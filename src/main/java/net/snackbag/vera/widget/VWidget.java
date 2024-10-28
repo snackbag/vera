@@ -1,16 +1,22 @@
 package net.snackbag.vera.widget;
 
+import net.snackbag.vera.VeraProvider;
+import net.snackbag.vera.core.VeraApp;
+
 public abstract class VWidget {
     protected int x;
     protected int y;
     protected int width;
     protected int height;
 
-    public VWidget(int x, int y, int width, int height) {
+    protected VeraApp app;
+
+    public VWidget(int x, int y, int width, int height, VeraApp app) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.app = app;
     }
 
     public abstract void render();
@@ -46,5 +52,13 @@ public abstract class VWidget {
 
     public void move(int both) {
         move(both, both);
+    }
+
+    public VeraApp getApp() {
+        return app;
+    }
+
+    protected VeraProvider getProvider() {
+        return app.getProvider();
     }
 }
