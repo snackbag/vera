@@ -1,5 +1,7 @@
 package net.snackbag.vera;
 
-public interface VeraProvider {
+import net.snackbag.vera.core.VeraApp;
 
+public interface VeraProvider {
+    void handleAppInitialization(VeraApp app);
 }
