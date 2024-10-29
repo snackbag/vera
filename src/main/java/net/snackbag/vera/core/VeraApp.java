@@ -1,6 +1,7 @@
 package net.snackbag.vera.core;
 
 import net.snackbag.vera.VeraProvider;
+import net.snackbag.vera.VeraRenderer;
 import net.snackbag.vera.widget.VWidget;
 
 import java.util.ArrayList;
@@ -110,5 +111,11 @@ public abstract class VeraApp {
 
     public VColor getBackgroundColor() {
         return backgroundColor;
+    }
+
+    public void render() {
+        VeraRenderer renderer = provider.getRenderer();
+
+        renderer.drawRect(this, x, y, width, height, backgroundColor);
     }
 }
