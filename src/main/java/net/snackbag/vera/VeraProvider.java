@@ -7,4 +7,8 @@ public interface VeraProvider {
     void handleAppInitialization(VeraApp app);
 
     void renderLabel(VLabel label);
+
+    int getScreenHeight();
+
+    int getScreenWidth();
 }
