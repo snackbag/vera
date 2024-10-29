@@ -1,5 +1,6 @@
 package net.snackbag.mcvera.test;
 
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.option.KeyBinding;
@@ -19,5 +20,9 @@ public class TestHandler {
                 "mcvera.testing"
         );
         KeyBindingHelper.registerKeyBinding(testKeybinding);
+
+        ClientTickEvents.END_CLIENT_TICK.register((client) -> {
+            if (testKeybinding.wasPressed()) TestApplication.INSTANCE.setVisibility(!TestApplication.INSTANCE.isVisible());
+        });
     }
 }

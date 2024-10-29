@@ -5,6 +5,8 @@ import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.widget.VLabel;
 
 public class TestApplication extends VeraApp {
+    public static final TestApplication INSTANCE = new TestApplication();
+
     public TestApplication() {
         super(Vera.getProvider("mcvera"));
     }
