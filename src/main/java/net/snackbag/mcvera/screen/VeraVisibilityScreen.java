@@ -10,4 +10,9 @@ public class VeraVisibilityScreen extends Screen {
     public VeraVisibilityScreen() {
         super(Text.of("Vera"));
     }
+
+    @Override
+    public boolean shouldCloseOnEsc() {
+        return false;
+    }
 }
