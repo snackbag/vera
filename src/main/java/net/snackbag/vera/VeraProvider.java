@@ -10,4 +10,6 @@ public interface VeraProvider {
     int getScreenHeight();
 
     int getScreenWidth();
+
+    VeraRenderer getRenderer();
 }
