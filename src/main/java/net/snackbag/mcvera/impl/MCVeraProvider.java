@@ -12,6 +12,7 @@ public class MCVeraProvider implements VeraProvider {
     @Override
     public void handleAppInitialization(VeraApp app) {
         MCVeraData.applications.add(app);
+        app.init();
     }
 
     @Override
