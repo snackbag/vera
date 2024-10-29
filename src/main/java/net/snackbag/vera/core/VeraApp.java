@@ -117,6 +117,6 @@ public abstract class VeraApp {
     public void render() {
         VeraRenderer renderer = provider.getRenderer();
 
-        renderer.drawRect(this, x, y, width, height, backgroundColor);
+        renderer.drawRect(this, x, y, width, height, 0, backgroundColor);
     }
 }
