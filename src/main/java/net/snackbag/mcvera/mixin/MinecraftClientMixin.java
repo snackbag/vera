@@ -17,12 +17,16 @@ public abstract class MinecraftClientMixin {
 
 	@Inject(at = @At("HEAD"), method = "setScreen")
 	private void mcvera$veraVisibilityManager(@Nullable Screen screen, CallbackInfo ci) {
-		if (screen == null && !MCVeraData.visibleApplications.isEmpty()) {
-			if (!(MinecraftClient.getInstance().currentScreen instanceof VeraVisibilityScreen)) {
-				setScreen(new VeraVisibilityScreen());
+		MinecraftClient client = MinecraftClient.getInstance();
+
+		client.send(() -> {
+			if (screen == null && !MCVeraData.visibleApplications.isEmpty()) {
+				if (!(MinecraftClient.getInstance().currentScreen instanceof VeraVisibilityScreen)) {
+					setScreen(new VeraVisibilityScreen());
+				}
+			} else if (screen instanceof VeraVisibilityScreen && MCVeraData.visibleApplications.isEmpty()) {
+				setScreen(null);
 			}
-		} else if (screen instanceof VeraVisibilityScreen && MCVeraData.visibleApplications.isEmpty()) {
-			setScreen(null);
-		}
+		});
 	}
 }
