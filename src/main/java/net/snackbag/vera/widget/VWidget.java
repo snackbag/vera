@@ -108,6 +108,18 @@ public abstract class VWidget {
         registerEventExecutor("hover-leave", runnable);
     }
 
+    public void onLeftClick(Runnable runnable) {
+        registerEventExecutor("left-click", runnable);
+    }
+
+    public void onRightClick(Runnable runnable) {
+        registerEventExecutor("right-click", runnable);
+    }
+
+    public void onMiddleClick(Runnable runnable) {
+        registerEventExecutor("middle-click", runnable);
+    }
+
     public void registerEventExecutor(String event, Runnable runnable) {
         if (!eventExecutors.containsKey(event)) eventExecutors.put(event, new ArrayList<>());
         eventExecutors.get(event).add(runnable);
