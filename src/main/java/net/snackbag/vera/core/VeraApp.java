@@ -16,6 +16,8 @@ public abstract class VeraApp {
     private int width;
     private int height;
 
+    private boolean visible;
+
     public VeraApp(VeraProvider provider) {
         this.provider = provider;
         this.widgets = new ArrayList<>();
@@ -27,6 +29,32 @@ public abstract class VeraApp {
 
         this.x = (provider.getScreenHeight() - this.width) / 2;
         this.y = (provider.getScreenHeight() - this.width) / 2;
+
+        this.visible = false;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public boolean isShown() {
+        return visible;
+    }
+
+    public boolean isHidden() {
+        return !visible;
+    }
+
+    public void show() {
+        setVisibility(true);
+    }
+
+    public void hide() {
+        setVisibility(false);
+    }
+
+    public void setVisibility(boolean visible) {
+        this.visible = visible;
     }
 
     public int getHeight() {
