@@ -31,7 +31,7 @@ public class MCVeraRenderer implements VeraRenderer {
 
     @Override
     public void drawText(VeraApp app, int x, int y, double rotation, String text, VFont font) {
-        drawContext.drawText(MinecraftClient.getInstance().textRenderer, text, x, y, font.getColor().toInt(), true);
+        drawContext.drawText(MinecraftClient.getInstance().textRenderer, text, x, y, font.getColor().toInt(), false);
     }
 
     @Override
