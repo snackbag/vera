@@ -29,7 +29,7 @@ public class MCVeraProvider implements VeraProvider {
 
     @Override
     public VeraRenderer getRenderer() {
-        return ;
+        return MCVeraRenderer.getInstance();
     }
 
     @Override
