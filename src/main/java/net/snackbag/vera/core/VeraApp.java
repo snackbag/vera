@@ -26,11 +26,11 @@ public abstract class VeraApp {
         this.backgroundColor = VColor.white();
 
         provider.handleAppInitialization(this);
-        this.width = Math.min(provider.getScreenWidth(), 400);
-        this.height = Math.min(provider.getScreenHeight(), 300);
 
-        this.x = (provider.getScreenHeight() - this.width) / 2;
-        this.y = (provider.getScreenHeight() - this.width) / 2;
+        this.width = provider.getScreenWidth();
+        this.height = provider.getScreenHeight();
+        this.x = 0;
+        this.y = 0;
 
         this.visible = false;
     }
