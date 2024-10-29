@@ -9,6 +9,7 @@ public abstract class VWidget {
     protected int y;
     protected int width;
     protected int height;
+    protected double rotation;
 
     protected VeraApp app;
 
@@ -18,6 +19,7 @@ public abstract class VWidget {
         this.width = width;
         this.height = height;
         this.app = app;
+        this.rotation = 0;
     }
 
     public abstract void render();
@@ -57,6 +59,14 @@ public abstract class VWidget {
 
     public VeraApp getApp() {
         return app;
+    }
+
+    public double getRotation() {
+        return rotation;
+    }
+
+    public void rotate(double rotation) {
+        this.rotation = rotation;
     }
 
     protected VeraProvider getProvider() {
