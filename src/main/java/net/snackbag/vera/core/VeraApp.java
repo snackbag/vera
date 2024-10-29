@@ -119,4 +119,6 @@ public abstract class VeraApp {
 
         renderer.drawRect(this, x, y, width, height, 0, backgroundColor);
     }
+
+    public void update() {}
 }

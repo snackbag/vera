@@ -76,4 +76,6 @@ public abstract class VWidget {
     protected VeraRenderer getRenderer() {
         return app.getProvider().getRenderer();
     }
+
+    public void update() {}
 }
