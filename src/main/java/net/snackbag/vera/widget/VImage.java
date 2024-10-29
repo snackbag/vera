@@ -23,7 +23,8 @@ public class VImage extends VWidget {
     @Override
     public void render() {
         VeraRenderer renderer = getRenderer();
+        VeraApp app = getApp();
 
-        renderer.drawImage(app, x, y, width, height, rotation, path);
+        renderer.drawImage(app, x + app.getX(), y + app.getY(), width, height, rotation, path);
     }
 }
