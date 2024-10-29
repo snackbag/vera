@@ -50,12 +50,12 @@ public class MCVeraProvider implements VeraProvider {
 
     @Override
     public int getTextWidth(String text, VFont font) {
-        return font.getSize();
+        return MinecraftClient.getInstance().textRenderer.getWidth(text);
     }
 
     @Override
     public int getTextHeight(String text, VFont font) {
-        return MinecraftClient.getInstance().textRenderer.getWidth(text);
+        return font.getSize() / 2;
     }
 
     @Override
