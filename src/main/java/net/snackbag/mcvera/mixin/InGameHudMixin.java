@@ -15,6 +15,7 @@ public abstract class InGameHudMixin {
     @Inject(at = @At("TAIL"), method = "render")
     private void mcvera$renderUI(DrawContext context, float tickDelta, CallbackInfo ci) {
         MCVeraRenderer renderer = MCVeraRenderer.getInstance();
+        MCVeraRenderer.drawContext = context;
 
         for (VeraApp app : MCVeraData.visibleApplications) {
             renderer.renderApp(app);
