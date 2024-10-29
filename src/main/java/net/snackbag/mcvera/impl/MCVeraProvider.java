@@ -28,7 +28,9 @@ public class MCVeraProvider implements VeraProvider {
         MCVeraData.visibleApplications.remove(app);
         MinecraftClient client = MinecraftClient.getInstance();
 
-        if (MCVeraData.visibleApplications.isEmpty() && client.currentScreen instanceof VeraVisibilityScreen) client.setScreen(null);
+        if (MCVeraData.visibleApplications.isEmpty() && client.currentScreen instanceof VeraVisibilityScreen) {
+            client.setScreen(null);
+        }
     }
 
     @Override
