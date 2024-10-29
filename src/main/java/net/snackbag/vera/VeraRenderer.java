@@ -6,5 +6,5 @@ import net.snackbag.vera.core.VFont;
 public interface VeraRenderer {
     void drawRect(int x, int y, int width, int height, VColor color);
 
-    void drawText(int x, int y, VFont font);
+    void drawText(int x, int y, String text, VFont font);
 }
