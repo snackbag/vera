@@ -1,5 +1,6 @@
 package net.snackbag.mcvera.impl;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.snackbag.vera.VeraRenderer;
@@ -35,9 +36,12 @@ public class MCVeraRenderer implements VeraRenderer {
     @Override
     public void renderApp(VeraApp app) {
         List<VWidget> widgets = app.getWidgets();
+        RenderSystem.enableBlend();
 
         for (VWidget widget : widgets) {
             widget.render();
         }
+
+        RenderSystem.disableBlend();
     }
 }
