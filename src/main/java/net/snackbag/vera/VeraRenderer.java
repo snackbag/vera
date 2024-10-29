@@ -10,4 +10,6 @@ public interface VeraRenderer {
     void drawText(VeraApp app, int x, int y, String text, VFont font);
 
     void renderApp(VeraApp app);
+
+    void drawImage(VeraApp app, int x, int y, int width, int height, String path);
 }
