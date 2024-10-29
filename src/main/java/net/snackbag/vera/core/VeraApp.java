@@ -6,6 +6,7 @@ import net.snackbag.vera.widget.VWidget;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class VeraApp {
     private final VeraProvider provider;
@@ -121,4 +122,23 @@ public abstract class VeraApp {
     }
 
     public void update() {}
+
+    public List<VWidget> getHoveredWidgets() {
+        return getHoveredWidgets(provider.getMouseX(), provider.getMouseY());
+    }
+
+    public List<VWidget> getHoveredWidgets(int mouseX, int mouseY) {
+        return widgets.parallelStream()
+                .filter(widget -> isMouseOverWidget(widget, mouseX, mouseY))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isMouseOverWidget(VWidget widget, int mouseX, int mouseY) {
+        int widgetX = widget.getX() + x;
+        int widgetY = widget.getY() + y;
+        int widgetWidth = widget.getWidth();
+        int widgetHeight = widget.getHeight();
+        return mouseX >= widgetX && mouseX <= widgetX + widgetWidth &&
+                mouseY >= widgetY && mouseY <= widgetY + widgetHeight;
+    }
 }
