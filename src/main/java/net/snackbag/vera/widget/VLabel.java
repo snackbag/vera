@@ -67,5 +67,14 @@ public class VLabel extends VWidget {
     @Override
     public void render() {
         VeraRenderer renderer = getRenderer();
+
+        renderer.drawRect(
+                x - padding.get3(),
+                y - padding.get1(),
+                width + padding.get3() + padding.get4(),
+                height + padding.get1() + padding.get2(),
+                backgroundColor
+        );
+        renderer.drawText(x, y, font);
     }
 }
