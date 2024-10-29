@@ -91,11 +91,21 @@ public abstract class VWidget {
     }
 
     public void setHovered(boolean hovered) {
+        // If changed
+        if (this.hovered != hovered) {
+            if (hovered) fireEvent("hover");
+            else fireEvent("hover-leave");
+        }
+
         this.hovered = hovered;
     }
 
     public void onHover(Runnable runnable) {
         registerEventExecutor("hover", runnable);
+    }
+
+    public void onHoverLeave(Runnable runnable) {
+        registerEventExecutor("hover-leave", runnable);
     }
 
     public void registerEventExecutor(String event, Runnable runnable) {
