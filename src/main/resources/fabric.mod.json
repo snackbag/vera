@@ -18,6 +18,9 @@
 		"main": [
             "net.snackbag.mcvera.MinecraftVera"
 		],
+		"client": [
+			"net.snackbag.mcvera.MinecraftVeraClient"
+		],
 		"fabric-datagen": [
 			"net.snackbag.mcvera.MinecraftVeraDataGenerator"
 		]
