@@ -23,6 +23,13 @@ public class TestApplication extends VeraApp {
         label.setBackgroundColor(VColor.black());
         label.setFont(label.getFont().withColor(VColor.white()));
         label.adjustSize();
+        label.onHover(() -> {
+            label.setText("Hovered");
+        });
+
+        label.onHoverLeave(() -> {
+            label.setText("Not hovered");
+        });
         addWidget(label);
 
         VImage image = new VImage(
