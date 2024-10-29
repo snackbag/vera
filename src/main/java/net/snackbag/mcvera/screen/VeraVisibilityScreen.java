@@ -15,4 +15,9 @@ public class VeraVisibilityScreen extends Screen {
     public boolean shouldCloseOnEsc() {
         return false;
     }
+
+    @Override
+    public boolean shouldPause() {
+        return false;
+    }
 }
