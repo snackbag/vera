@@ -18,15 +18,17 @@ public class MCVeraProvider implements VeraProvider {
     @Override
     public void handleAppShow(VeraApp app) {
         MCVeraData.visibleApplications.add(app);
+        MinecraftClient client = MinecraftClient.getInstance();
 
-        if (MinecraftClient.getInstance().currentScreen == null) MinecraftClient.getInstance().setScreen(new VeraVisibilityScreen());
+        if (client.currentScreen == null) client.setScreen(new VeraVisibilityScreen());
     }
 
     @Override
     public void handleAppHide(VeraApp app) {
         MCVeraData.visibleApplications.remove(app);
+        MinecraftClient client = MinecraftClient.getInstance();
 
-        if (MCVeraData.visibleApplications.isEmpty()) MinecraftClient.getInstance().setScreen(null);
+        if (MCVeraData.visibleApplications.isEmpty() && client.currentScreen instanceof VeraVisibilityScreen) client.setScreen(null);
     }
 
     @Override
