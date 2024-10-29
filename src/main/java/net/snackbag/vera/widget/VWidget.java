@@ -4,6 +4,10 @@ import net.snackbag.vera.VeraProvider;
 import net.snackbag.vera.VeraRenderer;
 import net.snackbag.vera.core.VeraApp;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public abstract class VWidget {
     protected int x;
     protected int y;
@@ -12,6 +16,8 @@ public abstract class VWidget {
     protected double rotation;
 
     protected VeraApp app;
+    private boolean hovered = false;
+    private final HashMap<String, List<Runnable>> eventExecutors;
 
     public VWidget(int x, int y, int width, int height, VeraApp app) {
         this.x = x;
@@ -20,6 +26,7 @@ public abstract class VWidget {
         this.height = height;
         this.app = app;
         this.rotation = 0;
+        this.eventExecutors = new HashMap<>();
     }
 
     public abstract void render();
@@ -78,4 +85,26 @@ public abstract class VWidget {
     }
 
     public void update() {}
+
+    public boolean isHovered() {
+        return hovered;
+    }
+
+    public void setHovered(boolean hovered) {
+        this.hovered = hovered;
+    }
+
+    public void onHover(Runnable runnable) {
+        registerEventExecutor("hover", runnable);
+    }
+
+    public void registerEventExecutor(String event, Runnable runnable) {
+        if (!eventExecutors.containsKey(event)) eventExecutors.put(event, new ArrayList<>());
+        eventExecutors.get(event).add(runnable);
+    }
+
+    public void fireEvent(String event) {
+        if (!eventExecutors.containsKey(event)) return;
+        eventExecutors.get(event).parallelStream().forEach((Runnable::run));
+    }
 }
