@@ -18,5 +18,9 @@ public interface VeraProvider {
 
     int getTextHeight(String text, VFont font);
 
+    int getMouseX();
+
+    int getMouseY();
+
     String getDefaultFontName();
 }
