@@ -11,7 +11,7 @@ public interface VeraProvider {
     void handleAppHide(VeraApp app);
 
     default void handleAppVisibilityChange(VeraApp app, boolean visibility) {
-        if (!visibility) handleAppShow(app);
+        if (visibility) handleAppShow(app);
         else handleAppHide(app);
     }
 
