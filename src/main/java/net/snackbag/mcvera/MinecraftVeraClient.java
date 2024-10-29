@@ -16,7 +16,7 @@ public class MinecraftVeraClient implements ClientModInitializer {
         Vera.registerProvider("mcvera", new MCVeraProvider());
         TestHandler.impl(false);
 
-        HudRenderCallback.EVENT.register((context, f) -> {
+        HudRenderCallback.EVENT.register((context, tickDelta) -> {
             MCVeraRenderer.drawContext = context;
             MCVeraRenderer renderer = MCVeraRenderer.getInstance();
 
