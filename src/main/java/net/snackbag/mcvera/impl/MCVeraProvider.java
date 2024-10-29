@@ -2,6 +2,7 @@ package net.snackbag.mcvera.impl;
 
 import net.minecraft.client.MinecraftClient;
 import net.snackbag.mcvera.MCVeraData;
+import net.snackbag.mcvera.screen.VeraVisibilityScreen;
 import net.snackbag.vera.VeraProvider;
 import net.snackbag.vera.VeraRenderer;
 import net.snackbag.vera.core.VFont;
@@ -16,11 +17,15 @@ public class MCVeraProvider implements VeraProvider {
     @Override
     public void handleAppShow(VeraApp app) {
         MCVeraData.visibleApplications.add(app);
+
+        if (MinecraftClient.getInstance().currentScreen == null) MinecraftClient.getInstance().setScreen(new VeraVisibilityScreen());
     }
 
     @Override
     public void handleAppHide(VeraApp app) {
         MCVeraData.visibleApplications.remove(app);
+
+        if (MCVeraData.visibleApplications.isEmpty()) MinecraftClient.getInstance().setScreen(null);
     }
 
     @Override
