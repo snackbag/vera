@@ -11,12 +11,55 @@ public abstract class VeraApp {
     private final List<VWidget> widgets;
     private VColor backgroundColor;
 
+    private int x;
+    private int y;
+    private int width;
+    private int height;
+
     public VeraApp(VeraProvider provider) {
         this.provider = provider;
         this.widgets = new ArrayList<>();
         this.backgroundColor = VColor.white();
 
         provider.handleAppInitialization(this);
+        this.width = Math.min(provider.getScreenWidth(), 400);
+        this.height = Math.min(provider.getScreenHeight(), 300);
+
+        this.x = (provider.getScreenHeight() - this.width) / 2;
+        this.y = (provider.getScreenHeight() - this.width) / 2;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void move(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public void move(int both) {
+        this.move(both, both);
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     public VeraProvider getProvider() {
