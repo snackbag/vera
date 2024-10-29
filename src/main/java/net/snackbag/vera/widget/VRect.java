@@ -25,6 +25,6 @@ public class VRect extends VWidget {
     public void render() {
         VeraRenderer renderer = getRenderer();
 
-        renderer.drawRect(getApp(), x + app.getX(), y + app.getY(), width, height, color);
+        renderer.drawRect(getApp(), x + app.getX(), y + app.getY(), width, height, rotation, color);
     }
 }

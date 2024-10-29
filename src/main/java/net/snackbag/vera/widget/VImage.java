@@ -24,6 +24,6 @@ public class VImage extends VWidget {
     public void render() {
         VeraRenderer renderer = getRenderer();
 
-        renderer.drawImage(app, x, y, width, height, path);
+        renderer.drawImage(app, x, y, width, height, rotation, path);
     }
 }

@@ -81,8 +81,9 @@ public class VLabel extends VWidget {
                 y - padding.get1(),
                 width + padding.get3() + padding.get4(),
                 height + padding.get1() + padding.get2(),
+                rotation,
                 backgroundColor
         );
-        renderer.drawText(app, x + app.getX(), y + app.getY(), text, font);
+        renderer.drawText(app, x + app.getX(), y + app.getY(), rotation, text, font);
     }
 }
