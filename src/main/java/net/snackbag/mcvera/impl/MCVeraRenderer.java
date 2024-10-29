@@ -26,7 +26,7 @@ public class MCVeraRenderer implements VeraRenderer {
 
     @Override
     public void drawRect(VeraApp app, int x, int y, int width, int height, double rotation, VColor color) {
-        drawContext.fill(x, y, width, height, color.toInt());
+        drawContext.fill(x, y, x + width, y + height, color.toInt());
     }
 
     @Override
