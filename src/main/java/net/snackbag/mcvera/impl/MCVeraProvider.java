@@ -1,6 +1,7 @@
 package net.snackbag.mcvera.impl;
 
 import net.minecraft.client.MinecraftClient;
+import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.vera.VeraProvider;
 import net.snackbag.vera.VeraRenderer;
 import net.snackbag.vera.core.VFont;
@@ -8,18 +9,18 @@ import net.snackbag.vera.core.VeraApp;
 
 public class MCVeraProvider implements VeraProvider {
     @Override
-    public void handleAppInitialization(VeraApp veraApp) {
-
+    public void handleAppInitialization(VeraApp app) {
+        MCVeraData.applications.add(app);
     }
 
     @Override
-    public void handleAppShow(VeraApp veraApp) {
-
+    public void handleAppShow(VeraApp app) {
+        MCVeraData.visibleApplications.add(app);
     }
 
     @Override
-    public void handleAppHide(VeraApp veraApp) {
-
+    public void handleAppHide(VeraApp app) {
+        MCVeraData.visibleApplications.remove(app);
     }
 
     @Override
