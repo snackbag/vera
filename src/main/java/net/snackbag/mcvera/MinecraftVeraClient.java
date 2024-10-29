@@ -2,6 +2,7 @@ package net.snackbag.mcvera;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.snackbag.mcvera.impl.MCVeraProvider;
+import net.snackbag.mcvera.test.TestHandler;
 import net.snackbag.vera.Vera;
 
 public class MinecraftVeraClient implements ClientModInitializer {
@@ -10,5 +11,6 @@ public class MinecraftVeraClient implements ClientModInitializer {
         MinecraftVera.LOGGER.info("Loading client Vera implementation...");
 
         Vera.registerProvider("mcvera", new MCVeraProvider());
+        TestHandler.impl(false);
     }
 }
