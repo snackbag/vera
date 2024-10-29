@@ -38,6 +38,8 @@ public class MCVeraRenderer implements VeraRenderer {
         List<VWidget> widgets = app.getWidgets();
         RenderSystem.enableBlend();
 
+        app.render();
+
         for (VWidget widget : widgets) {
             widget.render();
         }
