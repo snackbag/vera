@@ -77,8 +77,8 @@ public class VLabel extends VWidget {
 
         renderer.drawRect(
                 app,
-                x - padding.get3(),
-                y - padding.get1(),
+                x - padding.get3() + app.getX(),
+                y - padding.get1() + app.getY(),
                 width + padding.get3() + padding.get4(),
                 height + padding.get1() + padding.get2(),
                 rotation,
