@@ -1,6 +1,7 @@
 package net.snackbag.vera.widget;
 
 import net.snackbag.vera.VeraProvider;
+import net.snackbag.vera.VeraRenderer;
 import net.snackbag.vera.core.VeraApp;
 
 public abstract class VWidget {
@@ -60,5 +61,9 @@ public abstract class VWidget {
 
     protected VeraProvider getProvider() {
         return app.getProvider();
+    }
+
+    protected VeraRenderer getRenderer() {
+        return app.getProvider().getRenderer();
     }
 }
