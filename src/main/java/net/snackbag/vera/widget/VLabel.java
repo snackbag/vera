@@ -5,9 +5,9 @@ import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VeraApp;
 
 public class VLabel extends VWidget {
-    protected String text;
-    protected int fontSize;
-    protected VColor backgroundColor;
+    private String text;
+    private int fontSize;
+    private VColor backgroundColor;
 
     public VLabel(String text, VeraApp app) {
         super(0, 0, 100, 12, app);
@@ -35,6 +35,10 @@ public class VLabel extends VWidget {
 
     public void setBackgroundColor(VColor backgroundColor) {
         this.backgroundColor = backgroundColor;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     @Override
