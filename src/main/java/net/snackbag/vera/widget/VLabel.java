@@ -3,11 +3,12 @@ package net.snackbag.vera.widget;
 import net.snackbag.vera.VeraRenderer;
 import net.snackbag.vera.core.V4Int;
 import net.snackbag.vera.core.VColor;
+import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 
 public class VLabel extends VWidget {
     private String text;
-    private int fontSize;
+    private VFont font;
     private VColor backgroundColor;
     private V4Int padding;
 
@@ -15,7 +16,7 @@ public class VLabel extends VWidget {
         super(0, 0, 100, 12, app);
 
         this.text = text;
-        this.fontSize = 16;
+        this.font = new VFont(getProvider().getDefaultFontName(), 16, VColor.black());
         this.backgroundColor = VColor.transparent();
         this.padding = new V4Int(4);
     }
@@ -24,12 +25,12 @@ public class VLabel extends VWidget {
         return text;
     }
 
-    public int getFontSize() {
-        return fontSize;
+    public VFont getFont() {
+        return font;
     }
 
-    public void setFontSize(int fontSize) {
-        this.fontSize = fontSize;
+    public void setFont(VFont font) {
+        this.font = font;
     }
 
     public VColor getBackgroundColor() {
