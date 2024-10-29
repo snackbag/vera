@@ -1,5 +1,6 @@
 package net.snackbag.vera.widget;
 
+import net.snackbag.vera.VeraRenderer;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VeraApp;
 
@@ -38,6 +39,6 @@ public class VLabel extends VWidget {
 
     @Override
     public void render() {
-        getProvider().renderLabel(this);
+        VeraRenderer renderer = getRenderer();
     }
 }
