@@ -3,6 +3,7 @@ package net.snackbag.mcvera.impl;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.util.Identifier;
 import net.snackbag.vera.VeraRenderer;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
@@ -24,13 +25,18 @@ public class MCVeraRenderer implements VeraRenderer {
     }
 
     @Override
-    public void drawRect(VeraApp app, int x, int y, int width, int height, VColor color) {
+    public void drawRect(VeraApp app, int x, int y, int width, int height, double rotation, VColor color) {
         drawContext.fill(x, y, width, height, color.toInt());
     }
 
     @Override
-    public void drawText(VeraApp app, int x, int y, String text, VFont font) {
+    public void drawText(VeraApp app, int x, int y, double rotation, String text, VFont font) {
         drawContext.drawText(MinecraftClient.getInstance().textRenderer, text, x, y, font.getColor().toInt(), true);
+    }
+
+    @Override
+    public void drawImage(VeraApp veraApp, int x, int y, int width, int height, double rotation, String path) {
+        drawContext.drawTexture(new Identifier(path), x, y, 0, 0, width, height, width, height);
     }
 
     @Override
