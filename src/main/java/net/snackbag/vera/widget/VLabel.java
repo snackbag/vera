@@ -65,6 +65,11 @@ public class VLabel extends VWidget {
         setPadding(new V4Int(top, bottom, left, right));
     }
 
+    public void adjustSize() {
+        this.width = getProvider().getTextWidth(text, font);
+        this.height = getProvider().getTextHeight(text, font);
+    }
+
     @Override
     public void render() {
         VeraRenderer renderer = getRenderer();
