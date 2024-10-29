@@ -3,6 +3,7 @@ package net.snackbag.mcvera.impl;
 import net.snackbag.vera.VeraRenderer;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
+import net.snackbag.vera.core.VeraApp;
 
 public class MCVeraRenderer implements VeraRenderer {
     private static MCVeraRenderer instance = null;
@@ -16,12 +17,17 @@ public class MCVeraRenderer implements VeraRenderer {
     }
 
     @Override
-    public void drawRect(int x, int y, int width, int height, VColor color) {
+    public void drawRect(VeraApp app, int x, int y, int width, int height, VColor color) {
 
     }
 
     @Override
-    public void drawText(int x, int y, String text, VFont font) {
+    public void drawText(VeraApp app, int x, int y, String text, VFont font) {
+
+    }
+
+    @Override
+    public void renderApp(VeraApp app) {
 
     }
 }

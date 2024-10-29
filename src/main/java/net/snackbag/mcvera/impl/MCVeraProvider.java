@@ -13,7 +13,12 @@ public class MCVeraProvider implements VeraProvider {
     }
 
     @Override
-    public void renderApp(VeraApp veraApp) {
+    public void handleAppShow(VeraApp veraApp) {
+
+    }
+
+    @Override
+    public void handleAppHide(VeraApp veraApp) {
 
     }
 
