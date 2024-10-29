@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "mcvera",
+	"version": "${version}",
+	"name": "Vera Minecraft Implementation",
+	"description": "A full implementation of the Vera UI library for Minecraft",
+	"authors": [
+		"JX_Snack"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "AGPL-3.0",
+	"icon": "assets/mcvera/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+            "net.snackbag.mcvera.MinecraftVera"
+		],
+		"fabric-datagen": [
+			"net.snackbag.mcvera.MinecraftVeraDataGenerator"
+		]
+	},
+	"mixins": [
+		"mcvera.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.7",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
