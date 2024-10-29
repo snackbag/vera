@@ -22,7 +22,9 @@ public class TestHandler {
         KeyBindingHelper.registerKeyBinding(testKeybinding);
 
         ClientTickEvents.END_CLIENT_TICK.register((client) -> {
-            if (testKeybinding.wasPressed()) TestApplication.INSTANCE.setVisibility(!TestApplication.INSTANCE.isVisible());
+            while (testKeybinding.wasPressed()) {
+                TestApplication.INSTANCE.setVisibility(!TestApplication.INSTANCE.isVisible());
+            }
         });
     }
 }
