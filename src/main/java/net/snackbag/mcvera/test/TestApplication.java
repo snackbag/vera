@@ -19,11 +19,14 @@ public class TestApplication extends VeraApp {
         setBackgroundColor(VColor.white());
 
         VLabel label = new VLabel("Hello world!", this);
+        label.setPadding(5);
+        label.setBackgroundColor(VColor.black());
+        label.setFont(label.getFont().withColor(VColor.white()));
         addWidget(label);
 
         VImage image = new VImage(
                 Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/dirt.png").toString(),
-                16, 16, this);
+                512, 512, this);
         image.move(30);
         addWidget(image);
     }
