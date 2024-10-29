@@ -16,7 +16,7 @@ public abstract class MinecraftClientMixin {
 	@Shadow public abstract void setScreen(@Nullable Screen screen);
 
 	@Inject(at = @At("HEAD"), method = "setScreen")
-	private void init(@Nullable Screen screen, CallbackInfo ci) {
+	private void mcvera$veraVisibilityManager(@Nullable Screen screen, CallbackInfo ci) {
 		if (screen == null && !MCVeraData.visibleApplications.isEmpty()) {
 			setScreen(new VeraVisibilityScreen());
 		}
