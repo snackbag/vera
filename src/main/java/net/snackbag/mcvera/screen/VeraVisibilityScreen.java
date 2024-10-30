@@ -1,5 +1,6 @@
 package net.snackbag.mcvera.screen;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.snackbag.mcvera.MCVeraData;
@@ -38,5 +39,17 @@ public class VeraVisibilityScreen extends Screen {
         }
 
         return true;
+    }
+
+    @Override
+    public void resize(MinecraftClient client, int width, int height) {
+        super.resize(client, width, height);
+
+        for (VeraApp app : MCVeraData.visibleApplications) {
+            client.send(app::update);
+            for (VWidget widget : app.getWidgets()) {
+                client.send(widget::update);
+            }
+        }
     }
 }
