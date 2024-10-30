@@ -4,7 +4,7 @@ Vera is an interface-based UI library for Java, which allows for multiple render
 ```groovy
 // build.gradle
 dependencies {
-    implementation "net.snackbag.vera:Vera:0.3.0"
+    implementation "net.snackbag.vera:Vera:0.3.1"
 }
 
 repositories {
