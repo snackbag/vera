@@ -4,6 +4,7 @@ import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.widget.VImage;
 import net.snackbag.vera.widget.VLabel;
 
@@ -16,6 +17,11 @@ public class TestApplication extends VeraApp {
 
     @Override
     public void init() {
+        VShortcut shortcut = new VShortcut(this, "LeftWin+N", () -> {
+            System.out.println("Shortcut pressed!");
+        });
+        addShortcut(shortcut);
+
         setBackgroundColor(VColor.white());
 
         VLabel label = new VLabel("Hello world!", this);
