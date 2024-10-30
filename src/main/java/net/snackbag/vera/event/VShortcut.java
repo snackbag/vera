@@ -9,7 +9,7 @@ public class VShortcut {
 
     public VShortcut(VeraApp app, String combination, Runnable event) {
         this.app = app;
-        this.combination = combination;
+        this.combination = combination.toLowerCase().replace(" ", "");
         this.event = event;
     }
 
