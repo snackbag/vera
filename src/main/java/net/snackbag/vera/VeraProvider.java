@@ -2,6 +2,7 @@ package net.snackbag.vera;
 
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.event.VShortcut;
 
 public interface VeraProvider {
     void handleAppInitialization(VeraApp app);
@@ -14,6 +15,8 @@ public interface VeraProvider {
         if (visibility) handleAppShow(app);
         else handleAppHide(app);
     }
+
+    void handleShortcut(VShortcut shortcut);
 
     int getScreenHeight();
 
