@@ -38,4 +38,13 @@ public class TestApplication extends VeraApp {
         image.move(0, 30);
         addWidget(image);
     }
+
+    @Override
+    public void update() {
+        super.update();
+
+        move(0);
+        setHeight(20);
+        setWidth(getProvider().getScreenWidth());
+    }
 }
