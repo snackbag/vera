@@ -38,4 +38,8 @@ public class VFont {
     public VFont withColor(VColor color) {
         return new VFont(name, size, color);
     }
+
+    public VFont withName(String name) {
+        return new VFont(name, size, color);
+    }
 }
