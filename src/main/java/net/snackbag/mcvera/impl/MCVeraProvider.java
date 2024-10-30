@@ -7,6 +7,7 @@ import net.snackbag.vera.VeraProvider;
 import net.snackbag.vera.VeraRenderer;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.widget.VWidget;
 
 public class MCVeraProvider implements VeraProvider {
@@ -43,6 +44,11 @@ public class MCVeraProvider implements VeraProvider {
         if (MCVeraData.visibleApplications.isEmpty() && client.currentScreen instanceof VeraVisibilityScreen) {
             client.setScreen(null);
         }
+    }
+
+    @Override
+    public void handleRunShortcut(VShortcut shortcut) {
+        MinecraftClient.getInstance().send(shortcut.getEvent());
     }
 
     @Override
