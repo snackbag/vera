@@ -16,16 +16,9 @@ public class TestHandler {
     public static void impl(boolean force) {
         if (!(force || shouldTest())) return;
 
-        KeyBinding testKeybinding = new KeyBinding(
-                "mcvera.opentest",
-                GLFW.GLFW_KEY_APOSTROPHE,
-                "mcvera.testing"
-        );
-        KeyBindingHelper.registerKeyBinding(testKeybinding);
-
         ClientTickEvents.END_CLIENT_TICK.register((client) -> {
             if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_APOSTROPHE)) {
-                TestApplication.INSTANCE.setVisibility(!TestApplication.INSTANCE.isVisible());
+                TestApplication.INSTANCE.setVisibility(true);
             }
         });
     }
