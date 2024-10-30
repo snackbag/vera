@@ -30,6 +30,6 @@ public class VShortcut {
     }
 
     public void run() {
-        app.getProvider().handleShortcut(this);
+        app.getProvider().handleRunShortcut(this);
     }
 }

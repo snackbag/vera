@@ -16,7 +16,7 @@ public interface VeraProvider {
         else handleAppHide(app);
     }
 
-    void handleShortcut(VShortcut shortcut);
+    void handleRunShortcut(VShortcut shortcut);
 
     int getScreenHeight();
 
