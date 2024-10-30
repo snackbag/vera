@@ -2,15 +2,19 @@ package net.snackbag.vera.core;
 
 import net.snackbag.vera.VeraProvider;
 import net.snackbag.vera.VeraRenderer;
+import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.widget.VWidget;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class VeraApp {
     private final VeraProvider provider;
     private final List<VWidget> widgets;
+    private final HashMap<String, VShortcut> shortcuts;
     private VColor backgroundColor;
 
     private int x;
@@ -23,6 +27,7 @@ public abstract class VeraApp {
     public VeraApp(VeraProvider provider) {
         this.provider = provider;
         this.widgets = new ArrayList<>();
+        this.shortcuts = new HashMap<>();
         this.backgroundColor = VColor.white();
 
         provider.handleAppInitialization(this);
@@ -122,6 +127,23 @@ public abstract class VeraApp {
     }
 
     public void update() {}
+
+    public void addShortcut(VShortcut shortcut) {
+        shortcuts.put(shortcut.getCombination(), shortcut);
+    }
+
+    public void handleShortcut(String combination) {
+        Set<String> combinations = shortcuts.keySet();
+        combination = combination.toLowerCase().replace(" ", "");
+
+        for (String combi : combinations) {
+            if (combi.equals(combination)) shortcuts.get(combi).run();
+        }
+    }
+
+    public List<VShortcut> getShortcuts() {
+        return List.copyOf(shortcuts.values());
+    }
 
     public List<VWidget> getHoveredWidgets() {
         return getHoveredWidgets(provider.getMouseX(), provider.getMouseY());
