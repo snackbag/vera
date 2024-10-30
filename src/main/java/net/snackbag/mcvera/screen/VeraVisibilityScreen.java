@@ -30,9 +30,9 @@ public class VeraVisibilityScreen extends Screen {
         for (VeraApp app : MCVeraData.visibleApplications) {
             for (VWidget widget : app.getHoveredWidgets((int) mouseX, (int) mouseY)) {
                 switch (button) {
-                    case 0: widget.fireEvent("left-click");
-                    case 1: widget.fireEvent("right-click");
-                    case 2: widget.fireEvent("middle-click");
+                    case 0: widget.fireEvent("left-click"); break;
+                    case 1: widget.fireEvent("right-click"); break;
+                    case 2: widget.fireEvent("middle-click"); break;
                     default: throw new IllegalStateException("Invalid button type: " + button);
                 }
             }
