@@ -13,17 +13,18 @@ public class MCVeraProvider implements VeraProvider {
     @Override
     public void handleAppInitialization(VeraApp app) {
         MCVeraData.applications.add(app);
-        app.init();
-        app.update();
+        MinecraftClient.getInstance().send(app::init);
+        MinecraftClient.getInstance().send(app::update);
     }
 
     @Override
     public void handleAppShow(VeraApp app) {
         MCVeraData.visibleApplications.add(app);
         MinecraftClient client = MinecraftClient.getInstance();
+        client.send(app::update);
 
         for (VWidget widget : app.getWidgets()) {
-            widget.update();
+            client.send(widget::update);
         }
 
         if (client.currentScreen == null) client.setScreen(new VeraVisibilityScreen());
@@ -33,9 +34,10 @@ public class MCVeraProvider implements VeraProvider {
     public void handleAppHide(VeraApp app) {
         MCVeraData.visibleApplications.remove(app);
         MinecraftClient client = MinecraftClient.getInstance();
+        client.send(app::update);
 
         for (VWidget widget : app.getWidgets()) {
-            widget.update();
+            client.send(widget::update);
         }
 
         if (MCVeraData.visibleApplications.isEmpty() && client.currentScreen instanceof VeraVisibilityScreen) {
