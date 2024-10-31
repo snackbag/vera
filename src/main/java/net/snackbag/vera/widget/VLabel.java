@@ -77,12 +77,12 @@ public class VLabel extends VWidget {
 
     @Override
     public int getRealX() {
-        return x - padding.get1();
+        return x - padding.get4();
     }
 
     @Override
     public int getRealY() {
-        return y - padding.get3();
+        return y - padding.get1();
     }
 
     public void adjustSize() {
@@ -97,10 +97,10 @@ public class VLabel extends VWidget {
 
         renderer.drawRect(
                 app,
-                x - padding.get4() + app.getX(),
-                y - padding.get1() + app.getY(),
-                width + padding.get4() + padding.get3(),
-                height + padding.get1() + padding.get2(),
+                getRealX() + app.getX(),
+                getRealY() + app.getY(),
+                getFullWidth(),
+                getFullHeight(),
                 rotation,
                 backgroundColor
         );
