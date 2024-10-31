@@ -17,6 +17,7 @@ public abstract class VWidget {
 
     protected VeraApp app;
     private boolean hovered = false;
+    private boolean visible = true;
     private final HashMap<String, List<Runnable>> eventExecutors;
 
     public VWidget(int x, int y, int width, int height, VeraApp app) {
@@ -118,6 +119,22 @@ public abstract class VWidget {
 
     public void onMiddleClick(Runnable runnable) {
         registerEventExecutor("middle-click", runnable);
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    public void show() {
+        setVisible(true);
+    }
+
+    public void hide() {
+        setVisible(false);
     }
 
     public void registerEventExecutor(String event, Runnable runnable) {
