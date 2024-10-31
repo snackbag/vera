@@ -61,7 +61,7 @@ public class MCVeraRenderer implements VeraRenderer {
         List<VWidget> hoveredWidgets = app.getHoveredWidgets();
         for (VWidget widget : widgets) {
             widget.setHovered(hoveredWidgets.contains(widget));
-            widget.render();
+            if (widget.isVisible()) widget.render();
         }
 
         RenderSystem.disableBlend();
