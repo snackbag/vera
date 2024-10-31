@@ -1,6 +1,7 @@
 package net.snackbag.mcvera.impl;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.Text;
 import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.mcvera.screen.VeraVisibilityScreen;
 import net.snackbag.vera.VeraProvider;
@@ -18,7 +19,8 @@ public class MCVeraProvider implements VeraProvider {
         MinecraftClient.getInstance().send(app::update);
 
         app.addShortcut(new VShortcut(app, "LeftCtrl+LeftAlt+LeftShift+D", () -> {
-            System.out.println("debug mode");
+            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of("Debug mode enabled"));
+            MCVeraData.debugApps.add(app);
         }));
     }
 

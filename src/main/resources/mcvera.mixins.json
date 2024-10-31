@@ -3,7 +3,8 @@
     "package": "net.snackbag.mcvera.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
-        "MinecraftClientMixin"
+        "MinecraftClientMixin",
+        "VeraAppMixin"
     ],
     "injectors": {
         "defaultRequire": 1

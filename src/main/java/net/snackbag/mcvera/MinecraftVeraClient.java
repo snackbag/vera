@@ -18,7 +18,6 @@ import net.snackbag.vera.core.VeraApp;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MinecraftVeraClient implements ClientModInitializer {
     @Override
