@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MinecraftVeraClient implements ClientModInitializer {
-    public final static List<Integer> pressedKeys = new ArrayList<>();
-
     @Override
     public void onInitializeClient() {
         MinecraftVera.LOGGER.info("Loading client Vera implementation...");
@@ -61,7 +59,7 @@ public class MinecraftVeraClient implements ClientModInitializer {
             throw new RuntimeException(e);
         }
 
-        for (int key : pressedKeys) {
+        for (int key : MCVeraData.pressedKeys) {
             String translationKey = InputUtil.fromKeyCode(key, 0).getTranslationKey().toLowerCase().replace(" ", "");
             String mapped = json.has(translationKey) ?
                     json.get(translationKey).getAsString().toLowerCase().replace(" ", "") :
