@@ -26,6 +26,7 @@ public class TestApplication extends VeraApp {
 
         VLabel label = new VLabel("Hello world!", this);
         label.setPadding(5);
+        label.move(10);
         label.setBackgroundColor(VColor.black());
         label.setFont(label.getFont().withColor(VColor.white()));
         label.adjustSize();
