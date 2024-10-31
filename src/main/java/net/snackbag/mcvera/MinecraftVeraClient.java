@@ -38,8 +38,11 @@ public class MinecraftVeraClient implements ClientModInitializer {
         });
 
         ClientTickEvents.END_CLIENT_TICK.register((client) -> {
-            String combination = makeCombination(client);
+            // only when changing
+            if (MCVeraData.previousPressedKeys.equals(MCVeraData.pressedKeys)) return;
+            MCVeraData.previousPressedKeys = new ArrayList<>(MCVeraData.pressedKeys);
 
+            String combination = makeCombination(client);
             for (VeraApp app : MCVeraData.visibleApplications) {
                 app.handleShortcut(combination);
             }
