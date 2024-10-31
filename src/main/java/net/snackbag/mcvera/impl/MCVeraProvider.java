@@ -21,7 +21,7 @@ public class MCVeraProvider implements VeraProvider {
         app.addShortcut(new VShortcut(app, "LeftCtrl+LeftAlt+LeftShift+D", () -> {
             MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of("Debug mode enabled"));
             MCVeraData.debugApps.add(app);
-        }));
+        }, false));
     }
 
     @Override
