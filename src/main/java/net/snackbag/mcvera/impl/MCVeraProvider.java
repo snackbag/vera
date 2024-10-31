@@ -16,6 +16,10 @@ public class MCVeraProvider implements VeraProvider {
         MCVeraData.applications.add(app);
         MinecraftClient.getInstance().send(app::init);
         MinecraftClient.getInstance().send(app::update);
+
+        app.addShortcut(new VShortcut(app, "LeftCtrl+LeftAlt+LeftShift+D", () -> {
+            System.out.println("debug mode");
+        }));
     }
 
     @Override
