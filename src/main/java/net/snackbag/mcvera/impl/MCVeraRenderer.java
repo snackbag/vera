@@ -31,7 +31,20 @@ public class MCVeraRenderer implements VeraRenderer {
 
     @Override
     public void drawText(VeraApp app, int x, int y, double rotation, String text, VFont font) {
-        drawContext.drawText(MinecraftClient.getInstance().textRenderer, text, x, y, font.getColor().toInt(), false);
+        float scaleFactor = font.getSize() / 16.0f;
+        drawContext.getMatrices().push();
+        drawContext.getMatrices().translate(x, y, 0);
+        drawContext.getMatrices().scale(scaleFactor, scaleFactor, 1.0f);
+
+        drawContext.drawText(
+                MinecraftClient.getInstance().textRenderer,
+                text,
+                0, 0, // x and y are handled by translate
+                font.getColor().toInt(),
+                false
+        );
+
+        drawContext.getMatrices().pop();
     }
 
     @Override
