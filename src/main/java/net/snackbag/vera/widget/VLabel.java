@@ -13,7 +13,7 @@ public class VLabel extends VWidget {
     private V4Int padding;
 
     public VLabel(String text, VeraApp app) {
-        super(0, 0, 100, 12, app);
+        super(0, 0, 100, 16, app);
 
         this.text = text;
         this.font = new VFont(getProvider().getDefaultFontName(), 16, VColor.black());
@@ -63,6 +63,26 @@ public class VLabel extends VWidget {
 
     public void setPadding(int top, int bottom, int left, int right) {
         setPadding(new V4Int(top, bottom, left, right));
+    }
+
+    @Override
+    public int getFullWidth() {
+        return width + padding.get3() + padding.get4();
+    }
+
+    @Override
+    public int getFullHeight() {
+        return height + padding.get1() + padding.get2();
+    }
+
+    @Override
+    public int getRealX() {
+        return x - padding.get1();
+    }
+
+    @Override
+    public int getRealY() {
+        return y - padding.get3();
     }
 
     public void adjustSize() {

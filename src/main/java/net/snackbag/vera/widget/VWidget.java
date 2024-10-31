@@ -40,12 +40,29 @@ public abstract class VWidget {
         return y;
     }
 
+
+    public int getRealX() {
+        return getX();
+    }
+
+    public int getRealY() {
+        return getY();
+    }
+
     public int getWidth() {
         return width;
     }
 
+    public int getFullWidth() {
+        return getWidth();
+    }
+
     public int getHeight() {
         return height;
+    }
+
+    public int getFullHeight() {
+        return getHeight();
     }
 
     public void setWidth(int width) {
