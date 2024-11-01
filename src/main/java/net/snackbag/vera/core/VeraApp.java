@@ -156,6 +156,8 @@ public abstract class VeraApp {
     }
 
     private boolean isMouseOverWidget(VWidget widget, int mouseX, int mouseY) {
+        if (!widget.isVisible()) return false;
+
         int widgetX = widget.getRealX() + x;
         int widgetY = widget.getRealY() + y;
         int widgetWidth = widget.getFullWidth();
