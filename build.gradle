@@ -29,9 +29,9 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	implementation "net.snackbag.vera:Vera:0.4.1"
-	include "net.snackbag.vera:Vera:0.4.1"
-//	implementation files("Vera-0.4.0.jar") // Dev only
+	implementation "net.snackbag.vera:Vera:0.4.2"
+	include "net.snackbag.vera:Vera:0.4.2"
+//	implementation files("Vera-0.4.2.jar") // Dev only
 }
 
 processResources {
