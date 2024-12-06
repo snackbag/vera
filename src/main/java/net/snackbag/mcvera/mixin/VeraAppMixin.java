@@ -15,7 +15,6 @@ public abstract class VeraAppMixin {
     @Inject(at = @At("HEAD"), method = "handleShortcut", remap = false)
     private void mcvera$handleShortcut(String combination, CallbackInfo ci) {
         VeraApp instance = (VeraApp) (Object) this;
-        if (!(instance.getProvider() instanceof MCVeraProvider)) return;
         if (!MCVeraData.debugApps.contains(instance)) return;
 
         MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of("§e§l[DEBUG]§f: (shortcut) " + combination));

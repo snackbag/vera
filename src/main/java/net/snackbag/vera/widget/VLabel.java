@@ -1,6 +1,6 @@
 package net.snackbag.vera.widget;
 
-import net.snackbag.vera.VeraRenderer;
+import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.V4Int;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
@@ -16,7 +16,7 @@ public class VLabel extends VWidget {
         super(0, 0, 100, 16, app);
 
         this.text = text;
-        this.font = new VFont(getProvider().getDefaultFontName(), 16, VColor.black());
+        this.font = new VFont(Vera.provider.getDefaultFontName(), 16, VColor.black());
         this.backgroundColor = VColor.transparent();
         this.padding = new V4Int(4);
     }
@@ -86,16 +86,15 @@ public class VLabel extends VWidget {
     }
 
     public void adjustSize() {
-        this.width = getProvider().getTextWidth(text, font);
-        this.height = getProvider().getTextHeight(text, font);
+        this.width = Vera.provider.getTextWidth(text, font);
+        this.height = Vera.provider.getTextHeight(text, font);
     }
 
     @Override
     public void render() {
-        VeraRenderer renderer = getRenderer();
         VeraApp app = getApp();
 
-        renderer.drawRect(
+        Vera.renderer.drawRect(
                 app,
                 getRealX() + app.getX(),
                 getRealY() + app.getY(),
@@ -104,6 +103,6 @@ public class VLabel extends VWidget {
                 rotation,
                 backgroundColor
         );
-        renderer.drawText(app, x + app.getX(), y + app.getY(), rotation, text, font);
+        Vera.renderer.drawText(app, x + app.getX(), y + app.getY(), rotation, text, font);
     }
 }

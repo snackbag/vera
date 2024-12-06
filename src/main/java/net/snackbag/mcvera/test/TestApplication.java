@@ -12,7 +12,7 @@ public class TestApplication extends VeraApp {
     public static final TestApplication INSTANCE = new TestApplication();
 
     public TestApplication() {
-        super(Vera.getProvider("mcvera"));
+        super();
     }
 
     @Override
@@ -52,6 +52,6 @@ public class TestApplication extends VeraApp {
 
         move(0);
         setHeight(20);
-        setWidth(getProvider().getScreenWidth());
+        setWidth(Vera.provider.getScreenWidth());
     }
 }

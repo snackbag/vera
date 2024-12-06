@@ -1,7 +1,6 @@
 package net.snackbag.vera.core;
 
-import net.snackbag.vera.VeraProvider;
-import net.snackbag.vera.VeraRenderer;
+import net.snackbag.vera.Vera;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.widget.VWidget;
 
@@ -12,7 +11,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class VeraApp {
-    private final VeraProvider provider;
     private final List<VWidget> widgets;
     private final HashMap<String, VShortcut> shortcuts;
     private VColor backgroundColor;
@@ -24,16 +22,15 @@ public abstract class VeraApp {
 
     private boolean visible;
 
-    public VeraApp(VeraProvider provider) {
-        this.provider = provider;
+    public VeraApp() {
         this.widgets = new ArrayList<>();
         this.shortcuts = new HashMap<>();
         this.backgroundColor = VColor.white();
 
-        provider.handleAppInitialization(this);
+        Vera.provider.handleAppInitialization(this);
 
-        this.width = provider.getScreenWidth();
-        this.height = provider.getScreenHeight();
+        this.width = Vera.provider.getScreenWidth();
+        this.height = Vera.provider.getScreenHeight();
         this.x = 0;
         this.y = 0;
 
@@ -62,7 +59,7 @@ public abstract class VeraApp {
 
     public void setVisibility(boolean visible) {
         this.visible = visible;
-        provider.handleAppVisibilityChange(this, visible);
+        Vera.provider.handleAppVisibilityChange(this, visible);
     }
 
     public int getHeight() {
@@ -98,10 +95,6 @@ public abstract class VeraApp {
         return y;
     }
 
-    public VeraProvider getProvider() {
-        return provider;
-    }
-
     public abstract void init();
 
     public List<VWidget> getWidgets() {
@@ -121,9 +114,7 @@ public abstract class VeraApp {
     }
 
     public void render() {
-        VeraRenderer renderer = provider.getRenderer();
-
-        renderer.drawRect(this, x, y, width, height, 0, backgroundColor);
+        Vera.renderer.drawRect(this, x, y, width, height, 0, backgroundColor);
     }
 
     public void update() {}
@@ -146,7 +137,7 @@ public abstract class VeraApp {
     }
 
     public List<VWidget> getHoveredWidgets() {
-        return getHoveredWidgets(provider.getMouseX(), provider.getMouseY());
+        return getHoveredWidgets(Vera.provider.getMouseX(), Vera.provider.getMouseY());
     }
 
     public List<VWidget> getHoveredWidgets(int mouseX, int mouseY) {

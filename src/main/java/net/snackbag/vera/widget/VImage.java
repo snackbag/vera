@@ -1,6 +1,6 @@
 package net.snackbag.vera.widget;
 
-import net.snackbag.vera.VeraRenderer;
+import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VeraApp;
 
 public class VImage extends VWidget {
@@ -22,9 +22,7 @@ public class VImage extends VWidget {
 
     @Override
     public void render() {
-        VeraRenderer renderer = getRenderer();
         VeraApp app = getApp();
-
-        renderer.drawImage(app, x + app.getX(), y + app.getY(), width, height, rotation, path);
+        Vera.renderer.drawImage(app, x + app.getX(), y + app.getY(), width, height, rotation, path);
     }
 }

@@ -1,6 +1,6 @@
 package net.snackbag.vera.widget;
 
-import net.snackbag.vera.VeraRenderer;
+import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VeraApp;
 
@@ -23,8 +23,6 @@ public class VRect extends VWidget {
 
     @Override
     public void render() {
-        VeraRenderer renderer = getRenderer();
-
-        renderer.drawRect(getApp(), x + app.getX(), y + app.getY(), width, height, rotation, color);
+        Vera.renderer.drawRect(getApp(), x + app.getX(), y + app.getY(), width, height, rotation, color);
     }
 }

@@ -1,7 +1,5 @@
 package net.snackbag.vera.widget;
 
-import net.snackbag.vera.VeraProvider;
-import net.snackbag.vera.VeraRenderer;
 import net.snackbag.vera.core.VeraApp;
 
 import java.util.ArrayList;
@@ -92,14 +90,6 @@ public abstract class VWidget {
 
     public void rotate(double rotation) {
         this.rotation = rotation;
-    }
-
-    protected VeraProvider getProvider() {
-        return app.getProvider();
-    }
-
-    protected VeraRenderer getRenderer() {
-        return app.getProvider().getRenderer();
     }
 
     public void update() {}

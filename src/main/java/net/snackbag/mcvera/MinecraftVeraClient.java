@@ -23,8 +23,6 @@ public class MinecraftVeraClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         MinecraftVera.LOGGER.info("Loading client Vera implementation...");
-
-        Vera.registerProvider("mcvera", new MCVeraProvider());
         TestHandler.impl(false);
 
         HudRenderCallback.EVENT.register((context, tickDelta) -> {

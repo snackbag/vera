@@ -1,5 +1,6 @@
 package net.snackbag.vera.event;
 
+import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VeraApp;
 import org.apache.commons.lang3.SystemUtils;
 
@@ -49,6 +50,6 @@ public class VShortcut {
     }
 
     public void run() {
-        app.getProvider().handleRunShortcut(this);
+        Vera.provider.handleRunShortcut(this);
     }
 }
