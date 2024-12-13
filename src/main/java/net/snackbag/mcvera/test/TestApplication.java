@@ -24,6 +24,11 @@ public class TestApplication extends VeraApp {
 
         setBackgroundColor(VColor.white());
 
+        VLineInput input = new VLineInput(this);
+        input.move(50);
+        addWidget(input);
+        setFocusedWidget(input);
+
         VLabel label = new VLabel("Hello world!", this);
         label.setPadding(5);
         label.move(10);
