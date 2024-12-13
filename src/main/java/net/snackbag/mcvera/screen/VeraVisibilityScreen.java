@@ -24,32 +24,4 @@ public class VeraVisibilityScreen extends Screen {
     public boolean shouldPause() {
         return false;
     }
-
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        for (VeraApp app : MCVeraData.visibleApplications) {
-            for (VWidget widget : app.getHoveredWidgets((int) mouseX, (int) mouseY)) {
-                switch (button) {
-                    case 0: widget.fireEvent("left-click"); break;
-                    case 1: widget.fireEvent("right-click"); break;
-                    case 2: widget.fireEvent("middle-click"); break;
-                    default: throw new IllegalStateException("Invalid button type: " + button);
-                }
-            }
-        }
-
-        return true;
-    }
-
-    @Override
-    public void resize(MinecraftClient client, int width, int height) {
-        super.resize(client, width, height);
-
-        for (VeraApp app : MCVeraData.visibleApplications) {
-            client.send(app::update);
-            for (VWidget widget : app.getWidgets()) {
-                client.send(widget::update);
-            }
-        }
-    }
 }
