@@ -1,6 +1,7 @@
 package net.snackbag.vera.widget;
 
 import net.snackbag.vera.Vera;
+import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 import org.lwjgl.glfw.GLFW;
@@ -12,6 +13,7 @@ public class VLineInput extends VWidget {
     public VLineInput(VeraApp app) {
         super(0, 0, 100, 20, app);
         text = "";
+        font = new VFont(Vera.provider.getDefaultFontName(), 16, VColor.black());
     }
 
     @Override
