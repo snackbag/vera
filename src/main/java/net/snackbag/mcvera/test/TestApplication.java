@@ -18,10 +18,16 @@ public class TestApplication extends VeraApp {
 
     @Override
     public void init() {
-        VShortcut shortcut = new VShortcut(this, "LeftWin+N", () -> {
-            System.out.println("Shortcut pressed!");
+        VShortcut exit = new VShortcut(this, "escape", () -> {
+            if (hasFocusedWidget()) {
+                setFocusedWidget(null);
+                return;
+            }
+
+            this.hide();
         });
-        addShortcut(shortcut);
+
+        addShortcut(exit);
 
         setBackgroundColor(VColor.white());
 
