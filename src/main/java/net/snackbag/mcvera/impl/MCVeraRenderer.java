@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
+import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
@@ -25,6 +26,7 @@ public class MCVeraRenderer {
 
     public void drawRect(VeraApp app, int x, int y, int width, int height, double rotation, VColor color) {
         drawContext.fill(x, y, x + width, y + height, color.toInt());
+//        drawText(app, x, y < 12 ? y : y - 6, 0, String.valueOf(color.opacity()), new VFont(Vera.provider.getDefaultFontName(), 12, VColor.of(255, 80, 80)));
     }
 
     public void drawText(VeraApp app, int x, int y, double rotation, String text, VFont font) {
