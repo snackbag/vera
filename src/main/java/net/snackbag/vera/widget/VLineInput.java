@@ -47,6 +47,18 @@ public class VLineInput extends VWidget {
         registerEventExecutor("vline-change", runnable);
     }
 
+    public void onCursorMove(Runnable runnable) {
+        registerEventExecutor("vline-cursor-move", runnable);
+    }
+
+    public void onCursorMoveLeft(Runnable runnable) {
+        registerEventExecutor("vline-cursor-move-left", runnable);
+    }
+
+    public void onCursorMoveRight(Runnable runnable) {
+        registerEventExecutor("vline-cursor-move-right", runnable);
+    }
+
     @Override
     public void keyPressed(int keyCode, int scanCode, int modifiers) {
         if (keyCode == GLFW.GLFW_KEY_BACKSPACE && !text.isEmpty()) {
@@ -57,9 +69,13 @@ public class VLineInput extends VWidget {
             text = builder.toString();
             fireEvent("vline-change");
         } else if (keyCode == GLFW.GLFW_KEY_LEFT && cursorPos > 0) {
+            fireEvent("vline-cursor-move");
+            fireEvent("vline-cursor-move-left");
             cursorPos -= 1;
         } else if (keyCode == GLFW.GLFW_KEY_RIGHT && cursorPos < text.length()) {
             cursorPos += 1;
+            fireEvent("vline-cursor-move");
+            fireEvent("vline-cursor-move-right");
         }
 
         super.keyPressed(keyCode, scanCode, modifiers);
