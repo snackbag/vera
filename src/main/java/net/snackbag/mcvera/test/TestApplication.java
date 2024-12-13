@@ -8,6 +8,7 @@ import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.widget.VImage;
 import net.snackbag.vera.widget.VLabel;
 import net.snackbag.vera.widget.VLineInput;
+import net.snackbag.vera.widget.VRect;
 
 public class TestApplication extends VeraApp {
     public static final TestApplication INSTANCE = new TestApplication();
@@ -29,7 +30,10 @@ public class TestApplication extends VeraApp {
 
         addShortcut(exit);
 
-        setBackgroundColor(VColor.white());
+        VRect bg = new VRect(VColor.white(), this);
+        bg.setSize(200, 12);
+        bg.move(50);
+        addWidget(bg);
 
         VLineInput input = new VLineInput(this);
         input.move(50);
@@ -63,7 +67,7 @@ public class TestApplication extends VeraApp {
         super.update();
 
         move(0);
-        setHeight(20);
+        setHeight(Vera.provider.getScreenHeight());
         setWidth(Vera.provider.getScreenWidth());
     }
 }
