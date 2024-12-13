@@ -159,7 +159,8 @@ public abstract class VWidget {
     }
 
     public void setFocused(boolean focused) {
-        app.setFocusedWidget(this);
+        if (focused) app.setFocusedWidget(this);
+        else app.setFocusedWidget(null);
     }
 
     public void keyPressed(int keyCode, int scanCode, int modifiers) {}
