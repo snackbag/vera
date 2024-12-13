@@ -154,6 +154,14 @@ public abstract class VWidget {
         eventExecutors.get(event).parallelStream().forEach((Runnable::run));
     }
 
+    public boolean isFocused() {
+        return app.isFocusedWidget(this);
+    }
+
+    public void setFocused(boolean focused) {
+        app.setFocusedWidget(this);
+    }
+
     public void keyPressed(int keyCode, int scanCode, int modifiers) {}
 
     public void charTyped(char chr, int modifiers) {}

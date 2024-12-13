@@ -3,6 +3,7 @@ package net.snackbag.vera.core;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.widget.VWidget;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public abstract class VeraApp {
     private int height;
 
     private boolean visible;
+    private @Nullable VWidget focusedWidget;
 
     public VeraApp() {
         this.widgets = new ArrayList<>();
@@ -155,5 +157,17 @@ public abstract class VeraApp {
         int widgetHeight = widget.getFullHeight();
         return mouseX >= widgetX && mouseX <= widgetX + widgetWidth &&
                 mouseY >= widgetY && mouseY <= widgetY + widgetHeight;
+    }
+
+    public void setFocusedWidget(@Nullable VWidget widget) {
+        this.focusedWidget = widget;
+    }
+
+    public @Nullable VWidget getFocusedWidget() {
+        return focusedWidget;
+    }
+
+    public boolean isFocusedWidget(VWidget widget) {
+        return focusedWidget != null && focusedWidget == widget;
     }
 }
