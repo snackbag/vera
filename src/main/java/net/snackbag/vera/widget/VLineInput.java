@@ -9,6 +9,7 @@ import org.lwjgl.glfw.GLFW;
 public class VLineInput extends VWidget {
     private VFont font;
     private String text;
+    private VColor cursorColor = VColor.white();
     private int cursorPos = 0;
 
     public VLineInput(VeraApp app) {
@@ -22,8 +23,7 @@ public class VLineInput extends VWidget {
         Vera.renderer.drawText(app, x, y, 0, text, font);
         Vera.renderer.drawRect(app,
                 x + Vera.provider.getTextWidth(text.substring(0, cursorPos), font), y,
-                1, Vera.provider.getTextHeight(text, font), 0,
-                VColor.white());
+                1, Vera.provider.getTextHeight(text, font), 0, cursorColor);
     }
 
     public VFont getFont() {
@@ -79,6 +79,22 @@ public class VLineInput extends VWidget {
         }
 
         super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    public int getCursorPos() {
+        return cursorPos;
+    }
+
+    public void setCursorPos(int cursorPos) {
+        this.cursorPos = cursorPos;
+    }
+
+    public VColor getCursorColor() {
+        return cursorColor;
+    }
+
+    public void setCursorColor(VColor cursorColor) {
+        this.cursorColor = cursorColor;
     }
 
     @Override
