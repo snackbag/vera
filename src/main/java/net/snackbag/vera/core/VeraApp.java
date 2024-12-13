@@ -170,6 +170,12 @@ public abstract class VeraApp {
     public boolean isFocusedWidget(VWidget widget) {
         return focusedWidget != null && focusedWidget == widget;
     }
+
+    public boolean hasFocusedWidget() {
+        return focusedWidget != null;
+    }
+
+
     public void keyPressed(int keyCode, int scanCode, int modifiers) {
         if (hasFocusedWidget()) getFocusedWidget().keyPressed(keyCode, scanCode, modifiers);
     }
