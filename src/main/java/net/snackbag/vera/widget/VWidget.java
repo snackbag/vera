@@ -153,4 +153,8 @@ public abstract class VWidget {
         if (!eventExecutors.containsKey(event)) return;
         eventExecutors.get(event).parallelStream().forEach((Runnable::run));
     }
+
+    public void keyPressed(int keyCode, int scanCode, int modifiers) {}
+
+    public void charTyped(char chr, int modifiers) {}
 }
