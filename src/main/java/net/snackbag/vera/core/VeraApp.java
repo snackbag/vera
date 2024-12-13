@@ -27,7 +27,7 @@ public abstract class VeraApp {
     public VeraApp() {
         this.widgets = new ArrayList<>();
         this.shortcuts = new HashMap<>();
-        this.backgroundColor = VColor.white();
+        this.backgroundColor = VColor.transparent();
 
         Vera.provider.handleAppInitialization(this);
 
