@@ -151,7 +151,7 @@ public abstract class VWidget {
 
     public void fireEvent(String event) {
         if (!eventExecutors.containsKey(event)) return;
-        eventExecutors.get(event).parallelStream().forEach((Runnable::run));
+        eventExecutors.get(event).parallelStream().forEach(Runnable::run);
     }
 
     public boolean isFocused() {
