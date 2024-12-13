@@ -7,6 +7,7 @@ import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.widget.VImage;
 import net.snackbag.vera.widget.VLabel;
+import net.snackbag.vera.widget.VLineInput;
 
 public class TestApplication extends VeraApp {
     public static final TestApplication INSTANCE = new TestApplication();
