@@ -33,12 +33,18 @@ public class VLineInput extends VWidget {
 
     public void setText(String text) {
         this.text = text;
+        fireEvent("vline-change");
+    }
+
+    public void onLineChanged(Runnable runnable) {
+        registerEventExecutor("vline-change", runnable);
     }
 
     @Override
     public void keyPressed(int keyCode, int scanCode, int modifiers) {
         if (keyCode == GLFW.GLFW_KEY_BACKSPACE && !text.isEmpty()) {
             text = text.substring(0, text.length() - 1);
+            fireEvent("vline-change");
         }
 
         super.keyPressed(keyCode, scanCode, modifiers);
@@ -48,6 +54,7 @@ public class VLineInput extends VWidget {
     public void charTyped(char chr, int modifiers) {
         if (!Character.isISOControl(chr)) {
             text += chr;
+            fireEvent("vline-change");
         }
         super.charTyped(chr, modifiers);
     }
