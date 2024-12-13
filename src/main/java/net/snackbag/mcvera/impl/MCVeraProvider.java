@@ -82,6 +82,14 @@ public class MCVeraProvider {
         return (int) (MinecraftClient.getInstance().mouse.getY() / MinecraftClient.getInstance().getWindow().getScaleFactor());
     }
 
+    public void handleKeyPressed(int keyCode, int scanCode, int modifiers) {
+
+    }
+
+    public void handleCharTyped(char chr, int modifiers) {
+
+    }
+
     public String getDefaultFontName() {
         return "minecraft:default";
     }
