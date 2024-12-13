@@ -56,6 +56,10 @@ public class VLineInput extends VWidget {
             cursorPos -= 1;
             text = builder.toString();
             fireEvent("vline-change");
+        } else if (keyCode == GLFW.GLFW_KEY_LEFT && cursorPos > 0) {
+            cursorPos -= 1;
+        } else if (keyCode == GLFW.GLFW_KEY_RIGHT && cursorPos < text.length()) {
+            cursorPos += 1;
         }
 
         super.keyPressed(keyCode, scanCode, modifiers);
