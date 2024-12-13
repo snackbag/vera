@@ -38,7 +38,6 @@ public abstract class VWidget {
         return y;
     }
 
-
     public int getRealX() {
         return getX();
     }
@@ -69,6 +68,11 @@ public abstract class VWidget {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public void setSize(int width, int height) {
+        setWidth(width);
+        setHeight(height);
     }
 
     public void move(int x, int y) {
