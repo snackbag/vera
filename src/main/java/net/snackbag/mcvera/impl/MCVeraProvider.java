@@ -57,11 +57,11 @@ public class MCVeraProvider {
     }
 
     public int getScreenHeight() {
-        return MinecraftClient.getInstance().getWindow().getHeight();
+        return MinecraftClient.getInstance().getWindow().getScaledHeight();
     }
 
     public int getScreenWidth() {
-        return MinecraftClient.getInstance().getWindow().getWidth();
+        return MinecraftClient.getInstance().getWindow().getScaledWidth();
     }
 
     public int getTextWidth(String text, VFont font) {
