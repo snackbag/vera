@@ -1,0 +1,11 @@
+{
+    "providers": [
+        {
+            "type": "ttf",
+            "shift": [0, 0],
+            "size": 12,
+            "file": "minecraft:arial.ttf",
+            "oversample": 2
+        }
+    ]
+}
