@@ -3,8 +3,9 @@ package net.snackbag.mcvera.impl;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
@@ -37,7 +38,7 @@ public class MCVeraRenderer {
 
         drawContext.drawText(
                 MinecraftClient.getInstance().textRenderer,
-                text,
+                Text.literal(text).setStyle(Style.EMPTY.withFont(new Identifier(font.getName()))),
                 0, 0, // x and y are handled by translate
                 font.getColor().toInt(),
                 false
