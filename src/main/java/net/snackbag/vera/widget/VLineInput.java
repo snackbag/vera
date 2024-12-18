@@ -21,9 +21,12 @@ public class VLineInput extends VWidget {
     @Override
     public void render() {
         Vera.renderer.drawText(app, x, y, 0, text, font);
-        Vera.renderer.drawRect(app,
-                x + Vera.provider.getTextWidth(text.substring(0, cursorPos), font), y,
-                1, Vera.provider.getTextHeight(text, font), 0, cursorColor);
+
+        if ((System.currentTimeMillis() / 500) % 2 == 0) {
+            Vera.renderer.drawRect(app,
+                    x + Vera.provider.getTextWidth(text.substring(0, cursorPos), font), y,
+                    1, Vera.provider.getTextHeight(text, font), 0, cursorColor);
+        }
     }
 
     public VFont getFont() {
