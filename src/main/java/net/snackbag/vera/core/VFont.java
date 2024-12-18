@@ -1,5 +1,7 @@
 package net.snackbag.vera.core;
 
+import net.snackbag.vera.Vera;
+
 public class VFont {
     private final String name;
     private final int size;
@@ -17,6 +19,10 @@ public class VFont {
 
     public VFont(String name) {
         this(name, 16, VColor.black());
+    }
+
+    public static VFont create() {
+        return new VFont(Vera.provider.getDefaultFontName());
     }
 
     public String getName() {
