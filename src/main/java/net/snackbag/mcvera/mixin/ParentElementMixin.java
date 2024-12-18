@@ -9,12 +9,17 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
+
 @Mixin(ParentElement.class)
 public interface ParentElementMixin {
     @Inject(method = "mouseClicked", at = @At("HEAD"))
     private void mcvera$handleMouseClick(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
         for (VeraApp app : MCVeraData.visibleApplications) {
-            for (VWidget widget : app.getHoveredWidgets((int) mouseX, (int) mouseY)) {
+            List<VWidget> hoveredWidgets = app.getHoveredWidgets((int) mouseX, (int) mouseY);
+            if (hoveredWidgets.isEmpty()) app.setFocusedWidget(null);
+
+            for (VWidget widget : hoveredWidgets) {
                 switch (button) {
                     case 0: widget.fireEvent("left-click"); break;
                     case 1: widget.fireEvent("right-click"); break;
