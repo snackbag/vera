@@ -36,6 +36,8 @@ public class MCVeraProvider {
     }
 
     public void handleAppHide(VeraApp app) {
+        if (!app.isVisible()) return;
+
         MCVeraData.visibleApplications.remove(app);
         MinecraftClient client = MinecraftClient.getInstance();
         client.send(app::update);
