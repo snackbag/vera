@@ -77,7 +77,8 @@ public class VDropdown extends VWidget {
 
     @Override
     public int getFullHeight() {
-        return items.size() * (font.getSize() / 2) + padding.get1() + padding.get2();
+        if (droppedDown) return items.size() * (font.getSize() / 2) + padding.get1() + padding.get2();
+        else return font.getSize() / 2 + padding.get1() + padding.get2();
     }
 
     public V4Int getPadding() {
