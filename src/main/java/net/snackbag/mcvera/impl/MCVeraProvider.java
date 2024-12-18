@@ -111,4 +111,16 @@ public class MCVeraProvider {
     public String getDefaultFontName() {
         return "minecraft:default";
     }
+
+    public void handleAppSetMouseRequired(VeraApp app, boolean mouseRequired) {
+        if (!app.isVisible()) return;
+
+        if (mouseRequired) {
+            MCVeraData.appsWithMouseRequired += 1;
+        } else {
+            MCVeraData.appsWithMouseRequired -= 1;
+        }
+
+        handleMouseLockUpdate();
+    }
 }
