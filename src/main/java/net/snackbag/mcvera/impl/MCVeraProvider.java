@@ -22,6 +22,8 @@ public class MCVeraProvider {
     }
 
     public void handleAppShow(VeraApp app) {
+        if (app.isVisible()) return;
+
         MCVeraData.visibleApplications.add(app);
         MinecraftClient client = MinecraftClient.getInstance();
         client.send(app::update);
