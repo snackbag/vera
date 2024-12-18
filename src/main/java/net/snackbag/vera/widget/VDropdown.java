@@ -61,22 +61,22 @@ public class VDropdown extends VWidget {
     }
 
     @Override
-    public int getRealX() {
+    public int getHitboxX() {
         return x - padding.get3();
     }
 
     @Override
-    public int getRealY() {
+    public int getHitboxY() {
         return y - padding.get1();
     }
 
     @Override
-    public int getFullWidth() {
+    public int getHitboxWidth() {
         return width + padding.get3() + padding.get4();
     }
 
     @Override
-    public int getFullHeight() {
+    public int getHitboxHeight() {
         if (droppedDown) return items.size() * (font.getSize() / 2) + padding.get1() + padding.get2();
         else return font.getSize() / 2 + padding.get1() + padding.get2();
     }

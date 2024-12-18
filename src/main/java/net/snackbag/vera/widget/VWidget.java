@@ -39,11 +39,11 @@ public abstract class VWidget {
         return y;
     }
 
-    public int getRealX() {
+    public int getHitboxX() {
         return getX();
     }
 
-    public int getRealY() {
+    public int getHitboxY() {
         return getY();
     }
 
@@ -51,7 +51,7 @@ public abstract class VWidget {
         return width;
     }
 
-    public int getFullWidth() {
+    public int getHitboxWidth() {
         return getWidth();
     }
 
@@ -59,7 +59,7 @@ public abstract class VWidget {
         return height;
     }
 
-    public int getFullHeight() {
+    public int getHitboxHeight() {
         return getHeight();
     }
 

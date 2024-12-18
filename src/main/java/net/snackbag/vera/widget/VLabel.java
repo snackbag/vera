@@ -66,22 +66,22 @@ public class VLabel extends VWidget {
     }
 
     @Override
-    public int getFullWidth() {
+    public int getHitboxWidth() {
         return width + padding.get3() + padding.get4();
     }
 
     @Override
-    public int getFullHeight() {
+    public int getHitboxHeight() {
         return height + padding.get1() + padding.get2();
     }
 
     @Override
-    public int getRealX() {
+    public int getHitboxX() {
         return x - padding.get4();
     }
 
     @Override
-    public int getRealY() {
+    public int getHitboxY() {
         return y - padding.get1();
     }
 
@@ -96,10 +96,10 @@ public class VLabel extends VWidget {
 
         Vera.renderer.drawRect(
                 app,
-                getRealX() + app.getX(),
-                getRealY() + app.getY(),
-                getFullWidth(),
-                getFullHeight(),
+                getHitboxX() + app.getX(),
+                getHitboxY() + app.getY(),
+                getHitboxWidth(),
+                getHitboxHeight(),
                 rotation,
                 backgroundColor
         );
