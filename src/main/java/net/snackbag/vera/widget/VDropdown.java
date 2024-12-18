@@ -17,7 +17,6 @@ public class VDropdown extends VWidget {
     private VColor backgroundColor;
     private V4Int padding;
 
-    private boolean droppedDown = false;
     private int selectedItem = 0;
 
     public VDropdown(VeraApp app) {
@@ -31,7 +30,7 @@ public class VDropdown extends VWidget {
 
     @Override
     public void render() {
-        if (droppedDown) {
+        if (isFocused()) {
             Vera.renderer.drawRect(
                     app,
                     x - padding.get3(),
@@ -77,8 +76,7 @@ public class VDropdown extends VWidget {
 
     @Override
     public int getHitboxHeight() {
-        if (droppedDown) return items.size() * (font.getSize() / 2) + padding.get1() + padding.get2();
-        else return font.getSize() / 2 + padding.get1() + padding.get2();
+        return font.getSize() / 2 + padding.get1() + padding.get2();
     }
 
     public V4Int getPadding() {
@@ -102,8 +100,16 @@ public class VDropdown extends VWidget {
         this.padding = new V4Int(all);
     }
 
-    public boolean isDroppedDown() {
-        return droppedDown;
+    @Override
+    public void handleBuiltinEvent(String event) {
+        if (event.equals("left-click")) {
+            if (isFocused()) {
+                setFocused(false);
+                return;
+            }
+        }
+
+        super.handleBuiltinEvent(event);
     }
 
     public int getSelectedItem() {
@@ -140,15 +146,6 @@ public class VDropdown extends VWidget {
 
     public List<Item> getItems() {
         return new ArrayList<>(items);
-    }
-
-    @Override
-    public void handleBuiltinEvent(String event) {
-        super.handleBuiltinEvent(event);
-
-        if (event.equals("left-click")) {
-            droppedDown = !droppedDown;
-        }
     }
 
     public record Item(
