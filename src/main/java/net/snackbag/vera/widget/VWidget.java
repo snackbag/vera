@@ -14,6 +14,7 @@ public abstract class VWidget {
     protected double rotation;
 
     protected VeraApp app;
+    protected boolean focusOnClick = true;
     private boolean hovered = false;
     private boolean visible = true;
     private final HashMap<String, List<Runnable>> eventExecutors;
@@ -155,7 +156,16 @@ public abstract class VWidget {
 
     public void fireEvent(String event) {
         if (!eventExecutors.containsKey(event)) return;
+        handleBuiltinEvent(event);
         eventExecutors.get(event).parallelStream().forEach(Runnable::run);
+    }
+
+    public void handleBuiltinEvent(String event) {
+        if (event.equals("left-click")) {
+            if (shouldFocusOnClick()) {
+                setFocused(true);
+            }
+        }
     }
 
     public boolean isFocused() {
@@ -165,6 +175,14 @@ public abstract class VWidget {
     public void setFocused(boolean focused) {
         if (focused) app.setFocusedWidget(this);
         else app.setFocusedWidget(null);
+    }
+
+    public boolean shouldFocusOnClick() {
+        return focusOnClick;
+    }
+
+    public void setFocusOnClick(boolean focus) {
+        focusOnClick = focus;
     }
 
     public void keyPressed(int keyCode, int scanCode, int modifiers) {}
