@@ -141,6 +141,15 @@ public class VDropdown extends VWidget {
         return new ArrayList<>(items);
     }
 
+    @Override
+    public void handleBuiltinEvent(String event) {
+        super.handleBuiltinEvent(event);
+
+        if (event.equals("left-click")) {
+            droppedDown = !droppedDown;
+        }
+    }
+
     public record Item(
             String name,
             @Nullable Runnable leftClick,
