@@ -20,11 +20,11 @@ public abstract class MinecraftClientMixin {
 		MinecraftClient client = MinecraftClient.getInstance();
 
 		client.send(() -> {
-			if (screen == null && !MCVeraData.visibleApplications.isEmpty()) {
+			if (screen == null && MCVeraData.appsWithMouseRequired >= 1) {
 				if (!(MinecraftClient.getInstance().currentScreen instanceof VeraVisibilityScreen)) {
 					setScreen(new VeraVisibilityScreen());
 				}
-			} else if (screen instanceof VeraVisibilityScreen && MCVeraData.visibleApplications.isEmpty()) {
+			} else if (screen instanceof VeraVisibilityScreen && MCVeraData.appsWithMouseRequired <= 0) {
 				setScreen(null);
 			}
 		});
