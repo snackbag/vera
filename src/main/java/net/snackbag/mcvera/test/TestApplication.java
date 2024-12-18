@@ -5,10 +5,7 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
-import net.snackbag.vera.widget.VImage;
-import net.snackbag.vera.widget.VLabel;
-import net.snackbag.vera.widget.VLineInput;
-import net.snackbag.vera.widget.VRect;
+import net.snackbag.vera.widget.*;
 
 public class TestApplication extends VeraApp {
     public static final TestApplication INSTANCE = new TestApplication();
@@ -65,6 +62,14 @@ public class TestApplication extends VeraApp {
                 32, 32, this);
         image.move(0, 30);
         addWidget(image);
+
+        VDropdown dropdown = new VDropdown(this);
+        dropdown.addItem("coolio");
+        dropdown.addItem("shmoolio");
+        dropdown.addItem("roolio");
+        dropdown.addItem("buger");
+        dropdown.move(90, 90);
+        addWidget(dropdown);
     }
 
     @Override
