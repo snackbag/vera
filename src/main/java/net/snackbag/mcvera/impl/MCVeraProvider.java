@@ -30,7 +30,7 @@ public class MCVeraProvider {
             client.send(widget::update);
         }
 
-        if (client.currentScreen == null) client.setScreen(new VeraVisibilityScreen());
+        handleMouseLockUpdate();
     }
 
     public void handleAppHide(VeraApp app) {
@@ -50,6 +50,16 @@ public class MCVeraProvider {
     public void handleAppVisibilityChange(VeraApp app, boolean visibility) {
         if (visibility) handleAppShow(app);
         else handleAppHide(app);
+    }
+
+    public void handleMouseLockUpdate() {
+        MinecraftClient client = MinecraftClient.getInstance();
+
+        if (MCVeraData.appsWithMouseRequired <= 0 && client.currentScreen instanceof VeraVisibilityScreen)
+            client.setScreen(null);
+
+        if (MCVeraData.appsWithMouseRequired >= 0 && client.currentScreen == null)
+            client.setScreen(new VeraVisibilityScreen());
     }
 
     public void handleRunShortcut(VShortcut shortcut) {
