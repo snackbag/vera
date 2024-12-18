@@ -28,7 +28,12 @@ public class TestApplication extends VeraApp {
             this.hide();
         });
 
+        VShortcut changeMouseRequired = new VShortcut(this, "leftalt+m", () -> {
+            setMouseRequired(!isMouseRequired());
+        });
+
         addShortcut(exit);
+        addShortcut(changeMouseRequired);
 
         VRect bg = new VRect(VColor.white(), this);
         bg.setSize(200, 12);
