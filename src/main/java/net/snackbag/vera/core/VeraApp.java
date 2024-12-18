@@ -15,6 +15,7 @@ public abstract class VeraApp {
     private final List<VWidget> widgets;
     private final HashMap<String, VShortcut> shortcuts;
     private VColor backgroundColor;
+    private boolean mouseRequired;
 
     private int x;
     private int y;
@@ -25,9 +26,14 @@ public abstract class VeraApp {
     private @Nullable VWidget focusedWidget;
 
     public VeraApp() {
+        this(true);
+    }
+
+    public VeraApp(boolean mouseRequired) {
         this.widgets = new ArrayList<>();
         this.shortcuts = new HashMap<>();
         this.backgroundColor = VColor.transparent();
+        this.mouseRequired = mouseRequired;
 
         Vera.provider.handleAppInitialization(this);
 
