@@ -25,6 +25,7 @@ public class MCVeraProvider {
         if (app.isVisible()) return;
 
         MCVeraData.visibleApplications.add(app);
+        if (app.isMouseRequired()) MCVeraData.appsWithMouseRequired += 1;
         MinecraftClient client = MinecraftClient.getInstance();
         client.send(app::update);
 
