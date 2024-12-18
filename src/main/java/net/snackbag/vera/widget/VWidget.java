@@ -155,8 +155,9 @@ public abstract class VWidget {
     }
 
     public void fireEvent(String event) {
-        if (!eventExecutors.containsKey(event)) return;
         handleBuiltinEvent(event);
+        
+        if (!eventExecutors.containsKey(event)) return;
         eventExecutors.get(event).parallelStream().forEach(Runnable::run);
     }
 
