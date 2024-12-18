@@ -15,7 +15,7 @@ public class VLineInput extends VWidget {
     public VLineInput(VeraApp app) {
         super(0, 0, 100, 20, app);
         text = "";
-        font = new VFont(Vera.provider.getDefaultFontName(), 16, VColor.black());
+        font = VFont.create();
     }
 
     @Override

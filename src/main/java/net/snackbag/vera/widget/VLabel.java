@@ -16,7 +16,7 @@ public class VLabel extends VWidget {
         super(0, 0, 100, 16, app);
 
         this.text = text;
-        this.font = new VFont(Vera.provider.getDefaultFontName(), 16, VColor.black());
+        this.font = VFont.create();
         this.backgroundColor = VColor.transparent();
         this.padding = new V4Int(4);
     }
