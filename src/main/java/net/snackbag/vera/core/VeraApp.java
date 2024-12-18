@@ -44,6 +44,12 @@ public abstract class VeraApp {
 
         this.visible = false;
     }
+    public void setMouseRequired(boolean mouseRequired) {
+        if (this.mouseRequired == mouseRequired) return;
+
+        Vera.provider.handleAppSetMouseRequired(this, mouseRequired);
+        this.mouseRequired = mouseRequired;
+    }
 
     public boolean isVisible() {
         return visible;
