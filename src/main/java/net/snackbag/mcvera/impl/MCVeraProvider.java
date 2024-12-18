@@ -38,6 +38,7 @@ public class MCVeraProvider {
     public void handleAppHide(VeraApp app) {
         if (!app.isVisible()) return;
 
+        if (app.isMouseRequired()) MCVeraData.appsWithMouseRequired -= 1;
         MCVeraData.visibleApplications.remove(app);
         MinecraftClient client = MinecraftClient.getInstance();
         client.send(app::update);
@@ -46,9 +47,7 @@ public class MCVeraProvider {
             client.send(widget::update);
         }
 
-        if (MCVeraData.visibleApplications.isEmpty() && client.currentScreen instanceof VeraVisibilityScreen) {
-            client.setScreen(null);
-        }
+        handleMouseLockUpdate();
     }
 
     public void handleAppVisibilityChange(VeraApp app, boolean visibility) {
