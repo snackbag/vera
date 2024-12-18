@@ -55,7 +55,7 @@ public class VDropdown extends VWidget {
             );
 
             if (!items.isEmpty()) {
-                Vera.renderer.drawText(app, x, y + font.getSize() / 2, 0, items.get(0).name, font);
+                Vera.renderer.drawText(app, x, y, 0, items.get(0).name, font);
             }
         }
     }
