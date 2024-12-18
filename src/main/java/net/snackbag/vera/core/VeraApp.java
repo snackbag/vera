@@ -66,8 +66,8 @@ public abstract class VeraApp {
     }
 
     public void setVisibility(boolean visible) {
-        this.visible = visible;
         Vera.provider.handleAppVisibilityChange(this, visible);
+        this.visible = visible;
     }
 
     public int getHeight() {
