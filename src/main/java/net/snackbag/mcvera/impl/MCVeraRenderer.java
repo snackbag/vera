@@ -47,8 +47,8 @@ public class MCVeraRenderer {
         drawContext.getMatrices().pop();
     }
 
-    public void drawImage(VeraApp veraApp, int x, int y, int width, int height, double rotation, String path) {
-        drawContext.drawTexture(new Identifier(path), x, y, 0, 0, width, height, width, height);
+    public void drawImage(VeraApp veraApp, int x, int y, int width, int height, double rotation, Identifier path) {
+        drawContext.drawTexture(path, x, y, 0, 0, width, height, width, height);
     }
 
     public void renderApp(VeraApp app) {

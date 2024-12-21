@@ -1,23 +1,28 @@
 package net.snackbag.vera.widget;
 
+import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VeraApp;
 
 public class VImage extends VWidget {
-    private String path;
+    private Identifier path;
 
-    public VImage(String path, int width, int height, VeraApp app) {
+    public VImage(Identifier path, int width, int height, VeraApp app) {
         super(0, 0, width, height, app);
 
         this.path = path;
     }
 
-    public String getPath() {
+    public Identifier getPath() {
         return path;
     }
 
-    public void setPath(String path) {
+    public void setPath(Identifier path) {
         this.path = path;
+    }
+
+    public void setPath(String path) {
+        setPath(new Identifier(path));
     }
 
     @Override
