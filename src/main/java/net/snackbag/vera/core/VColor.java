@@ -1,5 +1,7 @@
 package net.snackbag.vera.core;
 
+import java.util.function.Consumer;
+
 public class VColor {
     private final int red;
     private final int green;
@@ -119,5 +121,51 @@ public class VColor {
 
     public static VColor black() {
         return new VColor(0, 0, 0, 1);
+    }
+
+    public static class ColorModifier {
+        private VColor color;
+        private final Consumer<VColor> colorUpdater;
+
+        public ColorModifier(VColor color, Consumer<VColor> colorUpdater) {
+            this.color = color;
+            this.colorUpdater = colorUpdater;
+        }
+
+        public ColorModifier rgb(int r, int g, int b) {
+            color = new VColor(r, g, b, color.opacity);
+            colorUpdater.accept(color);
+            return this;
+        }
+
+        public ColorModifier rgba(int r, int g, int b, float a) {
+            color = new VColor(r, g, b, a);
+            colorUpdater.accept(color);
+            return this;
+        }
+
+        public ColorModifier red(int r) {
+            color = color.withRed(r);
+            colorUpdater.accept(color);
+            return this;
+        }
+
+        public ColorModifier green(int g) {
+            color = color.withGreen(g);
+            colorUpdater.accept(color);
+            return this;
+        }
+
+        public ColorModifier blue(int b) {
+            color = color.withBlue(b);
+            colorUpdater.accept(color);
+            return this;
+        }
+
+        public ColorModifier opacity(int o) {
+            color = color.withOpacity(o);
+            colorUpdater.accept(color);
+            return this;
+        }
     }
 }
