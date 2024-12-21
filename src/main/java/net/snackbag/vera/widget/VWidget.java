@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class VWidget {
+public abstract class VWidget<T extends VWidget<T>> {
     protected int x;
     protected int y;
     protected int width;
@@ -189,4 +189,9 @@ public abstract class VWidget {
     public void keyPressed(int keyCode, int scanCode, int modifiers) {}
 
     public void charTyped(char chr, int modifiers) {}
+
+    public T alsoAdd() {
+        app.addWidget(this);
+        return (T) this;
+    }
 }
