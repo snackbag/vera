@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class VeraApp {
-    private final List<VWidget> widgets;
+    private final List<VWidget<?>> widgets;
     private final HashMap<String, VShortcut> shortcuts;
     private VColor backgroundColor;
     private boolean mouseRequired;
@@ -23,7 +23,7 @@ public abstract class VeraApp {
     private int height;
 
     private boolean visible;
-    private @Nullable VWidget focusedWidget;
+    private @Nullable VWidget<?> focusedWidget;
 
     public VeraApp() {
         this(true);
