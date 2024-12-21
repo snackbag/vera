@@ -162,7 +162,7 @@ public class VColor {
             return this;
         }
 
-        public ColorModifier opacity(int o) {
+        public ColorModifier opacity(float o) {
             color = color.withOpacity(o);
             colorUpdater.accept(color);
             return this;
