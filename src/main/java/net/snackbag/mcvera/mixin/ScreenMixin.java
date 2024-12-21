@@ -23,7 +23,7 @@ public abstract class ScreenMixin {
     private void mcvera$handleResize(MinecraftClient client, int width, int height, CallbackInfo ci) {
         for (VeraApp app : MCVeraData.visibleApplications) {
             client.send(app::update);
-            for (VWidget widget : app.getWidgets()) {
+            for (VWidget<?> widget : app.getWidgets()) {
                 client.send(widget::update);
             }
         }

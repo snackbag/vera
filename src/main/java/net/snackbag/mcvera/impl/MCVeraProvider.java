@@ -29,7 +29,7 @@ public class MCVeraProvider {
         MinecraftClient client = MinecraftClient.getInstance();
         client.send(app::update);
 
-        for (VWidget widget : app.getWidgets()) {
+        for (VWidget<?> widget : app.getWidgets()) {
             client.send(widget::update);
         }
 
@@ -44,7 +44,7 @@ public class MCVeraProvider {
         MinecraftClient client = MinecraftClient.getInstance();
         client.send(app::update);
 
-        for (VWidget widget : app.getWidgets()) {
+        for (VWidget<?> widget : app.getWidgets()) {
             client.send(widget::update);
         }
 

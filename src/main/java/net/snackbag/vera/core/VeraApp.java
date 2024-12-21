@@ -116,11 +116,11 @@ public abstract class VeraApp {
 
     public abstract void init();
 
-    public List<VWidget> getWidgets() {
+    public List<VWidget<?>> getWidgets() {
         return new ArrayList<>(widgets);
     }
 
-    public void addWidget(VWidget widget) {
+    public void addWidget(VWidget<?> widget) {
         this.widgets.add(widget);
     }
 
@@ -155,17 +155,17 @@ public abstract class VeraApp {
         return List.copyOf(shortcuts.values());
     }
 
-    public List<VWidget> getHoveredWidgets() {
+    public List<VWidget<?>> getHoveredWidgets() {
         return getHoveredWidgets(Vera.provider.getMouseX(), Vera.provider.getMouseY());
     }
 
-    public List<VWidget> getHoveredWidgets(int mouseX, int mouseY) {
+    public List<VWidget<?>> getHoveredWidgets(int mouseX, int mouseY) {
         return widgets.parallelStream()
                 .filter(widget -> isMouseOverWidget(widget, mouseX, mouseY))
                 .collect(Collectors.toList());
     }
 
-    private boolean isMouseOverWidget(VWidget widget, int mouseX, int mouseY) {
+    private boolean isMouseOverWidget(VWidget<?> widget, int mouseX, int mouseY) {
         if (!widget.isVisible()) return false;
 
         int widgetX = widget.getHitboxX() + x;
@@ -176,15 +176,15 @@ public abstract class VeraApp {
                 mouseY >= widgetY && mouseY <= widgetY + widgetHeight;
     }
 
-    public void setFocusedWidget(@Nullable VWidget widget) {
+    public void setFocusedWidget(@Nullable VWidget<?> widget) {
         this.focusedWidget = widget;
     }
 
-    public @Nullable VWidget getFocusedWidget() {
+    public @Nullable VWidget<?> getFocusedWidget() {
         return focusedWidget;
     }
 
-    public boolean isFocusedWidget(VWidget widget) {
+    public boolean isFocusedWidget(VWidget<?> widget) {
         return focusedWidget != null && focusedWidget == widget;
     }
 

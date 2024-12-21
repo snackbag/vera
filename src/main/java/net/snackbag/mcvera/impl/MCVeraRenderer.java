@@ -52,12 +52,12 @@ public class MCVeraRenderer {
     }
 
     public void renderApp(VeraApp app) {
-        List<VWidget> widgets = app.getWidgets();
+        List<VWidget<?>> widgets = app.getWidgets();
         RenderSystem.enableBlend();
 
         app.render();
-        List<VWidget> hoveredWidgets = app.getHoveredWidgets();
-        for (VWidget widget : widgets) {
+        List<VWidget<?>> hoveredWidgets = app.getHoveredWidgets();
+        for (VWidget<?> widget : widgets) {
             widget.setHovered(hoveredWidgets.contains(widget));
             if (widget.isVisible()) widget.render();
         }
