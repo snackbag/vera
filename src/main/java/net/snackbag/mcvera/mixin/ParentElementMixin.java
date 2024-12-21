@@ -33,4 +33,11 @@ public interface ParentElementMixin {
             }
         });
     }
+
+    @Inject(method = "mouseScrolled", at = @At("HEAD"))
+    private void mcvera$handleMouseScroll(double mouseX, double mouseY, double amount, CallbackInfoReturnable<Boolean> cir) {
+        Vera.forHoveredWidget((int) mouseX, (int) mouseY, (widget) -> {
+            widget.fireEvent("mouse-scroll", (int) mouseX, (int) mouseY, amount);
+        });
+    }
 }
