@@ -21,6 +21,10 @@ public class VRect extends VWidget<VRect> {
         this.color = color;
     }
 
+    public VColor.ColorModifier modifyColor() {
+        return new VColor.ColorModifier(color, this::setColor);
+    }
+
     @Override
     public void render() {
         Vera.renderer.drawRect(getApp(), x + app.getX(), y + app.getY(), width, height, rotation, color);

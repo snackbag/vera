@@ -131,12 +131,20 @@ public class VDropdown extends VWidget<VDropdown> {
         return new VFont.FontModifier(font, this::setFont);
     }
 
+    public VColor.ColorModifier modifyFontColor() {
+        return new VColor.ColorModifier(font.getColor(), (color) -> setFont(font.withColor(color)));
+    }
+
     public VColor getBackgroundColor() {
         return backgroundColor;
     }
 
     public void setBackgroundColor(VColor backgroundColor) {
         this.backgroundColor = backgroundColor;
+    }
+
+    public VColor.ColorModifier modifyBackgroundColor() {
+        return new VColor.ColorModifier(backgroundColor, this::setBackgroundColor);
     }
 
     public void addItem(String name) {

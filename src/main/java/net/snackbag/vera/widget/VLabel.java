@@ -69,6 +69,10 @@ public class VLabel extends VWidget<VLabel> {
         return new VFont.FontModifier(font, this::setFont);
     }
 
+    public VColor.ColorModifier modifyFontColor() {
+        return new VColor.ColorModifier(font.getColor(), (color) -> setFont(font.withColor(color)));
+    }
+
     @Override
     public int getHitboxWidth() {
         return width + padding.get3() + padding.get4();
