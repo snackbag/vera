@@ -125,12 +125,24 @@ public abstract class VWidget<T extends VWidget<T>> {
         registerEventExecutor("left-click", runnable);
     }
 
+    public void onLeftClickRelease(Runnable runnable) {
+        registerEventExecutor("left-click-release", runnable);
+    }
+
     public void onRightClick(Runnable runnable) {
         registerEventExecutor("right-click", runnable);
     }
 
+    public void onRightClickRelease(Runnable runnable) {
+        registerEventExecutor("right-click-release", runnable);
+    }
+
     public void onMiddleClick(Runnable runnable) {
         registerEventExecutor("middle-click", runnable);
+    }
+
+    public void onMiddleClickRelease(Runnable runnable) {
+        registerEventExecutor("right-click-release", runnable);
     }
 
     public boolean isVisible() {
