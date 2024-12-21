@@ -2,11 +2,11 @@ package net.snackbag.vera.widget;
 
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VEvent;
+import net.snackbag.vera.event.VScrollEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Consumer;
 
 public abstract class VWidget<T extends VWidget<T>> {
     protected int x;
@@ -148,8 +148,10 @@ public abstract class VWidget<T extends VWidget<T>> {
         registerEventExecutor("right-click-release", runnable);
     }
 
-    public void onMouseScroll(Consumer<Integer> runnable) {
-        registerEventExecutor("mouse-scroll", args -> runnable.accept((int) args[0]));
+    public void onMouseScroll(VScrollEvent runnable) {
+        registerEventExecutor("mouse-scroll", args -> runnable.run(
+                (int) args[0], (int) args[1], (double) args[2])
+        );
     }
 
     public boolean isVisible() {
