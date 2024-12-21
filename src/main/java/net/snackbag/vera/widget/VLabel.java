@@ -6,7 +6,7 @@ import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 
-public class VLabel extends VWidget {
+public class VLabel extends VWidget<VLabel> {
     private String text;
     private VFont font;
     private VColor backgroundColor;

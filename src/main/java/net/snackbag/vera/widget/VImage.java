@@ -4,7 +4,7 @@ import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VeraApp;
 
-public class VImage extends VWidget {
+public class VImage extends VWidget<VImage> {
     private Identifier path;
 
     public VImage(Identifier path, int width, int height, VeraApp app) {

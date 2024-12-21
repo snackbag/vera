@@ -4,7 +4,7 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VeraApp;
 
-public class VRect extends VWidget {
+public class VRect extends VWidget<VRect> {
     protected VColor color;
 
     public VRect(VColor color, VeraApp app) {

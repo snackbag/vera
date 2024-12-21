@@ -6,7 +6,7 @@ import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 import org.lwjgl.glfw.GLFW;
 
-public class VLineInput extends VWidget {
+public class VLineInput extends VWidget<VLineInput> {
     private VFont font;
     private String text;
     private VColor cursorColor = VColor.white();

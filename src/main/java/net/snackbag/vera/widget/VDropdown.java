@@ -1,6 +1,5 @@
 package net.snackbag.vera.widget;
 
-import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.V4Int;
 import net.snackbag.vera.core.VColor;
@@ -11,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VDropdown extends VWidget {
+public class VDropdown extends VWidget<VDropdown> {
     private final List<Item> items;
     private VFont font;
     private VColor backgroundColor;
