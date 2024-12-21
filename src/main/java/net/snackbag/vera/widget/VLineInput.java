@@ -37,6 +37,10 @@ public class VLineInput extends VWidget<VLineInput> {
         this.font = font;
     }
 
+    public VFont.FontModifier modifyFont() {
+        return new VFont.FontModifier(font, this::setFont);
+    }
+
     public String getText() {
         return text;
     }

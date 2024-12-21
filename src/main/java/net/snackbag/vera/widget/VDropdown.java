@@ -127,6 +127,10 @@ public class VDropdown extends VWidget<VDropdown> {
         this.font = font;
     }
 
+    public VFont.FontModifier modifyFont() {
+        return new VFont.FontModifier(font, this::setFont);
+    }
+
     public VColor getBackgroundColor() {
         return backgroundColor;
     }
