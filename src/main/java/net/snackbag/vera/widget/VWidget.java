@@ -1,10 +1,13 @@
 package net.snackbag.vera.widget;
 
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.event.VEvent;
+import net.snackbag.vera.event.VScrollEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
 
 public abstract class VWidget<T extends VWidget<T>> {
     protected int x;
@@ -17,7 +20,8 @@ public abstract class VWidget<T extends VWidget<T>> {
     protected boolean focusOnClick = true;
     private boolean hovered = false;
     private boolean visible = true;
-    private final HashMap<String, List<Runnable>> eventExecutors;
+
+    private final HashMap<String, List<VEvent>> eventExecutors;
 
     public VWidget(int x, int y, int width, int height, VeraApp app) {
         this.x = x;
@@ -145,6 +149,10 @@ public abstract class VWidget<T extends VWidget<T>> {
         registerEventExecutor("right-click-release", runnable);
     }
 
+    public void onMouseScroll(Consumer<Integer> runnable) {
+        registerEventExecutor("mouse-scroll", args -> runnable.accept((int) args[0]));
+    }
+
     public boolean isVisible() {
         return visible;
     }
@@ -161,16 +169,15 @@ public abstract class VWidget<T extends VWidget<T>> {
         setVisible(false);
     }
 
-    public void registerEventExecutor(String event, Runnable runnable) {
-        if (!eventExecutors.containsKey(event)) eventExecutors.put(event, new ArrayList<>());
-        eventExecutors.get(event).add(runnable);
+    public void registerEventExecutor(String event, VEvent executor) {
+        eventExecutors.computeIfAbsent(event, k -> new ArrayList<>()).add(executor);
     }
 
-    public void fireEvent(String event) {
+    public void fireEvent(String event, Object... args) {
         handleBuiltinEvent(event);
 
         if (!eventExecutors.containsKey(event)) return;
-        eventExecutors.get(event).parallelStream().forEach(Runnable::run);
+        eventExecutors.get(event).parallelStream().forEach(e -> e.run(args));
     }
 
     public void handleBuiltinEvent(String event) {
