@@ -2,7 +2,6 @@ package net.snackbag.vera.widget;
 
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VEvent;
-import net.snackbag.vera.event.VScrollEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
