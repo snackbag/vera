@@ -65,6 +65,10 @@ public class VLabel extends VWidget<VLabel> {
         setPadding(new V4Int(top, bottom, left, right));
     }
 
+    public VFont.FontModifier modifyFont() {
+        return new VFont.FontModifier(font, this::setFont);
+    }
+
     @Override
     public int getHitboxWidth() {
         return width + padding.get3() + padding.get4();
