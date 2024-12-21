@@ -58,7 +58,7 @@ public class TestApplication extends VeraApp {
         addWidget(label);
 
         VImage image = new VImage(
-                Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/dirt.png").toString(),
+                Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/dirt.png"),
                 32, 32, this);
         image.move(0, 30);
         addWidget(image);
