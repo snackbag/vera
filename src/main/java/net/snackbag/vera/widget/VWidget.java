@@ -173,6 +173,10 @@ public abstract class VWidget<T extends VWidget<T>> {
         eventExecutors.computeIfAbsent(event, k -> new ArrayList<>()).add(executor);
     }
 
+    public void registerEventExecutor(String event, Runnable runnable) {
+        registerEventExecutor(event, args -> runnable.run());
+    }
+
     public void fireEvent(String event, Object... args) {
         handleBuiltinEvent(event);
 
