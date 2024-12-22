@@ -5,7 +5,7 @@ import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VEvent;
 import net.snackbag.vera.event.VMouseDragEvent;
 import net.snackbag.vera.event.VMouseMoveEvent;
-import net.snackbag.vera.event.VScrollEvent;
+import net.snackbag.vera.event.VMouseScrollEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -154,7 +154,7 @@ public abstract class VWidget<T extends VWidget<T>> {
         registerEventExecutor("right-click-release", runnable);
     }
 
-    public void onMouseScroll(VScrollEvent runnable) {
+    public void onMouseScroll(VMouseScrollEvent runnable) {
         registerEventExecutor("mouse-scroll", args -> runnable.run(
                 (int) args[0], (int) args[1], (double) args[2])
         );

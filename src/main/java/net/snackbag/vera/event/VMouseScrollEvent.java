@@ -1,6 +1,6 @@
 package net.snackbag.vera.event;
 
 @FunctionalInterface
-public interface VScrollEvent {
+public interface VMouseScrollEvent {
     void run(int x, int y, double amount);
 }
