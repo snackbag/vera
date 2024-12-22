@@ -2,6 +2,7 @@ package net.snackbag.vera.widget;
 
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
+import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 import org.lwjgl.glfw.GLFW;
@@ -16,6 +17,8 @@ public class VLineInput extends VWidget<VLineInput> {
         super(0, 0, 100, 20, app);
         text = "";
         font = VFont.create();
+
+        setHoverCursor(VCursorShape.TEXT);
     }
 
     @Override
