@@ -18,7 +18,7 @@ public interface ParentElementMixin {
                 case 2: widget.fireEvent("middle-click"); break;
                 default: throw new IllegalStateException("Invalid button type: " + button);
             }
-        });
+        }, (app) -> app.setFocusedWidget(null));
     }
 
     @Inject(method = "mouseReleased", at = @At("HEAD"))
