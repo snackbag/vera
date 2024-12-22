@@ -5,8 +5,9 @@ import net.snackbag.vera.core.V4Int;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.modifier.VPaddingWidget;
 
-public class VLabel extends VWidget<VLabel> {
+public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
     private String text;
     private VFont font;
     private VColor backgroundColor;
@@ -46,24 +47,14 @@ public class VLabel extends VWidget<VLabel> {
         this.text = text;
     }
 
+    @Override
     public V4Int getPadding() {
         return padding;
     }
 
+    @Override
     public void setPadding(V4Int padding) {
         this.padding = padding;
-    }
-
-    public void setPadding(int all) {
-        setPadding(new V4Int(all));
-    }
-
-    public void setPadding(int tb, int lr) {
-        setPadding(new V4Int(tb, lr));
-    }
-
-    public void setPadding(int top, int bottom, int left, int right) {
-        setPadding(new V4Int(top, bottom, left, right));
     }
 
     public VFont.FontModifier modifyFont() {

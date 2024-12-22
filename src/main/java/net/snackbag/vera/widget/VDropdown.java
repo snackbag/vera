@@ -2,12 +2,13 @@ package net.snackbag.vera.widget;
 
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
+import net.snackbag.vera.modifier.VPaddingWidget;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class VDropdown extends VWidget<VDropdown> {
+public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
     private final List<Item> items;
     private VFont font;
     private VColor backgroundColor;
@@ -76,25 +77,14 @@ public class VDropdown extends VWidget<VDropdown> {
         return font.getSize() / 2 + padding.get1() + padding.get2();
     }
 
+    @Override
     public V4Int getPadding() {
         return padding;
     }
 
+    @Override
     public void setPadding(V4Int padding) {
         this.padding = padding;
-    }
-
-    public void setPadding(int t, int b, int l, int r) {
-        this.padding = new V4Int(t, b, l, r);
-    }
-
-    public void setPadding(int tb, int lr) {
-        this.padding = new V4Int(tb, lr);
-
-    }
-
-    public void setPadding(int all) {
-        this.padding = new V4Int(all);
     }
 
     @Override
