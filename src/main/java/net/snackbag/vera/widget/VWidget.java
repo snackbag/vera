@@ -26,6 +26,16 @@ public abstract class VWidget<T extends VWidget<T>> {
     private boolean hovered = false;
     private boolean visible = true;
 
+    private boolean leftClickDown = false;
+    private boolean middleClickDown = false;
+    private boolean rightClickDown = false;
+    private int leftDragPreviousX = -1;
+    private int leftDragPreviousY = -1;
+    private int middleDragPreviousX = -1;
+    private int middleDragPreviousY = -1;
+    private int rightDragPreviousX = -1;
+    private int rightDragPreviousY = -1;
+
     private final HashMap<String, List<VEvent>> eventExecutors;
 
     public VWidget(int x, int y, int width, int height, VeraApp app) {
@@ -92,6 +102,22 @@ public abstract class VWidget<T extends VWidget<T>> {
 
     public void move(int both) {
         move(both, both);
+    }
+
+    public boolean isLeftClickDown() {
+        return leftClickDown;
+    }
+
+    public boolean isMiddleClickDown() {
+        return middleClickDown;
+    }
+
+    public boolean isRightClickDown() {
+        return rightClickDown;
+    }
+
+    public boolean isAnyMouseButtonDown() {
+        return leftClickDown || middleClickDown || rightClickDown;
     }
 
     public VeraApp getApp() {
@@ -201,34 +227,90 @@ public abstract class VWidget<T extends VWidget<T>> {
     }
 
     public void fireEvent(String event, Object... args) {
-        handleBuiltinEvent(event);
+        handleBuiltinEvent(event, args);
 
         if (!eventExecutors.containsKey(event)) return;
         eventExecutors.get(event).parallelStream().forEach(e -> e.run(args));
     }
 
-    public void handleBuiltinEvent(String event) {
+    public void handleBuiltinEvent(String event, Object... args) {
         switch (event) {
             case "left-click" -> {
                 if (shouldFocusOnClick()) {
                     setFocused(true);
                 }
-                break;
+                leftClickDown = true;
             }
+
+            case "right-click" -> rightClickDown = true;
+            case "middle-click" -> middleClickDown = true;
+
+            case "left-click-release" -> clearLeftClickDown();
+            case "right-click-release" -> clearRightClickDown();
+            case "middle-click-release" -> clearMiddleClickDown();
+
+            case "mouse-move" -> {
+                if (leftClickDown) {
+                    int newX = (int) args[0];
+                    int newY = (int) args[1];
+                    if (leftDragPreviousX != -1 || leftDragPreviousY != -1) fireEvent("mouse-drag-left", leftDragPreviousX, leftDragPreviousY, newX, newY);
+
+                    leftDragPreviousX = newX;
+                    leftDragPreviousY = newY;
+                } else if (rightClickDown) {
+                    int newX = (int) args[0];
+                    int newY = (int) args[1];
+
+                    if (rightDragPreviousX != -1 || rightDragPreviousY != -1) fireEvent("mouse-drag-right", rightDragPreviousX, rightDragPreviousY, newX, newY);
+
+                    rightDragPreviousX = newX;
+                    rightDragPreviousY = newY;
+                } else if (middleClickDown) {
+                    int newX = (int) args[0];
+                    int newY = (int) args[1];
+
+                    if (middleDragPreviousX != -1 || middleDragPreviousY != -1) fireEvent("mouse-drag-middle", middleDragPreviousX, middleDragPreviousY, newX, newY);
+
+                    middleDragPreviousX = newX;
+                    middleDragPreviousY = newY;
+                }
+            }
+
             case "hover" -> {
                 if (hoverCursor == null) break;
 
                 cursorBeforeHover = app.getCursorShape();
                 app.setCursorShape(hoverCursor);
-                break;
             }
+
             case "hover-leave" -> {
                 if (cursorBeforeHover == null) break;
 
                 app.setCursorShape(cursorBeforeHover);
-                break;
+
+                clearLeftClickDown();
+                clearRightClickDown();
+                clearMiddleClickDown();
             }
         }
+    }
+
+    private void clearLeftClickDown() {
+        leftClickDown = false;
+        leftDragPreviousX = -1;
+        leftDragPreviousY = -1;
+    }
+
+    private void clearRightClickDown() {
+        rightClickDown = false;
+        rightDragPreviousX = -1;
+        rightDragPreviousY = -1;
+    }
+
+    private void clearMiddleClickDown() {
+        middleClickDown = false;
+        middleDragPreviousX = -1;
+        middleDragPreviousY = -1;
     }
 
     public @Nullable VCursorShape getHoverCursor() {
