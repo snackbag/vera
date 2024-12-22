@@ -17,6 +17,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
 
     private @Nullable VColor cursorColor;
     private int cursorPos;
+    private @Nullable Integer maxChars;
 
     private VColor backgroundColor;
     private V4Int padding;
@@ -30,6 +31,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         this.placeholderFont = VFont.create().withColor(VColor.black().withOpacity(0.5f));
         this.cursorColor = null;
         this.cursorPos = 0;
+        this.maxChars = null;
 
         this.backgroundColor = VColor.transparent();
         this.padding = new V4Int(4);
@@ -108,6 +110,14 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
     public void setText(String text) {
         this.text = text;
         fireEvent("vline-change");
+    }
+
+    public @Nullable Integer getMaxChars() {
+        return maxChars;
+    }
+
+    public void setMaxChars(@Nullable Integer maxChars) {
+        this.maxChars = maxChars;
     }
 
     public void setPlaceholderText(String placeholderText) {
@@ -249,6 +259,8 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
 
     @Override
     public void charTyped(char chr, int modifiers) {
+        if (maxChars != null && text.length() >= maxChars) return;
+
         if (!Character.isISOControl(chr)) {
             String front = text.substring(0, cursorPos);
             String back = text.substring(cursorPos);
