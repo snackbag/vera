@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
+import net.snackbag.vera.event.VCharLimitedEvent;
 import net.snackbag.vera.modifier.VPaddingWidget;
 import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.Nullable;
@@ -144,6 +145,10 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         registerEventExecutor("vline-cursor-move-right", runnable);
     }
 
+    public void onAddCharLimited(VCharLimitedEvent runnable) {
+        registerEventExecutor("vline-add-char-limited", args -> runnable.run((char) args[0]));
+    }
+
     @Override
     public void keyPressed(int keyCode, int scanCode, int modifiers) {
         if (text == null) {
@@ -259,7 +264,10 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
 
     @Override
     public void charTyped(char chr, int modifiers) {
-        if (maxChars != null && text.length() >= maxChars) return;
+        if (maxChars != null && text.length() >= maxChars) {
+            fireEvent("vline-add-char-limited", chr);
+            return;
+        }
 
         if (!Character.isISOControl(chr)) {
             String front = text.substring(0, cursorPos);
