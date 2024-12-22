@@ -11,6 +11,7 @@ public class VRect extends VWidget<VRect> {
         super(0, 0, 20, 20, app);
 
         this.color = color;
+        this.focusOnClick = false;
     }
 
     public VColor getColor() {

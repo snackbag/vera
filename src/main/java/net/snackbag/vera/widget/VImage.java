@@ -11,6 +11,7 @@ public class VImage extends VWidget<VImage> {
         super(0, 0, width, height, app);
 
         this.path = path;
+        this.focusOnClick = false;
     }
 
     public Identifier getPath() {

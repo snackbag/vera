@@ -19,6 +19,7 @@ public class VLabel extends VWidget<VLabel> {
         this.font = VFont.create();
         this.backgroundColor = VColor.transparent();
         this.padding = new V4Int(4);
+        this.focusOnClick = false;
     }
 
     public String getText() {
