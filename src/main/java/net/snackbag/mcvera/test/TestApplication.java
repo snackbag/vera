@@ -33,7 +33,7 @@ public class TestApplication extends VeraApp {
         addShortcut(exit);
         addShortcut(changeMouseRequired);
 
-        VLineInput input = new VLineInput(this);
+        VLineInput input = new VLineInput(this).alsoAdd();
         input.setMaxChars(15);
         input.setPlaceholderText("Enter text...");
         input.onAddCharLimited(System.out::println);
@@ -41,10 +41,9 @@ public class TestApplication extends VeraApp {
 
         input.move(50);
         input.setBackgroundColor(VColor.white());
-        addWidget(input);
         setFocusedWidget(input);
 
-        VLabel label = new VLabel("Hello world!", this);
+        VLabel label = new VLabel("Hello world!", this).alsoAdd();
 
         label.onMouseDragLeft((oldX, oldY, newX, newY) -> setCursorShape(VCursorShape.VERTICAL_RESIZE));
         label.onLeftClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
@@ -65,21 +64,18 @@ public class TestApplication extends VeraApp {
         label.onHoverLeave(() -> {
             label.setText("Not hovered");
         });
-        addWidget(label);
 
         VImage image = new VImage(
                 Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/dirt.png"),
-                32, 32, this);
+                32, 32, this).alsoAdd();
         image.move(0, 30);
-        addWidget(image);
 
-        VDropdown dropdown = new VDropdown(this);
+        VDropdown dropdown = new VDropdown(this).alsoAdd();
         dropdown.addItem("coolio");
         dropdown.addItem("shmoolio");
         dropdown.addItem("roolio");
         dropdown.addItem("buger");
         dropdown.move(90, 90);
-        addWidget(dropdown);
     }
 
     @Override
