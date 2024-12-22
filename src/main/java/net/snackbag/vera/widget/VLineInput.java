@@ -347,4 +347,39 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         cursorPos = Math.min(start, text.length());
         fireEvent("vline-change");
     }
+
+    public static class TextSelection {
+        private @Nullable Integer startPos;
+        private @Nullable Integer endPos;
+
+        public TextSelection() {
+            this.startPos = null;
+            this.endPos = null;
+        }
+
+        public @Nullable Integer getStartPos() {
+            return startPos;
+        }
+
+        public @Nullable Integer getEndPos() {
+            return endPos;
+        }
+
+        public void setStartPos(int startPos) {
+            this.startPos = startPos;
+        }
+
+        public void setEndPos(int endPos) {
+            this.endPos = endPos;
+        }
+
+        public void clear() {
+            this.startPos = null;
+            this.endPos = null;
+        }
+
+        public boolean isClear() {
+            return startPos == null || endPos == null;
+        }
+    }
 }
