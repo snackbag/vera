@@ -151,7 +151,7 @@ public abstract class VWidget<T extends VWidget<T>> {
     }
 
     public void onMiddleClickRelease(Runnable runnable) {
-        registerEventExecutor("right-click-release", runnable);
+        registerEventExecutor("middle-click-release", runnable);
     }
 
     public void onMouseScroll(VMouseScrollEvent runnable) {
