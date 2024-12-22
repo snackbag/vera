@@ -284,13 +284,13 @@ public abstract class VWidget<T extends VWidget<T>> {
             }
 
             case "hover-leave" -> {
-                if (cursorBeforeHover == null) break;
-
-                app.setCursorShape(cursorBeforeHover);
-
                 clearLeftClickDown();
                 clearRightClickDown();
                 clearMiddleClickDown();
+
+                if (cursorBeforeHover == null) break;
+
+                app.setCursorShape(cursorBeforeHover);
             }
         }
     }
