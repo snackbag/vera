@@ -1,5 +1,7 @@
 package net.snackbag.vera.widget;
 
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.InputUtil;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
@@ -83,6 +85,39 @@ public class VLineInput extends VWidget<VLineInput> {
             cursorPos -= 1;
             text = builder.toString();
             fireEvent("vline-change");
+        } else if (isDown(GLFW.GLFW_KEY_LEFT) && isAltDown()) {
+            fireEvent("vline-cursor-move");
+            fireEvent("vline-cursor-move-left");
+
+            if (cursorPos <= 0) {
+                cursorPos = 0;
+                return;
+            }
+
+            int pos = cursorPos - 1;
+            while (pos > 0 && !Character.isLetterOrDigit(text.charAt(pos))) {
+                pos--;
+            }
+
+            while (pos > 0 && Character.isLetterOrDigit(text.charAt(pos - 1))) {
+                pos--;
+            }
+
+            cursorPos = pos;
+        } else if (isDown(GLFW.GLFW_KEY_RIGHT) && isAltDown()) {
+            if (cursorPos >= text.length()) cursorPos = text.length();
+
+            int pos = cursorPos;
+
+            while (pos < text.length() && !Character.isLetterOrDigit(text.charAt(pos))) {
+                pos++;
+            }
+
+            while (pos < text.length() && Character.isLetterOrDigit(text.charAt(pos))) {
+                pos++;
+            }
+
+            cursorPos = pos;
         } else if (keyCode == GLFW.GLFW_KEY_LEFT && cursorPos > 0) {
             fireEvent("vline-cursor-move");
             fireEvent("vline-cursor-move-left");
@@ -137,5 +172,13 @@ public class VLineInput extends VWidget<VLineInput> {
             fireEvent("vline-change");
         }
         super.charTyped(chr, modifiers);
+    }
+
+    private boolean isDown(int key) {
+        return InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), key);
+    }
+
+    private boolean isAltDown() {
+        return isDown(GLFW.GLFW_KEY_LEFT_ALT) || isDown(GLFW.GLFW_KEY_RIGHT_ALT);
     }
 }
