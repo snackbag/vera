@@ -56,23 +56,38 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
                 backgroundColor
         );
 
+        // Render text selection background
         if (!textSelection.isClear()) {
-            String substring = text.substring(textSelection.startPos, textSelection.endPos);
+            int selStart = Math.min(textSelection.startPos, textSelection.endPos);
+            int selEnd = Math.max(textSelection.startPos, textSelection.endPos);
+            String beforeSelection = text.substring(0, selStart);
+            String selectedText = text.substring(selStart, selEnd);
+
+            int selectionX = x + Vera.provider.getTextWidth(beforeSelection, font);
             Vera.renderer.drawRect(
-                    app, x, y,
-                    Vera.provider.getTextWidth(substring, font),
-                    Vera.provider.getTextHeight(substring, font),
-                    0, textSelectionColor
+                    app,
+                    selectionX,
+                    y,
+                    Vera.provider.getTextWidth(selectedText, font),
+                    Vera.provider.getTextHeight(text, font),
+                    0,
+                    textSelectionColor
             );
         }
 
         if (text.isEmpty()) Vera.renderer.drawText(app, x, y, 0, placeholderText, placeholderFont);
-        Vera.renderer.drawText(app, x, y, 0, text, font);
+        else Vera.renderer.drawText(app, x, y, 0, text, font);
 
         if (isFocused() && (System.currentTimeMillis() / 500) % 2 == 0) {
-            Vera.renderer.drawRect(app,
-                    x + Vera.provider.getTextWidth(text.substring(0, cursorPos), font), y,
-                    1, Vera.provider.getTextHeight(text, font), 0, getCursorColorSafe());
+            Vera.renderer.drawRect(
+                    app,
+                    x + Vera.provider.getTextWidth(text.substring(0, cursorPos), font),
+                    y,
+                    1,
+                    Vera.provider.getTextHeight(text, font),
+                    0,
+                    getCursorColorSafe()
+            );
         }
     }
 
@@ -205,59 +220,193 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
             return;
         }
 
+        // Handle select all
+        if (isCtrlDown() && keyCode == GLFW.GLFW_KEY_A) {
+            selectAll();
+            return;
+        }
+
+        // Handle copy
+        if (isCtrlDown() && keyCode == GLFW.GLFW_KEY_C && !textSelection.isClear()) {
+            String selectedText = getSelectedText();
+            MinecraftClient.getInstance().keyboard.setClipboard(selectedText);
+            return;
+        }
+
+        // Handle paste
+        if (isCtrlDown() && keyCode == GLFW.GLFW_KEY_V) {
+            String clipboard = MinecraftClient.getInstance().keyboard.getClipboard();
+            if (!clipboard.isEmpty()) {
+                if (!textSelection.isClear()) {
+                    replaceSelectedText(clipboard);
+                } else {
+                    insertText(clipboard);
+                }
+            }
+            return;
+        }
+
+        // Handle cut
+        if (isCtrlDown() && keyCode == GLFW.GLFW_KEY_X && !textSelection.isClear()) {
+            String selectedText = getSelectedText();
+            MinecraftClient.getInstance().keyboard.setClipboard(selectedText);
+            deleteSelectedText();
+            return;
+        }
+
+        // Handle selection with arrow keys
+        if ((keyCode == GLFW.GLFW_KEY_LEFT || keyCode == GLFW.GLFW_KEY_RIGHT) && isShiftDown()) {
+            handleSelectionKeyPress(keyCode);
+            return;
+        }
+
+        // Handle deletion of selected text
+        if (!textSelection.isClear() &&
+                (keyCode == GLFW.GLFW_KEY_BACKSPACE || keyCode == GLFW.GLFW_KEY_DELETE)) {
+            deleteSelectedText();
+            return;
+        }
+
+        // Clear selection on cursor movement without shift
+        if ((keyCode == GLFW.GLFW_KEY_LEFT || keyCode == GLFW.GLFW_KEY_RIGHT) && !isShiftDown()) {
+            clearTextSelection();
+        }
+
+        // Handle word deletion
         if (keyCode == GLFW.GLFW_KEY_BACKSPACE && isAltDown() && cursorPos > 0) {
-            // Alt + Backspace: Delete the word to the left
             int newCursorPos = Math.max(0, jumpToWordStart(cursorPos));
             deleteText(newCursorPos, cursorPos);
         } else if (keyCode == GLFW.GLFW_KEY_DELETE && isAltDown() && cursorPos < text.length()) {
-            // Alt + Delete: Delete the word to the right
             int newCursorPos = Math.min(text.length(), jumpToWordEnd(cursorPos));
             deleteText(cursorPos, newCursorPos);
-        } else if (keyCode == GLFW.GLFW_KEY_BACKSPACE && isCtrlDown() && cursorPos > 0) {
-            // Ctrl + Backspace: Delete all text to the left of the cursor
+        }
+        // Handle line deletion
+        else if (keyCode == GLFW.GLFW_KEY_BACKSPACE && isCtrlDown() && cursorPos > 0) {
             deleteText(0, cursorPos);
         } else if (keyCode == GLFW.GLFW_KEY_DELETE && isCtrlDown() && cursorPos < text.length()) {
-            // Ctrl + Delete: Delete all text to the right of the cursor
             deleteText(cursorPos, text.length());
-        } else if (keyCode == GLFW.GLFW_KEY_BACKSPACE && cursorPos > 0) {
-            // Regular Backspace: Delete one character to the left
+        }
+        // Handle single character deletion
+        else if (keyCode == GLFW.GLFW_KEY_BACKSPACE && cursorPos > 0) {
             deleteText(cursorPos - 1, cursorPos);
         } else if (keyCode == GLFW.GLFW_KEY_DELETE && cursorPos < text.length()) {
-            // Regular Delete: Delete one character to the right
             deleteText(cursorPos, cursorPos + 1);
-        } else if (isDown(GLFW.GLFW_KEY_LEFT) && isAltDown() && cursorPos > 0) {
-            // Alt + Left: Jump to the start of the word to the left
+        }
+        // Handle word navigation
+        else if (isDown(GLFW.GLFW_KEY_LEFT) && isAltDown() && cursorPos > 0) {
             cursorPos = Math.max(0, jumpToWordStart(cursorPos));
             fireEvent("vline-cursor-move");
             fireEvent("vline-cursor-move-left");
         } else if (isDown(GLFW.GLFW_KEY_RIGHT) && isAltDown() && cursorPos < text.length()) {
-            // Alt + Right: Jump to the end of the word to the right
             cursorPos = Math.min(text.length(), jumpToWordEnd(cursorPos));
             fireEvent("vline-cursor-move");
             fireEvent("vline-cursor-move-right");
-        } else if (isDown(GLFW.GLFW_KEY_LEFT) && isCtrlDown()) {
-            // Ctrl + Left: Move to the start of the text
+        }
+        // Handle line navigation
+        else if (isDown(GLFW.GLFW_KEY_LEFT) && isCtrlDown()) {
             cursorPos = 0;
             fireEvent("vline-cursor-move");
             fireEvent("vline-cursor-move-left");
         } else if (isDown(GLFW.GLFW_KEY_RIGHT) && isCtrlDown()) {
-            // Ctrl + Right: Move to the end of the text
             cursorPos = text.length();
             fireEvent("vline-cursor-move");
             fireEvent("vline-cursor-move-right");
-        } else if (keyCode == GLFW.GLFW_KEY_LEFT && cursorPos > 0) {
-            // Left Arrow: Move cursor one character left
+        }
+        // Handle character navigation
+        else if (keyCode == GLFW.GLFW_KEY_LEFT && cursorPos > 0) {
             cursorPos = Math.max(0, cursorPos - 1);
             fireEvent("vline-cursor-move");
             fireEvent("vline-cursor-move-left");
         } else if (keyCode == GLFW.GLFW_KEY_RIGHT && cursorPos < text.length()) {
-            // Right Arrow: Move cursor one character right
             cursorPos = Math.min(text.length(), cursorPos + 1);
             fireEvent("vline-cursor-move");
             fireEvent("vline-cursor-move-right");
         }
 
         super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    private void handleSelectionKeyPress(int keyCode) {
+        if (textSelection.isClear()) {
+            textSelection.startPos = cursorPos;
+        }
+
+        int newPos = cursorPos;
+        if (keyCode == GLFW.GLFW_KEY_LEFT) {
+            if (isAltDown()) {
+                newPos = Math.max(0, jumpToWordStart(cursorPos));
+            } else if (isCtrlDown()) {
+                newPos = 0;
+            } else {
+                newPos = Math.max(0, cursorPos - 1);
+            }
+        } else if (keyCode == GLFW.GLFW_KEY_RIGHT) {
+            if (isAltDown()) {
+                newPos = Math.min(text.length(), jumpToWordEnd(cursorPos));
+            } else if (isCtrlDown()) {
+                newPos = text.length();
+            } else {
+                newPos = Math.min(text.length(), cursorPos + 1);
+            }
+        }
+
+        cursorPos = newPos;
+        textSelection.endPos = newPos;
+        fireEvent("vline-cursor-move");
+    }
+
+    private void insertText(String insertion) {
+        if (maxChars != null && text.length() + insertion.length() > maxChars) {
+            fireEvent("vline-add-char-limited", insertion.charAt(0));
+            return;
+        }
+
+        String front = text.substring(0, cursorPos);
+        String back = text.substring(cursorPos);
+        text = front + insertion + back;
+        cursorPos += insertion.length();
+        fireEvent("vline-change");
+    }
+
+    private void deleteSelectedText() {
+        if (textSelection.isClear()) return;
+
+        int start = Math.min(textSelection.startPos, textSelection.endPos);
+        int end = Math.max(textSelection.startPos, textSelection.endPos);
+
+        String front = text.substring(0, start);
+        String back = text.substring(end);
+        text = front + back;
+        cursorPos = start;
+        clearTextSelection();
+        fireEvent("vline-change");
+    }
+
+    private void replaceSelectedText(String replacement) {
+        if (textSelection.isClear()) return;
+
+        int start = Math.min(textSelection.startPos, textSelection.endPos);
+        int end = Math.max(textSelection.startPos, textSelection.endPos);
+
+        if (maxChars != null && text.length() - (end - start) + replacement.length() > maxChars) {
+            fireEvent("vline-add-char-limited", replacement.charAt(0));
+            return;
+        }
+
+        String front = text.substring(0, start);
+        String back = text.substring(end);
+        text = front + replacement + back;
+        cursorPos = start + replacement.length();
+        clearTextSelection();
+        fireEvent("vline-change");
+    }
+
+
+    private String getSelectedText() {
+        if (textSelection.isClear()) return "";
+        int start = Math.min(textSelection.startPos, textSelection.endPos);
+        int end = Math.max(textSelection.startPos, textSelection.endPos);
+        return text.substring(start, end);
     }
 
     public int getCursorPos() {
@@ -347,6 +496,10 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
                 isDown(GLFW.GLFW_KEY_LEFT_CONTROL) || isDown(GLFW.GLFW_KEY_RIGHT_CONTROL);
     }
 
+    private boolean isShiftDown() {
+        return isDown(GLFW.GLFW_KEY_LEFT_SHIFT) || isDown(GLFW.GLFW_KEY_RIGHT_SHIFT);
+    }
+
     private int jumpToWordStart(int position) {
         if (text == null || position <= 0) {
             return 0;
@@ -381,6 +534,12 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         }
 
         return pos;
+    }
+
+    public void selectAll() {
+        textSelection.startPos = 0;
+        textSelection.endPos = text.length();
+        cursorPos = text.length();
     }
 
     private void deleteText(int start, int end) {
