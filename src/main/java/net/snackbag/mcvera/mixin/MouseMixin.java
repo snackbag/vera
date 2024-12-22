@@ -22,12 +22,6 @@ public abstract class MouseMixin {
     private void mcvera$onCursorMove(long window, double x, double y, CallbackInfo ci) {
         if (client.getWindow().getHandle() != window) return;
 
-        VeraApp selectedApp = null;
-        for (VeraApp app : MCVeraData.visibleApplications) {
-            if (app.isMouseOverApp((int) x, (int) y)) selectedApp = app;
-        }
 
-        if (selectedApp == null) return;
-        GLFW.glfwSetCursor(window, selectedApp.getCursorShape().getGLFWCursor());
     }
 }
