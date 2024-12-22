@@ -22,6 +22,7 @@ public class VDropdown extends VWidget<VDropdown> {
         font = VFont.create();
         backgroundColor = VColor.white();
         padding = new V4Int(5, 10);
+        setHoverCursor(VCursorShape.POINTING_HAND);
     }
 
     @Override
