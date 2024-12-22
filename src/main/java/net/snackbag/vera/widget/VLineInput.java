@@ -18,6 +18,8 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
 
     private @Nullable VColor cursorColor;
     private int cursorPos;
+    private TextSelection textSelection;
+    private VColor textSelectionColor;
     private @Nullable Integer maxChars;
 
     private VColor backgroundColor;
@@ -32,6 +34,8 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         this.placeholderFont = VFont.create().withColor(VColor.black().withOpacity(0.5f));
         this.cursorColor = null;
         this.cursorPos = 0;
+        this.textSelection = new TextSelection();
+        this.textSelectionColor = VColor.of(0, 120, 215, 0.2f);
         this.maxChars = null;
 
         this.backgroundColor = VColor.transparent();
@@ -51,6 +55,10 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
                 rotation,
                 backgroundColor
         );
+
+        if (!textSelection.isClear()) {
+            Vera.renderer.drawRect(app, x, y, );
+        }
 
         if (text.isEmpty()) Vera.renderer.drawText(app, x, y, 0, placeholderText, placeholderFont);
         Vera.renderer.drawText(app, x, y, 0, text, font);
@@ -113,6 +121,39 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
     public void setText(String text) {
         this.text = text;
         fireEvent("vline-change");
+    }
+
+    public boolean isSelectingText() {
+        return !textSelection.isClear();
+    }
+
+    public void clearTextSelection() {
+        textSelection.clear();
+    }
+
+    public @Nullable Integer getTextSelectionStart() {
+        return textSelection.isClear() ? null : textSelection.startPos;
+    }
+
+    public @Nullable Integer getTextSelectionEnd() {
+        return textSelection.isClear() ? null : textSelection.endPos;
+    }
+
+    public void setTextSelection(int start, int end) {
+        textSelection.setStartPos(start);
+        textSelection.setEndPos(end);
+    }
+
+    public VColor getTextSelectionColor() {
+        return textSelectionColor;
+    }
+
+    public void setTextSelectionColor(VColor textSelectionColor) {
+        this.textSelectionColor = textSelectionColor;
+    }
+
+    public VColor.ColorModifier modifyTextSelectionColor() {
+        return new VColor.ColorModifier(textSelectionColor, this::setTextSelectionColor);
     }
 
     public @Nullable Integer getMaxChars() {
