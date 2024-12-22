@@ -462,18 +462,38 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
 
     @Override
     public void charTyped(char chr, int modifiers) {
-        if (maxChars != null && text.length() >= maxChars) {
-            fireEvent("vline-add-char-limited", chr);
-            return;
-        }
-
         if (!Character.isISOControl(chr)) {
-            String front = text.substring(0, cursorPos);
-            String back = text.substring(cursorPos);
+            if (!textSelection.isClear()) {
+                // Replace selected text with the typed character
+                int start = Math.min(textSelection.startPos, textSelection.endPos);
+                int end = Math.max(textSelection.startPos, textSelection.endPos);
 
-            text = front + chr + back;
-            cursorPos += 1;
-            fireEvent("vline-change");
+                if (maxChars != null && text.length() - (end - start) + 1 > maxChars) {
+                    fireEvent("vline-add-char-limited", chr);
+                    return;
+                }
+
+                String front = text.substring(0, start);
+                String back = text.substring(end);
+
+                text = front + chr + back;
+                cursorPos = start + 1;
+                clearTextSelection();
+                fireEvent("vline-change");
+            } else {
+                // Normal character insertion
+                if (maxChars != null && text.length() >= maxChars) {
+                    fireEvent("vline-add-char-limited", chr);
+                    return;
+                }
+
+                String front = text.substring(0, cursorPos);
+                String back = text.substring(cursorPos);
+
+                text = front + chr + back;
+                cursorPos += 1;
+                fireEvent("vline-change");
+            }
         }
         super.charTyped(chr, modifiers);
     }
