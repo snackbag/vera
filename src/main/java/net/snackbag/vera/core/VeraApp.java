@@ -177,6 +177,11 @@ public abstract class VeraApp {
                 mouseY >= widgetY && mouseY <= widgetY + widgetHeight;
     }
 
+    public boolean isMouseOverApp(int mouseX, int mouseY) {
+        if (!isVisible()) return false;
+        return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
+    }
+
     public void setFocusedWidget(@Nullable VWidget<?> widget) {
         this.focusedWidget = widget;
     }
