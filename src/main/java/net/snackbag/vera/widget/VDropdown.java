@@ -1,10 +1,7 @@
 package net.snackbag.vera.widget;
 
 import net.snackbag.vera.Vera;
-import net.snackbag.vera.core.V4Int;
-import net.snackbag.vera.core.VColor;
-import net.snackbag.vera.core.VFont;
-import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.core.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -101,11 +98,15 @@ public class VDropdown extends VWidget<VDropdown> {
 
     @Override
     public void handleBuiltinEvent(String event) {
-        if (event.equals("left-click")) {
-            if (isFocused()) {
-                setFocused(false);
-                return;
+        switch (event) {
+            case "left-click" -> {
+                if (isFocused()) {
+                    setFocused(false);
+                    return;
+                }
             }
+            case "hover" -> app.setCursorShape(VCursorShape.POINTING_HAND);
+            case "hover-leave" -> app.setCursorShape(VCursorShape.DEFAULT);
         }
 
         super.handleBuiltinEvent(event);
