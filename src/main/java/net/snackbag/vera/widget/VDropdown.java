@@ -88,7 +88,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
     }
 
     @Override
-    public void handleBuiltinEvent(String event) {
+    public void handleBuiltinEvent(String event, Object... args) {
         if (event.equals("left-click")) {
             if (isFocused()) {
                 setFocused(false);
@@ -96,7 +96,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
             }
         }
 
-        super.handleBuiltinEvent(event);
+        super.handleBuiltinEvent(event, args);
     }
 
     public int getSelectedItem() {
