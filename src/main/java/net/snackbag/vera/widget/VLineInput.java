@@ -5,12 +5,13 @@ import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 public class VLineInput extends VWidget<VLineInput> {
     private VFont font;
     private String text;
-    private VColor cursorColor = VColor.white();
+    private @Nullable VColor cursorColor = null;
     private int cursorPos = 0;
 
     public VLineInput(VeraApp app) {
@@ -28,7 +29,7 @@ public class VLineInput extends VWidget<VLineInput> {
         if (isFocused() && (System.currentTimeMillis() / 500) % 2 == 0) {
             Vera.renderer.drawRect(app,
                     x + Vera.provider.getTextWidth(text.substring(0, cursorPos), font), y,
-                    1, Vera.provider.getTextHeight(text, font), 0, cursorColor);
+                    1, Vera.provider.getTextHeight(text, font), 0, getCursorColorSafe());
         }
     }
 
@@ -103,11 +104,15 @@ public class VLineInput extends VWidget<VLineInput> {
         this.cursorPos = cursorPos;
     }
 
-    public VColor getCursorColor() {
+    public @Nullable VColor getCursorColor() {
         return cursorColor;
     }
 
-    public void setCursorColor(VColor cursorColor) {
+    public VColor getCursorColorSafe() {
+        return cursorColor == null ? font.getColor() : cursorColor;
+    }
+
+    public void setCursorColor(@Nullable VColor cursorColor) {
         this.cursorColor = cursorColor;
     }
 
