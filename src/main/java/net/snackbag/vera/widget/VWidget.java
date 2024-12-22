@@ -1,8 +1,10 @@
 package net.snackbag.vera.widget;
 
+import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VEvent;
 import net.snackbag.vera.event.VScrollEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +18,8 @@ public abstract class VWidget<T extends VWidget<T>> {
     protected double rotation;
 
     protected VeraApp app;
+    protected @Nullable VCursorShape hoverCursor = null;
+    protected @Nullable VCursorShape cursorBeforeHover = null;
     protected boolean focusOnClick = true;
     private boolean hovered = false;
     private boolean visible = true;
@@ -186,11 +190,35 @@ public abstract class VWidget<T extends VWidget<T>> {
     }
 
     public void handleBuiltinEvent(String event) {
-        if (event.equals("left-click")) {
-            if (shouldFocusOnClick()) {
-                setFocused(true);
+        switch (event) {
+            case "left-click" -> {
+                if (shouldFocusOnClick()) {
+                    setFocused(true);
+                }
+                break;
+            }
+            case "hover" -> {
+                if (hoverCursor == null) break;
+
+                cursorBeforeHover = app.getCursorShape();
+                app.setCursorShape(hoverCursor);
+                break;
+            }
+            case "hover-leave" -> {
+                if (cursorBeforeHover == null) break;
+
+                app.setCursorShape(cursorBeforeHover);
+                break;
             }
         }
+    }
+
+    public @Nullable VCursorShape getHoverCursor() {
+        return hoverCursor;
+    }
+
+    public void setHoverCursor(@Nullable VCursorShape hoverCursor) {
+        this.hoverCursor = hoverCursor;
     }
 
     public boolean isFocused() {
