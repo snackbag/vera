@@ -69,6 +69,8 @@ public class TestApplication extends VeraApp {
                 Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/dirt.png"),
                 32, 32, this).alsoAdd();
         image.move(0, 30);
+        image.onMiddleClick(this::hideCursor);
+        image.onMiddleClickRelease(this::showCursor);
 
         VDropdown dropdown = new VDropdown(this).alsoAdd();
         dropdown.addItem("coolio");
