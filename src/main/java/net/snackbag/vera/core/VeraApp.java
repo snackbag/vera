@@ -15,6 +15,7 @@ public abstract class VeraApp {
     private final List<VWidget<?>> widgets;
     private final HashMap<String, VShortcut> shortcuts;
     private VColor backgroundColor;
+    private VCursorShape cursorShape;
     private boolean mouseRequired;
 
     private int x;
@@ -192,6 +193,13 @@ public abstract class VeraApp {
         return focusedWidget != null;
     }
 
+    public VCursorShape getCursorShape() {
+        return cursorShape;
+    }
+
+    public void setCursorShape(VCursorShape cursorShape) {
+        this.cursorShape = cursorShape;
+    }
 
     public void keyPressed(int keyCode, int scanCode, int modifiers) {
         if (hasFocusedWidget()) getFocusedWidget().keyPressed(keyCode, scanCode, modifiers);
