@@ -1,9 +1,11 @@
 package net.snackbag.vera.core;
 
+import net.minecraft.client.MinecraftClient;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +36,7 @@ public abstract class VeraApp {
         this.widgets = new ArrayList<>();
         this.shortcuts = new HashMap<>();
         this.backgroundColor = VColor.transparent();
+        this.cursorShape = VCursorShape.DEFAULT;
         this.mouseRequired = mouseRequired;
 
         Vera.provider.handleAppInitialization(this);
@@ -80,6 +83,8 @@ public abstract class VeraApp {
     public void setVisibility(boolean visible) {
         Vera.provider.handleAppVisibilityChange(this, visible);
         this.visible = visible;
+
+        if (visible) setCursorShape(cursorShape);
     }
 
     public int getHeight() {
@@ -204,6 +209,12 @@ public abstract class VeraApp {
 
     public void setCursorShape(VCursorShape cursorShape) {
         this.cursorShape = cursorShape;
+
+        if (!isVisible()) return;
+        GLFW.glfwSetCursor(
+                MinecraftClient.getInstance().getWindow().getHandle(),
+                cursorShape.getGLFWCursor()
+        );
     }
 
     public void keyPressed(int keyCode, int scanCode, int modifiers) {
