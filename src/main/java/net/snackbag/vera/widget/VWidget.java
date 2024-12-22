@@ -3,6 +3,7 @@ package net.snackbag.vera.widget;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VEvent;
+import net.snackbag.vera.event.VMouseMoveEvent;
 import net.snackbag.vera.event.VScrollEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -156,6 +157,10 @@ public abstract class VWidget<T extends VWidget<T>> {
         registerEventExecutor("mouse-scroll", args -> runnable.run(
                 (int) args[0], (int) args[1], (double) args[2])
         );
+    }
+
+    public void onMouseMove(VMouseMoveEvent runnable) {
+        registerEventExecutor("mouse-move", args -> runnable.run((int) args[0], (int) args[1]));
     }
 
     public boolean isVisible() {
