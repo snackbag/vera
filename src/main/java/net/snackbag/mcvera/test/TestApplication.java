@@ -33,6 +33,10 @@ public class TestApplication extends VeraApp {
         addShortcut(changeMouseRequired);
 
         VLineInput input = new VLineInput(this);
+        input.setMaxChars(15);
+        input.setPlaceholderText("Enter text...");
+        input.onAddCharLimited(System.out::println);
+
         input.move(50);
         input.setBackgroundColor(VColor.white());
         addWidget(input);
