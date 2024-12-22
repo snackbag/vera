@@ -3,6 +3,7 @@ package net.snackbag.mcvera.test;
 import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
+import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.widget.*;
@@ -44,6 +45,14 @@ public class TestApplication extends VeraApp {
         setFocusedWidget(input);
 
         VLabel label = new VLabel("Hello world!", this);
+
+        label.onMouseDragLeft((oldX, oldY, newX, newY) -> setCursorShape(VCursorShape.VERTICAL_RESIZE));
+        label.onLeftClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
+        label.onMouseDragMiddle((oldX, oldY, newX, newY) -> setCursorShape(VCursorShape.ALL_RESIZE));
+        label.onMiddleClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
+        label.onMouseDragRight((oldX, oldY, newX, newY) -> setCursorShape(VCursorShape.HORIZONTAL_RESIZE));
+        label.onRightClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
+
         label.setPadding(5);
         label.move(10);
         label.setBackgroundColor(VColor.black());
