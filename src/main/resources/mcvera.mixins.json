@@ -11,6 +11,7 @@
     },
     "client": [
         "KeyboardMixin",
+        "MouseMixin",
         "ParentElementMixin",
         "ScreenMixin"
     ]
