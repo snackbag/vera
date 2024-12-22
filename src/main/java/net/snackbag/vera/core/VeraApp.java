@@ -18,6 +18,7 @@ public abstract class VeraApp {
     private final HashMap<String, VShortcut> shortcuts;
     private VColor backgroundColor;
     private VCursorShape cursorShape;
+    private boolean cursorVisible;
     private boolean mouseRequired;
 
     private int x;
@@ -37,6 +38,7 @@ public abstract class VeraApp {
         this.shortcuts = new HashMap<>();
         this.backgroundColor = VColor.transparent();
         this.cursorShape = VCursorShape.DEFAULT;
+        this.cursorVisible = true;
         this.mouseRequired = mouseRequired;
 
         Vera.provider.handleAppInitialization(this);
@@ -49,6 +51,28 @@ public abstract class VeraApp {
         this.visible = false;
     }
 
+    public void setCursorVisible(boolean cursorVisible) {
+        this.cursorVisible = cursorVisible;
+
+        if (!visible || !mouseRequired) return;
+        GLFW.glfwSetInputMode(
+                MinecraftClient.getInstance().getWindow().getHandle(),
+                GLFW.GLFW_CURSOR,
+                cursorVisible ? GLFW.GLFW_CURSOR_NORMAL : GLFW.GLFW_CURSOR_HIDDEN);
+    }
+
+    public void hideCursor() {
+        setCursorVisible(false);
+    }
+
+    public void showCursor() {
+        setCursorVisible(true);
+    }
+
+    public boolean isCursorVisible() {
+        return cursorVisible;
+    }
+
     public boolean isMouseRequired() {
         return mouseRequired;
     }
@@ -58,6 +82,12 @@ public abstract class VeraApp {
 
         Vera.provider.handleAppSetMouseRequired(this, mouseRequired);
         this.mouseRequired = mouseRequired;
+
+        if (!visible || !mouseRequired) return;
+        GLFW.glfwSetInputMode(
+                MinecraftClient.getInstance().getWindow().getHandle(),
+                GLFW.GLFW_CURSOR,
+                cursorVisible ? GLFW.GLFW_CURSOR_NORMAL : GLFW.GLFW_CURSOR_HIDDEN);
     }
 
     public boolean isVisible() {
@@ -85,6 +115,11 @@ public abstract class VeraApp {
         this.visible = visible;
 
         if (visible) setCursorShape(cursorShape);
+        if (!visible || !mouseRequired) return;
+        GLFW.glfwSetInputMode(
+                MinecraftClient.getInstance().getWindow().getHandle(),
+                GLFW.GLFW_CURSOR,
+                cursorVisible ? GLFW.GLFW_CURSOR_NORMAL : GLFW.GLFW_CURSOR_HIDDEN);
     }
 
     public int getHeight() {
