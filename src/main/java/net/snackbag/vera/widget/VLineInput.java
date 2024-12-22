@@ -117,6 +117,11 @@ public class VLineInput extends VWidget<VLineInput> {
     }
 
     @Override
+    public int getHitboxHeight() {
+        return Vera.provider.getTextHeight(text, font);
+    }
+
+    @Override
     public void charTyped(char chr, int modifiers) {
         if (!Character.isISOControl(chr)) {
             String front = text.substring(0, cursorPos);
