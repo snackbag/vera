@@ -32,13 +32,9 @@ public class TestApplication extends VeraApp {
         addShortcut(exit);
         addShortcut(changeMouseRequired);
 
-        VRect bg = new VRect(VColor.white(), this);
-        bg.setSize(200, 12);
-        bg.move(50);
-        addWidget(bg);
-
         VLineInput input = new VLineInput(this);
         input.move(50);
+        input.setBackgroundColor(VColor.white());
         addWidget(input);
         setFocusedWidget(input);
 
