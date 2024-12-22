@@ -3,33 +3,46 @@ package net.snackbag.vera.widget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 import net.snackbag.vera.Vera;
-import net.snackbag.vera.core.VColor;
-import net.snackbag.vera.core.VCursorShape;
-import net.snackbag.vera.core.VFont;
-import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.core.*;
+import net.snackbag.vera.modifier.VPaddingWidget;
 import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
-public class VLineInput extends VWidget<VLineInput> {
-    private VFont font;
+public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
     private String text;
-    private @Nullable VColor cursorColor = null;
-    private int cursorPos = 0;
+    private VFont font;
+    private @Nullable VColor cursorColor;
+    private int cursorPos;
+
     private VColor backgroundColor;
+    private V4Int padding;
 
     public VLineInput(VeraApp app) {
         super(0, 0, 100, 20, app);
-        text = "";
-        font = VFont.create();
-        backgroundColor = VColor.transparent();
+
+        this.text = "";
+        this.font = VFont.create();
+        this.cursorColor = null;
+        this.cursorPos = 0;
+
+        this.backgroundColor = VColor.transparent();
+        this.padding = new V4Int(4);
 
         setHoverCursor(VCursorShape.TEXT);
     }
 
     @Override
     public void render() {
-        Vera.renderer.drawRect(app, x, y, getWidth(), getHeight(), 0, backgroundColor);
+        Vera.renderer.drawRect(
+                app,
+                getHitboxX() + app.getX(),
+                getHitboxY() + app.getY(),
+                getHitboxWidth(),
+                getHitboxHeight(),
+                rotation,
+                backgroundColor
+        );
         Vera.renderer.drawText(app, x, y, 0, text, font);
 
         if (isFocused() && (System.currentTimeMillis() / 500) % 2 == 0) {
@@ -175,13 +188,34 @@ public class VLineInput extends VWidget<VLineInput> {
     }
 
     @Override
+    public V4Int getPadding() {
+        return padding;
+    }
+
+    @Override
+    public void setPadding(V4Int padding) {
+        this.padding = padding;
+    }
+
+    @Override
     public int getHitboxWidth() {
-        return Math.max(width, Vera.provider.getTextWidth(text, font));
+        return Math.max(width, Vera.provider.getTextWidth(text, font)) + padding.get3() + padding.get4();
     }
 
     @Override
     public int getHitboxHeight() {
-        return Vera.provider.getTextHeight(text, font);
+        return Vera.provider.getTextHeight(text, font) + padding.get1() + padding.get2();
+    }
+
+
+    @Override
+    public int getHitboxX() {
+        return x - padding.get4();
+    }
+
+    @Override
+    public int getHitboxY() {
+        return y - padding.get1();
     }
 
     @Override
