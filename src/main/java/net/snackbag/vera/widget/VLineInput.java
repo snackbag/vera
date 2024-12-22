@@ -16,17 +16,20 @@ public class VLineInput extends VWidget<VLineInput> {
     private String text;
     private @Nullable VColor cursorColor = null;
     private int cursorPos = 0;
+    private VColor backgroundColor;
 
     public VLineInput(VeraApp app) {
         super(0, 0, 100, 20, app);
         text = "";
         font = VFont.create();
+        backgroundColor = VColor.transparent();
 
         setHoverCursor(VCursorShape.TEXT);
     }
 
     @Override
     public void render() {
+        Vera.renderer.drawRect(app, x, y, getWidth(), getHeight(), 0, backgroundColor);
         Vera.renderer.drawText(app, x, y, 0, text, font);
 
         if (isFocused() && (System.currentTimeMillis() / 500) % 2 == 0) {
@@ -50,6 +53,18 @@ public class VLineInput extends VWidget<VLineInput> {
 
     public VColor.ColorModifier modifyFontColor() {
         return new VColor.ColorModifier(font.getColor(), (color) -> setFont(font.withColor(color)));
+    }
+
+    public VColor getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(VColor backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public VColor.ColorModifier modifyBackgroundColor() {
+        return new VColor.ColorModifier(backgroundColor, this::setBackgroundColor);
     }
 
     public String getText() {
