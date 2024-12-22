@@ -57,7 +57,13 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         );
 
         if (!textSelection.isClear()) {
-            Vera.renderer.drawRect(app, x, y, );
+            String substring = text.substring(textSelection.startPos, textSelection.endPos);
+            Vera.renderer.drawRect(
+                    app, x, y,
+                    Vera.provider.getTextWidth(substring, font),
+                    Vera.provider.getTextHeight(substring, font),
+                    0, textSelectionColor
+            );
         }
 
         if (text.isEmpty()) Vera.renderer.drawText(app, x, y, 0, placeholderText, placeholderFont);
