@@ -79,56 +79,59 @@ public class VLineInput extends VWidget<VLineInput> {
 
     @Override
     public void keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_BACKSPACE && !text.isEmpty() && cursorPos > 0) {
-            StringBuilder builder = new StringBuilder(text);
-            builder.deleteCharAt(cursorPos - 1);
+        if (text == null) {
+            text = "";
+            return;
+        }
 
-            cursorPos -= 1;
-            text = builder.toString();
-            fireEvent("vline-change");
-        } else if (isDown(GLFW.GLFW_KEY_LEFT) && isAltDown()) {
+        if (keyCode == GLFW.GLFW_KEY_BACKSPACE && isAltDown() && cursorPos > 0) {
+            // Alt + Backspace: Delete the word to the left
+            int newCursorPos = Math.max(0, jumpToWordStart(cursorPos));
+            deleteText(newCursorPos, cursorPos);
+        } else if (keyCode == GLFW.GLFW_KEY_DELETE && isAltDown() && cursorPos < text.length()) {
+            // Alt + Delete: Delete the word to the right
+            int newCursorPos = Math.min(text.length(), jumpToWordEnd(cursorPos));
+            deleteText(cursorPos, newCursorPos);
+        } else if (keyCode == GLFW.GLFW_KEY_BACKSPACE && isCtrlDown() && cursorPos > 0) {
+            // Ctrl + Backspace: Delete all text to the left of the cursor
+            deleteText(0, cursorPos);
+        } else if (keyCode == GLFW.GLFW_KEY_DELETE && isCtrlDown() && cursorPos < text.length()) {
+            // Ctrl + Delete: Delete all text to the right of the cursor
+            deleteText(cursorPos, text.length());
+        } else if (keyCode == GLFW.GLFW_KEY_BACKSPACE && cursorPos > 0) {
+            // Regular Backspace: Delete one character to the left
+            deleteText(cursorPos - 1, cursorPos);
+        } else if (keyCode == GLFW.GLFW_KEY_DELETE && cursorPos < text.length()) {
+            // Regular Delete: Delete one character to the right
+            deleteText(cursorPos, cursorPos + 1);
+        } else if (isDown(GLFW.GLFW_KEY_LEFT) && isAltDown() && cursorPos > 0) {
+            // Alt + Left: Jump to the start of the word to the left
+            cursorPos = Math.max(0, jumpToWordStart(cursorPos));
             fireEvent("vline-cursor-move");
             fireEvent("vline-cursor-move-left");
-
-            if (cursorPos <= 0) {
-                cursorPos = 0;
-                return;
-            }
-
-            int pos = cursorPos - 1;
-            while (pos > 0 && !Character.isLetterOrDigit(text.charAt(pos))) {
-                pos--;
-            }
-
-            while (pos > 0 && Character.isLetterOrDigit(text.charAt(pos - 1))) {
-                pos--;
-            }
-
-            cursorPos = pos;
-        } else if (isDown(GLFW.GLFW_KEY_RIGHT) && isAltDown()) {
-            if (cursorPos >= text.length()) cursorPos = text.length();
-
-            int pos = cursorPos;
-
-            while (pos < text.length() && !Character.isLetterOrDigit(text.charAt(pos))) {
-                pos++;
-            }
-
-            while (pos < text.length() && Character.isLetterOrDigit(text.charAt(pos))) {
-                pos++;
-            }
-
-            cursorPos = pos;
+        } else if (isDown(GLFW.GLFW_KEY_RIGHT) && isAltDown() && cursorPos < text.length()) {
+            // Alt + Right: Jump to the end of the word to the right
+            cursorPos = Math.min(text.length(), jumpToWordEnd(cursorPos));
+            fireEvent("vline-cursor-move");
+            fireEvent("vline-cursor-move-right");
         } else if (isDown(GLFW.GLFW_KEY_LEFT) && isCtrlDown()) {
+            // Ctrl + Left: Move to the start of the text
             cursorPos = 0;
-        } else if (isDown(GLFW.GLFW_KEY_RIGHT) && isCtrlDown()) {
-            cursorPos = text.length();
-        } else if (keyCode == GLFW.GLFW_KEY_LEFT && cursorPos > 0) {
             fireEvent("vline-cursor-move");
             fireEvent("vline-cursor-move-left");
-            cursorPos -= 1;
+        } else if (isDown(GLFW.GLFW_KEY_RIGHT) && isCtrlDown()) {
+            // Ctrl + Right: Move to the end of the text
+            cursorPos = text.length();
+            fireEvent("vline-cursor-move");
+            fireEvent("vline-cursor-move-right");
+        } else if (keyCode == GLFW.GLFW_KEY_LEFT && cursorPos > 0) {
+            // Left Arrow: Move cursor one character left
+            cursorPos = Math.max(0, cursorPos - 1);
+            fireEvent("vline-cursor-move");
+            fireEvent("vline-cursor-move-left");
         } else if (keyCode == GLFW.GLFW_KEY_RIGHT && cursorPos < text.length()) {
-            cursorPos += 1;
+            // Right Arrow: Move cursor one character right
+            cursorPos = Math.min(text.length(), cursorPos + 1);
             fireEvent("vline-cursor-move");
             fireEvent("vline-cursor-move-right");
         }
@@ -180,7 +183,11 @@ public class VLineInput extends VWidget<VLineInput> {
     }
 
     private boolean isDown(int key) {
-        return InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), key);
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null || client.getWindow() == null) {
+            return false;
+        }
+        return InputUtil.isKeyPressed(client.getWindow().getHandle(), key);
     }
 
     private boolean isAltDown() {
@@ -191,5 +198,53 @@ public class VLineInput extends VWidget<VLineInput> {
         return SystemUtils.IS_OS_MAC_OSX ?
                 isDown(GLFW.GLFW_KEY_LEFT_SUPER) || isDown(GLFW.GLFW_KEY_RIGHT_SUPER) :
                 isDown(GLFW.GLFW_KEY_LEFT_CONTROL) || isDown(GLFW.GLFW_KEY_RIGHT_CONTROL);
+    }
+
+    private int jumpToWordStart(int position) {
+        if (text == null || position <= 0) {
+            return 0;
+        }
+
+        int pos = Math.min(position - 1, text.length() - 1);
+
+        while (pos > 0 && !Character.isLetterOrDigit(text.charAt(pos))) {
+            pos--;
+        }
+
+        while (pos > 0 && Character.isLetterOrDigit(text.charAt(pos - 1))) {
+            pos--;
+        }
+
+        return pos;
+    }
+
+    private int jumpToWordEnd(int position) {
+        if (text == null || position >= text.length()) {
+            return text == null ? 0 : text.length();
+        }
+
+        int pos = position;
+
+        while (pos < text.length() && !Character.isLetterOrDigit(text.charAt(pos))) {
+            pos++;
+        }
+
+        while (pos < text.length() && Character.isLetterOrDigit(text.charAt(pos))) {
+            pos++;
+        }
+
+        return pos;
+    }
+
+    private void deleteText(int start, int end) {
+        if (text == null || start < 0 || end > text.length() || start >= end) {
+            return;
+        }
+
+        StringBuilder builder = new StringBuilder(text);
+        builder.delete(start, end);
+        text = builder.toString();
+        cursorPos = Math.min(start, text.length());
+        fireEvent("vline-change");
     }
 }
