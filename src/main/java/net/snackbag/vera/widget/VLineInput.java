@@ -11,7 +11,10 @@ import org.lwjgl.glfw.GLFW;
 
 public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
     private String text;
+    private String placeholderText;
     private VFont font;
+    private VFont placeholderFont;
+
     private @Nullable VColor cursorColor;
     private int cursorPos;
 
@@ -22,7 +25,9 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         super(0, 0, 100, 20, app);
 
         this.text = "";
+        this.placeholderText = "";
         this.font = VFont.create();
+        this.placeholderFont = VFont.create().withColor(VColor.black().withOpacity(0.5f));
         this.cursorColor = null;
         this.cursorPos = 0;
 
@@ -60,11 +65,27 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         this.font = font;
     }
 
+    public VFont getPlaceholderFont() {
+        return placeholderFont;
+    }
+
+    public void setPlaceholderFont(VFont placeholderFont) {
+        this.placeholderFont = placeholderFont;
+    }
+
     public VFont.FontModifier modifyFont() {
         return new VFont.FontModifier(font, this::setFont);
     }
 
     public VColor.ColorModifier modifyFontColor() {
+        return new VColor.ColorModifier(font.getColor(), (color) -> setFont(font.withColor(color)));
+    }
+
+    public VFont.FontModifier modifyPlaceholderFont() {
+        return new VFont.FontModifier(font, this::setPlaceholderFont);
+    }
+
+    public VColor.ColorModifier modifyPlaceholderFontColor() {
         return new VColor.ColorModifier(font.getColor(), (color) -> setFont(font.withColor(color)));
     }
 
@@ -87,6 +108,14 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
     public void setText(String text) {
         this.text = text;
         fireEvent("vline-change");
+    }
+
+    public void setPlaceholderText(String placeholderText) {
+        this.placeholderText = placeholderText;
+    }
+
+    public String getPlaceholderText() {
+        return placeholderText;
     }
 
     public void onLineChanged(Runnable runnable) {
