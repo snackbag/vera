@@ -36,6 +36,7 @@ public class TestApplication extends VeraApp {
         input.setMaxChars(15);
         input.setPlaceholderText("Enter text...");
         input.onAddCharLimited(System.out::println);
+        input.onMouseMove((x, y) -> System.out.println("x=" + x + ", y=" + y));
 
         input.move(50);
         input.setBackgroundColor(VColor.white());
