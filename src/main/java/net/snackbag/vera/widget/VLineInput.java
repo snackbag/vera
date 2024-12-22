@@ -51,6 +51,8 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
                 rotation,
                 backgroundColor
         );
+
+        if (text.isEmpty()) Vera.renderer.drawText(app, x, y, 0, placeholderText, placeholderFont);
         Vera.renderer.drawText(app, x, y, 0, text, font);
 
         if (isFocused() && (System.currentTimeMillis() / 500) % 2 == 0) {
