@@ -98,15 +98,11 @@ public class VDropdown extends VWidget<VDropdown> {
 
     @Override
     public void handleBuiltinEvent(String event) {
-        switch (event) {
-            case "left-click" -> {
-                if (isFocused()) {
-                    setFocused(false);
-                    return;
-                }
+        if (event.equals("left-click")) {
+            if (isFocused()) {
+                setFocused(false);
+                return;
             }
-            case "hover" -> app.setCursorShape(VCursorShape.POINTING_HAND);
-            case "hover-leave" -> app.setCursorShape(VCursorShape.DEFAULT);
         }
 
         super.handleBuiltinEvent(event);
