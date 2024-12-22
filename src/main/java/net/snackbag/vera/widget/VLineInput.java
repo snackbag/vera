@@ -76,7 +76,7 @@ public class VLineInput extends VWidget<VLineInput> {
 
     @Override
     public void keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_BACKSPACE && !text.isEmpty()) {
+        if (keyCode == GLFW.GLFW_KEY_BACKSPACE && !text.isEmpty() && cursorPos > 0) {
             StringBuilder builder = new StringBuilder(text);
             builder.deleteCharAt(cursorPos - 1);
 
