@@ -7,6 +7,7 @@ import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
+import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
@@ -118,6 +119,10 @@ public class VLineInput extends VWidget<VLineInput> {
             }
 
             cursorPos = pos;
+        } else if (isDown(GLFW.GLFW_KEY_LEFT) && isCtrlDown()) {
+            cursorPos = 0;
+        } else if (isDown(GLFW.GLFW_KEY_RIGHT) && isCtrlDown()) {
+            cursorPos = text.length();
         } else if (keyCode == GLFW.GLFW_KEY_LEFT && cursorPos > 0) {
             fireEvent("vline-cursor-move");
             fireEvent("vline-cursor-move-left");
@@ -180,5 +185,11 @@ public class VLineInput extends VWidget<VLineInput> {
 
     private boolean isAltDown() {
         return isDown(GLFW.GLFW_KEY_LEFT_ALT) || isDown(GLFW.GLFW_KEY_RIGHT_ALT);
+    }
+
+    private boolean isCtrlDown() {
+        return SystemUtils.IS_OS_MAC_OSX ?
+                isDown(GLFW.GLFW_KEY_LEFT_SUPER) || isDown(GLFW.GLFW_KEY_RIGHT_SUPER) :
+                isDown(GLFW.GLFW_KEY_LEFT_CONTROL) || isDown(GLFW.GLFW_KEY_RIGHT_CONTROL);
     }
 }
