@@ -3,6 +3,7 @@ package net.snackbag.vera.widget;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VEvent;
+import net.snackbag.vera.event.VMouseDragEvent;
 import net.snackbag.vera.event.VMouseMoveEvent;
 import net.snackbag.vera.event.VScrollEvent;
 import org.jetbrains.annotations.Nullable;
@@ -161,6 +162,18 @@ public abstract class VWidget<T extends VWidget<T>> {
 
     public void onMouseMove(VMouseMoveEvent runnable) {
         registerEventExecutor("mouse-move", args -> runnable.run((int) args[0], (int) args[1]));
+    }
+
+    public void onMouseDragLeft(VMouseDragEvent runnable) {
+        registerEventExecutor("mouse-drag-left", args -> runnable.run((int) args[0], (int) args[1], (int) args[2], (int) args[2]));
+    }
+
+    public void onMouseDragRight(VMouseDragEvent runnable) {
+        registerEventExecutor("mouse-drag-right", args -> runnable.run((int) args[0], (int) args[1], (int) args[2], (int) args[2]));
+    }
+
+    public void onMouseDragMiddle(VMouseDragEvent runnable) {
+        registerEventExecutor("mouse-drag-middle", args -> runnable.run((int) args[0], (int) args[1], (int) args[2], (int) args[2]));
     }
 
     public boolean isVisible() {
