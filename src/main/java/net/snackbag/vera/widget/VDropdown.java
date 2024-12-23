@@ -144,7 +144,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
     }
 
     public List<Item> getItems() {
-        return new ArrayList<>(items);
+        return items;
     }
 
     public record Item(
