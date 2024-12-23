@@ -40,7 +40,22 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
             );
 
             for (int i = 0; i < items.size(); i++) {
-                Vera.renderer.drawText(app, x, y + (i * (font.getSize() / 2)), 0, items.get(i).name, font);
+                Item item = items.get(i);
+                if (item.icon != null) {
+                    Vera.renderer.drawImage(
+                            app,
+                            x, y + (i * font.getSize() / 2),
+                            font.getSize() / 2, font.getSize() / 2,
+                            0, item.icon
+                    );
+
+                    Vera.renderer.drawText(
+                            app, x + font.getSize() / 4, y + (i * font.getSize() / 2),
+                            0, item.name, font
+                    );
+                } else {
+                    Vera.renderer.drawText(app, x, y + (i * (font.getSize() / 2)), 0, item.name, font);
+                }
             }
         } else {
             Vera.renderer.drawRect(
@@ -140,19 +155,77 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         items.add(new Item(name, null, null, null, null));
     }
 
+    public void addItem(String name, Identifier icon) {
+        items.add(new Item(name, null, null, null, icon));
+    }
+
+    public void addItem(String name, Runnable leftClick) {
+        items.add(new Item(name, leftClick, null, null, null));
+    }
+
+    public void addItem(String name, Runnable leftClick, Identifier icon) {
+        items.add(new Item(name, leftClick, null, null, icon));
+    }
+
     public void addItem(Item item) {
         items.add(item);
+    }
+
+    public @Nullable Item getItem(int index) {
+        return items.size() > index ? items.get(index) : null;
     }
 
     public List<Item> getItems() {
         return items;
     }
 
-    public record Item(
-            String name,
-            @Nullable Runnable leftClick,
-            @Nullable Runnable middleClick,
-            @Nullable Runnable rightClick,
-            @Nullable Identifier icon
-    ) {}
+    public static class Item {
+        private String name;
+        private final @Nullable Runnable leftClick;
+        private final @Nullable Runnable middleClick;
+        private final @Nullable Runnable rightClick;
+        private @Nullable Identifier icon;
+
+        public Item(String name,
+                    @Nullable Runnable leftClick,
+                    @Nullable Runnable middleClick,
+                    @Nullable Runnable rightClick,
+                    @Nullable Identifier icon) {
+
+            this.name = name;
+            this.leftClick = leftClick;
+            this.middleClick = middleClick;
+            this.rightClick = rightClick;
+            this.icon = icon;
+        }
+
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public @Nullable Runnable getLeftClickExecutor() {
+            return leftClick;
+        }
+
+        public @Nullable Runnable getMiddleClickExecutor() {
+            return middleClick;
+        }
+
+        public @Nullable Runnable getRightClickExecutor() {
+            return rightClick;
+        }
+
+        public @Nullable Identifier getIcon() {
+            return icon;
+        }
+
+        public void setIcon(@Nullable Identifier icon) {
+            this.icon = icon;
+        }
+    }
 }
