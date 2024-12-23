@@ -1,5 +1,6 @@
 package net.snackbag.vera.widget;
 
+import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.modifier.VPaddingWidget;
@@ -136,7 +137,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
     }
 
     public void addItem(String name) {
-        items.add(new Item(name, null, null, null));
+        items.add(new Item(name, null, null, null, null));
     }
 
     public void addItem(Item item) {
@@ -151,6 +152,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
             String name,
             @Nullable Runnable leftClick,
             @Nullable Runnable middleClick,
-            @Nullable Runnable rightClick
+            @Nullable Runnable rightClick,
+            @Nullable Identifier icon
     ) {}
 }
