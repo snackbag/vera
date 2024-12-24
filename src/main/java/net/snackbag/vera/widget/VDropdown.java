@@ -17,6 +17,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
     private int selectedItem = 0;
     private int itemSpacing = 0;
+    private @Nullable Integer hoveredItem = null;
 
     public VDropdown(VeraApp app) {
         super(0, 0, 100, 16, app);
@@ -115,6 +116,13 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         }
 
         super.handleBuiltinEvent(event, args);
+    }
+    public @Nullable Item getHoveredItem() {
+        return hoveredItem == null ? null : items.get(hoveredItem);
+    }
+
+    public @Nullable Integer getHoveredIndex() {
+        return hoveredItem;
     }
 
     public int getItemSpacing() {
