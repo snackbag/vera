@@ -108,10 +108,47 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
     @Override
     public void handleBuiltinEvent(String event, Object... args) {
-        if (event.equals("left-click")) {
-            if (isFocused()) {
-                setFocused(false);
-                return;
+        switch (event) {
+            case "left-click" -> {
+                if (isFocused()) {
+                    Item target = getHoveredItem();
+                    if (target != null) target.safeRunLeftClickExecutor();
+
+                    setFocused(false);
+                    return;
+                }
+            }
+
+            case "right-click" -> {
+                if (isFocused()) {
+                    Item target = getHoveredItem();
+                    if (target != null) target.safeRunRightClickExecutor();
+
+                    setFocused(false);
+                    return;
+                }
+            }
+
+            case "middle-click" -> {
+                if (isFocused()) {
+                    Item target = getHoveredItem();
+                    if (target != null) target.safeRunMiddleClickExecutor();
+
+                    setFocused(false);
+                    return;
+                }
+            }
+
+            case "mouse-move" -> {
+                if (!isFocused()) return;
+
+                // Subtract the widget's position from the received position
+                // Yes it looks weird. I'm sorry for the awful variable naming
+                int mouseX = x - (int) args[0];
+                int mouseY = y - (int) args[1];
+
+                Item item = getItemAt(mouseX, mouseY);
+                if (item != null) hoveredItem = items.indexOf(item);
             }
         }
 
