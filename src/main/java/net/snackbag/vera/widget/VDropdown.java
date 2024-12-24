@@ -16,6 +16,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
     private V4Int padding;
 
     private int selectedItem = 0;
+    private int itemSpacing = 0;
 
     public VDropdown(VeraApp app) {
         super(0, 0, 100, 16, app);
@@ -35,26 +36,27 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
                     x - padding.get3(),
                     y - padding.get1(),
                     width + padding.get3() + padding.get4(),
-                    items.size() * (font.getSize() / 2) + padding.get1() + padding.get2(),
+                    items.size() * (font.getSize() / 2 + itemSpacing) + padding.get1() + padding.get2(),
                     0, backgroundColor
             );
 
             for (int i = 0; i < items.size(); i++) {
                 Item item = items.get(i);
+                int itemY = y + (i * (font.getSize() / 2 + itemSpacing));
                 if (item.icon != null) {
                     Vera.renderer.drawImage(
                             app,
-                            x, y + (i * font.getSize() / 2),
+                            x, itemY,
                             font.getSize() / 2, font.getSize() / 2,
                             0, item.icon
                     );
 
                     Vera.renderer.drawText(
-                            app, x + (int) (font.getSize() * 0.70), y + (i * font.getSize() / 2),
+                            app, x + (int) (font.getSize() * 0.70), itemY,
                             0, item.name, font
                     );
                 } else {
-                    Vera.renderer.drawText(app, x, y + (i * (font.getSize() / 2)), 0, item.name, font);
+                    Vera.renderer.drawText(app, x, itemY, 0, item.name, font);
                 }
             }
         } else {
@@ -113,6 +115,14 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         }
 
         super.handleBuiltinEvent(event, args);
+    }
+
+    public int getItemSpacing() {
+        return itemSpacing;
+    }
+
+    public void setItemSpacing(int itemSpacing) {
+        this.itemSpacing = itemSpacing;
     }
 
     public int getSelectedItem() {
