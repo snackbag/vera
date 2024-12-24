@@ -117,6 +117,11 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
         super.handleBuiltinEvent(event, args);
     }
+
+    private @Nullable Item getItemAt(int mouseX, int mouseY) {
+
+    }
+
     public @Nullable Item getHoveredItem() {
         return hoveredItem == null ? null : items.get(hoveredItem);
     }
