@@ -78,6 +78,7 @@ public class TestApplication extends VeraApp {
         dropdown.addItem("roolio");
         dropdown.addItem("buger");
         dropdown.move(90, 90);
+        dropdown.setItemSpacing(3);
 
         dropdown.getItem(2).setIcon(Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/dirt.png"));
     }
