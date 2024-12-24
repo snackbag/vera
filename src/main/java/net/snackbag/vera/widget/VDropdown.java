@@ -237,5 +237,17 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         public void setIcon(@Nullable Identifier icon) {
             this.icon = icon;
         }
+
+        public void safeRunLeftClickExecutor() {
+            if (leftClick != null) leftClick.run();
+        }
+
+        public void safeRunMiddleClickExecutor() {
+            if (middleClick != null) middleClick.run();
+        }
+
+        public void safeRunRightClickExecutor() {
+            if (rightClick != null) rightClick.run();
+        }
     }
 }
