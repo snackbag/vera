@@ -155,8 +155,14 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         super.handleBuiltinEvent(event, args);
     }
 
-    private @Nullable Item getItemAt(int mouseX, int mouseY) {
+    private int getItemIndexAt(int mouseY) {
+        return (y - mouseY) / (font.getSize() / 2 + itemSpacing);
+    }
 
+    private @Nullable Item getItemAt(int mouseX, int mouseY) {
+        int index = getItemIndexAt(mouseY);
+        System.out.println(index);
+        return items.size() < index ? null : items.get(index);
     }
 
     public @Nullable Item getHoveredItem() {
