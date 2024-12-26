@@ -165,6 +165,18 @@ public abstract class VeraApp {
         this.widgets.add(widget);
     }
 
+    public void removeWidget(VWidget<?> widget) {
+        if (!widgets.contains(widget)) return;
+
+        if (isFocusedWidget(widget)) setFocusedWidget(null);
+        if (widget.isLeftClickDown()) widget.fireEvent("left-click-release");
+        if (widget.isMiddleClickDown()) widget.fireEvent("middle-click-release");
+        if (widget.isRightClickDown()) widget.fireEvent("right-click-release");
+        if (widget.isHovered()) widget.fireEvent("hover-leave");
+
+        this.widgets.remove(widget);
+    }
+
     public void setBackgroundColor(VColor color) {
         this.backgroundColor = color;
     }
@@ -201,7 +213,7 @@ public abstract class VeraApp {
     }
 
     public List<VWidget<?>> getHoveredWidgets(int mouseX, int mouseY) {
-        return widgets.parallelStream()
+        return getWidgets().parallelStream()
                 .filter(widget -> isMouseOverWidget(widget, mouseX, mouseY))
                 .collect(Collectors.toList());
     }
