@@ -262,6 +262,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
     public void setSelectedItem(int selectedItem) {
         this.selectedItem = selectedItem;
+        fireEvent("vdropdown-item-switch", selectedItem);
     }
 
     public VFont getFont() {
