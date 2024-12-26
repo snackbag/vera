@@ -4,6 +4,7 @@ import net.minecraft.util.Identifier;
 import net.snackbag.mcvera.MinecraftVera;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
+import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VCheckedStateChange;
 import org.jetbrains.annotations.Nullable;
@@ -26,6 +27,8 @@ public class VCheckBox extends VWidget<VCheckBox> {
         this.checkedTexture = new Identifier(MinecraftVera.MOD_ID, "widgets/checkmark/checked.png");
         this.defaultTexture = new Identifier(MinecraftVera.MOD_ID, "widgets/checkmark/default.png");
         this.hoverOverlayColor = VColor.transparent();
+
+        setHoverCursor(VCursorShape.POINTING_HAND);
     }
 
     @Override
