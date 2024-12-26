@@ -1,5 +1,6 @@
 package net.snackbag.vera;
 
+import net.minecraft.client.MinecraftClient;
 import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.mcvera.impl.MCVeraProvider;
 import net.snackbag.mcvera.impl.MCVeraRenderer;
@@ -40,5 +41,13 @@ public class Vera {
             List<VWidget<?>> hoveredWidgets = app.getHoveredWidgets(mouseX, mouseY);
             if (hoveredWidgets.isEmpty()) runnable.accept(app);
         }
+    }
+
+    public static int getMouseX() {
+        return (int) (MinecraftClient.getInstance().mouse.getX() / MinecraftClient.getInstance().getWindow().getScaleFactor());
+    }
+
+    public static int getMouseY() {
+        return (int) (MinecraftClient.getInstance().mouse.getY() / MinecraftClient.getInstance().getWindow().getScaleFactor());
     }
 }
