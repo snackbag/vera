@@ -89,7 +89,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
             );
 
             if (!items.isEmpty()) {
-                Vera.renderer.drawText(app, x, y, 0, items.get(0).name, font);
+                Vera.renderer.drawText(app, x, y, 0, items.get(selectedItem).name, font);
             }
         }
     }
