@@ -13,6 +13,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
     private final List<Item> items;
     private VFont font;
     private VColor backgroundColor;
+    private VColor itemHoveredColor;
     private V4Int padding;
 
     private int selectedItem = 0;
@@ -25,6 +26,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         items = new ArrayList<>();
         font = VFont.create();
         backgroundColor = VColor.white();
+        itemHoveredColor = VColor.white().sub(30);
         padding = new V4Int(5, 10);
         setHoverCursor(VCursorShape.POINTING_HAND);
     }
@@ -52,7 +54,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
                             itemY - (itemSpacing / 2),
                             width + padding.get3() + padding.get4(),
                             (font.getSize() / 2 + itemSpacing) + (itemSpacing / 2) - 1,
-                            0, VColor.white().sub(20)
+                            0, itemHoveredColor
                     );
                 }
 
@@ -86,6 +88,14 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
                 Vera.renderer.drawText(app, x, y, 0, items.get(0).name, font);
             }
         }
+    }
+
+    public VColor getItemHoveredColor() {
+        return itemHoveredColor;
+    }
+
+    public void setItemHoveredColor(VColor itemHoveredColor) {
+        this.itemHoveredColor = itemHoveredColor;
     }
 
     @Override
