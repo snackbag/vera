@@ -46,8 +46,9 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
             for (int i = 0; i < items.size(); i++) {
                 Item item = items.get(i);
                 int itemY = y + (i * (font.getSize() / 2 + itemSpacing));
+                boolean itemHovered = hoveredItem != null && i == hoveredItem;
 
-                if (hoveredItem != null && i == hoveredItem) {
+                if (itemHovered) {
                     Vera.renderer.drawRect(
                             app,
                             x - padding.get3(),
@@ -63,7 +64,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
                             app,
                             x, itemY,
                             font.getSize() / 2, font.getSize() / 2,
-                            0, item.icon
+                            0, itemHovered ? item.getHoverIcon() : item.icon
                     );
 
                     Vera.renderer.drawText(
