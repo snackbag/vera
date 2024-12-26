@@ -91,6 +91,13 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         }
     }
 
+    @Override
+    public void handleBuiltinEvent(String event, Object... args) {
+        if (event.equals("left-click")) textSelection.clear();
+
+        super.handleBuiltinEvent(event, args);
+    }
+
     public VFont getFont() {
         return font;
     }
