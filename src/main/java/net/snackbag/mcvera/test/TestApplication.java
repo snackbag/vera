@@ -81,6 +81,7 @@ public class TestApplication extends VeraApp {
         dropdown.setItemSpacing(3);
         dropdown.modifyHoverFont().color(VColor.white());
         dropdown.setItemHoverColor(VColor.black());
+        dropdown.onFocusStateChange(() -> System.out.println("focus state change: " + dropdown.isFocused()));
 
         dropdown.getItem(2).setHoverIcon(Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/diamond_ore.png"));
 
