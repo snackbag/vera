@@ -199,11 +199,6 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
                 int mouseX = argX - x;
                 int mouseY = argY - y;
 
-
-                // TODO: Remove debug prints
-                System.out.println("mouseX=" + mouseX + ", a0=" + args[0] + ", x=" + x);
-                System.out.println("mouseY=" + mouseY + ", a1=" + args[1] + ", y=" + y);
-
                 Item item = getItemAt(mouseX, mouseY);
                 hoveredItem = (item != null) ? items.indexOf(item) : null;
             }
@@ -216,11 +211,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         if (mouseY < 0) return -1;
 
         int itemHeight = font.getSize() / 2 + itemSpacing;
-        int index = mouseY / itemHeight;
-
-        // TODO: Remove debug print
-        System.out.println(index);
-        return index;
+        return mouseY / itemHeight;
     }
 
     private @Nullable Item getItemAt(int mouseX, int mouseY) {
