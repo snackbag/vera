@@ -13,7 +13,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
     private final List<Item> items;
     private VFont font;
     private VColor backgroundColor;
-    private VColor itemHoveredColor;
+    private VColor itemHoverColor;
     private V4Int padding;
 
     private int selectedItem = 0;
@@ -26,7 +26,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         items = new ArrayList<>();
         font = VFont.create();
         backgroundColor = VColor.white();
-        itemHoveredColor = VColor.white().sub(30);
+        itemHoverColor = VColor.white().sub(30);
         padding = new V4Int(5, 10);
         setHoverCursor(VCursorShape.POINTING_HAND);
     }
@@ -54,7 +54,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
                             itemY - (itemSpacing / 2),
                             width + padding.get3() + padding.get4(),
                             (font.getSize() / 2 + itemSpacing) + (itemSpacing / 2) - 1,
-                            0, itemHoveredColor
+                            0, itemHoverColor
                     );
                 }
 
@@ -90,12 +90,16 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         }
     }
 
-    public VColor getItemHoveredColor() {
-        return itemHoveredColor;
+    public VColor getItemHoverColor() {
+        return itemHoverColor;
     }
 
-    public void setItemHoveredColor(VColor itemHoveredColor) {
-        this.itemHoveredColor = itemHoveredColor;
+    public void setItemHoverColor(VColor itemHoveredColor) {
+        this.itemHoverColor = itemHoveredColor;
+    }
+
+    public VColor.ColorModifier modifyItemHoverColor() {
+        return new VColor.ColorModifier(itemHoverColor, this::setItemHoverColor);
     }
 
     @Override
@@ -261,19 +265,19 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
     }
 
     public void addItem(String name) {
-        items.add(new Item(name, null, null, null, null));
+        items.add(new Item(name, null, null, null, null, null));
     }
 
     public void addItem(String name, Identifier icon) {
-        items.add(new Item(name, null, null, null, icon));
+        items.add(new Item(name, null, null, null, icon, null));
     }
 
     public void addItem(String name, Runnable leftClick) {
-        items.add(new Item(name, leftClick, null, null, null));
+        items.add(new Item(name, leftClick, null, null, null, null));
     }
 
     public void addItem(String name, Runnable leftClick, Identifier icon) {
-        items.add(new Item(name, leftClick, null, null, icon));
+        items.add(new Item(name, leftClick, null, null, icon, null));
     }
 
     public void addItem(Item item) {
@@ -294,18 +298,21 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         private final @Nullable Runnable middleClick;
         private final @Nullable Runnable rightClick;
         private @Nullable Identifier icon;
+        private @Nullable Identifier hoverIcon;
 
         public Item(String name,
                     @Nullable Runnable leftClick,
                     @Nullable Runnable middleClick,
                     @Nullable Runnable rightClick,
-                    @Nullable Identifier icon) {
+                    @Nullable Identifier icon,
+                    @Nullable Identifier hoverIcon) {
 
             this.name = name;
             this.leftClick = leftClick;
             this.middleClick = middleClick;
             this.rightClick = rightClick;
             this.icon = icon;
+            this.hoverIcon = hoverIcon;
         }
 
 
@@ -333,8 +340,20 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
             return icon;
         }
 
+        /**
+         * If no hover icon has been set it automatically returns the normal icon
+         * @return the hover icon
+         */
+        public @Nullable Identifier getHoverIcon() {
+            return hoverIcon == null ? icon : hoverIcon;
+        }
+
         public void setIcon(@Nullable Identifier icon) {
             this.icon = icon;
+        }
+
+        public void setHoverIcon(@Nullable Identifier hoverIcon) {
+            this.hoverIcon = hoverIcon;
         }
 
         public void safeRunLeftClickExecutor() {
