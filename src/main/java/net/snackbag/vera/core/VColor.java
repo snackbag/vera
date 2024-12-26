@@ -111,6 +111,22 @@ public class VColor {
         return new VColor(red, green, blue, opacity);
     }
 
+    public VColor add(int all) {
+        return new VColor(Math.min(red + all, 255), Math.min(green + all, 255), Math.min(blue + all, 255));
+    }
+
+    public VColor add(int red, int green, int blue) {
+        return new VColor(Math.min(this.red + red, 255), Math.min(this.green + green, 255), Math.min(this.blue + blue, 255));
+    }
+
+    public VColor sub(int all) {
+        return new VColor(Math.max(red - all, 0), Math.max(green - all, 0), Math.max(blue - all, 0));
+    }
+
+    public VColor sub(int red, int green, int blue) {
+        return new VColor(Math.max(this.red - red, 0), Math.max(this.green - green, 0), Math.max(this.blue - blue, 0));
+    }
+
     public static VColor transparent() {
         return new VColor(0, 0, 0, 0);
     }
