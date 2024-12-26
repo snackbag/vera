@@ -3,6 +3,7 @@ package net.snackbag.vera.widget;
 import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
+import net.snackbag.vera.event.VItemSwitchEvent;
 import net.snackbag.vera.modifier.VPaddingWidget;
 import org.jetbrains.annotations.Nullable;
 
@@ -159,7 +160,10 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
             case "left-click" -> {
                 if (isFocused()) {
                     Item target = getHoveredItem();
-                    if (target != null) target.safeRunLeftClickExecutor();
+                    if (target != null && hoveredItem != null) {
+                        target.safeRunLeftClickExecutor();
+                        setSelectedItem(hoveredItem);
+                    }
 
                     setFocused(false);
                     return;
@@ -169,7 +173,10 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
             case "right-click" -> {
                 if (isFocused()) {
                     Item target = getHoveredItem();
-                    if (target != null) target.safeRunRightClickExecutor();
+                    if (target != null && hoveredItem != null) {
+                        target.safeRunRightClickExecutor();
+                        setSelectedItem(hoveredItem);
+                    }
 
                     setFocused(false);
                     return;
@@ -179,7 +186,10 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
             case "middle-click" -> {
                 if (isFocused()) {
                     Item target = getHoveredItem();
-                    if (target != null) target.safeRunMiddleClickExecutor();
+                    if (target != null && hoveredItem != null) {
+                        target.safeRunMiddleClickExecutor();
+                        setSelectedItem(hoveredItem);
+                    }
 
                     setFocused(false);
                     return;
@@ -212,6 +222,14 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
         int itemHeight = font.getSize() / 2 + itemSpacing;
         return mouseY / itemHeight;
+    }
+
+    public void onItemSwitch(VItemSwitchEvent runnable) {
+        registerEventExecutor("vdropdown-item-switch", args -> runnable.run((int) args[0]));
+    }
+
+    public void onSelectorOpen(Runnable runnable) {
+        registerEventExecutor("vdropdown-selector-open", runnable);
     }
 
     private @Nullable Item getItemAt(int mouseX, int mouseY) {
