@@ -77,7 +77,7 @@ public class TestApplication extends VeraApp {
         dropdown.addItem("shmoolio");
         dropdown.addItem("roolio", Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/dirt.png"));
         dropdown.addItem("buger", () -> System.out.println("pressed"));
-        dropdown.move(90, 90);
+        dropdown.move(90);
         dropdown.setItemSpacing(3);
         dropdown.modifyHoverFont().color(VColor.white());
         dropdown.setItemHoverColor(VColor.black());
