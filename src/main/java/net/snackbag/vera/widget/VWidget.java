@@ -342,6 +342,10 @@ public abstract class VWidget<T extends VWidget<T>> {
 
     public void charTyped(char chr, int modifiers) {}
 
+    public void remove() {
+        app.removeWidget(this);
+    }
+
     public T alsoAdd() {
         app.addWidget(this);
         return (T) this;
