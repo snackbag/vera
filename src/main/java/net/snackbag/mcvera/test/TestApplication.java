@@ -79,8 +79,11 @@ public class TestApplication extends VeraApp {
         dropdown.addItem("buger");
         dropdown.move(90, 90);
         dropdown.setItemSpacing(3);
+        dropdown.modifyHoverFont().color(VColor.white());
+        dropdown.setItemHoverColor(VColor.black());
 
         dropdown.getItem(2).setIcon(Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/dirt.png"));
+        dropdown.getItem(2).setHoverIcon(Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/diamond_ore.png"));
     }
 
     @Override
