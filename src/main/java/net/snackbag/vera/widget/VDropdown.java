@@ -93,7 +93,9 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
     @Override
     public int getHitboxHeight() {
-        return font.getSize() / 2 + padding.get1() + padding.get2();
+        return !isFocused() ?
+                font.getSize() / 2 + padding.get1() + padding.get2() :
+                items.size() * (font.getSize() / 2 + itemSpacing) + padding.get1() + padding.get2();
     }
 
     @Override
