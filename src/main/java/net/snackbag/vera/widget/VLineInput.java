@@ -78,7 +78,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         if (text.isEmpty()) Vera.renderer.drawText(app, x, y, 0, placeholderText, placeholderFont);
         else Vera.renderer.drawText(app, x, y, 0, text, font);
 
-        if (isFocused() && (System.currentTimeMillis() / 500) % 2 == 0) {
+        if (isFocused() && textSelection.isClear() && (System.currentTimeMillis() / 500) % 2 == 0) {
             Vera.renderer.drawRect(
                     app,
                     x + Vera.provider.getTextWidth(text.substring(0, cursorPos), font),
