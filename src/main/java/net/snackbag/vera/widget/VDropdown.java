@@ -94,6 +94,14 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         }
     }
 
+    @Override
+    public void setFocused(boolean focused) {
+        super.setFocused(focused);
+
+        if (focused) fireEvent("vdropdown-selector-open");
+        else fireEvent("vdropdown-selector-close");
+    }
+
     public VColor getItemHoverColor() {
         return itemHoverColor;
     }
@@ -230,6 +238,10 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
     public void onSelectorOpen(Runnable runnable) {
         registerEventExecutor("vdropdown-selector-open", runnable);
+    }
+
+    public void onSelectorClose(Runnable runnable) {
+        registerEventExecutor("vdropdown-selector-close", runnable);
     }
 
     private @Nullable Item getItemAt(int mouseX, int mouseY) {
