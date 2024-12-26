@@ -12,6 +12,7 @@ import java.util.List;
 public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
     private final List<Item> items;
     private VFont font;
+    private VFont hoverFont;
     private VColor backgroundColor;
     private VColor itemHoverColor;
     private V4Int padding;
@@ -25,6 +26,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
         items = new ArrayList<>();
         font = VFont.create();
+        hoverFont = VFont.create();
         backgroundColor = VColor.white();
         itemHoverColor = VColor.white().sub(30);
         padding = new V4Int(5, 10);
@@ -97,6 +99,22 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
     public void setItemHoverColor(VColor itemHoveredColor) {
         this.itemHoverColor = itemHoveredColor;
+    }
+
+    public VFont getHoverFont() {
+        return hoverFont;
+    }
+
+    public void setHoverFont(VFont hoverFont) {
+        this.hoverFont = hoverFont;
+    }
+
+    public VColor.ColorModifier modifyHoverFontColor() {
+        return new VColor.ColorModifier(hoverFont.getColor(), (color) -> setHoverFont(hoverFont.withColor(color)));
+    }
+
+    public VFont.FontModifier modifyHoverFont() {
+        return new VFont.FontModifier(hoverFont, this::setHoverFont);
     }
 
     public VColor.ColorModifier modifyItemHoverColor() {
