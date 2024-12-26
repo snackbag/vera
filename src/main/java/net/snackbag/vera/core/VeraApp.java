@@ -235,7 +235,13 @@ public abstract class VeraApp {
     }
 
     public void setFocusedWidget(@Nullable VWidget<?> widget) {
-        this.focusedWidget = widget;
+        if (this.focusedWidget != widget) {
+            VWidget<?> oldWidget = this.focusedWidget;
+            this.focusedWidget = widget;
+
+            if (oldWidget != null) oldWidget.fireEvent("focus-state-change");
+            if (widget != null) widget.fireEvent("focus-state-change");
+        }
     }
 
     public @Nullable VWidget<?> getFocusedWidget() {

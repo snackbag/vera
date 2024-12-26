@@ -202,6 +202,10 @@ public abstract class VWidget<T extends VWidget<T>> {
         registerEventExecutor("mouse-drag-middle", args -> runnable.run((int) args[0], (int) args[1], (int) args[2], (int) args[3]));
     }
 
+    public void onFocusStateChange(Runnable runnable) {
+        registerEventExecutor("focus-state-change", runnable);
+    }
+
     public boolean isVisible() {
         return visible;
     }
