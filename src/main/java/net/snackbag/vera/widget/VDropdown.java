@@ -36,13 +36,41 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
     @Override
     public void render() {
+        Vera.renderer.drawRect(
+                app, getHitboxX(), getHitboxY(), getHitboxWidth(), getHitboxHeight(),
+                0, backgroundColor
+        );
+
+        if (isFocused()) {
+            for (int i = 0; i < items.size(); i++) {
+                boolean isHovered = hoveredItem != null && i == hoveredItem;
+                if (isHovered) {
+                    Vera.renderer.drawRect(
+                            app,
+                            getHitboxX(),
+                            y + (i * (itemSpacing + font.getSize() / 2)),
+                            getHitboxWidth(),
+                            font.getSize() / 2 + itemSpacing,
+                            0, itemHoverColor
+                    );
+                }
+
+                Vera.renderer.drawText(
+                        app, x, y + (i * (itemSpacing + font.getSize() / 2) + itemSpacing / 2),
+                        0, getItems().get(i).name, isHovered ? hoverFont : font);
+            }
+        } else {
+            Vera.renderer.drawText(app, x, y, 0, getItems().get(selectedItem).name, font);
+        }
+
+        /*
         if (isFocused()) {
             Vera.renderer.drawRect(
                     app,
                     x - padding.get3(),
                     y - padding.get1(),
                     width + padding.get3() + padding.get4(),
-                    items.size() * (font.getSize() / 2 + itemSpacing) + padding.get1() + padding.get2(),
+                    items.size() * (font.getSize() / 2 + itemSpacing) + padding.get1() + padding.get2() - itemSpacing / 2,
                     0, backgroundColor
             );
 
@@ -57,7 +85,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
                             x - padding.get3(),
                             itemY - (itemSpacing / 2),
                             width + padding.get3() + padding.get4(),
-                            (font.getSize() / 2 + itemSpacing) + (itemSpacing / 2) - 1,
+                           (font.getSize() / 2 + itemSpacing) - 1,
                             0, itemHoverColor
                     );
                 }
@@ -92,6 +120,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
                 Vera.renderer.drawText(app, x, y, 0, items.get(selectedItem).name, font);
             }
         }
+         */
     }
 
     @Override
@@ -228,8 +257,8 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
     private int getItemIndexAt(int mouseY) {
         if (mouseY < 0) return -1;
 
-        int itemHeight = font.getSize() / 2 + itemSpacing;
-        return mouseY / itemHeight;
+        int index = mouseY / (itemSpacing + font.getSize() / 2);
+        return items.size() < index ? -1 : index;
     }
 
     public void onItemSwitch(VItemSwitchEvent runnable) {
