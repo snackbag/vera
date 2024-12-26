@@ -86,7 +86,7 @@ public class TestApplication extends VeraApp {
 
         VCheckBox checkbox = new VCheckBox(this).alsoAdd();
         checkbox.move(20, 140);
-        checkbox.setHoverOverlayColor(VColor.white().withOpacity(0.2f));
+        checkbox.setHoverOverlayColor(VColor.white().withOpacity(0.4f));
     }
 
     @Override
