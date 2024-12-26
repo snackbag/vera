@@ -44,6 +44,11 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         if (isFocused()) {
             for (int i = 0; i < items.size(); i++) {
                 boolean isHovered = hoveredItem != null && i == hoveredItem;
+                Item item = items.get(i);
+
+                int textY = y + (i * (itemSpacing + font.getSize() / 2) + itemSpacing / 2);
+                int textX = (int) (item.icon == null ? x : x + font.getSize() * 0.7);
+
                 if (isHovered) {
                     Vera.renderer.drawRect(
                             app,
@@ -55,72 +60,20 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
                     );
                 }
 
-                Vera.renderer.drawText(
-                        app, x, y + (i * (itemSpacing + font.getSize() / 2) + itemSpacing / 2),
-                        0, getItems().get(i).name, isHovered ? hoverFont : font);
+                if (item.icon != null) {
+                    Vera.renderer.drawImage(
+                            app, x, textY,
+                            font.getSize() / 2,
+                            font.getSize() / 2,
+                            0, isHovered ? item.getHoverIcon() : item.getIcon()
+                    );
+                }
+
+                Vera.renderer.drawText(app, textX, textY, 0, item.name, isHovered ? hoverFont : font);
             }
         } else {
             Vera.renderer.drawText(app, x, y, 0, getItems().get(selectedItem).name, font);
         }
-
-        /*
-        if (isFocused()) {
-            Vera.renderer.drawRect(
-                    app,
-                    x - padding.get3(),
-                    y - padding.get1(),
-                    width + padding.get3() + padding.get4(),
-                    items.size() * (font.getSize() / 2 + itemSpacing) + padding.get1() + padding.get2() - itemSpacing / 2,
-                    0, backgroundColor
-            );
-
-            for (int i = 0; i < items.size(); i++) {
-                Item item = items.get(i);
-                int itemY = y + (i * (font.getSize() / 2 + itemSpacing));
-                boolean itemHovered = hoveredItem != null && i == hoveredItem;
-
-                if (itemHovered) {
-                    Vera.renderer.drawRect(
-                            app,
-                            x - padding.get3(),
-                            itemY - (itemSpacing / 2),
-                            width + padding.get3() + padding.get4(),
-                           (font.getSize() / 2 + itemSpacing) - 1,
-                            0, itemHoverColor
-                    );
-                }
-
-                if (item.icon != null) {
-                    Vera.renderer.drawImage(
-                            app,
-                            x, itemY,
-                            font.getSize() / 2, font.getSize() / 2,
-                            0, itemHovered ? item.getHoverIcon() : item.icon
-                    );
-
-                    Vera.renderer.drawText(
-                            app, x + (int) (font.getSize() * 0.70), itemY,
-                            0, item.name, itemHovered ? hoverFont : font
-                    );
-                } else {
-                    Vera.renderer.drawText(app, x, itemY, 0, item.name, itemHovered ? hoverFont : font);
-                }
-            }
-        } else {
-            Vera.renderer.drawRect(
-                    app,
-                    x - padding.get3(),
-                    y - padding.get1(),
-                    width + padding.get3() + padding.get4(),
-                    font.getSize() / 2 + padding.get1() + padding.get2(),
-                    0, backgroundColor
-            );
-
-            if (!items.isEmpty()) {
-                Vera.renderer.drawText(app, x, y, 0, items.get(selectedItem).name, font);
-            }
-        }
-         */
     }
 
     @Override
