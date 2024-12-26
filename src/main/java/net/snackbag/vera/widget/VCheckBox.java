@@ -31,7 +31,7 @@ public class VCheckBox extends VWidget<VCheckBox> {
     @Override
     public void render() {
         Vera.renderer.drawImage(app, x, y, width, height, 0, getCurrentTexture());
-        Vera.renderer.drawRect(app, x, y, width, height, 0, hoverOverlayColor);
+        if (isHovered()) Vera.renderer.drawRect(app, x, y, width, height, 0, hoverOverlayColor);
     }
 
     @Override
