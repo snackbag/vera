@@ -71,10 +71,10 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
                     Vera.renderer.drawText(
                             app, x + (int) (font.getSize() * 0.70), itemY,
-                            0, item.name, font
+                            0, item.name, itemHovered ? hoverFont : font
                     );
                 } else {
-                    Vera.renderer.drawText(app, x, itemY, 0, item.name, font);
+                    Vera.renderer.drawText(app, x, itemY, 0, item.name, itemHovered ? hoverFont : font);
                 }
             }
         } else {
