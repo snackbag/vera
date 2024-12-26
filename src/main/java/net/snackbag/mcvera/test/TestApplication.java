@@ -83,6 +83,10 @@ public class TestApplication extends VeraApp {
         dropdown.setItemHoverColor(VColor.black());
 
         dropdown.getItem(2).setHoverIcon(Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/diamond_ore.png"));
+
+        VCheckBox checkbox = new VCheckBox(this).alsoAdd();
+        checkbox.move(20, 140);
+        checkbox.setHoverOverlayColor(VColor.white().withOpacity(0.2f));
     }
 
     @Override
