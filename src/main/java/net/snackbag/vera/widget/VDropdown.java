@@ -142,15 +142,25 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
             }
 
             case "mouse-move" -> {
-                if (!isFocused()) return;
+                if (!isFocused()) {
+                    hoveredItem = null;
+                    return;
+                }
 
-                // Subtract the widget's position from the received position
-                // Yes it looks weird. I'm sorry for the awful variable naming
-                int mouseX = x - (int) args[0];
-                int mouseY = y - (int) args[1];
+                // Get mouse position relative to the dropdown's top-left corner
+                int argX = (int) args[0];
+                int argY = (int) args[1];
+
+                int mouseX = argX - x;
+                int mouseY = argY - y;
+
+
+                // TODO: Remove debug prints
+                System.out.println("mouseX=" + mouseX + ", a0=" + args[0] + ", x=" + x);
+                System.out.println("mouseY=" + mouseY + ", a1=" + args[1] + ", y=" + y);
 
                 Item item = getItemAt(mouseX, mouseY);
-                if (item != null) hoveredItem = items.indexOf(item);
+                hoveredItem = (item != null) ? items.indexOf(item) : null;
             }
         }
 
@@ -158,13 +168,22 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
     }
 
     private int getItemIndexAt(int mouseY) {
-        return (y - mouseY) / (font.getSize() / 2 + itemSpacing);
+        if (mouseY < 0) return -1;
+
+        int itemHeight = font.getSize() / 2 + itemSpacing;
+        int index = mouseY / itemHeight;
+
+        // TODO: Remove debug print
+        System.out.println(index);
+        return index;
     }
 
     private @Nullable Item getItemAt(int mouseX, int mouseY) {
         int index = getItemIndexAt(mouseY);
-        System.out.println(index);
-        return items.size() < index ? null : items.get(index);
+        if (index < 0 || index >= items.size()) {
+            return null;
+        }
+        return items.get(index);
     }
 
     public @Nullable Item getHoveredItem() {
