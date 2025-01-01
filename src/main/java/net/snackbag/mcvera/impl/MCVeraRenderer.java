@@ -59,7 +59,7 @@ public class MCVeraRenderer {
         List<VWidget<?>> hoveredWidgets = app.getHoveredWidgets();
         for (VWidget<?> widget : widgets) {
             widget.setHovered(hoveredWidgets.contains(widget));
-            if (widget.isVisible()) widget.render();
+            if (widget.visibilityConditionsPassed()) widget.render();
         }
 
         RenderSystem.disableBlend();
