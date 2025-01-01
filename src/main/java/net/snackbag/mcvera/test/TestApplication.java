@@ -92,6 +92,12 @@ public class TestApplication extends VeraApp {
         checkbox.onCheckStateChange((state) -> {
             if (!state) removeWidget(checkbox);
         });
+
+        VTabWidget tabs = new VTabWidget(this).alsoAdd();
+        tabs.move(20, 170);
+        tabs.addTab("test");
+        tabs.addTab("sigma");
+        tabs.setActiveTab(0);
     }
 
     @Override
