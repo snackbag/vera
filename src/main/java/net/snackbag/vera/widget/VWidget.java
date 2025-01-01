@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Supplier;
 
 public abstract class VWidget<T extends VWidget<T>> {
     protected int x;
@@ -37,6 +38,7 @@ public abstract class VWidget<T extends VWidget<T>> {
     private int rightDragPreviousY = -1;
 
     private final HashMap<String, List<VEvent>> eventExecutors;
+    private final List<Supplier<Boolean>> visibilityConditions;
 
     public VWidget(int x, int y, int width, int height, VeraApp app) {
         this.x = x;
@@ -46,6 +48,9 @@ public abstract class VWidget<T extends VWidget<T>> {
         this.app = app;
         this.rotation = 0;
         this.eventExecutors = new HashMap<>();
+        this.visibilityConditions = new ArrayList<>();
+
+        addVisibilityCondition(this::isVisible);
     }
 
     public abstract void render();
@@ -353,5 +358,13 @@ public abstract class VWidget<T extends VWidget<T>> {
     public T alsoAdd() {
         app.addWidget(this);
         return (T) this;
+    }
+
+    public void addVisibilityCondition(Supplier<Boolean> condition) {
+        visibilityConditions.add(condition);
+    }
+
+    public boolean visibilityConditionsPassed() {
+        return visibilityConditions.parallelStream().anyMatch(Supplier::get);
     }
 }
