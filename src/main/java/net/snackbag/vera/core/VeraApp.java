@@ -219,7 +219,7 @@ public abstract class VeraApp {
     }
 
     private boolean isMouseOverWidget(VWidget<?> widget, int mouseX, int mouseY) {
-        if (!widget.isVisible()) return false;
+        if (!widget.visibilityConditionsPassed()) return false;
 
         int widgetX = widget.getHitboxX() + x;
         int widgetY = widget.getHitboxY() + y;
