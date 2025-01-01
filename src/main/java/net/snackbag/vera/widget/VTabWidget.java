@@ -2,6 +2,7 @@ package net.snackbag.vera.widget;
 
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
+import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 
@@ -25,6 +26,8 @@ public class VTabWidget extends VWidget<VTabWidget> {
         font = VFont.create();
         selectedBackgroundColor = VColor.white();
         defaultBackgroundColor = VColor.white().sub(40);
+
+        setHoverCursor(VCursorShape.POINTING_HAND);
     }
 
     @Override
