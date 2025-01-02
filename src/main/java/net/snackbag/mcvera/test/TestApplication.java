@@ -95,8 +95,8 @@ public class TestApplication extends VeraApp {
 
         VTabWidget tabs = new VTabWidget(this).alsoAdd();
         tabs.move(20, 170);
-        tabs.addTab("test");
-        tabs.addTab("sigma");
+        tabs.addTab("test", checkbox);
+        tabs.addTab("other test", dropdown);
         tabs.setActiveTab(0);
     }
 
