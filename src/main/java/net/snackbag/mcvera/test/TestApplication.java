@@ -80,6 +80,8 @@ public class TestApplication extends VeraApp {
         rightLabel.setBackgroundColor(VColor.black());
         rightLabel.modifyFontColor().rgb(255, 255, 255);
         rightLabel.move(100, 10);
+        rightLabel.setBorder(VColor.white());
+        rightLabel.setBorderSize(1);
 
         VImage image = new VImage(
                 Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/dirt.png"),
