@@ -128,6 +128,10 @@ public class VTabWidget extends VWidget<VTabWidget> {
         return -1;
     }
 
+    public @Nullable Integer getTabIndex(String tab) {
+        return !tabs.containsKey(tab) ? null : List.of(tabs.keySet().toArray()).indexOf(tab);
+    }
+
     public void onTabHoverChange(Consumer<Integer> runnable) {
         registerEventExecutor("vtabwidget-tab-hover-change", (args) -> runnable.accept((int) args[0]));
     }
