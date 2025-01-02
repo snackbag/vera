@@ -73,6 +73,10 @@ public class VColor {
         return blue / 255;
     }
 
+    public int opacityToAlpha() {
+        return (int) (opacity * 255);
+    }
+
     public boolean isTransparent() {
         return opacity == 0;
     }
