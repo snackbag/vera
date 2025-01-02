@@ -66,30 +66,30 @@ public class VTabWidget extends VWidget<VTabWidget> {
 
             case "left-click" -> {
                 if (hoveredTab == null || !isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-left-click", hoveredTab);
+                fireEvent("vtabwidget-tab-left-click", hoveredTab);
                 setActiveTab((int) args[0]);
             }
             case "left-click-release" -> {
                 if (hoveredTab == null || !isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-left-click-release", args[0]);
+                fireEvent("vtabwidget-tab-left-click-release", args[0]);
             }
 
             case "middle-click" -> {
                 if (hoveredTab == null || !isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-middle-click", args[0]);
+                fireEvent("vtabwidget-tab-middle-click", args[0]);
             }
             case "middle-click-release" -> {
                 if (hoveredTab == null || !isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-middle-click-release", args[0]);
+                fireEvent("vtabwidget-tab-middle-click-release", args[0]);
             }
 
             case "right-click" -> {
                 if (hoveredTab == null || !isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-right-click", args[0]);
+                fireEvent("vtabwidget-tab-right-click", args[0]);
             }
             case "right-click-release" -> {
                 if (hoveredTab == null || !isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-right-click-release", args[0]);
+                fireEvent("vtabwidget-tab-right-click-release", args[0]);
             }
         }
     }
