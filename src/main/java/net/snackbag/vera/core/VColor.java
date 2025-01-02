@@ -61,16 +61,16 @@ public class VColor {
         return opacity;
     }
 
-    public int oneRed() {
-        return red / 255;
+    public float oneRed() {
+        return (float) red / 255;
     }
 
-    public int oneGreen() {
-        return green / 255;
+    public float oneGreen() {
+        return (float) green / 255;
     }
 
-    public int oneBlue() {
-        return blue / 255;
+    public float oneBlue() {
+        return (float) blue / 255;
     }
 
     public int opacityToAlpha() {
