@@ -142,15 +142,27 @@ public abstract class VWidget<T extends VWidget<T>> {
     public void renderBorder() {
         // Top
         Vera.renderer.drawRect(app, getHitboxX(), getHitboxY() - borderSize.get1(), getHitboxWidth(), borderSize.get1(), 0, border.get1());
+        if (borderSize.get3() > 0) {
+            Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY() - borderSize.get1(), borderSize.get3(), borderSize.get1(), 0, border.get1());
+        }
 
         // Bottom
         Vera.renderer.drawRect(app, getHitboxX(), getHitboxY() + getHitboxHeight(), getHitboxWidth(), borderSize.get2(), 0, border.get2());
+        if (borderSize.get4() > 0) {
+            Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY() + getHitboxHeight(), borderSize.get4(), borderSize.get2(), 0, border.get2());
+        }
 
         // Left
         Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY(), borderSize.get3(), getHitboxHeight(), 0, border.get3());
+        if (borderSize.get2() > 0) {
+            Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY() + getHitboxHeight(), borderSize.get3(), borderSize.get2(), 0, border.get3());
+        }
 
         // Right
         Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY(), borderSize.get4(), getHitboxHeight(), 0, border.get4());
+        if (borderSize.get1() > 0) {
+            Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY() - borderSize.get1(), borderSize.get4(), borderSize.get1(), 0, border.get4());
+        }
     }
 
     public void setSize(int width, int height) {
