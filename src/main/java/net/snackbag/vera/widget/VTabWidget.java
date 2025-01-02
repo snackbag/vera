@@ -65,30 +65,30 @@ public class VTabWidget extends VWidget<VTabWidget> {
             case "mouse-move", "hover-enter", "hover-leave" -> getHoveredTabIndex((int) args[0]);
 
             case "left-click" -> {
-                if (hoveredTab == null || !isValidTabIndex(hoveredTab)) return;
+                if (!isValidTabIndex(hoveredTab)) return;
                 fireEvent("vtabwidget-tab-left-click", hoveredTab);
                 setActiveTab((int) args[0]);
             }
             case "left-click-release" -> {
-                if (hoveredTab == null || !isValidTabIndex(hoveredTab)) return;
+                if (!isValidTabIndex(hoveredTab)) return;
                 fireEvent("vtabwidget-tab-left-click-release", args[0]);
             }
 
             case "middle-click" -> {
-                if (hoveredTab == null || !isValidTabIndex(hoveredTab)) return;
+                if (!isValidTabIndex(hoveredTab)) return;
                 fireEvent("vtabwidget-tab-middle-click", args[0]);
             }
             case "middle-click-release" -> {
-                if (hoveredTab == null || !isValidTabIndex(hoveredTab)) return;
+                if (!isValidTabIndex(hoveredTab)) return;
                 fireEvent("vtabwidget-tab-middle-click-release", args[0]);
             }
 
             case "right-click" -> {
-                if (hoveredTab == null || !isValidTabIndex(hoveredTab)) return;
+                if (!isValidTabIndex(hoveredTab)) return;
                 fireEvent("vtabwidget-tab-right-click", args[0]);
             }
             case "right-click-release" -> {
-                if (hoveredTab == null || !isValidTabIndex(hoveredTab)) return;
+                if (!isValidTabIndex(hoveredTab)) return;
                 fireEvent("vtabwidget-tab-right-click-release", args[0]);
             }
         }
