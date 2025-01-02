@@ -5,6 +5,7 @@ import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -52,6 +53,50 @@ public class VTabWidget extends VWidget<VTabWidget> {
 
             marginX += textWidth + itemSpacingRight;
         }
+    }
+
+    @Override
+    public void handleBuiltinEvent(String event, Object... args) {
+        super.handleBuiltinEvent(event, args);
+
+        switch (event) {
+            case "mouse-move" -> {
+                System.out.println("tab: " + getHoveredTab((int) args[0]));
+            }
+
+            case "hover-enter" -> {
+
+            }
+
+            case "hover-leave" -> {
+
+            }
+        }
+    }
+
+    public @Nullable String getHoveredTab(int mouseX) {
+        int index = getHoveredTabIndex(mouseX);
+        return (index < 0 || index >= tabs.size()) ? null : (String) List.of(tabs.keySet().toArray()).get(index);
+    }
+
+    public int getHoveredTabIndex(int mouseX) {
+        int relativeX = mouseX - getHitboxX();
+        int currentX = 0;
+        int index = 0;
+
+        for (String tabName : tabs.keySet()) {
+            int textWidth = Vera.provider.getTextWidth(tabName, font);
+            int totalTabWidth = itemSpacingLeft + textWidth + itemSpacingRight;
+
+            if (relativeX >= currentX && relativeX < currentX + totalTabWidth) {
+                return index;
+            }
+
+            currentX += totalTabWidth;
+            index++;
+        }
+
+        return -1;
     }
 
     public void addTab(String tab, VWidget<?>... widgets) {
