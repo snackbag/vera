@@ -180,7 +180,7 @@ public class VTabWidget extends VWidget<VTabWidget> {
 
     public void addWidget(String tab, List<VWidget<?>> widgets) {
         if (tab == null) {
-            throw new IllegalArgumentException("Failed to add " + widgets.size() + " widget(s) to tab '" + tab + ",' because it doesn't exist. (App: " + app.getClass().getSimpleName() + ")");
+            throw new IllegalArgumentException("Failed to add " + widgets.size() + " widget(s) to tab '" + tab + "', because it doesn't exist. (App: " + app.getClass().getSimpleName() + ")");
         }
 
         Integer tabIndex = getTabIndex(tab);
