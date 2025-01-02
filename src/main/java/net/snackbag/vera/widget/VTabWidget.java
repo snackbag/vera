@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class VTabWidget extends VWidget<VTabWidget> {
     private VFont font;
@@ -90,6 +91,10 @@ public class VTabWidget extends VWidget<VTabWidget> {
             int totalTabWidth = itemSpacingLeft + textWidth + itemSpacingRight;
 
             if (relativeX >= currentX && relativeX < currentX + totalTabWidth) {
+                if (hoveredTab != null && hoveredTab != index) {
+                    fireEvent("vtabwidget-tab-hover-change", hoveredTab);
+                }
+
                 hoveredTab = index;
                 return index;
             }
@@ -99,6 +104,10 @@ public class VTabWidget extends VWidget<VTabWidget> {
         }
 
         return -1;
+    }
+
+    public void onTabHoverChange(Consumer<Integer> runnable) {
+        registerEventExecutor("vtabwidget-tab-hover-change", (args) -> runnable.accept((int) args[0]));
     }
 
     public void addTab(String tab, VWidget<?>... widgets) {
