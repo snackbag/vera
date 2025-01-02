@@ -71,25 +71,25 @@ public class VTabWidget extends VWidget<VTabWidget> {
             }
             case "left-click-release" -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-tab-left-click-release", args[0]);
+                fireEvent("vtabwidget-tab-left-click-release", hoveredTab);
             }
 
             case "middle-click" -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-tab-middle-click", args[0]);
+                fireEvent("vtabwidget-tab-middle-click", hoveredTab);
             }
             case "middle-click-release" -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-tab-middle-click-release", args[0]);
+                fireEvent("vtabwidget-tab-middle-click-release", hoveredTab);
             }
 
             case "right-click" -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-tab-right-click", args[0]);
+                fireEvent("vtabwidget-tab-right-click", hoveredTab);
             }
             case "right-click-release" -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-tab-right-click-release", args[0]);
+                fireEvent("vtabwidget-tab-right-click-release", hoveredTab);
             }
         }
     }
