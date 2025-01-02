@@ -1,5 +1,6 @@
 package net.snackbag.vera.widget;
 
+import net.minecraft.client.MinecraftClient;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
@@ -63,10 +64,10 @@ public class VTabWidget extends VWidget<VTabWidget> {
         super.handleBuiltinEvent(event, args);
 
         switch (event) {
-            case "mouse-move", "hover-enter", "hover-leave" -> {
-                if (!isValidTabIndex(hoveredTab)) return;
-                getHoveredTabIndex(hoveredTab);
-            }
+            case "mouse-move" -> getHoveredTabIndex((int) args[0]);
+
+            case "hover-enter" -> getHoveredTabIndex((int) (MinecraftClient.getInstance().mouse.getX() / MinecraftClient.getInstance().getWindow().getScaleFactor()));
+            case "hover-leave" -> hoveredTab = null;
 
             case "left-click" -> {
                 if (!isValidTabIndex(hoveredTab)) return;
