@@ -72,7 +72,7 @@ public class VTabWidget extends VWidget<VTabWidget> {
             case "left-click" -> {
                 if (!isValidTabIndex(hoveredTab)) return;
                 fireEvent("vtabwidget-tab-left-click", hoveredTab);
-                setActiveTab((int) args[0]);
+                setActiveTab(hoveredTab);
             }
             case "left-click-release" -> {
                 if (!isValidTabIndex(hoveredTab)) return;
