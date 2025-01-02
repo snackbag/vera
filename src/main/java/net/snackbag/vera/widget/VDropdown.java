@@ -202,6 +202,8 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
                 Item item = getItemAt(mouseX, mouseY);
                 hoveredItem = (item != null) ? items.indexOf(item) : null;
             }
+
+            case "hover-leave" -> hoveredItem = null;
         }
 
         super.handleBuiltinEvent(event, args);
