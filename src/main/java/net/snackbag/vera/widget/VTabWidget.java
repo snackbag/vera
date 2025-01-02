@@ -62,7 +62,10 @@ public class VTabWidget extends VWidget<VTabWidget> {
         super.handleBuiltinEvent(event, args);
 
         switch (event) {
-            case "mouse-move", "hover-enter", "hover-leave" -> getHoveredTabIndex((int) hoveredTab);
+            case "mouse-move", "hover-enter", "hover-leave" -> {
+                if (!isValidTabIndex(hoveredTab)) return;
+                getHoveredTabIndex(hoveredTab);
+            }
 
             case "left-click" -> {
                 if (!isValidTabIndex(hoveredTab)) return;
