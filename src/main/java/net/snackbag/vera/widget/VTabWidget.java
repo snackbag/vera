@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class VTabWidget extends VWidget<VTabWidget> {
@@ -187,7 +188,7 @@ public class VTabWidget extends VWidget<VTabWidget> {
         Integer tabIndex = getTabIndex(tab);
 
         for (VWidget<?> widget : widgets) {
-            widget.addVisibilityCondition(() -> isValidTabIndex(tabIndex) && tabIndex == activeTab);
+            widget.addVisibilityCondition(() -> isValidTabIndex(tabIndex) && Objects.equals(tabIndex, activeTab));
         }
     }
 
