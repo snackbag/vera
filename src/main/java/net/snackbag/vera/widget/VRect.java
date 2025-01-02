@@ -28,6 +28,6 @@ public class VRect extends VWidget<VRect> {
 
     @Override
     public void render() {
-        Vera.renderer.drawRect(getApp(), x + app.getX(), y + app.getY(), width, height, rotation, color);
+        Vera.renderer.drawRect(getApp(), x, y, width, height, rotation, color);
     }
 }
