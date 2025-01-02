@@ -63,7 +63,7 @@ public class VTabWidget extends VWidget<VTabWidget> {
         switch (event) {
             case "mouse-move" -> getHoveredTabIndex((int) args[0]);
 
-            case "hover-enter" -> getHoveredTabIndex((int) (MinecraftClient.getInstance().mouse.getX() / MinecraftClient.getInstance().getWindow().getScaleFactor()));
+            case "hover-enter" -> getHoveredTabIndex(Vera.getMouseX());
             case "hover-leave" -> hoveredTab = null;
 
             case "left-click" -> {
