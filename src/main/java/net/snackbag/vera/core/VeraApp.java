@@ -215,6 +215,7 @@ public abstract class VeraApp {
     public List<VWidget<?>> getHoveredWidgets(int mouseX, int mouseY) {
         return getWidgets().parallelStream()
                 .filter(widget -> isMouseOverWidget(widget, mouseX, mouseY))
+                .filter(VWidget::visibilityConditionsPassed)
                 .collect(Collectors.toList());
     }
 
