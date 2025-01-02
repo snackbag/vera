@@ -27,7 +27,7 @@ public class Vera {
             }
 
             for (VWidget<?> widget : hoveredWidgets) {
-                runnable.accept(widget);
+                if (widget.visibilityConditionsPassed()) runnable.accept(widget);
             }
         }
     }
