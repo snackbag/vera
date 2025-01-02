@@ -3,6 +3,23 @@ package net.snackbag.vera.core;
 import java.util.function.Consumer;
 
 public class VColor {
+    public static final VColor MC_BLACK = VColor.black();
+    public static final VColor MC_DARK_BLUE = VColor.of(0, 0, 170);
+    public static final VColor MC_DARK_GREEN = VColor.of(0, 170, 0);
+    public static final VColor MC_DARK_AQUA = VColor.of(0, 170, 170);
+    public static final VColor MC_DARK_RED = VColor.of(170, 0, 0);
+    public static final VColor MC_DARK_PURPLE = VColor.of(170, 0, 170);
+    public static final VColor MC_GOLD = VColor.of(255, 170, 0);
+    public static final VColor MC_GRAY = VColor.of(170, 170, 170);
+    public static final VColor MC_DARK_GRAY = VColor.of(85, 85, 85);
+    public static final VColor MC_BLUE = VColor.of(85, 85, 255);
+    public static final VColor MC_GREEN = VColor.of(85, 255, 85);
+    public static final VColor MC_AQUA = VColor.of(85, 255, 255);
+    public static final VColor MC_RED = VColor.of(255, 85, 85);
+    public static final VColor MC_LIGHT_PURPLE = VColor.of(255, 85, 255);
+    public static final VColor MC_YELLOW = VColor.of(255, 255, 85);
+    public static final VColor MC_WHITE = VColor.white();
+
     private final int red;
     private final int green;
     private final int blue;
