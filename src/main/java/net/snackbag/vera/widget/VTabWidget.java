@@ -94,8 +94,8 @@ public class VTabWidget extends VWidget<VTabWidget> {
         }
     }
 
-    public boolean isValidTabIndex(int index) {
-        return (!(index < 0 || index >= tabs.size()));
+    public boolean isValidTabIndex(@Nullable Integer index) {
+        return (!(index == null || index < 0 || index >= tabs.size()));
     }
 
     public @Nullable String getHoveredTab(int mouseX) {
