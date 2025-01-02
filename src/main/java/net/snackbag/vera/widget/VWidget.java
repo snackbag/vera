@@ -1,5 +1,7 @@
 package net.snackbag.vera.widget;
 
+import net.snackbag.vera.core.V4Color;
+import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VEvent;
@@ -19,6 +21,7 @@ public abstract class VWidget<T extends VWidget<T>> {
     protected int width;
     protected int height;
     protected double rotation;
+    protected V4Color border;
 
     protected VeraApp app;
     protected @Nullable VCursorShape hoverCursor = null;
@@ -93,6 +96,26 @@ public abstract class VWidget<T extends VWidget<T>> {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public V4Color getBorder() {
+        return border;
+    }
+
+    public void setBorder(V4Color border) {
+        this.border = border;
+    }
+
+    public void setBorder(VColor all) {
+        setBorder(new V4Color(all));
+    }
+
+    public void setBorder(VColor tb, VColor lr) {
+        setBorder(new V4Color(tb, lr));
+    }
+
+    public void setBorder(VColor top, VColor bottom, VColor left, VColor right) {
+        setBorder(new V4Color(top, bottom, left, right));
     }
 
     public void setSize(int width, int height) {
