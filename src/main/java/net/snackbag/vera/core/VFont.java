@@ -24,7 +24,7 @@ public class VFont {
     }
 
     public static VFont create() {
-        return new VFont(Vera.provider.getDefaultFontName());
+        return new VFont(Vera.FONT_DEFAULT);
     }
 
     public String getName() {
