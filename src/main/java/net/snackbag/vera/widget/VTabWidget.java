@@ -44,7 +44,7 @@ public class VTabWidget extends VWidget<VTabWidget> {
             Vera.renderer.drawRect(app,
                     x + marginX - itemSpacingLeft, y,
                     itemSpacingLeft + itemSpacingRight + textWidth,
-                    getHitboxHeight() + 4, 0,
+                    getHitboxHeight(), 0,
                     activeTab != null && activeTab == i ? selectedBackgroundColor: defaultBackgroundColor
             );
 
@@ -78,7 +78,7 @@ public class VTabWidget extends VWidget<VTabWidget> {
 
     @Override
     public int getHitboxHeight() {
-        return font.getSize() / 2;
+        return font.getSize() / 2 + 4;
     }
 
     public Integer getActiveTab() {
