@@ -186,7 +186,8 @@ public class VTabWidget extends VWidget<VTabWidget> {
         Integer tabIndex = getTabIndex(tab);
 
         for (VWidget<?> widget : widgets) {
-            widget.addVisibilityCondition(() -> isValidTabIndex(tabIndex) && Objects.equals(tabIndex, activeTab));
+            widget.addVisibilityCondition(() -> isValidTabIndex(tabIndex) && Objects.equals(tabIndex, getActiveTab()));
+            tabs.get(tab).add(widget);
         }
     }
 
