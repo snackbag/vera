@@ -2,6 +2,7 @@ package net.snackbag.mcvera.test;
 
 import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
+import net.snackbag.vera.core.VAlignmentFlag;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
@@ -64,6 +65,18 @@ public class TestApplication extends VeraApp {
         label.onHoverLeave(() -> {
             label.setText("Not hovered");
         });
+
+        VLabel centerLabel = new VLabel("CENTER", this).alsoAdd();
+        centerLabel.setAlignment(VAlignmentFlag.CENTER);
+        centerLabel.setBackgroundColor(VColor.black());
+        centerLabel.modifyFontColor().rgb(255, 255, 255);
+        centerLabel.move(220, 10);
+
+        VLabel rightLabel = new VLabel("RIGHT", this).alsoAdd();
+        rightLabel.setAlignment(VAlignmentFlag.RIGHT);
+        rightLabel.setBackgroundColor(VColor.black());
+        rightLabel.modifyFontColor().rgb(255, 255, 255);
+        rightLabel.move(100, 10);
 
         VImage image = new VImage(
                 Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/dirt.png"),
