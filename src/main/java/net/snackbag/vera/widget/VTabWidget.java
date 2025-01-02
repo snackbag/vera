@@ -19,7 +19,8 @@ public class VTabWidget extends VWidget<VTabWidget> {
     private int itemSpacingRight = 4;
 
     private final LinkedHashMap<String, List<VWidget<?>>> tabs = new LinkedHashMap<>();
-    private Integer activeTab = null;
+    private @Nullable Integer activeTab = null;
+    private @Nullable Integer hoveredTab = null;
 
     public VTabWidget(VeraApp app, String... tabs) {
         super(0, 0, 100, 16, app);
@@ -89,6 +90,7 @@ public class VTabWidget extends VWidget<VTabWidget> {
             int totalTabWidth = itemSpacingLeft + textWidth + itemSpacingRight;
 
             if (relativeX >= currentX && relativeX < currentX + totalTabWidth) {
+                hoveredTab = index;
                 return index;
             }
 
@@ -140,15 +142,15 @@ public class VTabWidget extends VWidget<VTabWidget> {
         return currentX;
     }
 
-    public Integer getActiveTab() {
+    public @Nullable Integer getActiveTab() {
         return activeTab;
     }
 
-    public void setActiveTab(Integer activeTab) {
-        if (activeTab >= tabs.keySet().size()) {
-            System.out.println("n=ste to null cuz " + activeTab + " >= " + tabs.keySet().size());
+    public void setActiveTab(@Nullable Integer activeTab) {
+        if (activeTab == null || activeTab >= tabs.keySet().size()) {
             activeTab = null;
         }
+
         this.activeTab = activeTab;
     }
 
