@@ -42,6 +42,10 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
         this.backgroundColor = backgroundColor;
     }
 
+    public VColor.ColorModifier modifyBackgroundColor() {
+        return new VColor.ColorModifier(backgroundColor, this::setBackgroundColor);
+    }
+
     public void setText(String text) {
         this.text = text;
     }
