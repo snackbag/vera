@@ -176,6 +176,12 @@ public class VTabWidget extends VWidget<VTabWidget> {
         if (tab == null) {
             throw new IllegalArgumentException("Failed to add " + widgets.size() + " widget(s) to tab '" + tab + ",' because it doesn't exist. (App: " + app.getClass().getSimpleName() + ")");
         }
+
+        Integer tabIndex = getTabIndex(tab);
+
+        for (VWidget<?> widget : widgets) {
+            widget.addVisibilityCondition(() -> isValidTabIndex(tabIndex) && tabIndex == activeTab);
+        }
     }
 
     @Override
