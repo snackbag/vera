@@ -8,10 +8,7 @@ import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class VTabWidget extends VWidget<VTabWidget> {
@@ -170,11 +167,11 @@ public class VTabWidget extends VWidget<VTabWidget> {
     }
 
     public void addTab(String tab, List<VWidget<?>> widgets) {
-        if (tabs.containsKey(tab)) {
-            addWidget(tab, widgets);
+        if (!tabs.containsKey(tab)) {
+            tabs.put(tab, new ArrayList<>());
         }
 
-        tabs.put(tab, widgets);
+        addWidget(tab, widgets);
     }
 
     public void addWidget(String tab, VWidget<?>... widgets) {
