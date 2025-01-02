@@ -365,6 +365,6 @@ public abstract class VWidget<T extends VWidget<T>> {
     }
 
     public boolean visibilityConditionsPassed() {
-        return visibilityConditions.parallelStream().anyMatch(Supplier::get);
+        return visibilityConditions.parallelStream().allMatch(Supplier::get);
     }
 }
