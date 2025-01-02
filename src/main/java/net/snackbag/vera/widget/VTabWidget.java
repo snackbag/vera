@@ -62,17 +62,16 @@ public class VTabWidget extends VWidget<VTabWidget> {
         super.handleBuiltinEvent(event, args);
 
         switch (event) {
-            case "mouse-move" -> {
-                System.out.println("tab: " + getHoveredTab((int) args[0]));
-            }
+            case "mouse-move", "hover-enter", "hover-leave" -> getHoveredTabIndex((int) args[0]);
 
-            case "hover-enter" -> {
+            case "left-click" -> fireEvent("vtabwidget-left-click", args[0]);
+            case "left-click-release" -> fireEvent("vtabwidget-left-click-release", args[0]);
 
-            }
+            case "middle-click" -> fireEvent("vtabwidget-middle-click", args[0]);
+            case "middle-click-release" -> fireEvent("vtabwidget-middle-click-release", args[0]);
 
-            case "hover-leave" -> {
-
-            }
+            case "right-click" -> fireEvent("vtabwidget-right-click", args[0]);
+            case "right-click-release" -> fireEvent("vtabwidget-right-click-release", args[0]);
         }
     }
 
@@ -108,6 +107,30 @@ public class VTabWidget extends VWidget<VTabWidget> {
 
     public void onTabHoverChange(Consumer<Integer> runnable) {
         registerEventExecutor("vtabwidget-tab-hover-change", (args) -> runnable.accept((int) args[0]));
+    }
+
+    public void onTabLeftClick(Consumer<Integer> runnable) {
+        registerEventExecutor("vtabwidget-tab-left-click", (args) -> runnable.accept((int) args[0]));
+    }
+
+    public void onTabLeftClickRelease(Consumer<Integer> runnable) {
+        registerEventExecutor("vtabwidget-tab-left-click-release", (args) -> runnable.accept((int) args[0]));
+    }
+
+    public void onTabMiddleClick(Consumer<Integer> runnable) {
+        registerEventExecutor("vtabwidget-tab-middle-click", (args) -> runnable.accept((int) args[0]));
+    }
+
+    public void onTabMiddleClickRelease(Consumer<Integer> runnable) {
+        registerEventExecutor("vtabwidget-tab-middle-click-release", (args) -> runnable.accept((int) args[0]));
+    }
+
+    public void onTabRightClick(Consumer<Integer> runnable) {
+        registerEventExecutor("vtabwidget-tab-right-click", (args) -> runnable.accept((int) args[0]));
+    }
+
+    public void onTabRightClickRelease(Consumer<Integer> runnable) {
+        registerEventExecutor("vtabwidget-tab-right-click-release", (args) -> runnable.accept((int) args[0]));
     }
 
     public void addTab(String tab, VWidget<?>... widgets) {
