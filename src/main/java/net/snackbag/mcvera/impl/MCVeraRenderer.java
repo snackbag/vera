@@ -26,14 +26,14 @@ public class MCVeraRenderer {
     }
 
     public void drawRect(VeraApp app, int x, int y, int width, int height, double rotation, VColor color) {
-        drawContext.fill(x, y, x + width, y + height, color.toInt());
-//        drawText(app, x, y < 12 ? y : y - 6, 0, String.valueOf(color.opacity()), new VFont(Vera.provider.getDefaultFontName(), 12, VColor.of(255, 80, 80)));
+        drawContext.fill(x + app.getX(), y + app.getY(), x + width, y + height, color.toInt());
+//        drawText(app, x + app.getX(), y < 12 ? y + app.getY() : y - 6 + app.getY(), 0, String.valueOf(color.opacity()), new VFont(Vera.provider.getDefaultFontName(), 12, VColor.of(255, 80, 80)));
     }
 
     public void drawText(VeraApp app, int x, int y, double rotation, String text, VFont font) {
         float scaleFactor = font.getSize() / 16.0f;
         drawContext.getMatrices().push();
-        drawContext.getMatrices().translate(x, y, 0);
+        drawContext.getMatrices().translate(x + app.getX(), y + app.getY(), 0);
         drawContext.getMatrices().scale(scaleFactor, scaleFactor, 1.0f);
 
         drawContext.drawText(
@@ -47,8 +47,8 @@ public class MCVeraRenderer {
         drawContext.getMatrices().pop();
     }
 
-    public void drawImage(VeraApp veraApp, int x, int y, int width, int height, double rotation, Identifier path) {
-        drawContext.drawTexture(path, x, y, 0, 0, width, height, width, height);
+    public void drawImage(VeraApp app, int x, int y, int width, int height, double rotation, Identifier path) {
+        drawContext.drawTexture(path, x + app.getX(), y + app.getY(), 0, 0, width, height, width, height);
     }
 
     public void renderApp(VeraApp app) {
