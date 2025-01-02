@@ -81,6 +81,20 @@ public class VTabWidget extends VWidget<VTabWidget> {
         return font.getSize() / 2 + 4;
     }
 
+    @Override
+    public int getHitboxWidth() {
+        int currentX = 0;
+
+        for (String tabName : tabs.keySet()) {
+            int textWidth = Vera.provider.getTextWidth(tabName, font);
+            int totalTabWidth = itemSpacingLeft + textWidth + itemSpacingRight;
+
+            currentX += totalTabWidth;
+        }
+
+        return currentX;
+    }
+
     public Integer getActiveTab() {
         return activeTab;
     }
