@@ -13,11 +13,11 @@ public class VColor {
     }
 
     private VColor(int red, int green, int blue, float opacity) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
+        this.red = Math.max(Math.min(255, red), 0);
+        this.green = Math.max(Math.min(255, green), 0);
+        this.blue = Math.max(Math.min(255, blue), 0);
 
-        this.opacity = opacity;
+        this.opacity = Math.max(Math.min(1f, opacity), 0f);
     }
 
     public static VColor of(int red, int green, int blue) {
