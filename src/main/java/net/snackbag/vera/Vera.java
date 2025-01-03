@@ -7,7 +7,11 @@ import net.snackbag.mcvera.impl.MCVeraRenderer;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.PointerBuffer;
+import org.lwjgl.system.MemoryStack;
+import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -49,5 +53,27 @@ public class Vera {
 
     public static int getMouseY() {
         return (int) (MinecraftClient.getInstance().mouse.getY() / MinecraftClient.getInstance().getWindow().getScaleFactor());
+    }
+
+    public static @Nullable String openFileSelector(@Nullable String title, Path defaultPath, @Nullable String filter) {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            PointerBuffer filters;
+            if (filter == null) {
+                filters = null;
+            } else {
+                filters = stack.mallocPointer(1);
+                filters.put(stack.UTF8(filter).flip());
+            }
+
+            @Nullable
+            String path = TinyFileDialogs.tinyfd_openFileDialog(
+                    title,
+                    defaultPath.toAbsolutePath().toString(),
+                    filters,
+                    null,
+                    false
+            );
+            return path;
+        }
     }
 }
