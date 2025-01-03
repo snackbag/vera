@@ -4,10 +4,14 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.mcvera.screen.VeraVisibilityScreen;
+import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.widget.VWidget;
+
+import java.nio.file.Path;
+import java.util.List;
 
 public class MCVeraProvider {
     public void handleAppInitialization(VeraApp app) {
@@ -122,5 +126,11 @@ public class MCVeraProvider {
         }
 
         handleMouseLockUpdate();
+    }
+
+    public void handleFilesDropped(List<Path> paths) {
+        Vera.forHoveredWidget(Vera.getMouseX(), Vera.getMouseY(), (widget) -> {
+            widget.fireEvent("files-dropped", paths);
+        });
     }
 }
