@@ -1,5 +1,6 @@
 package net.snackbag.mcvera.test;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VAlignmentFlag;
@@ -8,6 +9,13 @@ import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.widget.*;
+import org.lwjgl.PointerBuffer;
+import org.lwjgl.system.MemoryStack;
+import org.lwjgl.util.tinyfd.TinyFileDialogs;
+
+import java.awt.*;
+import java.nio.file.Path;
+import java.util.Arrays;
 
 public class TestApplication extends VeraApp {
     public static final TestApplication INSTANCE = new TestApplication();
@@ -83,6 +91,7 @@ public class TestApplication extends VeraApp {
         rightLabel.move(100, 10);
         rightLabel.setBorder(VColor.white());
         rightLabel.setBorderSize(1);
+        rightLabel.onRightClick(() -> System.out.println(Vera.openFileSelector("test", Path.of("/Volumes/Media"), null)));
 
         VImage image = new VImage(
                 Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/dirt.png"),
