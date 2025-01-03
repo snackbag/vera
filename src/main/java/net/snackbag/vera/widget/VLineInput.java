@@ -97,7 +97,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
             textSelection.clear();
 
             if (Vera.getMouseX() < x) cursorPos = 0;
-            else if (Vera.getMouseX() > Vera.provider.getTextWidth(text, font)) cursorPos = text.length();
+            else if (Vera.getMouseX() > x + Vera.provider.getTextWidth(text, font)) cursorPos = text.length();
         }
 
         super.handleBuiltinEvent(event, args);
