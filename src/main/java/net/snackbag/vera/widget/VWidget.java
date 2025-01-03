@@ -2,12 +2,10 @@ package net.snackbag.vera.widget;
 
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
-import net.snackbag.vera.event.VEvent;
-import net.snackbag.vera.event.VMouseDragEvent;
-import net.snackbag.vera.event.VMouseMoveEvent;
-import net.snackbag.vera.event.VMouseScrollEvent;
+import net.snackbag.vera.event.*;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -279,6 +277,10 @@ public abstract class VWidget<T extends VWidget<T>> {
 
     public void onFocusStateChange(Runnable runnable) {
         registerEventExecutor("focus-state-change", runnable);
+    }
+
+    public void onFilesDropped(VFilesDroppedEvent runnable) {
+        registerEventExecutor("files-dropped", args -> runnable.run((List<Path>) args[0]));
     }
 
     public boolean isVisible() {
