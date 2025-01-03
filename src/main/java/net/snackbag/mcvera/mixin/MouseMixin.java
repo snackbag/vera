@@ -10,6 +10,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.nio.file.Path;
+import java.util.List;
+
 @Mixin(Mouse.class)
 public abstract class MouseMixin {
     @Shadow @Final private MinecraftClient client;
@@ -26,5 +29,10 @@ public abstract class MouseMixin {
         Vera.forHoveredWidget(scaledX, scaledY, (widget) -> {
             widget.fireEvent("mouse-move", scaledX, scaledY);
         });
+    }
+
+    @Inject(method = "onFilesDropped", at = @At("HEAD"))
+    private void mcvera$onFilesWindowHoverDropped(long window, List<Path> paths, CallbackInfo ci) {
+        Vera.provider.handleFilesDropped(paths);
     }
 }
