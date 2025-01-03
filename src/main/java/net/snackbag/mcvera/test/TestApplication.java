@@ -52,6 +52,7 @@ public class TestApplication extends VeraApp {
         label.onMiddleClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
         label.onMouseDragRight((oldX, oldY, newX, newY) -> setCursorShape(VCursorShape.HORIZONTAL_RESIZE));
         label.onRightClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
+        label.onFilesDropped(System.out::println);
 
         label.setPadding(5);
         label.move(10);
