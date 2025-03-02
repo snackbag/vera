@@ -20,7 +20,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
     private int cursorPos;
     private TextSelection textSelection;
     private VColor textSelectionColor;
-    private @Nullable Integer maxChars;
+    private int maxChars;
 
     private VColor backgroundColor;
     private V4Int padding;
@@ -36,7 +36,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         this.cursorPos = 0;
         this.textSelection = new TextSelection();
         this.textSelectionColor = VColor.of(0, 120, 215, 0.2f);
-        this.maxChars = null;
+        this.maxChars = -1;
 
         this.backgroundColor = VColor.transparent();
         this.padding = new V4Int(4);
@@ -189,12 +189,16 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         return new VColor.ColorModifier(textSelectionColor, this::setTextSelectionColor);
     }
 
-    public @Nullable Integer getMaxChars() {
+    public int getMaxChars() {
         return maxChars;
     }
 
     public void setMaxChars(@Nullable Integer maxChars) {
-        this.maxChars = maxChars;
+        this.maxChars = maxChars == null ? -1 : maxChars;
+    }
+
+    public void setMaxChars(int maxChars) {
+        setMaxChars(Integer.valueOf(maxChars));
     }
 
     public void setPlaceholderText(String placeholderText) {
@@ -368,7 +372,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
     }
 
     private void insertText(String insertion) {
-        if (maxChars != null && text.length() + insertion.length() > maxChars) {
+        if (maxChars > -1 && text.length() + insertion.length() > maxChars) {
             fireEvent("vline-add-char-limited", insertion.charAt(0));
             return;
         }
@@ -400,7 +404,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         int start = Math.min(textSelection.startPos, textSelection.endPos);
         int end = Math.max(textSelection.startPos, textSelection.endPos);
 
-        if (maxChars != null && text.length() - (end - start) + replacement.length() > maxChars) {
+        if (maxChars > -1 && text.length() - (end - start) + replacement.length() > maxChars) {
             fireEvent("vline-add-char-limited", replacement.charAt(0));
             return;
         }
@@ -480,7 +484,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
                 int start = Math.min(textSelection.startPos, textSelection.endPos);
                 int end = Math.max(textSelection.startPos, textSelection.endPos);
 
-                if (maxChars != null && text.length() - (end - start) + 1 > maxChars) {
+                if (maxChars > -1 && text.length() - (end - start) + 1 > maxChars) {
                     fireEvent("vline-add-char-limited", chr);
                     return;
                 }
@@ -494,7 +498,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
                 fireEvent("vline-change");
             } else {
                 // Normal character insertion
-                if (maxChars != null && text.length() >= maxChars) {
+                if (maxChars > -1 && text.length() >= maxChars) {
                     fireEvent("vline-add-char-limited", chr);
                     return;
                 }
