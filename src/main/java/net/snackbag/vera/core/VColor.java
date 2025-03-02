@@ -204,5 +204,29 @@ public class VColor {
             colorUpdater.accept(color);
             return this;
         }
+
+        public ColorModifier add(int all) {
+            color = color.add(all);
+            colorUpdater.accept(color);
+            return this;
+        }
+
+        public ColorModifier add(int r, int g, int b) {
+            color = color.add(r, g, b);
+            colorUpdater.accept(color);
+            return this;
+        }
+
+        public ColorModifier sub(int all) {
+            color = color.sub(all);
+            colorUpdater.accept(color);
+            return this;
+        }
+
+        public ColorModifier sub(int r, int g, int b) {
+            color = color.sub(r, g, b);
+            colorUpdater.accept(color);
+            return this;
+        }
     }
 }
