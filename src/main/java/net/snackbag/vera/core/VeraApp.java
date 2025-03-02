@@ -189,6 +189,8 @@ public abstract class VeraApp {
         Vera.renderer.drawRect(this, x, y, width, height, 0, backgroundColor);
     }
 
+    public void renderAfterWidgets() {}
+
     public void update() {}
 
     public void addShortcut(VShortcut shortcut) {

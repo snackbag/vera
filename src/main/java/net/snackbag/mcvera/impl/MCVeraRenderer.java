@@ -64,6 +64,7 @@ public class MCVeraRenderer {
                 widget.renderBorder();
             }
         }
+        app.renderAfterWidgets();
 
         RenderSystem.disableBlend();
     }
