@@ -3,9 +3,11 @@ package net.snackbag.mcvera.impl;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.RotationAxis;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
@@ -26,8 +28,20 @@ public class MCVeraRenderer {
     }
 
     public void drawRect(VeraApp app, int x, int y, int width, int height, double rotation, VColor color) {
-        drawContext.fill(x + app.getX(), y + app.getY(), x + width, y + height, color.toInt());
-//        drawText(app, x + app.getX(), y < 12 ? y + app.getY() : y - 6 + app.getY(), 0, String.valueOf(color.opacity()), new VFont(Vera.provider.getDefaultFontName(), 12, VColor.of(255, 80, 80)));
+        MatrixStack stack = drawContext.getMatrices();
+        stack.push();
+
+        int centerX = x + width / 2;
+        int centerY = y + height / 2;
+
+        stack.translate(app.getX(), app.getY(), 0);
+        stack.translate(centerX, centerY, 0);
+        stack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float) rotation));
+        stack.translate(-width / 2, -height / 2, 0);
+
+        drawContext.fill(0, 0, width, height, color.toInt());
+
+        stack.pop();
     }
 
     public void drawText(VeraApp app, int x, int y, double rotation, String text, VFont font) {

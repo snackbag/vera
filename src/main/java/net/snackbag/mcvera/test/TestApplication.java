@@ -126,6 +126,10 @@ public class TestApplication extends VeraApp {
         tabs.addTab("test", checkbox);
         tabs.addTab("other test", dropdown);
         tabs.setActiveTab(0);
+
+        VRect rotationRect = new VRect(VColor.black(), this).alsoAdd();
+        rotationRect.rotate(45);
+        rotationRect.move(20, 200);
     }
 
     @Override
