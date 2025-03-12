@@ -52,4 +52,9 @@ public class VShortcut {
     public void run() {
         Vera.provider.handleRunShortcut(this);
     }
+
+    public VShortcut alsoAdd() {
+        app.addShortcut(this);
+        return this;
+    }
 }
