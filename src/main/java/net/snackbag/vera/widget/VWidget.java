@@ -287,6 +287,27 @@ public abstract class VWidget<T extends VWidget<T>> {
         registerEventExecutor("files-dropped", args -> runnable.run((List<Path>) args[0]));
     }
 
+    public void onMessage(VWidgetMessageEvent runnable) {
+        registerEventExecutor("widget-message", args -> runnable.run((VWidgetMessageEvent.Context) args[0]));
+    }
+
+    public void sendMessage(VWidget<?> widget, String type) {
+        sendMessage(widget, type, null);
+    }
+
+    public void sendMessage(VWidget<?> widget, String type, @Nullable Object content) {
+        widget.fireEvent("widget-message", new VWidgetMessageEvent.Context(this, type, content));
+    }
+
+    public void sendMessageAll(String type) {
+        sendMessageAll(type, null);
+    }
+
+    public void sendMessageAll(String type, @Nullable Object content) {
+        VWidgetMessageEvent.Context ctx = new VWidgetMessageEvent.Context(this, type, content);
+        for (VWidget<?> widget : app.getWidgets()) widget.fireEvent("widget-message", ctx);
+    }
+
     public boolean isVisible() {
         return visible;
     }
