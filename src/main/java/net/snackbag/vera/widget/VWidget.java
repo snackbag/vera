@@ -314,6 +314,15 @@ public abstract class VWidget<T extends VWidget<T>> {
         eventExecutors.get(event).parallelStream().forEach(e -> e.run(args));
     }
 
+    public void clearEvents() {
+        eventExecutors.clear();
+    }
+
+    public void clearEventsFor(String event) {
+        // IDE said I don't need a containsKey check
+        eventExecutors.remove(event);
+    }
+
     public void handleBuiltinEvent(String event, Object... args) {
         switch (event) {
             case "left-click" -> {
