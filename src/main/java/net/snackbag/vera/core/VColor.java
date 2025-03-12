@@ -45,6 +45,14 @@ public class VColor {
         return new VColor(red, green, blue, opacity);
     }
 
+    public static VColor of(int all) {
+        return new VColor(all, all, all);
+    }
+
+    public static VColor of(int all, float opacity) {
+        return new VColor(all, all, all, opacity);
+    }
+
     public int red() {
         return red;
     }
