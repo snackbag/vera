@@ -21,7 +21,7 @@ public abstract class VWidget<T extends VWidget<T>> {
     protected V4Int borderSize;
 
     protected VeraApp app;
-    protected @Nullable VCursorShape hoverCursor = null;
+    protected VCursorShape hoverCursor = VCursorShape.DEFAULT;
     protected @Nullable VCursorShape cursorBeforeHover = null;
     protected boolean focusOnClick = true;
     private boolean hovered = false;
@@ -392,8 +392,6 @@ public abstract class VWidget<T extends VWidget<T>> {
             }
 
             case "hover" -> {
-                if (hoverCursor == null) break;
-
                 cursorBeforeHover = app.getCursorShape();
                 app.setCursorShape(hoverCursor);
             }
@@ -428,12 +426,12 @@ public abstract class VWidget<T extends VWidget<T>> {
         middleDragPreviousY = -1;
     }
 
-    public @Nullable VCursorShape getHoverCursor() {
+    public VCursorShape getHoverCursor() {
         return hoverCursor;
     }
 
     public void setHoverCursor(@Nullable VCursorShape hoverCursor) {
-        this.hoverCursor = hoverCursor;
+        this.hoverCursor = hoverCursor == null ? VCursorShape.DEFAULT : hoverCursor;
     }
 
     public boolean isFocused() {
