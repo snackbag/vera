@@ -31,6 +31,39 @@ public class VCheckBox extends VWidget<VCheckBox> {
         setHoverCursor(VCursorShape.POINTING_HAND);
     }
 
+    public VCheckBox(VeraApp app, Identifier defaultTexture, Identifier checkedTexture) {
+        this(app);
+
+        this.defaultTexture = defaultTexture;
+        this.checkedTexture = checkedTexture;
+    }
+
+    public VCheckBox(VeraApp app, Identifier defaultTexture, Identifier checkedTexture, int width, int height) {
+        this(app, defaultTexture, checkedTexture);
+
+        setSize(width, height);
+    }
+
+    public VCheckBox(
+            VeraApp app,
+            Identifier defaultTexture, @Nullable Identifier defaultHoverTexture,
+            Identifier checkedTexture, @Nullable Identifier checkedHoverTexture) {
+        this(app, defaultTexture, checkedTexture);
+
+        this.defaultHoverTexture = defaultHoverTexture;
+        this.checkedHoverTexture = checkedHoverTexture;
+    }
+
+    public VCheckBox(
+            VeraApp app,
+            Identifier defaultTexture, @Nullable Identifier defaultHoverTexture,
+            Identifier checkedTexture, @Nullable Identifier checkedHoverTexture,
+            int width, int height) {
+        this(app, defaultTexture, defaultHoverTexture, checkedTexture, checkedHoverTexture);
+
+        setSize(width, height);
+    }
+
     @Override
     public void render() {
         Vera.renderer.drawImage(app, x, y, width, height, 0, getCurrentTexture());
