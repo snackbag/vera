@@ -168,6 +168,10 @@ public abstract class VWidget<T extends VWidget<T>> {
         setHeight(height);
     }
 
+    public void setSize(int all) {
+        setSize(all, all);
+    }
+
     public void move(int x, int y) {
         this.x = x;
         this.y = y;
