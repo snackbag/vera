@@ -1,8 +1,11 @@
 package net.snackbag.vera.core;
 
-import java.util.function.Consumer;
+import net.snackbag.vera.modifier.VStyleable;
 
-public class VColor {
+import java.util.function.Consumer;
+import java.util.regex.Pattern;
+
+public class VColor implements VStyleable {
     public static final VColor MC_BLACK = VColor.black();
     public static final VColor MC_DARK_BLUE = VColor.of(0, 0, 170);
     public static final VColor MC_DARK_GREEN = VColor.of(0, 170, 0);
@@ -166,6 +169,21 @@ public class VColor {
 
     public static VColor black() {
         return new VColor(0, 0, 0, 1);
+    }
+
+    @Override
+    public VStyleable parseStyleFromString(String val) {
+        return null;
+    }
+
+    @Override
+    public boolean matchesStyleString(String val) {
+        return Pattern.matches("rgb\\s*\\(\\s*\\d{1,3}\\s*,\\s*\\d{1,3}\\s*,\\s*\\d{1,3}\\s*\\)\n", val);
+    }
+
+    @Override
+    public String getStylingTypeId() {
+        return "color";
     }
 
     public static class ColorModifier {
