@@ -3,6 +3,7 @@ package net.snackbag.vera.core;
 import net.minecraft.client.MinecraftClient;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.event.VShortcut;
+import net.snackbag.vera.style.VStyleSheet;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
@@ -20,6 +21,7 @@ public abstract class VeraApp {
     private VCursorShape cursorShape;
     private boolean cursorVisible;
     private boolean mouseRequired;
+    private VStyleSheet styleSheet;
 
     private int x;
     private int y;
@@ -34,6 +36,8 @@ public abstract class VeraApp {
     }
 
     public VeraApp(boolean mouseRequired) {
+        this.styleSheet = new VStyleSheet(this);
+
         this.widgets = new ArrayList<>();
         this.shortcuts = new HashMap<>();
         this.backgroundColor = VColor.transparent();
@@ -120,6 +124,10 @@ public abstract class VeraApp {
                 MinecraftClient.getInstance().getWindow().getHandle(),
                 GLFW.GLFW_CURSOR,
                 cursorVisible ? GLFW.GLFW_CURSOR_NORMAL : GLFW.GLFW_CURSOR_HIDDEN);
+    }
+
+    public VStyleSheet getStyleSheet() {
+        return styleSheet;
     }
 
     public int getHeight() {
