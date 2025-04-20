@@ -3,12 +3,12 @@ package net.snackbag.vera.widget;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.event.*;
+import net.snackbag.vera.modifier.VStyleable;
+import net.snackbag.vera.style.VStyleMap;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 
 public abstract class VWidget<T extends VWidget<T>> {
@@ -19,6 +19,8 @@ public abstract class VWidget<T extends VWidget<T>> {
     protected double rotation;
     protected V4Color border;
     protected V4Int borderSize;
+    protected final LinkedHashSet<String> styleClasses = new LinkedHashSet<>();
+    protected final VStyleMap localStyles = new VStyleMap();
 
     protected VeraApp app;
     protected VCursorShape hoverCursor = VCursorShape.DEFAULT;
@@ -56,6 +58,39 @@ public abstract class VWidget<T extends VWidget<T>> {
     }
 
     public abstract void render();
+
+    public VStyleMap getStyles() {
+        return app.getStyleSheet().getStyles(this);
+    }
+
+    public VStyleMap getLocalStyles() {
+        return localStyles;
+    }
+
+    public void setStyle(String field, VStyleable value) {
+        localStyles.put(field, value);
+    }
+
+    public String[] getAllStyleClasses() {
+        return styleClasses.toArray(new String[]{});
+    }
+
+    public boolean hasStyleClass(String clazz) {
+        return styleClasses.contains(clazz);
+    }
+
+    public void addStyleClass(String clazz) {
+        styleClasses.add(clazz);
+    }
+
+    public void removeStyleClass(String clazz) {
+        styleClasses.remove(clazz); // doesn't throw error if not in set -- that's not a typo
+    }
+
+    public void toggleStyleClass(String clazz) {
+        if (styleClasses.contains(clazz)) removeStyleClass(clazz);
+        else addStyleClass(clazz);
+    }
 
     public int getX() {
         return x;
