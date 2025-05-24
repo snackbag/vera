@@ -186,7 +186,7 @@ public abstract class VeraApp {
     }
 
     public void render() {
-        Vera.renderer.drawRect(this, x, y, width, height, 0, backgroundColor);
+        Vera.renderer.drawRect(this, 0, 0, width, height, 0, backgroundColor);
     }
 
     public void renderAfterWidgets() {}
