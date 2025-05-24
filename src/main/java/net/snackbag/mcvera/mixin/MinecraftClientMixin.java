@@ -4,6 +4,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.mcvera.screen.VeraVisibilityScreen;
+import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,5 +30,17 @@ public abstract class MinecraftClientMixin {
 				setScreen(null);
 			}
 		});
+	}
+
+	@Inject(at = @At("HEAD"), method = "onResolutionChanged")
+	private void mcvera$handleResize(CallbackInfo ci) {
+		MinecraftClient client = MinecraftClient.getInstance();
+
+		for (VeraApp app : MCVeraData.visibleApplications) {
+			client.send(app::update);
+			for (VWidget<?> widget : app.getWidgets()) {
+				client.send(widget::update);
+			}
+		}
 	}
 }

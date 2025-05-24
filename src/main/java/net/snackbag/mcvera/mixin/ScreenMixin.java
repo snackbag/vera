@@ -18,14 +18,4 @@ public abstract class ScreenMixin {
     private void mcvera$handleKeyPress(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         Vera.provider.handleKeyPressed(keyCode, scanCode, modifiers);
     }
-
-    @Inject(method = "resize", at = @At("TAIL"))
-    private void mcvera$handleResize(MinecraftClient client, int width, int height, CallbackInfo ci) {
-        for (VeraApp app : MCVeraData.visibleApplications) {
-            client.send(app::update);
-            for (VWidget<?> widget : app.getWidgets()) {
-                client.send(widget::update);
-            }
-        }
-    }
 }
