@@ -31,7 +31,7 @@ public abstract class VWidget<T extends VWidget<T>> {
 
     private final HashMap<String, List<VEvent>> eventExecutors;
     private final List<Supplier<Boolean>> visibilityConditions;
-    public final SortedSet<String> classes = new TreeSet<>();
+    public final LinkedHashSet<String> classes = new LinkedHashSet<>();
 
     public VWidget(int x, int y, int width, int height, VeraApp app) {
         this.x = x;
