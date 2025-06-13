@@ -165,6 +165,14 @@ public abstract class VWidget<T extends VWidget<T>> {
         return style != null ? style : dflt;
     }
 
+    public VColor.ColorModifier modifyKeyAsColor(String key) {
+        return app.styleSheet.modifyKeyAsColor(this, key);
+    }
+
+    public VFont.FontModifier modifyKeyAsFont(String key) {
+        return app.styleSheet.modifyKeyAsFont(this, key);
+    }
+
     public void renderBorder() {
         // TODO: [Render Rework] Better border rendering
 

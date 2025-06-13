@@ -1,5 +1,7 @@
 package net.snackbag.vera.style;
 
+import net.snackbag.vera.core.VColor;
+import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,6 +49,14 @@ public class VStyleSheet {
 
         if (!widgetSpecificStyles.containsKey(widget)) widgetSpecificStyles.put(widget, new HashMap<>());
         widgetSpecificStyles.get(widget).put(key, value);
+    }
+
+    public VColor.ColorModifier modifyKeyAsColor(VWidget<?> widget, String key) {
+        return new VColor.ColorModifier(getKey(widget, key), color -> setKey(widget, key, color));
+    }
+
+    public VFont.FontModifier modifyKeyAsFont(VWidget<?> widget, String key) {
+        return new VFont.FontModifier(getKey(widget, key), font -> setKey(widget, key, font));
     }
 
     public void reserveType(String key, StyleValueType type) {
