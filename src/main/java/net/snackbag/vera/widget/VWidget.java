@@ -292,15 +292,15 @@ public abstract class VWidget<T extends VWidget<T>> {
     }
 
     public void onMouseDragLeft(VMouseDragEvent runnable) {
-        registerEventExecutor("mouse-drag-left", args -> runnable.run((int) args[0], (int) args[1], (int) args[2], (int) args[3]));
+        registerEventExecutor("mouse-drag-left", args -> runnable.run((VMouseDragEvent.Context) args[0]));
     }
 
     public void onMouseDragRight(VMouseDragEvent runnable) {
-        registerEventExecutor("mouse-drag-right", args -> runnable.run((int) args[0], (int) args[1], (int) args[2], (int) args[3]));
+        registerEventExecutor("mouse-drag-right", args -> runnable.run((VMouseDragEvent.Context) args[0]));
     }
 
     public void onMouseDragMiddle(VMouseDragEvent runnable) {
-        registerEventExecutor("mouse-drag-middle", args -> runnable.run((int) args[0], (int) args[1], (int) args[2], (int) args[3]));
+        registerEventExecutor("mouse-drag-middle", args -> runnable.run((VMouseDragEvent.Context) args[0]));
     }
 
     public void onFocusStateChange(Runnable runnable) {
