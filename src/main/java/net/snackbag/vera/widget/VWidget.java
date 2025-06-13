@@ -20,7 +20,6 @@ public abstract class VWidget<T extends VWidget<T>> {
 
     protected VeraApp app;
     protected VCursorShape hoverCursor = VCursorShape.DEFAULT;
-    protected @Nullable VCursorShape cursorBeforeHover = null;
     protected boolean focusOnClick = true;
     private boolean hovered = false;
     private boolean visible = true;
@@ -391,7 +390,6 @@ public abstract class VWidget<T extends VWidget<T>> {
             }
 
             case "hover" -> {
-                cursorBeforeHover = app.getCursorShape();
                 app.setCursorShape(hoverCursor);
             }
 
@@ -399,10 +397,6 @@ public abstract class VWidget<T extends VWidget<T>> {
                 clearLeftClickDown();
                 clearRightClickDown();
                 clearMiddleClickDown();
-
-                if (cursorBeforeHover == null) break;
-
-                app.setCursorShape(cursorBeforeHover);
             }
         }
     }
