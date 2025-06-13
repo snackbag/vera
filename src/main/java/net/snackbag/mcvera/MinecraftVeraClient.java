@@ -26,7 +26,6 @@ public class MinecraftVeraClient implements ClientModInitializer {
         TestHandler.impl(false);
 
         HudRenderCallback.EVENT.register((context, tickDelta) -> {
-            MCVeraRenderer.drawContext = context;
             MCVeraRenderer renderer = MCVeraRenderer.getInstance();
 
             for (VeraApp app : MCVeraData.visibleApplications) {
