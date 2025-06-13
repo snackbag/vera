@@ -27,6 +27,7 @@ public enum VWindowPositioningFlag {
     GUI_OVERLAY,
 
     /**
+     * (default)<br>
      * Renders over all other render events
      */
     SCREEN,
