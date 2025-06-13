@@ -6,7 +6,6 @@ import net.snackbag.vera.modifier.VPaddingWidget;
 
 public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
     private String text;
-    private VFont font;
     private V4Int padding;
     private VAlignmentFlag alignment;
 
@@ -14,24 +13,16 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
         super(0, 0, 100, 16, app);
 
         this.text = text;
-        this.font = VFont.create();
         this.padding = new V4Int(4);
         this.focusOnClick = false;
         alignment = VAlignmentFlag.LEFT;
 
         setStyle("background-color", VColor.transparent());
+        setStyle("font", VFont.create());
     }
 
     public String getText() {
         return text;
-    }
-
-    public VFont getFont() {
-        return font;
-    }
-
-    public void setFont(VFont font) {
-        this.font = font;
     }
 
     public void setText(String text) {
@@ -46,14 +37,6 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
     @Override
     public void setPadding(V4Int padding) {
         this.padding = padding;
-    }
-
-    public VFont.FontModifier modifyFont() {
-        return new VFont.FontModifier(font, this::setFont);
-    }
-
-    public VColor.ColorModifier modifyFontColor() {
-        return new VColor.ColorModifier(font.getColor(), (color) -> setFont(font.withColor(color)));
     }
 
     @Override
@@ -85,13 +68,28 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
     }
 
     public void adjustSize() {
+        VFont font = getStyle("font");
+
         this.width = Vera.provider.getTextWidth(text, font);
         this.height = Vera.provider.getTextHeight(text, font);
+    }
+
+    public VColor.ColorModifier modifyColor(String key) {
+        return app.styleSheet.modifyKeyAsColor(this, key);
+    }
+
+    public VFont.FontModifier modifyFont(String key) {
+        return app.styleSheet.modifyKeyAsFont(this, key);
+    }
+
+    public VColor.ColorModifier modifyFontColor(String key) {
+        return app.styleSheet.modifyKeyAsColor(this, key);
     }
 
     @Override
     public void render() {
         VeraApp app = getApp();
+        VFont font = getStyle("font");
 
         Vera.renderer.drawRect(
                 app,
