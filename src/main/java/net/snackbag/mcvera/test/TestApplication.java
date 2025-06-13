@@ -1,6 +1,5 @@
 package net.snackbag.mcvera.test;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VAlignmentFlag;
@@ -9,13 +8,8 @@ import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.widget.*;
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
-import java.awt.*;
 import java.nio.file.Path;
-import java.util.Arrays;
 
 public class TestApplication extends VeraApp {
     public static final TestApplication INSTANCE = new TestApplication();
