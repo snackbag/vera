@@ -6,9 +6,7 @@ import net.snackbag.vera.event.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 
 public abstract class VWidget<T extends VWidget<T>> {
@@ -39,6 +37,7 @@ public abstract class VWidget<T extends VWidget<T>> {
 
     private final HashMap<String, List<VEvent>> eventExecutors;
     private final List<Supplier<Boolean>> visibilityConditions;
+    public final SortedSet<String> classes = new TreeSet<>();
 
     public VWidget(int x, int y, int width, int height, VeraApp app) {
         this.x = x;
