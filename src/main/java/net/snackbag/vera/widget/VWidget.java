@@ -152,6 +152,19 @@ public abstract class VWidget<T extends VWidget<T>> {
         setBorderSize(new V4Int(top, bottom, left, right));
     }
 
+    public void setStyle(String key, Object value) {
+        app.styleSheet.setKey(this, key, value);
+    }
+
+    public <V> V getStyle(String key) {
+        return app.styleSheet.getKey(this, key);
+    }
+
+    public <V> V getStyleOrDefault(String key, V dflt) {
+        V style = getStyle(key);
+        return style != null ? style : dflt;
+    }
+
     public void renderBorder() {
         // TODO: [Render Rework] Better border rendering
 

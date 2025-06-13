@@ -3,6 +3,7 @@ package net.snackbag.vera.core;
 import net.minecraft.client.MinecraftClient;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.event.VShortcut;
+import net.snackbag.vera.style.VStyleSheet;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
@@ -14,6 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class VeraApp {
+    public final VStyleSheet styleSheet = new VStyleSheet();
     private final List<VWidget<?>> widgets;
     private final HashMap<String, VShortcut> shortcuts;
     private VColor backgroundColor;
