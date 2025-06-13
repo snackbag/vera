@@ -16,7 +16,11 @@ public class TestHandler {
 
         ClientTickEvents.END_CLIENT_TICK.register((client) -> {
             if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_APOSTROPHE)) {
-                TestApplication.INSTANCE.setVisibility(true);
+                if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT)) {
+                    StyleTestApplication.INSTANCE.show();
+                } else {
+                    TestApplication.INSTANCE.setVisibility(true);
+                }
             }
         });
     }
