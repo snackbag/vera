@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.style.VStyleSheet;
+import net.snackbag.vera.util.DraggingManager;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
@@ -16,6 +17,8 @@ import java.util.stream.Collectors;
 
 public abstract class VeraApp {
     public final VStyleSheet styleSheet = new VStyleSheet();
+
+    private final DraggingManager dragManager = new DraggingManager(this);
     private final List<VWidget<?>> widgets;
     private final HashMap<String, VShortcut> shortcuts;
     private VColor backgroundColor;
@@ -217,8 +220,11 @@ public abstract class VeraApp {
     }
 
     public List<VWidget<?>> getHoveredWidgets(int mouseX, int mouseY) {
+        int mx = mouseX - x;
+        int my = mouseY - y;
+
         return getWidgets().parallelStream()
-                .filter(widget -> isMouseOverWidget(widget, mouseX, mouseY))
+                .filter(widget -> isMouseOverWidget(widget, mx, my))
                 .filter(VWidget::visibilityConditionsPassed)
                 .collect(Collectors.toList());
     }
@@ -281,5 +287,17 @@ public abstract class VeraApp {
 
     public void charTyped(char chr, int modifiers) {
         if (hasFocusedWidget()) getFocusedWidget().charTyped(chr, modifiers);
+    }
+
+    public void mouseClicked(VMouseButton button, int x, int y) {
+        dragManager.handleClick(button, x, y);
+    }
+
+    public void mouseReleased(VMouseButton button, int x, int y) {
+        dragManager.handleRelease(button, x, y);
+    }
+
+    public void mouseMoved(int x, int y) {
+        dragManager.handleMove(x, y);
     }
 }
