@@ -1,18 +1,16 @@
 package net.snackbag.vera.core;
 
 import net.minecraft.client.MinecraftClient;
+import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.event.VShortcut;
+import net.snackbag.vera.flag.VWindowPositioningFlag;
 import net.snackbag.vera.style.VStyleSheet;
-import net.snackbag.vera.util.DraggingManager;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class VeraApp {
@@ -32,6 +30,7 @@ public abstract class VeraApp {
 
     private boolean visible;
     private @Nullable VWidget<?> focusedWidget;
+    private VWindowPositioningFlag positioning;
 
     public VeraApp() {
         this(true);
@@ -53,6 +52,7 @@ public abstract class VeraApp {
         this.y = 0;
 
         this.visible = false;
+        setPositioning(VWindowPositioningFlag.SCREEN);
     }
 
     public void setCursorVisible(boolean cursorVisible) {
@@ -278,6 +278,22 @@ public abstract class VeraApp {
                 MinecraftClient.getInstance().getWindow().getHandle(),
                 cursorShape.getGLFWCursor()
         );
+    }
+
+    public VWindowPositioningFlag getPositioning() {
+        return positioning;
+    }
+
+    public void setPositioning(VWindowPositioningFlag positioning) {
+        if (MCVeraData.visibleApplications.getOrDefault(positioning, new LinkedHashSet<>()).contains(this))
+            MCVeraData.visibleApplications.get(positioning).remove(this);
+
+        this.positioning = positioning;
+
+        if (!MCVeraData.visibleApplications.containsKey(positioning))
+            MCVeraData.visibleApplications.put(positioning, new LinkedHashSet<>());
+
+        MCVeraData.visibleApplications.get(positioning).add(this);
     }
 
     public void keyPressed(int keyCode, int scanCode, int modifiers) {
