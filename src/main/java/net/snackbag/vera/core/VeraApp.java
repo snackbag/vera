@@ -285,15 +285,20 @@ public abstract class VeraApp {
     }
 
     public void setPositioning(VWindowPositioningFlag positioning) {
-        if (MCVeraData.visibleApplications.getOrDefault(positioning, new LinkedHashSet<>()).contains(this))
-            MCVeraData.visibleApplications.get(positioning).remove(this);
-
-        this.positioning = positioning;
-
+        // make sure hashmaps exist
+        if (!MCVeraData.visibleApplications.containsKey(this.positioning))
+            MCVeraData.visibleApplications.put(this.positioning, new LinkedHashSet<>());
         if (!MCVeraData.visibleApplications.containsKey(positioning))
             MCVeraData.visibleApplications.put(positioning, new LinkedHashSet<>());
 
-        MCVeraData.visibleApplications.get(positioning).add(this);
+        // if visible, then we can also add the app itself
+        if (isVisible()) {
+            MCVeraData.visibleApplications.get(positioning).add(this);
+        }
+
+        // doesn't matter if visible or not, we always remove it from its original
+        MCVeraData.visibleApplications.get(this.positioning).remove(this);
+        this.positioning = positioning;
     }
 
     public void keyPressed(int keyCode, int scanCode, int modifiers) {
