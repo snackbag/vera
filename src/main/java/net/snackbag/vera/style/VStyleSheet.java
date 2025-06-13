@@ -13,10 +13,11 @@ public class VStyleSheet {
 
     public VStyleSheet() {
         // Generic
-        reserveType("color", StyleValueType.COLOR);
         reserveType("background-color", StyleValueType.COLOR);
 
         // Font
+        reserveType("color", StyleValueType.COLOR);
+        reserveType("font", StyleValueType.FONT);
         reserveType("font-size", StyleValueType.INT);
         reserveType("font-name", StyleValueType.STRING);
     }
