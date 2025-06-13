@@ -29,6 +29,7 @@ public abstract class VeraApp {
     private int height;
 
     private boolean visible;
+    private boolean requiresHierarchy;
     private @Nullable VWidget<?> focusedWidget;
     private VWindowPositioningFlag positioning;
 
@@ -157,6 +158,26 @@ public abstract class VeraApp {
 
     public int getY() {
         return y;
+    }
+
+    public void setRequiresHierarchy(boolean requires) {
+        if (MCVeraData.appHierarchy.contains(this) && !requires) {
+            MCVeraData.appHierarchy.remove(this);
+        }
+
+        MCVeraData.appHierarchy.add(this);
+        this.requiresHierarchy = requires;
+    }
+
+    public void moveToHierarchyTop() {
+        if (!requiresHierarchy) return;
+
+        MCVeraData.appHierarchy.remove(this);
+        MCVeraData.appHierarchy.add(0, this);
+    }
+
+    public boolean isRequiresHierarchy() {
+        return requiresHierarchy;
     }
 
     public abstract void init();

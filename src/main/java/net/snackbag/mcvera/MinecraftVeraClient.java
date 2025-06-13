@@ -9,7 +9,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
-import net.snackbag.mcvera.impl.MCVeraProvider;
 import net.snackbag.mcvera.impl.MCVeraRenderer;
 import net.snackbag.mcvera.test.TestHandler;
 import net.snackbag.vera.Vera;
@@ -39,9 +38,7 @@ public class MinecraftVeraClient implements ClientModInitializer {
             MCVeraData.previousPressedKeys = new ArrayList<>(MCVeraData.pressedKeys);
 
             String combination = makeCombination(client);
-            for (VeraApp app : MCVeraData.visibleApplications) {
-                app.handleShortcut(combination);
-            }
+            Vera.forVisibleAndAllowedApps(app -> app.handleShortcut(combination));
         });
     }
 

@@ -5,6 +5,7 @@ import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.mcvera.impl.MCVeraProvider;
 import net.snackbag.mcvera.impl.MCVeraRenderer;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.flag.VWindowPositioningFlag;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.PointerBuffer;
@@ -12,6 +13,7 @@ import org.lwjgl.system.MemoryStack;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -21,6 +23,33 @@ public class Vera {
 
     public static final String FONT_DEFAULT = provider.getDefaultFontName();
     public static final String FONT_ARIAL = "minecraft:arial";
+
+    public static void forVisibleAndAllowedApps(Consumer<VeraApp> handler) {
+        final List<VeraApp> handledApps = new ArrayList<>();
+        if (!MCVeraData.appHierarchy.isEmpty()) {
+            VeraApp app = MCVeraData.appHierarchy.get(0);
+
+            handledApps.add(app);
+            handler.accept(app);
+        }
+
+        for (VWindowPositioningFlag flag : MCVeraData.visibleApplications.keySet()) {
+            for (VeraApp app : MCVeraData.visibleApplications.get(flag)) {
+                if (handledApps.contains(app) || app.isRequiresHierarchy()) continue;
+
+                handler.accept(app);
+                handledApps.add(app);
+            }
+        }
+    }
+
+    public static void forAllVisibleApps(Consumer<VeraApp> handler) {
+        for (VWindowPositioningFlag flag : MCVeraData.visibleApplications.keySet()) {
+            for (VeraApp app : MCVeraData.visibleApplications.get(flag)) {
+                handler.accept(app);
+            }
+        }
+    }
 
     public static void forHoveredWidget(int mouseX, int mouseY, Consumer<VWidget<?>> runnable, @Nullable Consumer<VeraApp> ifEmpty) {
         for (VeraApp app : MCVeraData.visibleApplications) {

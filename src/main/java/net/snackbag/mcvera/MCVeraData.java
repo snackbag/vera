@@ -8,6 +8,7 @@ import java.util.*;
 public class MCVeraData {
     public static LinkedHashSet<VeraApp> applications = new LinkedHashSet<>();
     public static HashMap<VWindowPositioningFlag, LinkedHashSet<VeraApp>> visibleApplications = new HashMap<>();
+    public static List<VeraApp> appHierarchy = new ArrayList<>();
 
     public static int appsWithMouseRequired = 0;
     public static final Set<VeraApp> debugApps = new HashSet<>();

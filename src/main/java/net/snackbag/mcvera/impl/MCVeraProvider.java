@@ -28,7 +28,7 @@ public class MCVeraProvider {
     public void handleAppShow(VeraApp app) {
         if (app.isVisible()) return;
 
-        MCVeraData.visibleApplications.add(app);
+        MCVeraData.visibleApplications.get(app.getPositioning()).add(app);
         if (app.isMouseRequired()) MCVeraData.appsWithMouseRequired += 1;
         MinecraftClient client = MinecraftClient.getInstance();
         client.send(app::update);
@@ -44,7 +44,7 @@ public class MCVeraProvider {
         if (!app.isVisible()) return;
 
         if (app.isMouseRequired()) MCVeraData.appsWithMouseRequired -= 1;
-        MCVeraData.visibleApplications.remove(app);
+        MCVeraData.visibleApplications.get(app.getPositioning()).remove(app);
         MinecraftClient client = MinecraftClient.getInstance();
         client.send(app::update);
 
@@ -101,15 +101,11 @@ public class MCVeraProvider {
     }
 
     public void handleKeyPressed(int keyCode, int scanCode, int modifiers) {
-        for (VeraApp app : MCVeraData.visibleApplications) {
-            app.keyPressed(keyCode, scanCode, modifiers);
-        }
+        Vera.forVisibleAndAllowedApps(app -> app.keyPressed(keyCode, scanCode, modifiers));
     }
 
     public void handleCharTyped(char chr, int modifiers) {
-        for (VeraApp app : MCVeraData.visibleApplications) {
-            app.charTyped(chr, modifiers);
-        }
+        Vera.forVisibleAndAllowedApps(app -> app.charTyped(chr, modifiers));
     }
 
     public String getDefaultFontName() {
