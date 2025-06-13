@@ -59,7 +59,7 @@ public class TestApplication extends VeraApp {
 
         label.setPadding(5);
         label.move(10);
-        label.setBackgroundColor(VColor.black());
+        label.setStyle("background-color", VColor.black());
         label.setFont(label.getFont().withColor(VColor.white()));
         label.adjustSize();
         label.onHover(() -> {
@@ -72,7 +72,7 @@ public class TestApplication extends VeraApp {
 
         VLabel centerLabel = new VLabel("CENTER", this).alsoAdd();
         centerLabel.setAlignment(VAlignmentFlag.CENTER);
-        centerLabel.setBackgroundColor(VColor.black());
+        centerLabel.setStyle("background-color", VColor.black());
         centerLabel.modifyFontColor().rgb(255, 255, 255);
         centerLabel.move(220, 10);
         centerLabel.setBorder(VColor.MC_BLUE, VColor.MC_GOLD, VColor.MC_RED, VColor.MC_GREEN);
@@ -81,7 +81,7 @@ public class TestApplication extends VeraApp {
 
         VLabel rightLabel = new VLabel("RIGHT", this).alsoAdd();
         rightLabel.setAlignment(VAlignmentFlag.RIGHT);
-        rightLabel.setBackgroundColor(VColor.black());
+        rightLabel.setStyle("background-color", VColor.black());
         rightLabel.modifyFontColor().rgb(255, 255, 255);
         rightLabel.move(100, 10);
         rightLabel.setBorder(VColor.white());
