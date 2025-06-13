@@ -7,7 +7,6 @@ import net.snackbag.vera.modifier.VPaddingWidget;
 public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
     private String text;
     private VFont font;
-    private VColor backgroundColor;
     private V4Int padding;
     private VAlignmentFlag alignment;
 
@@ -16,10 +15,11 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
 
         this.text = text;
         this.font = VFont.create();
-        this.backgroundColor = VColor.transparent();
         this.padding = new V4Int(4);
         this.focusOnClick = false;
         alignment = VAlignmentFlag.LEFT;
+
+        setStyle("background-color", VColor.transparent());
     }
 
     public String getText() {
@@ -32,18 +32,6 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
 
     public void setFont(VFont font) {
         this.font = font;
-    }
-
-    public VColor getBackgroundColor() {
-        return backgroundColor;
-    }
-
-    public void setBackgroundColor(VColor backgroundColor) {
-        this.backgroundColor = backgroundColor;
-    }
-
-    public VColor.ColorModifier modifyBackgroundColor() {
-        return new VColor.ColorModifier(backgroundColor, this::setBackgroundColor);
     }
 
     public void setText(String text) {
@@ -112,7 +100,7 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
                 getHitboxWidth(),
                 getHitboxHeight(),
                 rotation,
-                backgroundColor
+                getStyle("background-color")
         );
 
         switch (alignment) {
