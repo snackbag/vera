@@ -25,6 +25,7 @@ public class TestApplication extends VeraApp {
     }
 
     @Override
+    @SuppressWarnings("removal")
     public void init() {
         VShortcut exit = new VShortcut(this, "escape", () -> {
             if (hasFocusedWidget()) {
