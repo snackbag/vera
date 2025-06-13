@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 public abstract class VeraApp {
     public final VStyleSheet styleSheet = new VStyleSheet();
 
-    private final DraggingManager dragManager = new DraggingManager(this);
     private final List<VWidget<?>> widgets;
     private final HashMap<String, VShortcut> shortcuts;
     private VColor backgroundColor;
@@ -287,17 +286,5 @@ public abstract class VeraApp {
 
     public void charTyped(char chr, int modifiers) {
         if (hasFocusedWidget()) getFocusedWidget().charTyped(chr, modifiers);
-    }
-
-    public void mouseClicked(VMouseButton button, int x, int y) {
-        dragManager.handleClick(button, x, y);
-    }
-
-    public void mouseReleased(VMouseButton button, int x, int y) {
-        dragManager.handleRelease(button, x, y);
-    }
-
-    public void mouseMoved(int x, int y) {
-        dragManager.handleMove(x, y);
     }
 }
