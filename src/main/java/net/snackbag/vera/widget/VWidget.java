@@ -3,6 +3,7 @@ package net.snackbag.vera.widget;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.event.*;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
@@ -99,18 +100,26 @@ public abstract class VWidget<T extends VWidget<T>> {
         return border;
     }
 
+    @Deprecated(forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.10.0")
     public void setBorder(V4Color border) {
         this.border = border;
     }
 
+    @Deprecated(forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.10.0")
     public void setBorder(VColor all) {
         setBorder(new V4Color(all));
     }
 
+    @Deprecated(forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.10.0")
     public void setBorder(VColor tb, VColor lr) {
         setBorder(new V4Color(tb, lr));
     }
 
+    @Deprecated(forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.10.0")
     public void setBorder(VColor top, VColor bottom, VColor left, VColor right) {
         setBorder(new V4Color(top, bottom, left, right));
     }
@@ -119,23 +128,33 @@ public abstract class VWidget<T extends VWidget<T>> {
         return borderSize;
     }
 
+    @Deprecated(forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.10.0")
     public void setBorderSize(V4Int borderSize) {
         this.borderSize = borderSize;
     }
 
+    @Deprecated(forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.10.0")
     public void setBorderSize(int all) {
         setBorderSize(new V4Int(all));
     }
 
+    @Deprecated(forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.10.0")
     public void setBorderSize(int tb, int lr) {
         setBorderSize(new V4Int(tb, lr));
     }
 
+    @Deprecated(forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.10.0")
     public void setBorderSize(int top, int bottom, int left, int right) {
         setBorderSize(new V4Int(top, bottom, left, right));
     }
 
     public void renderBorder() {
+        // TODO: [Render Rework] Better border rendering
+
         // Top
         Vera.renderer.drawRect(app, getHitboxX(), getHitboxY() - borderSize.get1(), getHitboxWidth(), borderSize.get1(), 0, border.get1());
         if (borderSize.get3() > 0) {
