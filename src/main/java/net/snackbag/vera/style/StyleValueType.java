@@ -3,12 +3,16 @@ package net.snackbag.vera.style;
 import net.snackbag.vera.core.VColor;
 
 public enum StyleValueType {
-    COLOR,
-    STRING,
-    INT,
-    FLOAT;
+    COLOR(VColor.black()),
+    STRING(""),
+    INT(0),
+    FLOAT(0.0F);
 
-    StyleValueType() {}
+    public final Object standard;
+
+    StyleValueType(Object standard) {
+        this.standard = standard;
+    }
 
     public static StyleValueType get(Object val) {
         if (val instanceof VColor) return COLOR;
