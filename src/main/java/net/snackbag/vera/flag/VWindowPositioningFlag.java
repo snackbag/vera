@@ -2,6 +2,11 @@ package net.snackbag.vera.flag;
 
 public enum VWindowPositioningFlag {
     /**
+     * Renders below everything, also under the spyglass
+     */
+    BELOW_ALL,
+
+    /**
      * Renders under the HUD
      */
     UNDER_HUD,
