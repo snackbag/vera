@@ -28,6 +28,10 @@ public enum VWindowPositioningFlag {
 
     /**
      * Renders on the same layer as the GUI
+     * <p>
+     * <strong>Watch out:</strong> if the UI doesn't require a mouse to exist, it will not render if no other app that
+     * does require a mouse is present. In case you 100% need it, it is recommended to either use {@link #ABOVE_HUD} or
+     * {@link #ABOVE_GUI}
      */
     GUI,
 
