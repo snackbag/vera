@@ -23,8 +23,6 @@ public abstract class InGameHudMixin {
         for (VeraApp app : apps) {
             Vera.renderer.renderApp(app);
         }
-
-        RenderSystem.enableBlend();
     }
 
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getLastFrameDuration()F"), method = "render")
@@ -34,8 +32,6 @@ public abstract class InGameHudMixin {
         for (VeraApp app : apps) {
             Vera.renderer.renderApp(app);
         }
-
-        RenderSystem.enableBlend();
     }
 
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;getCurrentGameMode()Lnet/minecraft/world/GameMode;", ordinal = 0, shift = At.Shift.BEFORE), method = "render")
@@ -45,8 +41,6 @@ public abstract class InGameHudMixin {
         for (VeraApp app : apps) {
             Vera.renderer.renderApp(app);
         }
-
-        RenderSystem.enableBlend();
     }
 
     @Inject(at = @At(value = "TAIL"), method = "renderHotbar")
@@ -56,7 +50,5 @@ public abstract class InGameHudMixin {
         for (VeraApp app : apps) {
             Vera.renderer.renderApp(app);
         }
-
-        RenderSystem.enableBlend();
     }
 }
