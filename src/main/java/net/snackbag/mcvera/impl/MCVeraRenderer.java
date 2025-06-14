@@ -12,6 +12,7 @@ import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.widget.VWidget;
+import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
@@ -57,8 +58,10 @@ public class MCVeraRenderer {
     }
 
     public void renderApp(VeraApp app) {
+        boolean blendEnabled = GL11.glIsEnabled(GL11.GL_BLEND);
+
         List<VWidget<?>> widgets = app.getWidgets();
-        RenderSystem.enableBlend();
+        if (!blendEnabled) RenderSystem.enableBlend();
 
         app.render();
         List<VWidget<?>> hoveredWidgets = app.getHoveredWidgets();
@@ -71,6 +74,6 @@ public class MCVeraRenderer {
         }
         app.renderAfterWidgets();
 
-        RenderSystem.disableBlend();
+        if (!blendEnabled) RenderSystem.disableBlend();
     }
 }
