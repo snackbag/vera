@@ -19,45 +19,22 @@ import java.util.LinkedHashSet;
 public abstract class GameRendererMixin {
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getOverlay()Lnet/minecraft/client/gui/screen/Overlay;", ordinal = 0, shift = At.Shift.BEFORE))
     private void mcvera$renderAboveHud(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
-        LinkedHashSet<VeraApp> apps = MCVeraData.visibleApplications.getOrDefault(VWindowPositioningFlag.ABOVE_HUD, new LinkedHashSet<>());
-
-        for (VeraApp app : apps) {
-            Vera.renderer.renderApp(app);
-        }
-
-        GL11.glIsEnabled(GL11.GL_BLEND);
+        Vera.renderer.renderApps(VWindowPositioningFlag.ABOVE_HUD);
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderWithTooltip(Lnet/minecraft/client/gui/DrawContext;IIF)V"))
     private void mcvera$renderOnGUI(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
-        LinkedHashSet<VeraApp> apps = MCVeraData.visibleApplications.getOrDefault(VWindowPositioningFlag.GUI, new LinkedHashSet<>());
-
-        for (VeraApp app : apps) {
-            Vera.renderer.renderApp(app);
-        }
+        Vera.renderer.renderApps(VWindowPositioningFlag.GUI);
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderWithTooltip(Lnet/minecraft/client/gui/DrawContext;IIF)V", shift = At.Shift.AFTER))
     private void mcvera$renderAboveGUI(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
-        LinkedHashSet<VeraApp> apps = MCVeraData.visibleApplications.getOrDefault(VWindowPositioningFlag.ABOVE_GUI, new LinkedHashSet<>());
-
-        for (VeraApp app : apps) {
-            Vera.renderer.renderApp(app);
-        }
+        Vera.renderer.renderApps(VWindowPositioningFlag.ABOVE_GUI);
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/toast/ToastManager;draw(Lnet/minecraft/client/gui/DrawContext;)V", shift = At.Shift.AFTER))
     private void mcvera$renderScreenAndTop(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
-        LinkedHashSet<VeraApp> apps = MCVeraData.visibleApplications.getOrDefault(VWindowPositioningFlag.SCREEN, new LinkedHashSet<>());
-
-        for (VeraApp app : apps) {
-            Vera.renderer.renderApp(app);
-        }
-
-        apps = MCVeraData.visibleApplications.getOrDefault(VWindowPositioningFlag.TOP, new LinkedHashSet<>());
-
-        for (VeraApp app : apps) {
-            Vera.renderer.renderApp(app);
-        }
+        Vera.renderer.renderApps(VWindowPositioningFlag.SCREEN);
+        Vera.renderer.renderApps(VWindowPositioningFlag.TOP);
     }
 }

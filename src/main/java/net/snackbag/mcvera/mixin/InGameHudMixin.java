@@ -18,37 +18,21 @@ import java.util.LinkedHashSet;
 public abstract class InGameHudMixin {
     @Inject(at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;enableBlend()V", shift = At.Shift.AFTER, ordinal = 0), method = "render")
     private void mcvera$renderBelowVignette(DrawContext context, float tickDelta, CallbackInfo ci) {
-        LinkedHashSet<VeraApp> apps = MCVeraData.visibleApplications.getOrDefault(VWindowPositioningFlag.BELOW_VIGNETTE, new LinkedHashSet<>());
-
-        for (VeraApp app : apps) {
-            Vera.renderer.renderApp(app);
-        }
+        Vera.renderer.renderApps(VWindowPositioningFlag.BELOW_VIGNETTE);
     }
 
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getLastFrameDuration()F"), method = "render")
     private void mcvera$renderBelowOverlays(DrawContext context, float tickDelta, CallbackInfo ci) {
-        LinkedHashSet<VeraApp> apps = MCVeraData.visibleApplications.getOrDefault(VWindowPositioningFlag.BELOW_OVERLAYS, new LinkedHashSet<>());
-
-        for (VeraApp app : apps) {
-            Vera.renderer.renderApp(app);
-        }
+        Vera.renderer.renderApps(VWindowPositioningFlag.BELOW_OVERLAYS);
     }
 
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;getCurrentGameMode()Lnet/minecraft/world/GameMode;", ordinal = 0, shift = At.Shift.BEFORE), method = "render")
     private void mcvera$renderBelowHud(DrawContext context, float tickDelta, CallbackInfo ci) {
-        LinkedHashSet<VeraApp> apps = MCVeraData.visibleApplications.getOrDefault(VWindowPositioningFlag.BELOW_HUD, new LinkedHashSet<>());
-
-        for (VeraApp app : apps) {
-            Vera.renderer.renderApp(app);
-        }
+        Vera.renderer.renderApps(VWindowPositioningFlag.BELOW_HUD);
     }
 
     @Inject(at = @At(value = "TAIL"), method = "renderHotbar")
     private void mcvera$renderHud(float tickDelta, DrawContext context, CallbackInfo ci) {
-        LinkedHashSet<VeraApp> apps = MCVeraData.visibleApplications.getOrDefault(VWindowPositioningFlag.HUD, new LinkedHashSet<>());
-
-        for (VeraApp app : apps) {
-            Vera.renderer.renderApp(app);
-        }
+        Vera.renderer.renderApps(VWindowPositioningFlag.HUD);
     }
 }

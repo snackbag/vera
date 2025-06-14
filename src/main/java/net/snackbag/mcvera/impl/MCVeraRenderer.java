@@ -8,12 +8,16 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RotationAxis;
+import net.snackbag.mcvera.MCVeraData;
+import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.flag.VWindowPositioningFlag;
 import net.snackbag.vera.widget.VWidget;
 import org.lwjgl.opengl.GL11;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 
 public class MCVeraRenderer {
@@ -75,5 +79,13 @@ public class MCVeraRenderer {
         app.renderAfterWidgets();
 
         if (!blendEnabled) RenderSystem.disableBlend();
+    }
+
+    public void renderApps(VWindowPositioningFlag flag) {
+        LinkedHashSet<VeraApp> apps = MCVeraData.visibleApplications.getOrDefault(flag, new LinkedHashSet<>());
+
+        for (VeraApp app : apps) {
+            Vera.renderer.renderApp(app);
+        }
     }
 }
