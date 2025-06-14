@@ -24,14 +24,6 @@ public class MinecraftVeraClient implements ClientModInitializer {
         MinecraftVera.LOGGER.info("Loading client Vera implementation...");
         TestHandler.impl(false);
 
-        HudRenderCallback.EVENT.register((context, tickDelta) -> {
-            MCVeraRenderer renderer = MCVeraRenderer.getInstance();
-
-            for (VeraApp app : MCVeraData.visibleApplications) {
-                renderer.renderApp(app);
-            }
-        });
-
         ClientTickEvents.END_CLIENT_TICK.register((client) -> {
             // only when changing
             if (MCVeraData.previousPressedKeys.equals(MCVeraData.pressedKeys)) return;
