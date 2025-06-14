@@ -14,7 +14,7 @@ public enum VWindowPositioningFlag {
     /**
      * Renders under the HUD
      */
-    UNDER_HUD,
+    BELOW_HUD,
 
     /**
      * Renders on the same level as the HUD
@@ -24,7 +24,7 @@ public enum VWindowPositioningFlag {
     /**
      * Renders over the HUD and under normal GUI
      */
-    HUD_OVERLAY,
+    ABOVE_HUD,
 
     /**
      * Renders on the same layer as the GUI
@@ -34,7 +34,7 @@ public enum VWindowPositioningFlag {
     /**
      * Renders over the GUI but under any other render events
      */
-    GUI_OVERLAY,
+    ABOVE_GUI,
 
     /**
      * (default)<br>
