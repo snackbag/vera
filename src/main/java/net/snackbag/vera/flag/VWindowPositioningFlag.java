@@ -2,9 +2,14 @@ package net.snackbag.vera.flag;
 
 public enum VWindowPositioningFlag {
     /**
+     * Deepest render position, renders even under the vignette
+     */
+    BELOW_VIGNETTE,
+
+    /**
      * Renders below everything, also under the spyglass
      */
-    BELOW_ALL,
+    BELOW_OVERLAYS,
 
     /**
      * Renders under the HUD
