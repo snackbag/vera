@@ -37,9 +37,24 @@ public abstract class GameRendererMixin {
         }
     }
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderWithTooltip(Lnet/minecraft/client/gui/DrawContext;IIF)V"))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderWithTooltip(Lnet/minecraft/client/gui/DrawContext;IIF)V", shift = At.Shift.AFTER))
     private void mcvera$renderAboveGUI(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         LinkedHashSet<VeraApp> apps = MCVeraData.visibleApplications.getOrDefault(VWindowPositioningFlag.ABOVE_GUI, new LinkedHashSet<>());
+
+        for (VeraApp app : apps) {
+            Vera.renderer.renderApp(app);
+        }
+    }
+
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/toast/ToastManager;draw(Lnet/minecraft/client/gui/DrawContext;)V", shift = At.Shift.AFTER))
+    private void mcvera$renderScreenAndTop(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+        LinkedHashSet<VeraApp> apps = MCVeraData.visibleApplications.getOrDefault(VWindowPositioningFlag.SCREEN, new LinkedHashSet<>());
+
+        for (VeraApp app : apps) {
+            Vera.renderer.renderApp(app);
+        }
+
+        apps = MCVeraData.visibleApplications.getOrDefault(VWindowPositioningFlag.TOP, new LinkedHashSet<>());
 
         for (VeraApp app : apps) {
             Vera.renderer.renderApp(app);
