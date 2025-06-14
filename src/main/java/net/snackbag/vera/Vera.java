@@ -105,4 +105,12 @@ public class Vera {
             return path;
         }
     }
+
+    public static @Nullable VeraApp getTopHierarchyApp() {
+        return MCVeraData.appHierarchy.isEmpty() ? null : MCVeraData.appHierarchy.get(0);
+    }
+
+    public static boolean isTopHierarchy(VeraApp app) {
+        return getTopHierarchyApp() == app;
+    }
 }
