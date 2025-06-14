@@ -11,6 +11,8 @@
     },
     "client": [
         "DrawContextMixin",
+        "GameRendererMixin",
+        "InGameHudMixin",
         "KeyboardMixin",
         "MouseMixin",
         "ParentElementMixin",
