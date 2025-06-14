@@ -51,31 +51,6 @@ public class Vera {
         }
     }
 
-    public static void forHoveredWidget(int mouseX, int mouseY, Consumer<VWidget<?>> runnable, @Nullable Consumer<VeraApp> ifEmpty) {
-        for (VeraApp app : MCVeraData.visibleApplications) {
-            List<VWidget<?>> hoveredWidgets = app.getHoveredWidgets(mouseX, mouseY);
-            if (hoveredWidgets.isEmpty()) {
-                if (ifEmpty != null) ifEmpty.accept(app);
-                return;
-            }
-
-            for (VWidget<?> widget : hoveredWidgets) {
-                if (widget.visibilityConditionsPassed()) runnable.accept(widget);
-            }
-        }
-    }
-
-    public static void forHoveredWidget(int mouseX, int mouseY, Consumer<VWidget<?>> runnable) {
-        forHoveredWidget(mouseX, mouseY, runnable, null);
-    }
-
-    public static void forHoveredWidgetIfEmpty(int mouseX, int mouseY, Consumer<VeraApp> runnable) {
-        for (VeraApp app : MCVeraData.visibleApplications) {
-            List<VWidget<?>> hoveredWidgets = app.getHoveredWidgets(mouseX, mouseY);
-            if (hoveredWidgets.isEmpty()) runnable.accept(app);
-        }
-    }
-
     public static int getMouseX() {
         return (int) (MinecraftClient.getInstance().mouse.getX() / MinecraftClient.getInstance().getWindow().getScaleFactor());
     }
