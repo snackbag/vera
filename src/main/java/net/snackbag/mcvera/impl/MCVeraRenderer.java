@@ -17,6 +17,7 @@ import net.snackbag.vera.flag.VWindowPositioningFlag;
 import net.snackbag.vera.widget.VWidget;
 import org.lwjgl.opengl.GL11;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -83,8 +84,18 @@ public class MCVeraRenderer {
 
     public void renderApps(VWindowPositioningFlag flag) {
         LinkedHashSet<VeraApp> apps = MCVeraData.visibleApplications.getOrDefault(flag, new LinkedHashSet<>());
+        List<VeraApp> hierarchicApps = new ArrayList<>();
 
         for (VeraApp app : apps) {
+            if (app.isRequiresHierarchy()) {
+                hierarchicApps.add(app);
+                continue;
+            }
+
+            Vera.renderer.renderApp(app);
+        }
+
+        for (VeraApp app : hierarchicApps) {
             Vera.renderer.renderApp(app);
         }
     }
