@@ -28,7 +28,7 @@ public class MCVeraRenderer {
         stack.translate(app.getX(), app.getY(), 0);
         stack.translate(centerX, centerY, 0);
         stack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float) rotation));
-        stack.translate(-width / 2, -height / 2, 0);
+        stack.translate(-width / 2f, -height / 2f, 0);
 
         drawContext.fill(0, 0, width, height, color.toInt());
 
