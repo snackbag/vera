@@ -16,16 +16,7 @@ import net.snackbag.vera.widget.VWidget;
 import java.util.List;
 
 public class MCVeraRenderer {
-    private static MCVeraRenderer instance = null;
     public static DrawContext drawContext = null;
-
-    public static MCVeraRenderer getInstance() {
-        if (instance == null) {
-            instance = new MCVeraRenderer();
-        }
-
-        return instance;
-    }
 
     public void drawRect(VeraApp app, int x, int y, int width, int height, double rotation, VColor color) {
         MatrixStack stack = drawContext.getMatrices();
