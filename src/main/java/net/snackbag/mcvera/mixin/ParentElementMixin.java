@@ -18,16 +18,22 @@ public interface ParentElementMixin {
     private void mcvera$handleMouseClick(double mouseXRaw, double mouseYRaw, int button, CallbackInfoReturnable<Boolean> cir) {
         int mouseX = (int) mouseXRaw;
         int mouseY = (int) mouseYRaw;
+        boolean justChanged = false;
+
+        VeraApp top = MCVeraData.getTopHierarchy();
 
         for (VeraApp app : MCVeraData.appHierarchy) {
-            if (app.isMouseOverApp(mouseX, mouseY)) {
+            if (app.isMouseOverApp(mouseX, mouseY) && top != app) {
                 app.moveToHierarchyTop();
+                justChanged = true;
                 break;
             }
         }
 
+        boolean finalJustChanged = justChanged; // weird java shit
         MCVeraData.asTopHierarchy(app -> {
             if (!app.isMouseOverThis(mouseX, mouseY)) return;
+            if (!finalJustChanged) return;
             handleClickEvents(app.getHoveredWidget(mouseX, mouseY), button);
         });
 
