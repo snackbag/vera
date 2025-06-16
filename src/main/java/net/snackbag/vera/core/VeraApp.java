@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public abstract class VeraApp {
     public final VStyleSheet styleSheet = new VStyleSheet();
