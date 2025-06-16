@@ -260,6 +260,12 @@ public abstract class VeraApp {
         return Geometry.isInBox(mouseX, mouseY, widgetX, widgetY, widgetWidth, widgetHeight);
     }
 
+    public boolean isMouseOverThis(int mouseX, int mouseY) {
+        if (!isVisible()) return false;
+
+        return Geometry.isInBox(mouseX, mouseY, x, y, width, height);
+    }
+
     public boolean isMouseOverApp(int mouseX, int mouseY) {
         if (!isVisible()) return false;
         return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
