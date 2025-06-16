@@ -83,9 +83,20 @@ public interface ParentElementMixin {
     }
 
     @Inject(method = "mouseScrolled", at = @At("HEAD"))
-    private void mcvera$handleMouseScroll(double mouseX, double mouseY, double amount, CallbackInfoReturnable<Boolean> cir) {
-        Vera.forHoveredWidget((int) mouseX, (int) mouseY, (widget) -> {
-            widget.fireEvent("mouse-scroll", (int) mouseX, (int) mouseY, amount);
+    private void mcvera$handleMouseScroll(double mouseXRaw, double mouseYRaw, double amount, CallbackInfoReturnable<Boolean> cir) {
+        int mouseX = (int) mouseXRaw;
+        int mouseY = (int) mouseYRaw;
+
+        MCVeraData.asTopHierarchy(app -> handleScrollEvents(app.getHoveredWidget(mouseX, mouseY), mouseX, mouseY, amount));
+        Vera.forAllVisibleApps(app -> {
+            if (app.isRequiresHierarchy()) return;
+            handleScrollEvents(app.getHoveredWidget(mouseX, mouseY), mouseX, mouseY, amount);
         });
+    }
+
+    @Unique
+    private void handleScrollEvents(@Nullable VWidget<?> widget, int x, int y, double amount) {
+        if (widget == null) return;
+        widget.fireEvent("mouse-scroll", x, y, amount);
     }
 }
