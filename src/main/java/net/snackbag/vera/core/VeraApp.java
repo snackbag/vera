@@ -236,18 +236,14 @@ public abstract class VeraApp {
         return List.copyOf(shortcuts.values());
     }
 
-    public List<VWidget<?>> getHoveredWidgets() {
-        return getHoveredWidgets(Vera.provider.getMouseX(), Vera.provider.getMouseY());
-    }
-
-    public List<VWidget<?>> getHoveredWidgets(int mouseX, int mouseY) {
+    public @Nullable VWidget<?> getHoveredWidget(int mouseX, int mouseY) {
         int mx = mouseX - x;
         int my = mouseY - y;
 
         return getWidgets().parallelStream()
                 .filter(widget -> isMouseOverWidget(widget, mx, my))
                 .filter(VWidget::visibilityConditionsPassed)
-                .collect(Collectors.toList());
+                .findFirst().orElse(null);
     }
 
     private boolean isMouseOverWidget(VWidget<?> widget, int mouseX, int mouseY) {
