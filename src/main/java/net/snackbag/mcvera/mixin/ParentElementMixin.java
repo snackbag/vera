@@ -59,13 +59,17 @@ public interface ParentElementMixin {
     }
 
     @Inject(method = "mouseReleased", at = @At("HEAD"))
-    private void mcvera$handleMouseRelease(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
-        Vera.forHoveredWidget((int) mouseX, (int) mouseY, (widget) -> {
-            switch (button) {
-                case 0: widget.fireEvent("left-click-release"); break;
-                case 1: widget.fireEvent("right-click-release"); break;
-                case 2: widget.fireEvent("middle-click-release"); break;
-            }
+    private void mcvera$handleMouseRelease(double mouseXRaw, double mouseYRaw, int button, CallbackInfoReturnable<Boolean> cir) {
+        int mouseX = (int) mouseXRaw;
+        int mouseY = (int) mouseYRaw;
+
+        VeraApp top = MCVeraData.getTopHierarchy();
+        if (top != null && top.isMouseOverThis(mouseX, mouseY))
+            handleReleaseEvents(top.getHoveredWidget(mouseX, mouseY), button);
+
+        Vera.forAllVisibleApps(app -> {
+            if (app.isRequiresHierarchy()) return;
+            handleReleaseEvents(app.getHoveredWidget(mouseX, mouseY), button);
         });
     }
 
