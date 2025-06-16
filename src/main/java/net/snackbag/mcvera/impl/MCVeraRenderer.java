@@ -69,9 +69,9 @@ public class MCVeraRenderer {
         if (!blendEnabled) RenderSystem.enableBlend();
 
         app.render();
-        List<VWidget<?>> hoveredWidgets = app.getHoveredWidgets();
+        VWidget<?> hoveredWidget = app.getHoveredWidget(Vera.getMouseX(), Vera.getMouseY());
         for (VWidget<?> widget : widgets) {
-            widget.setHovered(hoveredWidgets.contains(widget));
+            widget.setHovered(widget == hoveredWidget);
             if (widget.visibilityConditionsPassed()) {
                 widget.render();
                 widget.renderBorder();
