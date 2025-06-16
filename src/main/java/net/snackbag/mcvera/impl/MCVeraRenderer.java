@@ -69,7 +69,7 @@ public class MCVeraRenderer {
         if (!blendEnabled) RenderSystem.enableBlend();
 
         app.render();
-        VWidget<?> hoveredWidget = app.getHoveredWidget(Vera.getMouseX(), Vera.getMouseY());
+        VWidget<?> hoveredWidget = app.getTopWidgetAt(Vera.getMouseX(), Vera.getMouseY());
         for (VWidget<?> widget : widgets) {
             if (widget != hoveredWidget && widget.isHovered()) widget.setHovered(false);
             else if (widget == hoveredWidget && !widget.isHovered()) widget.setHovered(true);

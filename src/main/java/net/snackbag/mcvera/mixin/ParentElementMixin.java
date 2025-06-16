@@ -23,7 +23,7 @@ public interface ParentElementMixin {
         VeraApp top = MCVeraData.getTopHierarchy();
 
         for (VeraApp app : MCVeraData.appHierarchy) {
-            if (app.isMouseOverApp(mouseX, mouseY) && top != app) {
+            if (app.isPointOverThis(mouseX, mouseY) && top != app) {
                 app.moveToHierarchyTop();
                 justChanged = true;
                 break;
@@ -32,15 +32,15 @@ public interface ParentElementMixin {
 
         boolean finalJustChanged = justChanged; // weird java shit
         MCVeraData.asTopHierarchy(app -> {
-            if (!app.isMouseOverThis(mouseX, mouseY)) return;
+            if (!app.isPointOverThis(mouseX, mouseY)) return;
             if (!finalJustChanged) return;
-            handleClickEvents(app.getHoveredWidget(mouseX, mouseY), button);
+            handleClickEvents(app.getTopWidgetAt(mouseX, mouseY), button);
         });
 
         Vera.forAllVisibleApps((app) -> {
             if (app.isRequiresHierarchy()) return;
 
-            VWidget<?> hoveredWidget = app.getHoveredWidget(mouseX, mouseY);
+            VWidget<?> hoveredWidget = app.getTopWidgetAt(mouseX, mouseY);
             if (hoveredWidget != null) handleClickEvents(hoveredWidget, button);
             else app.setFocusedWidget(null);
         });
@@ -63,10 +63,10 @@ public interface ParentElementMixin {
         int mouseX = (int) mouseXRaw;
         int mouseY = (int) mouseYRaw;
 
-        MCVeraData.asTopHierarchy(app -> handleReleaseEvents(app.getHoveredWidget(mouseX, mouseY), button));
+        MCVeraData.asTopHierarchy(app -> handleReleaseEvents(app.getTopWidgetAt(mouseX, mouseY), button));
         Vera.forAllVisibleApps(app -> {
             if (app.isRequiresHierarchy()) return;
-            handleReleaseEvents(app.getHoveredWidget(mouseX, mouseY), button);
+            handleReleaseEvents(app.getTopWidgetAt(mouseX, mouseY), button);
         });
     }
 
@@ -87,10 +87,10 @@ public interface ParentElementMixin {
         int mouseX = (int) mouseXRaw;
         int mouseY = (int) mouseYRaw;
 
-        MCVeraData.asTopHierarchy(app -> handleScrollEvents(app.getHoveredWidget(mouseX, mouseY), mouseX, mouseY, amount));
+        MCVeraData.asTopHierarchy(app -> handleScrollEvents(app.getTopWidgetAt(mouseX, mouseY), mouseX, mouseY, amount));
         Vera.forAllVisibleApps(app -> {
             if (app.isRequiresHierarchy()) return;
-            handleScrollEvents(app.getHoveredWidget(mouseX, mouseY), mouseX, mouseY, amount);
+            handleScrollEvents(app.getTopWidgetAt(mouseX, mouseY), mouseX, mouseY, amount);
         });
     }
 

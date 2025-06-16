@@ -236,30 +236,30 @@ public abstract class VeraApp {
         return List.copyOf(shortcuts.values());
     }
 
-    public @Nullable VWidget<?> getHoveredWidget(int mouseX, int mouseY) {
-        int mx = mouseX - x;
-        int my = mouseY - y;
+    public @Nullable VWidget<?> getTopWidgetAt(int px, int py) {
+        int mx = px - x;
+        int my = py - y;
 
         return getWidgets().parallelStream()
-                .filter(widget -> isMouseOverWidget(widget, mx, my))
+                .filter(widget -> isPointOverWidget(widget, mx, my))
                 .filter(VWidget::visibilityConditionsPassed)
                 .findFirst().orElse(null);
     }
 
-    private boolean isMouseOverWidget(VWidget<?> widget, int mouseX, int mouseY) {
+    private boolean isPointOverWidget(VWidget<?> widget, int px, int py) {
         if (!widget.visibilityConditionsPassed()) return false;
 
         int widgetX = widget.getHitboxX() + x;
         int widgetY = widget.getHitboxY() + y;
         int widgetWidth = widget.getHitboxWidth();
         int widgetHeight = widget.getHitboxHeight();
-        return Geometry.isInBox(mouseX, mouseY, widgetX, widgetY, widgetWidth, widgetHeight);
+        return Geometry.isInBox(px, py, widgetX, widgetY, widgetWidth, widgetHeight);
     }
 
-    public boolean isMouseOverThis(int mouseX, int mouseY) {
+    public boolean isPointOverThis(int px, int py) {
         if (!isVisible()) return false;
 
-        return Geometry.isInBox(mouseX, mouseY, x, y, width, height);
+        return Geometry.isInBox(px, py, x, y, width, height);
     }
 
     public boolean isMouseOverApp(int mouseX, int mouseY) {
