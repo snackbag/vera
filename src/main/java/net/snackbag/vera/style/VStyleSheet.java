@@ -6,7 +6,7 @@ import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
-import java.util.SortedSet;
+import java.util.LinkedHashSet;
 
 public class VStyleSheet {
     private final HashMap<VWidget<?>, HashMap<String, Object>> widgetSpecificStyles = new HashMap<>();
@@ -71,7 +71,7 @@ public class VStyleSheet {
         return styleClasses.getOrDefault(clazz, new HashMap<>());
     }
 
-    public HashMap<String, Object> mixClasses(SortedSet<String> classes) {
+    public HashMap<String, Object> mixClasses(LinkedHashSet<String> classes) {
         final HashMap<String, Object> values = new HashMap<>();
 
         for (String clazz : classes) {
