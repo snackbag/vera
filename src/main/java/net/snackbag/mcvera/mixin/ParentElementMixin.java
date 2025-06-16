@@ -63,10 +63,7 @@ public interface ParentElementMixin {
         int mouseX = (int) mouseXRaw;
         int mouseY = (int) mouseYRaw;
 
-        VeraApp top = MCVeraData.getTopHierarchy();
-        if (top != null && top.isMouseOverThis(mouseX, mouseY))
-            handleReleaseEvents(top.getHoveredWidget(mouseX, mouseY), button);
-
+        MCVeraData.asTopHierarchy(app -> handleReleaseEvents(app.getHoveredWidget(mouseX, mouseY), button));
         Vera.forAllVisibleApps(app -> {
             if (app.isRequiresHierarchy()) return;
             handleReleaseEvents(app.getHoveredWidget(mouseX, mouseY), button);
