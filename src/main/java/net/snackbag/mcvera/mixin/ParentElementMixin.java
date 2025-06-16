@@ -69,6 +69,18 @@ public interface ParentElementMixin {
         });
     }
 
+    @Unique
+    private void handleReleaseEvents(@Nullable VWidget<?> widget, int button) {
+        if (widget == null) return;
+
+        switch (button) {
+            case 0 -> widget.fireEvent("left-click-release");
+            case 1 -> widget.fireEvent("right-click-release");
+            case 2 -> widget.fireEvent("middle-click-release");
+            default -> throw new IllegalArgumentException("Invalid button type: %d".formatted(button));
+        }
+    }
+
     @Inject(method = "mouseScrolled", at = @At("HEAD"))
     private void mcvera$handleMouseScroll(double mouseX, double mouseY, double amount, CallbackInfoReturnable<Boolean> cir) {
         Vera.forHoveredWidget((int) mouseX, (int) mouseY, (widget) -> {
