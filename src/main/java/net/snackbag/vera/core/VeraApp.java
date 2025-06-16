@@ -261,11 +261,6 @@ public abstract class VeraApp {
         return Geometry.isInBox(px, py, x, y, width, height);
     }
 
-    public boolean isMouseOverApp(int mouseX, int mouseY) {
-        if (!isVisible()) return false;
-        return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
-    }
-
     public void setFocusedWidget(@Nullable VWidget<?> widget) {
         if (this.focusedWidget != widget) {
             VWidget<?> oldWidget = this.focusedWidget;
