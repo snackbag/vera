@@ -3,6 +3,7 @@ package net.snackbag.mcvera;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.flag.VWindowPositioningFlag;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -29,5 +30,9 @@ public class MCVeraData {
 
         runnable.accept(appHierarchy.get(0));
         return true;
+    }
+
+    public static @Nullable VeraApp getTopHierarchy() {
+        return appHierarchy.isEmpty() ? null : appHierarchy.get(0);
     }
 }
