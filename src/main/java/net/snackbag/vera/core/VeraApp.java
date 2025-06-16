@@ -6,6 +6,7 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.flag.VWindowPositioningFlag;
 import net.snackbag.vera.style.VStyleSheet;
+import net.snackbag.vera.util.Geometry;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
@@ -256,8 +257,7 @@ public abstract class VeraApp {
         int widgetY = widget.getHitboxY() + y;
         int widgetWidth = widget.getHitboxWidth();
         int widgetHeight = widget.getHitboxHeight();
-        return mouseX >= widgetX && mouseX <= widgetX + widgetWidth &&
-                mouseY >= widgetY && mouseY <= widgetY + widgetHeight;
+        return Geometry.isInBox(mouseX, mouseY, widgetX, widgetY, widgetWidth, widgetHeight);
     }
 
     public boolean isMouseOverApp(int mouseX, int mouseY) {
