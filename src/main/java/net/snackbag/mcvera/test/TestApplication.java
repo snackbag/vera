@@ -49,11 +49,11 @@ public class TestApplication extends VeraApp {
 
         VLabel label = new VLabel("Hello world!", this).alsoAdd();
 
-        label.onMouseDragLeft((oldX, oldY, newX, newY) -> setCursorShape(VCursorShape.VERTICAL_RESIZE));
+        label.onMouseDragLeft((ctx) -> setCursorShape(VCursorShape.VERTICAL_RESIZE));
         label.onLeftClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
-        label.onMouseDragMiddle((oldX, oldY, newX, newY) -> setCursorShape(VCursorShape.ALL_RESIZE));
+        label.onMouseDragMiddle((ctx) -> setCursorShape(VCursorShape.ALL_RESIZE));
         label.onMiddleClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
-        label.onMouseDragRight((oldX, oldY, newX, newY) -> setCursorShape(VCursorShape.HORIZONTAL_RESIZE));
+        label.onMouseDragRight((ctx) -> setCursorShape(VCursorShape.HORIZONTAL_RESIZE));
         label.onRightClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
         label.onFilesDropped(System.out::println);
 
