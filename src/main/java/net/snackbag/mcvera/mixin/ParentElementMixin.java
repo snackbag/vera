@@ -38,7 +38,7 @@ public interface ParentElementMixin {
             handleClickEvents(app.getTopWidgetAt(mouseX, mouseY), button);
         });
 
-        Vera.forAllVisibleApps((app) -> {
+        Vera.forAllVisibleApps(app -> {
             if (app.isRequiresHierarchy()) return;
 
             VWidget<?> hoveredWidget = app.getTopWidgetAt(mouseX, mouseY);
