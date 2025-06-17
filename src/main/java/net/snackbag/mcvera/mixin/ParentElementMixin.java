@@ -67,6 +67,8 @@ public interface ParentElementMixin {
         MCVeraData.asTopHierarchy(app -> handleReleaseEvents(app.getTopWidgetAt(mouseX, mouseY), button));
         Vera.forAllVisibleApps(app -> {
             if (app.isRequiresHierarchy()) return;
+            if (!app.isPointOverThis(mouseX, mouseY)) return;
+
             handleReleaseEvents(app.getTopWidgetAt(mouseX, mouseY), button);
         });
     }
@@ -91,6 +93,8 @@ public interface ParentElementMixin {
         MCVeraData.asTopHierarchy(app -> handleScrollEvents(app.getTopWidgetAt(mouseX, mouseY), mouseX, mouseY, amount));
         Vera.forAllVisibleApps(app -> {
             if (app.isRequiresHierarchy()) return;
+            if (!app.isPointOverThis(mouseX, mouseY)) return;
+
             handleScrollEvents(app.getTopWidgetAt(mouseX, mouseY), mouseX, mouseY, amount);
         });
     }
