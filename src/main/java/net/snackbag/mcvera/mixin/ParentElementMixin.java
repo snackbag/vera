@@ -33,7 +33,8 @@ public interface ParentElementMixin {
         boolean finalJustChanged = justChanged; // weird java shit
         MCVeraData.asTopHierarchy(app -> {
             if (!app.isPointOverThis(mouseX, mouseY)) return;
-            if (!finalJustChanged) return;
+            if (finalJustChanged) return;
+
             handleClickEvents(app.getTopWidgetAt(mouseX, mouseY), button);
         });
 
