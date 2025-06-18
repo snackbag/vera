@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
 import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.vera.Vera;
+import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.widget.VWidget;
 import org.spongepowered.asm.mixin.Final;
@@ -35,6 +36,7 @@ public abstract class MouseMixin {
 
             VWidget<?> widget = app.getTopWidgetAt(mouseX, mouseY);
             if (widget != null) widget.fireEvent("mouse-move", mouseX, mouseY);
+            else if (app.getCursorShape() != VCursorShape.DEFAULT) app.setCursorShape(VCursorShape.DEFAULT);
         });
     }
 
