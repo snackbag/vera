@@ -78,7 +78,7 @@ public class TestApplication extends VeraApp {
         centerLabel.move(220, 10);
         centerLabel.setBorder(VColor.MC_BLUE, VColor.MC_GOLD, VColor.MC_RED, VColor.MC_GREEN);
         centerLabel.setBorderSize(5, 10, 8, 16);
-        centerLabel.setHoverCursor(VCursorShape.ALL_RESIZE);
+        centerLabel.setStyle("cursor", VCursorShape.ALL_RESIZE);
 
         VLabel rightLabel = new VLabel("RIGHT", this).alsoAdd();
         rightLabel.setAlignment(VAlignmentFlag.RIGHT);
