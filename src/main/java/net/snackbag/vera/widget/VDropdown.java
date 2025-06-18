@@ -15,7 +15,6 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
     private final List<Item> items;
     private VFont font;
     private VFont hoverFont;
-    private VColor backgroundColor;
     private VColor itemHoverColor;
     private V4Int padding;
 
@@ -29,7 +28,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         items = new ArrayList<>();
         font = VFont.create();
         hoverFont = VFont.create();
-        backgroundColor = VColor.white();
+        setStyle("background-color", VColor.white());
         itemHoverColor = VColor.white().sub(30);
         padding = new V4Int(5, 10);
 
@@ -38,6 +37,9 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
     @Override
     public void render() {
+        StyleState state = createStyleState();
+        VColor backgroundColor = getStyle("background-color", state);
+
         Vera.renderer.drawRect(
                 app, getHitboxX(), getHitboxY(), getHitboxWidth(), getHitboxHeight(),
                 0, backgroundColor
@@ -277,18 +279,6 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
     public VColor.ColorModifier modifyFontColor() {
         return new VColor.ColorModifier(font.getColor(), (color) -> setFont(font.withColor(color)));
-    }
-
-    public VColor getBackgroundColor() {
-        return backgroundColor;
-    }
-
-    public void setBackgroundColor(VColor backgroundColor) {
-        this.backgroundColor = backgroundColor;
-    }
-
-    public VColor.ColorModifier modifyBackgroundColor() {
-        return new VColor.ColorModifier(backgroundColor, this::setBackgroundColor);
     }
 
     public void addItem(String name) {
