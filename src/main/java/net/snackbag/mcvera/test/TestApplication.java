@@ -7,6 +7,7 @@ import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
+import net.snackbag.vera.style.StyleState;
 import net.snackbag.vera.widget.*;
 
 import java.nio.file.Path;
@@ -94,6 +95,7 @@ public class TestApplication extends VeraApp {
         image.move(0, 30);
         image.onMiddleClick(this::hideCursor);
         image.onMiddleClickRelease(this::showCursor);
+        image.setStyle("src", "minecraft:textures/block/diamond.png", StyleState.HOVERED);
 
         VDropdown dropdown = new VDropdown(this).alsoAdd();
         dropdown.addItem("coolio");
