@@ -48,6 +48,7 @@ public abstract class VWidget<T extends VWidget<T>> {
         addVisibilityCondition(this::isVisible);
 
         setStyle("overlay", VColor.transparent());
+        setStyle("cursor", VCursorShape.DEFAULT);
     }
 
     public abstract void render();
