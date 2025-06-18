@@ -16,6 +16,7 @@ public class VStyleSheet {
     public VStyleSheet() {
         // Generic
         reserveType("background-color", StyleValueType.COLOR);
+        reserveType("src", StyleValueType.IDENTIFIER);
 
         // Font
         reserveType("color", StyleValueType.COLOR);
