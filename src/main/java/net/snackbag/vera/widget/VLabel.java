@@ -3,6 +3,7 @@ package net.snackbag.vera.widget;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.modifier.VPaddingWidget;
+import net.snackbag.vera.style.StyleState;
 
 public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
     private String text;
@@ -68,7 +69,7 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
     }
 
     public void adjustSize() {
-        VFont font = getStyle("font");
+        VFont font = getStyle("font", createStyleState());
 
         this.width = Vera.provider.getTextWidth(text, font);
         this.height = Vera.provider.getTextHeight(text, font);
@@ -90,7 +91,10 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
     @Override
     public void render() {
         VeraApp app = getApp();
-        VFont font = getStyle("font");
+
+        StyleState state = createStyleState();
+        VFont font = getStyle("font", state);
+        VColor backgroundColor = getStyle("background-color", state);
 
         Vera.renderer.drawRect(
                 app,
@@ -99,7 +103,7 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
                 getHitboxWidth(),
                 getHitboxHeight(),
                 rotation,
-                getStyle("background-color")
+                backgroundColor
         );
 
         switch (alignment) {
