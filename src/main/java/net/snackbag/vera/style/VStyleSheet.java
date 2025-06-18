@@ -48,6 +48,8 @@ public class VStyleSheet {
                 throw new RuntimeException("Cannot set key %s, because it is reserved for type %s. Received: %s".formatted(key, res, valRes));
         } else reserveType(key, valRes);
 
+        value = StyleValueType.convert(value, valRes);
+
         if (!widgetSpecificStyles.containsKey(widget)) widgetSpecificStyles.put(widget, new HashMap<>());
         widgetSpecificStyles.get(widget).put(key, value);
     }
