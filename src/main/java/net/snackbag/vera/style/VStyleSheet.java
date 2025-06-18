@@ -23,6 +23,9 @@ public class VStyleSheet {
         // Checkbox
         reserveType("src-checked", StyleValueType.IDENTIFIER);
 
+        // Line Input
+        reserveType("select-color", StyleValueType.COLOR);
+
         // Font
         reserveType("color", StyleValueType.COLOR);
         reserveType("font", StyleValueType.FONT);
