@@ -28,6 +28,7 @@ public abstract class VWidget<T extends VWidget<T>> {
     private boolean leftClickDown = false;
     private boolean middleClickDown = false;
     private boolean rightClickDown = false;
+    private StyleState prevStyleState = StyleState.DEFAULT;
 
     private final HashMap<String, List<VEvent>> eventExecutors;
     private final List<Supplier<Boolean>> visibilityConditions;
@@ -260,7 +261,11 @@ public abstract class VWidget<T extends VWidget<T>> {
         this.rotation = rotation;
     }
 
-    public void update() {}
+    public void update() {
+        StyleState state = createStyleState();
+
+        app.setCursorShape(getStyle("cursor", state));
+    }
 
     public boolean isHovered() {
         return hovered;
@@ -401,6 +406,7 @@ public abstract class VWidget<T extends VWidget<T>> {
 
     public void handleBuiltinEvent(String event, Object... args) {
         StyleState state = createStyleState();
+        if (state != prevStyleState) update();
 
         switch (event) {
             case "left-click" -> {
@@ -424,6 +430,8 @@ public abstract class VWidget<T extends VWidget<T>> {
                 clearMiddleClickDown();
             }
         }
+
+        prevStyleState = state;
     }
 
     private void clearLeftClickDown() {
