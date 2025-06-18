@@ -5,6 +5,7 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.event.VItemSwitchEvent;
 import net.snackbag.vera.modifier.VPaddingWidget;
+import net.snackbag.vera.style.StyleState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -31,7 +32,8 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         backgroundColor = VColor.white();
         itemHoverColor = VColor.white().sub(30);
         padding = new V4Int(5, 10);
-        setHoverCursor(VCursorShape.POINTING_HAND);
+
+        setStyle("cursor", VCursorShape.POINTING_HAND, StyleState.HOVERED);
     }
 
     @Override

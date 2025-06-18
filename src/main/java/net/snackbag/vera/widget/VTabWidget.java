@@ -6,6 +6,7 @@ import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.style.StyleState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -29,7 +30,7 @@ public class VTabWidget extends VWidget<VTabWidget> {
         selectedBackgroundColor = VColor.white();
         defaultBackgroundColor = VColor.white().sub(40);
 
-        setHoverCursor(VCursorShape.POINTING_HAND);
+        setStyle("cursor", VCursorShape.POINTING_HAND, StyleState.HOVERED);
     }
 
     @Override

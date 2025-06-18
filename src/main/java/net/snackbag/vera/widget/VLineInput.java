@@ -6,6 +6,7 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.event.VCharLimitedEvent;
 import net.snackbag.vera.modifier.VPaddingWidget;
+import net.snackbag.vera.style.StyleState;
 import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
@@ -41,7 +42,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         this.backgroundColor = VColor.transparent();
         this.padding = new V4Int(4);
 
-        setHoverCursor(VCursorShape.TEXT);
+        setStyle("cursor", VCursorShape.TEXT, StyleState.HOVERED);
     }
 
     @Override
