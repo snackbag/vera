@@ -15,8 +15,8 @@ public class VCheckBox extends VWidget<VCheckBox> {
     public VCheckBox(VeraApp app) {
         this(
                 app,
-                new Identifier(MinecraftVera.MOD_ID, "widget/checkmark/default.png"),
-                new Identifier(MinecraftVera.MOD_ID, "widget/checkmark/checked.png")
+                new Identifier(MinecraftVera.MOD_ID, "widgets/checkmark/default.png"),
+                new Identifier(MinecraftVera.MOD_ID, "widgets/checkmark/checked.png")
         );
     }
 
