@@ -29,7 +29,7 @@ public enum StyleValueType {
 
         else if (val instanceof Identifier) return IDENTIFIER;
         else if (val instanceof Integer) return INT;
-        else if (val instanceof Float) return FLOAT;
+        else if (val instanceof Float || val instanceof Double) return FLOAT;
         else if (val instanceof VColor) return COLOR;
         else if (val instanceof VFont) return FONT;
         else throw new RuntimeException("%s isn't a valid style type".formatted(val.getClass().getName()));
