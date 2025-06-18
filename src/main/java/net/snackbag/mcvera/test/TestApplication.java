@@ -89,7 +89,7 @@ public class TestApplication extends VeraApp {
         rightLabel.onRightClick(() -> System.out.println(Vera.openFileSelector("test", Path.of("/Volumes/Media"), null)));
 
         VImage image = new VImage(
-                Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/dirt.png"),
+                "minecraft:textures/block/dirt.png",
                 32, 32, this).alsoAdd();
         image.move(0, 30);
         image.onMiddleClick(this::hideCursor);
