@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 public class VStyleSheet {
-    private final HashMap<VWidget<?>, HashMap<String, Object>> widgetSpecificStyles = new HashMap<>();
-    private final HashMap<String, HashMap<String, Object>> styleClasses = new HashMap<>();
+    private final HashMap<VWidget<?>, HashMap<String, HashMap<StyleState, Object>>> widgetSpecificStyles = new HashMap<>();
+    private final HashMap<String, HashMap<String, HashMap<StyleState, Object>>> styleClasses = new HashMap<>();
     private final HashMap<String, StyleValueType> typeRegistry = new HashMap<>();
 
     public VStyleSheet() {
@@ -26,20 +26,30 @@ public class VStyleSheet {
     }
 
     public <T> T getKey(VWidget<?> widget, String key) {
+        return getKey(widget, key, StyleState.DEFAULT);
+    }
+
+    public <T> T getKey(VWidget<?> widget, String key, StyleState state) {
         if (widgetSpecificStyles.containsKey(widget) && widgetSpecificStyles.get(widget).containsKey(key)) {
-            return (T) widgetSpecificStyles.get(widget).get(key);
+            if (!widgetSpecificStyles.get(widget).get(key).containsKey(state)) return getKey(widget, key, state.fallback);
+            return (T) widgetSpecificStyles.get(widget).get(key).get(state);
         }
 
-        HashMap<String, Object> mixed = mixClasses(widget.classes);
+        HashMap<String, HashMap<StyleState, Object>> mixed = mixClasses(widget.classes);
 
         if (mixed.containsKey(key)) {
-            return (T) mixed.get(key);
+            if (!mixed.get(key).containsKey(state)) return getKey(widget, key, state.fallback);
+            return (T) mixed.get(key).get(state);
         }
 
         return null;
     }
 
-    public void setKey(VWidget<?> widget, String key, Object value) {
+    public void setKey(VWidget<?> widget, String key, Object object) {
+        setKey(widget, key, object, StyleState.DEFAULT);
+    }
+
+    public void setKey(VWidget<?> widget, String key, Object value, StyleState state) {
         StyleValueType res = getReservation(key);
         StyleValueType valRes = StyleValueType.get(value, res);
 
@@ -51,7 +61,8 @@ public class VStyleSheet {
         value = StyleValueType.convert(value, valRes);
 
         if (!widgetSpecificStyles.containsKey(widget)) widgetSpecificStyles.put(widget, new HashMap<>());
-        widgetSpecificStyles.get(widget).put(key, value);
+        if (!widgetSpecificStyles.get(widget).containsKey(key)) widgetSpecificStyles.get(widget).put(key, new HashMap<>());
+        widgetSpecificStyles.get(widget).get(key).put(state, value);
     }
 
     public VColor.ColorModifier modifyKeyAsColor(VWidget<?> widget, String key) {
@@ -70,15 +81,15 @@ public class VStyleSheet {
         return typeRegistry.getOrDefault(key, null);
     }
 
-    public HashMap<String, Object> getClassStyles(String clazz) {
+    public HashMap<String, HashMap<StyleState, Object>> getClassStyles(String clazz) {
         return styleClasses.getOrDefault(clazz, new HashMap<>());
     }
 
-    public HashMap<String, Object> mixClasses(LinkedHashSet<String> classes) {
-        final HashMap<String, Object> values = new HashMap<>();
+    public HashMap<String, HashMap<StyleState, Object>> mixClasses(LinkedHashSet<String> classes) {
+        final HashMap<String, HashMap<StyleState, Object>> values = new HashMap<>();
 
         for (String clazz : classes) {
-            HashMap<String, Object> styles = getClassStyles(clazz);
+            HashMap<String, HashMap<StyleState, Object>> styles = getClassStyles(clazz);
             for (String key : styles.keySet()) values.put(key, styles.get(key));
         }
 
