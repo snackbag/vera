@@ -12,6 +12,10 @@ public class VImage extends VWidget<VImage> {
         this.focusOnClick = false;
     }
 
+    public VImage(String path, int width, int height, VeraApp app) {
+        this(new Identifier(path), width, height, app);
+    }
+
     @Override
     public void render() {
         VeraApp app = getApp();
