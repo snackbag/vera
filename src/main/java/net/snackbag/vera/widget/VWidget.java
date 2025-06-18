@@ -169,7 +169,7 @@ public abstract class VWidget<T extends VWidget<T>> {
     }
 
     public <V> V getStyleOrDefault(String key, V dflt, StyleState state) {
-        V style = getStyle(key);
+        V style = getStyle(key, state);
         return style != null ? style : dflt;
     }
 
