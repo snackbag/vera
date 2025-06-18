@@ -34,7 +34,9 @@ public class VStyleSheet {
         return getKey(widget, key, StyleState.DEFAULT);
     }
 
-    public <T> T getKey(VWidget<?> widget, String key, StyleState state) {
+    public <T> T getKey(VWidget<?> widget, String key, @Nullable StyleState state) {
+        if (state == null) state = StyleState.DEFAULT;
+
         if (widgetSpecificStyles.containsKey(widget) && widgetSpecificStyles.get(widget).containsKey(key)) {
             if (!widgetSpecificStyles.get(widget).get(key).containsKey(state)) return getKey(widget, key, state.fallback);
             return (T) widgetSpecificStyles.get(widget).get(key).get(state);
@@ -54,7 +56,9 @@ public class VStyleSheet {
         setKey(widget, key, object, StyleState.DEFAULT);
     }
 
-    public void setKey(VWidget<?> widget, String key, Object value, StyleState state) {
+    public void setKey(VWidget<?> widget, String key, Object value, @Nullable StyleState state) {
+        if (state == null) state = StyleState.DEFAULT;
+
         StyleValueType res = getReservation(key);
         StyleValueType valRes = StyleValueType.get(value, res);
 
