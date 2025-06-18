@@ -6,7 +6,7 @@ public enum StyleState {
     DEFAULT("default"),
     HOVERED("hover", DEFAULT),
 
-    CLICKED("clicked", DEFAULT),
+    CLICKED("clicked", HOVERED),
     LEFT_CLICKED("left-click", CLICKED),
     MIDDLE_CLICKED("middle-click", CLICKED),
     RIGHT_CLICKED("right-click", CLICKED),
