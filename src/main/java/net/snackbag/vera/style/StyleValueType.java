@@ -21,8 +21,13 @@ public enum StyleValueType {
         this.standard = standard;
     }
 
-    public static StyleValueType get(Object val) {
-        if (val instanceof String) return STRING;
+    public static StyleValueType get(Object val, @Nullable StyleValueType bias) {
+        if (val instanceof String s) {
+            if (bias == IDENTIFIER && s.matches("^[\\w-./]*:[\\w-./]*$")) return IDENTIFIER;
+            return STRING;
+        }
+
+        else if (val instanceof Identifier) return IDENTIFIER;
         else if (val instanceof Integer) return INT;
         else if (val instanceof Float) return FLOAT;
         else if (val instanceof VColor) return COLOR;
