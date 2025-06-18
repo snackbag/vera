@@ -1,10 +1,14 @@
 package net.snackbag.vera.style;
 
+import net.minecraft.util.Identifier;
+import net.snackbag.mcvera.MinecraftVera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
+import org.jetbrains.annotations.Nullable;
 
 public enum StyleValueType {
     STRING(""),
+    IDENTIFIER(Identifier.of(MinecraftVera.MOD_ID, "empty")),
     INT(0),
     FLOAT(0.0F),
 
