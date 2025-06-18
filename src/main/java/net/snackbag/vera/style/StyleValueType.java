@@ -37,6 +37,7 @@ public enum StyleValueType {
 
     public static Object convert(Object value, StyleValueType to) {
         if (to == IDENTIFIER && value instanceof String v) return new Identifier(v);
+        else if (to == FLOAT && value instanceof Double v) return v.floatValue();
         return value;
     }
 }
