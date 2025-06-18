@@ -32,6 +32,7 @@ public enum StyleValueType {
         }
 
         else if (val instanceof Identifier) return IDENTIFIER;
+        else if (val instanceof VCursorShape) return CURSOR;
         else if (val instanceof Integer) return INT;
         else if (val instanceof Float || val instanceof Double) return FLOAT;
         else if (val instanceof VColor) return COLOR;
