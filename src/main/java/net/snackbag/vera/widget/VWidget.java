@@ -21,7 +21,6 @@ public abstract class VWidget<T extends VWidget<T>> {
     protected V4Int borderSize;
 
     protected VeraApp app;
-    protected VCursorShape hoverCursor = VCursorShape.DEFAULT;
     protected boolean focusOnClick = true;
     private boolean hovered = false;
     private boolean visible = true;
@@ -400,6 +399,8 @@ public abstract class VWidget<T extends VWidget<T>> {
     }
 
     public void handleBuiltinEvent(String event, Object... args) {
+        StyleState state = createStyleState();
+
         switch (event) {
             case "left-click" -> {
                 if (shouldFocusOnClick()) {
@@ -415,7 +416,7 @@ public abstract class VWidget<T extends VWidget<T>> {
             case "right-click-release" -> clearRightClickDown();
             case "middle-click-release" -> clearMiddleClickDown();
 
-            case "hover" -> app.setCursorShape(hoverCursor);
+            case "hover" -> app.setCursorShape(getStyle("cursor", state));
             case "hover-leave" -> {
                 clearLeftClickDown();
                 clearRightClickDown();
@@ -434,14 +435,6 @@ public abstract class VWidget<T extends VWidget<T>> {
 
     private void clearMiddleClickDown() {
         middleClickDown = false;
-    }
-
-    public VCursorShape getHoverCursor() {
-        return hoverCursor;
-    }
-
-    public void setHoverCursor(@Nullable VCursorShape hoverCursor) {
-        this.hoverCursor = hoverCursor == null ? VCursorShape.DEFAULT : hoverCursor;
     }
 
     public boolean isFocused() {
