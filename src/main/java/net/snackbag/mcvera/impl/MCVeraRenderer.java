@@ -77,6 +77,7 @@ public class MCVeraRenderer {
             if (widget.visibilityConditionsPassed()) {
                 widget.render();
                 widget.renderBorder();
+                widget.renderOverlay();
             }
         }
         app.renderAfterWidgets();

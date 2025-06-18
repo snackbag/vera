@@ -206,6 +206,12 @@ public abstract class VWidget<T extends VWidget<T>> {
         }
     }
 
+    public void renderOverlay() {
+        StyleState state = createStyleState();
+
+        Vera.renderer.drawRect(app, x, y, width, height, 0, getStyle("overlay", state));
+    }
+
     public void setSize(int width, int height) {
         setWidth(width);
         setHeight(height);
