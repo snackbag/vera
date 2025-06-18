@@ -41,7 +41,7 @@ public class VStyleSheet {
 
     public void setKey(VWidget<?> widget, String key, Object value) {
         StyleValueType res = getReservation(key);
-        StyleValueType valRes = StyleValueType.get(value);
+        StyleValueType valRes = StyleValueType.get(value, res);
 
         if (res != null) {
             if (valRes != res)
