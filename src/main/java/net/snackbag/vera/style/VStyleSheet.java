@@ -16,6 +16,7 @@ public class VStyleSheet {
     public VStyleSheet() {
         // Generic
         reserveType("background-color", StyleValueType.COLOR);
+        reserveType("src", StyleValueType.IDENTIFIER);
 
         // Font
         reserveType("color", StyleValueType.COLOR);
@@ -40,12 +41,14 @@ public class VStyleSheet {
 
     public void setKey(VWidget<?> widget, String key, Object value) {
         StyleValueType res = getReservation(key);
-        StyleValueType valRes = StyleValueType.get(value);
+        StyleValueType valRes = StyleValueType.get(value, res);
 
         if (res != null) {
             if (valRes != res)
                 throw new RuntimeException("Cannot set key %s, because it is reserved for type %s. Received: %s".formatted(key, res, valRes));
         } else reserveType(key, valRes);
+
+        value = StyleValueType.convert(value, valRes);
 
         if (!widgetSpecificStyles.containsKey(widget)) widgetSpecificStyles.put(widget, new HashMap<>());
         widgetSpecificStyles.get(widget).put(key, value);
