@@ -15,8 +15,12 @@ public class VStyleSheet {
 
     public VStyleSheet() {
         // Generic
+        reserveType("overlay", StyleValueType.COLOR);
         reserveType("background-color", StyleValueType.COLOR);
         reserveType("src", StyleValueType.IDENTIFIER);
+
+        // Checkbox
+        reserveType("src-checked", StyleValueType.IDENTIFIER);
 
         // Font
         reserveType("color", StyleValueType.COLOR);
