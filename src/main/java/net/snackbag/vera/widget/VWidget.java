@@ -47,6 +47,8 @@ public abstract class VWidget<T extends VWidget<T>> {
         this.borderSize = new V4Int(0);
 
         addVisibilityCondition(this::isVisible);
+
+        setStyle("overlay", VColor.transparent());
     }
 
     public abstract void render();
