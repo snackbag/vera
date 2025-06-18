@@ -3,10 +3,10 @@ package net.snackbag.vera.style;
 import org.jetbrains.annotations.Nullable;
 
 public enum StyleState {
-    IDLE("default"),
-    HOVERED("hover", IDLE),
+    DEFAULT("default"),
+    HOVERED("hover", DEFAULT),
 
-    CLICKED("any-click", IDLE),
+    CLICKED("any-click", DEFAULT),
     LEFT_CLICKED("left-click", CLICKED),
     MIDDLE_CLICKED("middle-click", CLICKED),
     RIGHT_CLICKED("right-click", CLICKED),
