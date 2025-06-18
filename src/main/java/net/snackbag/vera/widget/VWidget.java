@@ -173,6 +173,11 @@ public abstract class VWidget<T extends VWidget<T>> {
         return style != null ? style : dflt;
     }
 
+    public StyleState createStyleState() {
+        if (isHovered()) return StyleState.HOVERED;
+        else return StyleState.DEFAULT;
+    }
+
     public void renderBorder() {
         // TODO: [Render Rework] Better border rendering
 
