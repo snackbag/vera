@@ -18,6 +18,7 @@ public class VStyleSheet {
         reserveType("overlay", StyleValueType.COLOR);
         reserveType("background-color", StyleValueType.COLOR);
         reserveType("src", StyleValueType.IDENTIFIER);
+        reserveType("cursor", StyleValueType.CURSOR);
 
         // Checkbox
         reserveType("src-checked", StyleValueType.IDENTIFIER);
