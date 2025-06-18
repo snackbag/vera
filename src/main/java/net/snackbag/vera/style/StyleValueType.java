@@ -29,4 +29,9 @@ public enum StyleValueType {
         else if (val instanceof VFont) return FONT;
         else throw new RuntimeException("%s isn't a valid style type".formatted(val.getClass().getName()));
     }
+
+    public static Object convert(Object value, StyleValueType to) {
+        if (to == IDENTIFIER && value instanceof String v) return new Identifier(v);
+        return value;
+    }
 }
