@@ -3,6 +3,7 @@ package net.snackbag.vera.widget;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.event.*;
+import net.snackbag.vera.style.StyleState;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -150,11 +151,24 @@ public abstract class VWidget<T extends VWidget<T>> {
         app.styleSheet.setKey(this, key, value);
     }
 
+    public void setStyle(String key, Object value, StyleState state) {
+        app.styleSheet.setKey(this, key, value, state);
+    }
+
     public <V> V getStyle(String key) {
         return app.styleSheet.getKey(this, key);
     }
 
+    public <V> V getStyle(String key, StyleState state) {
+        return app.styleSheet.getKey(this, key, state);
+    }
+
     public <V> V getStyleOrDefault(String key, V dflt) {
+        V style = getStyle(key);
+        return style != null ? style : dflt;
+    }
+
+    public <V> V getStyleOrDefault(String key, V dflt, StyleState state) {
         V style = getStyle(key);
         return style != null ? style : dflt;
     }
