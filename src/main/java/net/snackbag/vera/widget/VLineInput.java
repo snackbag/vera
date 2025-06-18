@@ -20,10 +20,8 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
     private @Nullable VColor cursorColor;
     private int cursorPos;
     private TextSelection textSelection;
-    private VColor textSelectionColor;
     private int maxChars;
 
-    private VColor backgroundColor;
     private V4Int padding;
 
     public VLineInput(VeraApp app) {
@@ -36,10 +34,10 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         this.cursorColor = null;
         this.cursorPos = 0;
         this.textSelection = new TextSelection();
-        this.textSelectionColor = VColor.of(0, 120, 215, 0.2f);
+        setStyle("select-color", VColor.of(0, 120, 215, 0.2f));
         this.maxChars = -1;
 
-        this.backgroundColor = VColor.transparent();
+        setStyle("background-color", VColor.transparent());
         this.padding = new V4Int(4);
 
         setStyle("cursor", VCursorShape.TEXT, StyleState.HOVERED);
@@ -47,6 +45,11 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
 
     @Override
     public void render() {
+        StyleState state = createStyleState();
+
+        VColor backgroundColor = getStyle("background-color", state);
+        VColor textSelectionColor = getStyle("select-color", state);
+
         Vera.renderer.drawRect(
                 app,
                 getHitboxX() + app.getX(),
@@ -136,18 +139,6 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         return new VColor.ColorModifier(font.getColor(), (color) -> setFont(font.withColor(color)));
     }
 
-    public VColor getBackgroundColor() {
-        return backgroundColor;
-    }
-
-    public void setBackgroundColor(VColor backgroundColor) {
-        this.backgroundColor = backgroundColor;
-    }
-
-    public VColor.ColorModifier modifyBackgroundColor() {
-        return new VColor.ColorModifier(backgroundColor, this::setBackgroundColor);
-    }
-
     public String getText() {
         return text;
     }
@@ -176,18 +167,6 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
     public void setTextSelection(int start, int end) {
         textSelection.setStartPos(start);
         textSelection.setEndPos(end);
-    }
-
-    public VColor getTextSelectionColor() {
-        return textSelectionColor;
-    }
-
-    public void setTextSelectionColor(VColor textSelectionColor) {
-        this.textSelectionColor = textSelectionColor;
-    }
-
-    public VColor.ColorModifier modifyTextSelectionColor() {
-        return new VColor.ColorModifier(textSelectionColor, this::setTextSelectionColor);
     }
 
     public int getMaxChars() {
