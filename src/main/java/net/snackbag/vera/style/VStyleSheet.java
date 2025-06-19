@@ -25,6 +25,7 @@ public class VStyleSheet {
 
         // Line Input
         reserveType("select-color", StyleValueType.COLOR);
+        reserveType("color-cursor", StyleValueType.COLOR);
 
         // Font
         reserveType("color", StyleValueType.COLOR);

@@ -17,7 +17,6 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
     private VFont font;
     private VFont placeholderFont;
 
-    private @Nullable VColor cursorColor;
     private int cursorPos;
     private TextSelection textSelection;
     private int maxChars;
@@ -31,7 +30,6 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         this.placeholderText = "";
         this.font = VFont.create();
         this.placeholderFont = VFont.create().withColor(VColor.black().withOpacity(0.5f));
-        this.cursorColor = null;
         this.cursorPos = 0;
         this.textSelection = new TextSelection();
         setStyle("select-color", VColor.of(0, 120, 215, 0.2f));
@@ -413,16 +411,10 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         this.cursorPos = cursorPos;
     }
 
-    public @Nullable VColor getCursorColor() {
-        return cursorColor;
-    }
-
     public VColor getCursorColorSafe() {
-        return cursorColor == null ? font.getColor() : cursorColor;
-    }
+        VColor style = getStyleOrDefault("cursor-color", null);
 
-    public void setCursorColor(@Nullable VColor cursorColor) {
-        this.cursorColor = cursorColor;
+        return style == null ? font.getColor() : style;
     }
 
     @Override
