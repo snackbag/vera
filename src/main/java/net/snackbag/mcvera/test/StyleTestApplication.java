@@ -3,6 +3,7 @@ package net.snackbag.mcvera.test;
 import net.minecraft.util.Identifier;
 import net.snackbag.mcvera.MinecraftVera;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.widget.VLabel;
 
 public class StyleTestApplication extends VeraApp {
@@ -10,6 +11,8 @@ public class StyleTestApplication extends VeraApp {
 
     @Override
     public void init() {
+        new VShortcut(this, "escape", this::hide).alsoAdd();
+
         //loadStyleSheet(new Identifier(MinecraftVera.MOD_ID, "demo/test.vss"));
 
         new VLabel("helo", this).alsoAdd();
