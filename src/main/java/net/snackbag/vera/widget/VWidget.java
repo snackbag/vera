@@ -21,7 +21,7 @@ public abstract class VWidget<T extends VWidget<T>> {
     protected V4Int borderSize;
 
     protected VeraApp app;
-    protected boolean focusOnClick = true;
+    public boolean focusOnClick = true;
     private boolean hovered = false;
     private boolean visible = true;
 
@@ -410,7 +410,7 @@ public abstract class VWidget<T extends VWidget<T>> {
 
         switch (event) {
             case "left-click" -> {
-                if (shouldFocusOnClick()) {
+                if (focusOnClick) {
                     setFocused(true);
                 }
                 leftClickDown = true;
@@ -453,14 +453,6 @@ public abstract class VWidget<T extends VWidget<T>> {
     public void setFocused(boolean focused) {
         if (focused) app.setFocusedWidget(this);
         else app.setFocusedWidget(null);
-    }
-
-    public boolean shouldFocusOnClick() {
-        return focusOnClick;
-    }
-
-    public void setFocusOnClick(boolean focus) {
-        focusOnClick = focus;
     }
 
     public void keyPressed(int keyCode, int scanCode, int modifiers) {}
