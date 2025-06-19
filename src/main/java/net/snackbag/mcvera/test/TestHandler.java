@@ -1,10 +1,8 @@
 package net.snackbag.mcvera.test;
 
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.InputUtil;
-import org.lwjgl.glfw.GLFW;
+import net.snackbag.mcvera.InternalCommands;
 
 public class TestHandler {
     public static boolean shouldTest() {
@@ -14,14 +12,6 @@ public class TestHandler {
     public static void impl(boolean force) {
         if (!(force || shouldTest())) return;
 
-        ClientTickEvents.END_CLIENT_TICK.register((client) -> {
-            if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_APOSTROPHE)) {
-                if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT)) {
-                    StyleTestApplication.INSTANCE.show();
-                } else {
-                    TestApplication.INSTANCE.setVisibility(true);
-                }
-            }
-        });
+        ClientCommandRegistrationCallback.EVENT.register(InternalCommands::register);
     }
 }
