@@ -45,7 +45,7 @@ public class TestApplication extends VeraApp {
         input.onMouseMove((x, y) -> System.out.println("x=" + x + ", y=" + y));
 
         input.move(50);
-        input.setBackgroundColor(VColor.white());
+        input.setStyle("background-color", VColor.white());
         setFocusedWidget(input);
 
         VLabel label = new VLabel("Hello world!", this).alsoAdd();
