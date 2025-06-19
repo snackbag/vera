@@ -4,15 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
-import net.snackbag.mcvera.impl.MCVeraRenderer;
 import net.snackbag.mcvera.test.TestHandler;
 import net.snackbag.vera.Vera;
-import net.snackbag.vera.core.VeraApp;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
