@@ -363,6 +363,7 @@ public abstract class VWidget<T extends VWidget<T>> {
     public void handleBuiltinEvent(String event, Object... args) {
         StyleState state = createStyleState();
         if (state != prevStyleState) update();
+        prevStyleState = state;
 
         switch (event) {
             case "left-click" -> {
@@ -387,6 +388,8 @@ public abstract class VWidget<T extends VWidget<T>> {
             }
         }
 
+        state = createStyleState();
+        if (state != prevStyleState) update();
         prevStyleState = state;
     }
 
