@@ -32,7 +32,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         itemHoverColor = VColor.white().sub(30);
         padding = new V4Int(5, 10);
 
-        setStyle("cursor", VCursorShape.POINTING_HAND, StyleState.HOVERED);
+        setStyle("cursor", StyleState.HOVERED, VCursorShape.POINTING_HAND);
     }
 
     @Override

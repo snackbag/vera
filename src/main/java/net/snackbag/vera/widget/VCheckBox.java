@@ -33,7 +33,7 @@ public class VCheckBox extends VWidget<VCheckBox> {
         setStyle("src-checked", checkedTexture);
         setStyle("overlay", VColor.transparent());
 
-        setStyle("cursor", VCursorShape.POINTING_HAND, StyleState.HOVERED);
+        setStyle("cursor", StyleState.HOVERED, VCursorShape.POINTING_HAND);
     }
 
     @Override

@@ -38,7 +38,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         setStyle("background-color", VColor.transparent());
         this.padding = new V4Int(4);
 
-        setStyle("cursor", VCursorShape.TEXT, StyleState.HOVERED);
+        setStyle("cursor", StyleState.HOVERED, VCursorShape.TEXT);
     }
 
     @Override
