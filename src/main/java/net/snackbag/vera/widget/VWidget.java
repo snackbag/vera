@@ -122,7 +122,13 @@ public abstract class VWidget<T extends VWidget<T>> {
     }
 
     public StyleState createStyleState() {
-        if (isHovered()) return StyleState.HOVERED;
+        // Clicks first
+        if (leftClickDown) return StyleState.LEFT_CLICKED;
+        else if (middleClickDown) return StyleState.MIDDLE_CLICKED;
+        else if (rightClickDown) return StyleState.RIGHT_CLICKED;
+
+        // Hover as last, since everything else is hover too
+        else if (isHovered()) return StyleState.HOVERED;
         else return StyleState.DEFAULT;
     }
 
