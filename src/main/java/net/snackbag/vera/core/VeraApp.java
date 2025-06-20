@@ -186,6 +186,13 @@ public abstract class VeraApp {
         return new ArrayList<>(widgets);
     }
 
+    public List<VWidget<?>> getWidgetsReversed() {
+        List<VWidget<?>> widgets = getWidgets();
+        Collections.reverse(widgets);
+
+        return widgets;
+    }
+
     public void addWidget(VWidget<?> widget) {
         this.widgets.add(widget);
     }
@@ -239,7 +246,7 @@ public abstract class VeraApp {
         int mx = px - x;
         int my = py - y;
 
-        return getWidgets().parallelStream()
+        return getWidgetsReversed().parallelStream()
                 .filter(widget -> isPointOverWidget(widget, mx, my))
                 .filter(VWidget::visibilityConditionsPassed)
                 .findFirst().orElse(null);
