@@ -5,6 +5,7 @@ import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
@@ -64,6 +65,10 @@ public class VStyleSheet {
 
     public void setKey(VWidget<?> widget, String key, Object value, @Nullable StyleState state) {
         if (state == null) state = StyleState.DEFAULT;
+        if (value.getClass().isArray()) {
+            int length = Array.getLength(value);
+            if (length == 1) value = Array.get(value, 0);
+        }
 
         StyleValueType res = getReservation(key);
         StyleValueType valRes = StyleValueType.get(value, res);
