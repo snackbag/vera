@@ -32,8 +32,8 @@ public enum StyleValueType {
             return STRING;
         }
 
-        else if (val instanceof V4Color || val instanceof VColor[]) return V4COLOR;
-        else if (val instanceof V4Int || val instanceof int[]) return V4INT;
+        else if (val instanceof V4Color || (bias == V4COLOR && (val instanceof VColor[] || val instanceof VColor))) return V4COLOR;
+        else if (val instanceof V4Int || (bias == V4INT && (val instanceof int[] || val instanceof Integer[] || val instanceof Integer))) return V4INT;
         else if (val instanceof Identifier) return IDENTIFIER;
         else if (val instanceof VCursorShape) return CURSOR;
         else if (val instanceof Integer) return INT;
@@ -49,7 +49,9 @@ public enum StyleValueType {
             else if (to == CURSOR) return EnumUtils.getEnumIgnoreCase(VCursorShape.class, v);
         }
 
-        else if (value instanceof int[] v) {
+        else if (value instanceof int[] || value instanceof Integer[]) {
+            Integer[] v = (Integer[]) value;
+
             return switch (v.length) {
                 case 1 -> new V4Int(v[0]);
                 case 2 -> new V4Int(v[0], v[1]);
@@ -57,6 +59,8 @@ public enum StyleValueType {
                 default -> throw new RuntimeException("invalid V4Int format. Length must be 1, 2 or 4. Provided: %d".formatted(v.length));
             };
         }
+
+        else if (value instanceof Integer v && to == V4INT) return new V4Int(v);
 
         else if (value instanceof VColor[] v) {
             return switch (v.length) {
@@ -66,6 +70,8 @@ public enum StyleValueType {
                 default -> throw new RuntimeException("invalid V4Color format. Length must be 1, 2 or 4. Provided: %d".formatted(v.length));
             };
         }
+
+        else if (value instanceof VColor v && to == V4COLOR) return new V4Color(v);
 
         else if (to == FLOAT && value instanceof Double v) return v.floatValue();
         return value;
