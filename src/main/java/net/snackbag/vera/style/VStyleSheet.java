@@ -21,6 +21,10 @@ public class VStyleSheet {
         reserveType("src", StyleValueType.IDENTIFIER);
         reserveType("cursor", StyleValueType.CURSOR);
 
+        // Border
+        reserveType("border-color", StyleValueType.V4COLOR);
+        reserveType("border-size", StyleValueType.V4INT);
+
         // Checkbox
         reserveType("src-checked", StyleValueType.IDENTIFIER);
 
