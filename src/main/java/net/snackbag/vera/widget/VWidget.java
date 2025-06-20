@@ -93,11 +93,13 @@ public abstract class VWidget<T extends VWidget<T>> {
         this.height = height;
     }
 
-    public void setStyle(String key, Object value) {
+    @SuppressWarnings("unchecked")
+    public <V> void setStyle(String key, V... value) {
         app.styleSheet.setKey(this, key, value);
     }
 
-    public void setStyle(String key, Object value, StyleState state) {
+    @SuppressWarnings("unchecked")
+    public <V> void setStyle(String key, StyleState state, V... value) {
         app.styleSheet.setKey(this, key, value, state);
     }
 
