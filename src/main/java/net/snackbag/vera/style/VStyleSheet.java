@@ -17,6 +17,7 @@ public class VStyleSheet {
         // Generic
         reserveType("overlay", StyleValueType.COLOR);
         reserveType("background-color", StyleValueType.COLOR);
+        reserveType("color", StyleValueType.COLOR);
         reserveType("src", StyleValueType.IDENTIFIER);
         reserveType("cursor", StyleValueType.CURSOR);
 
@@ -28,10 +29,7 @@ public class VStyleSheet {
         reserveType("color-cursor", StyleValueType.COLOR);
 
         // Font
-        reserveType("color", StyleValueType.COLOR);
         reserveType("font", StyleValueType.FONT);
-        reserveType("font-size", StyleValueType.INT);
-        reserveType("font-name", StyleValueType.STRING);
     }
 
     public <T> T getKey(VWidget<?> widget, String key) {
