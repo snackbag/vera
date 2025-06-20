@@ -4,7 +4,6 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.event.*;
 import net.snackbag.vera.style.StyleState;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
@@ -17,8 +16,6 @@ public abstract class VWidget<T extends VWidget<T>> {
     protected int width;
     protected int height;
     protected double rotation;
-    protected V4Color border;
-    protected V4Int borderSize;
 
     protected VeraApp app;
     public boolean focusOnClick = true;
@@ -43,13 +40,15 @@ public abstract class VWidget<T extends VWidget<T>> {
         this.rotation = 0;
         this.eventExecutors = new HashMap<>();
         this.visibilityConditions = new ArrayList<>();
-        this.border = new V4Color(VColor.black());
-        this.borderSize = new V4Int(0);
 
         addVisibilityCondition(this::isVisible);
 
         setStyle("overlay", VColor.transparent());
         setStyle("cursor", VCursorShape.DEFAULT);
+
+        // Border
+        setStyle("border-color", new V4Color(VColor.black()));
+        setStyle("border-size", new V4Int(0));
     }
 
     public abstract void render();
@@ -94,62 +93,6 @@ public abstract class VWidget<T extends VWidget<T>> {
         this.height = height;
     }
 
-    public V4Color getBorder() {
-        return border;
-    }
-
-    @Deprecated(forRemoval = true)
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.10.0")
-    public void setBorder(V4Color border) {
-        this.border = border;
-    }
-
-    @Deprecated(forRemoval = true)
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.10.0")
-    public void setBorder(VColor all) {
-        setBorder(new V4Color(all));
-    }
-
-    @Deprecated(forRemoval = true)
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.10.0")
-    public void setBorder(VColor tb, VColor lr) {
-        setBorder(new V4Color(tb, lr));
-    }
-
-    @Deprecated(forRemoval = true)
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.10.0")
-    public void setBorder(VColor top, VColor bottom, VColor left, VColor right) {
-        setBorder(new V4Color(top, bottom, left, right));
-    }
-
-    public V4Int getBorderSize() {
-        return borderSize;
-    }
-
-    @Deprecated(forRemoval = true)
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.10.0")
-    public void setBorderSize(V4Int borderSize) {
-        this.borderSize = borderSize;
-    }
-
-    @Deprecated(forRemoval = true)
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.10.0")
-    public void setBorderSize(int all) {
-        setBorderSize(new V4Int(all));
-    }
-
-    @Deprecated(forRemoval = true)
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.10.0")
-    public void setBorderSize(int tb, int lr) {
-        setBorderSize(new V4Int(tb, lr));
-    }
-
-    @Deprecated(forRemoval = true)
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.10.0")
-    public void setBorderSize(int top, int bottom, int left, int right) {
-        setBorderSize(new V4Int(top, bottom, left, right));
-    }
-
     public void setStyle(String key, Object value) {
         app.styleSheet.setKey(this, key, value);
     }
@@ -184,28 +127,33 @@ public abstract class VWidget<T extends VWidget<T>> {
     public void renderBorder() {
         // TODO: [Render Rework] Better border rendering
 
+        StyleState state = createStyleState();
+
+        V4Color borderColor = getStyle("border-color", state);
+        V4Int borderSize = getStyle("border-size", state);
+
         // Top
-        Vera.renderer.drawRect(app, getHitboxX(), getHitboxY() - borderSize.get1(), getHitboxWidth(), borderSize.get1(), 0, border.get1());
+        Vera.renderer.drawRect(app, getHitboxX(), getHitboxY() - borderSize.get1(), getHitboxWidth(), borderSize.get1(), 0, borderColor.get1());
         if (borderSize.get3() > 0) {
-            Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY() - borderSize.get1(), borderSize.get3(), borderSize.get1(), 0, border.get1());
+            Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY() - borderSize.get1(), borderSize.get3(), borderSize.get1(), 0, borderColor.get1());
         }
 
         // Bottom
-        Vera.renderer.drawRect(app, getHitboxX(), getHitboxY() + getHitboxHeight(), getHitboxWidth(), borderSize.get2(), 0, border.get2());
+        Vera.renderer.drawRect(app, getHitboxX(), getHitboxY() + getHitboxHeight(), getHitboxWidth(), borderSize.get2(), 0, borderColor.get2());
         if (borderSize.get4() > 0) {
-            Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY() + getHitboxHeight(), borderSize.get4(), borderSize.get2(), 0, border.get2());
+            Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY() + getHitboxHeight(), borderSize.get4(), borderSize.get2(), 0, borderColor.get2());
         }
 
         // Left
-        Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY(), borderSize.get3(), getHitboxHeight(), 0, border.get3());
+        Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY(), borderSize.get3(), getHitboxHeight(), 0, borderColor.get3());
         if (borderSize.get2() > 0) {
-            Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY() + getHitboxHeight(), borderSize.get3(), borderSize.get2(), 0, border.get3());
+            Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY() + getHitboxHeight(), borderSize.get3(), borderSize.get2(), 0, borderColor.get3());
         }
 
         // Right
-        Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY(), borderSize.get4(), getHitboxHeight(), 0, border.get4());
+        Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY(), borderSize.get4(), getHitboxHeight(), 0, borderColor.get4());
         if (borderSize.get1() > 0) {
-            Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY() - borderSize.get1(), borderSize.get4(), borderSize.get1(), 0, border.get4());
+            Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY() - borderSize.get1(), borderSize.get4(), borderSize.get1(), 0, borderColor.get4());
         }
     }
 
