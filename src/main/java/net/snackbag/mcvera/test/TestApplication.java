@@ -75,8 +75,8 @@ public class TestApplication extends VeraApp {
         centerLabel.setStyle("background-color", VColor.black());
         centerLabel.modifyFontColor("font").rgb(255, 255, 255);
         centerLabel.move(220, 10);
-        centerLabel.setBorder(VColor.MC_BLUE, VColor.MC_GOLD, VColor.MC_RED, VColor.MC_GREEN);
-        centerLabel.setBorderSize(5, 10, 8, 16);
+        centerLabel.setStyle("border-color", VColor.MC_BLUE, VColor.MC_GOLD, VColor.MC_RED, VColor.MC_GREEN);
+        centerLabel.setStyle("border-size", 5, 10, 8, 16);
         centerLabel.setStyle("cursor", VCursorShape.ALL_RESIZE);
 
         VLabel rightLabel = new VLabel("RIGHT", this).alsoAdd();
@@ -84,8 +84,8 @@ public class TestApplication extends VeraApp {
         rightLabel.setStyle("background-color", VColor.black());
         rightLabel.modifyFontColor("font").rgb(255, 255, 255);
         rightLabel.move(100, 10);
-        rightLabel.setBorder(VColor.white());
-        rightLabel.setBorderSize(1);
+        rightLabel.setStyle("border-color", VColor.white());
+        rightLabel.setStyle("border-size", 1);
         rightLabel.onRightClick(() -> System.out.println(Vera.openFileSelector("test", Path.of("/Volumes/Media"), null)));
 
         VImage image = new VImage(
