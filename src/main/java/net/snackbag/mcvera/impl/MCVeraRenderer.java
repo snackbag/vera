@@ -28,8 +28,8 @@ public class MCVeraRenderer {
         MatrixStack stack = drawContext.getMatrices();
         stack.push();
 
-        int centerX = x + width / 2;
-        int centerY = y + height / 2;
+        float centerX = x + width / 2f;
+        float centerY = y + height / 2f;
 
         stack.translate(app.getX(), app.getY(), 0);
         stack.translate(centerX, centerY, 0);
