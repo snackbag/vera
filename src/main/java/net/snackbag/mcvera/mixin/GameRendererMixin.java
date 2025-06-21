@@ -1,13 +1,8 @@
 package net.snackbag.mcvera.mixin;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.render.GameRenderer;
-import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.vera.Vera;
-import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.flag.VWindowPositioningFlag;
-import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
