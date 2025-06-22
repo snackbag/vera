@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.CommandRegistryAccess;
+import net.snackbag.mcvera.test.LayoutTestApplication;
 import net.snackbag.mcvera.test.StyleTestApplication;
 import net.snackbag.mcvera.test.TestApplication;
 
@@ -16,15 +17,20 @@ public class InternalCommands {
         if (!FabricLoader.getInstance().isDevelopmentEnvironment()) return;
 
         dispatcher.register(
-                ClientCommandManager.literal("vera")
-                        .then(ClientCommandManager.literal("test1").executes((ctx) -> {
+                ClientCommandManager.literal("vera").then(ClientCommandManager.literal("test")
+                        .then(ClientCommandManager.literal("generic").executes((ctx) -> {
                             TestApplication.INSTANCE.show();
                             return 1;
                         }))
-                        .then(ClientCommandManager.literal("test2").executes((ctx) -> {
+                        .then(ClientCommandManager.literal("styles").executes((ctx) -> {
                             StyleTestApplication.INSTANCE.show();
                             return 1;
                         }))
+                        .then(ClientCommandManager.literal("layout").executes((ctx) -> {
+                            LayoutTestApplication.INSTANCE.show();
+                            return 1;
+                        }))
+                )
         );
     }
 }
