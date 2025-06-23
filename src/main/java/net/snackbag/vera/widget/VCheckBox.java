@@ -57,10 +57,10 @@ public class VCheckBox extends VWidget<VCheckBox> {
     public void setChecked(boolean checked) {
         this.checked = checked;
 
-        fireEvent("vcheckbox-checked", checked);
+        events.fireEvent("vcheckbox-checked", checked);
     }
 
     public void onCheckStateChange(VCheckedStateChange runnable) {
-        registerEventExecutor("vcheckbox-checked", args -> runnable.run((boolean) args[0]));
+        events.register("vcheckbox-checked", args -> runnable.run((boolean) args[0]));
     }
 }

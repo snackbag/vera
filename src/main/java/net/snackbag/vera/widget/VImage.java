@@ -19,8 +19,6 @@ public class VImage extends VWidget<VImage> {
 
     @Override
     public void render() {
-        VeraApp app = getApp();
-
         StyleState state = createStyleState();
         Identifier src = getStyle("src", state);
 

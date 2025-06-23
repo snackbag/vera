@@ -35,7 +35,7 @@ public abstract class MouseMixin {
             if (app.isRequiresHierarchy() && app != top) return;
 
             VWidget<?> widget = app.getTopWidgetAt(mouseX, mouseY);
-            if (widget != null) widget.fireEvent("mouse-move", mouseX, mouseY);
+            if (widget != null) widget.events.fireEvent("mouse-move", mouseX, mouseY);
             else if (app.getCursorShape() != VCursorShape.DEFAULT) app.setCursorShape(VCursorShape.DEFAULT);
         });
     }

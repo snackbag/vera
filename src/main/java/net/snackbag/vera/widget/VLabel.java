@@ -90,8 +90,6 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
 
     @Override
     public void render() {
-        VeraApp app = getApp();
-
         StyleState state = createStyleState();
         VFont font = getStyle("font", state);
         VColor backgroundColor = getStyle("background-color", state);

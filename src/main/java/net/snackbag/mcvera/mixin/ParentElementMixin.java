@@ -52,9 +52,9 @@ public interface ParentElementMixin {
         if (widget == null) return;
 
         switch (button) {
-            case 0 -> widget.fireEvent("left-click");
-            case 1 -> widget.fireEvent("right-click");
-            case 2 -> widget.fireEvent("middle-click");
+            case 0 -> widget.events.fireEvent("left-click");
+            case 1 -> widget.events.fireEvent("right-click");
+            case 2 -> widget.events.fireEvent("middle-click");
             default -> throw new IllegalArgumentException("Invalid button type: %d".formatted(button));
         }
     }
@@ -78,9 +78,9 @@ public interface ParentElementMixin {
         if (widget == null) return;
 
         switch (button) {
-            case 0 -> widget.fireEvent("left-click-release");
-            case 1 -> widget.fireEvent("right-click-release");
-            case 2 -> widget.fireEvent("middle-click-release");
+            case 0 -> widget.events.fireEvent("left-click-release");
+            case 1 -> widget.events.fireEvent("right-click-release");
+            case 2 -> widget.events.fireEvent("middle-click-release");
             default -> throw new IllegalArgumentException("Invalid button type: %d".formatted(button));
         }
     }
@@ -102,6 +102,6 @@ public interface ParentElementMixin {
     @Unique
     private void handleScrollEvents(@Nullable VWidget<?> widget, int x, int y, double amount) {
         if (widget == null) return;
-        widget.fireEvent("mouse-scroll", x, y, amount);
+        widget.events.fireEvent("mouse-scroll", x, y, amount);
     }
 }
