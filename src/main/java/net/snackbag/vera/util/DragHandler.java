@@ -50,13 +50,15 @@ public class DragHandler {
         int y = Vera.getMouseY();
 
         Vector2i move = createMove();
-
-        return new VMouseDragEvent.Context(
+        VMouseDragEvent.Context ctx = new VMouseDragEvent.Context(
                 beginPos.x, beginPos.y,
                 x, y,
                 move.x, move.y,
                 VMouseDragEvent.Direction.UP
         );
+
+        prevContext = ctx;
+        return ctx;
     }
 
     private static Vector2i createMove() {
