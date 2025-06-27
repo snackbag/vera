@@ -247,7 +247,7 @@ public abstract class VeraApp {
         int mx = px - x;
         int my = py - y;
 
-        return getWidgetsReversed().parallelStream()
+        return getWidgetsReversed().stream()
                 .filter(widget -> isPointOverWidget(widget, mx, my))
                 .filter(VWidget::visibilityConditionsPassed)
                 .findFirst().orElse(null);
