@@ -67,7 +67,7 @@ public abstract class VElement {
     }
 
     public void sendMessage(VElement element, String type, @Nullable Object content) {
-        events.fire("elem-message", new VWidgetMessageEvent.Context(this, type, content));
+        element.events.fire("elem-message", new VWidgetMessageEvent.Context(this, type, content));
     }
 
     //
