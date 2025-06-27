@@ -28,4 +28,9 @@ public abstract class VLayout extends VElement {
                 .mapToInt(VElement::getHeight)
                 .sum();
     }
+
+    public void addElement(VElement elem) {
+        if (elements.contains(elem)) return;
+        elements.add(elem);
+    }
 }
