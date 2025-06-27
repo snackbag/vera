@@ -45,8 +45,12 @@ public abstract class VLayout extends VElement {
         if (cacheId != Vera.renderCacheId) {
             cache.clear();
             cacheId = Vera.renderCacheId;
+
+            rebuild();
         }
     }
+
+    public abstract void rebuild();
 
     public int calculateElementsHeight() {
         return elements.parallelStream()
