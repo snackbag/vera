@@ -3,7 +3,9 @@ package net.snackbag.mcvera.mixin;
 import net.minecraft.client.gui.ParentElement;
 import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.vera.Vera;
+import net.snackbag.vera.core.VMouseButton;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.util.DragHandler;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,6 +22,8 @@ public interface ParentElementMixin {
         int mouseY = (int) mouseYRaw;
         boolean justChanged = false;
 
+        VMouseButton btn = VMouseButton.fromInt(button);
+
         VeraApp top = MCVeraData.getTopHierarchy();
 
         for (VeraApp app : MCVeraData.appHierarchy) {
@@ -35,28 +39,29 @@ public interface ParentElementMixin {
             if (!app.isPointOverThis(mouseX, mouseY)) return;
             if (finalJustChanged) return;
 
-            handleClickEvents(app.getTopWidgetAt(mouseX, mouseY), button);
+            handleClickEvents(app.getTopWidgetAt(mouseX, mouseY), btn);
         });
 
         Vera.forAllVisibleApps(app -> {
             if (app.isRequiresHierarchy()) return;
 
             VWidget<?> hoveredWidget = app.getTopWidgetAt(mouseX, mouseY);
-            if (hoveredWidget != null) handleClickEvents(hoveredWidget, button);
+            if (hoveredWidget != null) handleClickEvents(hoveredWidget, btn);
             else app.setFocusedWidget(null);
         });
     }
 
     @Unique
-    private void handleClickEvents(@Nullable VWidget<?> widget, int button) {
+    private void handleClickEvents(@Nullable VWidget<?> widget, VMouseButton button) {
         if (widget == null) return;
 
         switch (button) {
-            case 0 -> widget.events.fire("left-click");
-            case 1 -> widget.events.fire("right-click");
-            case 2 -> widget.events.fire("middle-click");
-            default -> throw new IllegalArgumentException("Invalid button type: %d".formatted(button));
+            case LEFT -> widget.events.fire("left-click");
+            case RIGHT -> widget.events.fire("right-click");
+            case MIDDLE -> widget.events.fire("middle-click");
         }
+
+        DragHandler.down(button, widget);
     }
 
     @Inject(method = "mouseReleased", at = @At("HEAD"))
@@ -64,24 +69,27 @@ public interface ParentElementMixin {
         int mouseX = (int) mouseXRaw;
         int mouseY = (int) mouseYRaw;
 
-        MCVeraData.asTopHierarchy(app -> handleReleaseEvents(app.getTopWidgetAt(mouseX, mouseY), button));
+        VMouseButton btn = VMouseButton.fromInt(button);
+
+        MCVeraData.asTopHierarchy(app -> handleReleaseEvents(app.getTopWidgetAt(mouseX, mouseY), btn));
         Vera.forAllVisibleApps(app -> {
             if (app.isRequiresHierarchy()) return;
             if (!app.isPointOverThis(mouseX, mouseY)) return;
 
-            handleReleaseEvents(app.getTopWidgetAt(mouseX, mouseY), button);
+            handleReleaseEvents(app.getTopWidgetAt(mouseX, mouseY), btn);
         });
+
+        DragHandler.release(btn);
     }
 
     @Unique
-    private void handleReleaseEvents(@Nullable VWidget<?> widget, int button) {
+    private void handleReleaseEvents(@Nullable VWidget<?> widget, VMouseButton button) {
         if (widget == null) return;
 
         switch (button) {
-            case 0 -> widget.events.fire("left-click-release");
-            case 1 -> widget.events.fire("right-click-release");
-            case 2 -> widget.events.fire("middle-click-release");
-            default -> throw new IllegalArgumentException("Invalid button type: %d".formatted(button));
+            case LEFT -> widget.events.fire("left-click-release");
+            case RIGHT -> widget.events.fire("right-click-release");
+            case MIDDLE -> widget.events.fire("middle-click-release");
         }
     }
 
