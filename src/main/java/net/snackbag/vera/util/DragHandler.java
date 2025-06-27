@@ -39,6 +39,8 @@ public class DragHandler {
 
         DragHandler.target = null;
         DragHandler.button = null;
+        DragHandler.beginPos = null;
+        DragHandler.prevContext = null;
     }
 
     public static VMouseDragEvent.Context createContext() {
