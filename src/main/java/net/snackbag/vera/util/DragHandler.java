@@ -22,7 +22,7 @@ public class DragHandler {
 
         DragHandler.button = button;
         DragHandler.target = target;
-        beginPos = new Vector2i(Vera.getMouseX(), Vera.getMouseY());
+        DragHandler.beginPos = new Vector2i(Vera.getMouseX(), Vera.getMouseY());
 
         fireEvents();
     }
