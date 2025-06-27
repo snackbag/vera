@@ -27,8 +27,8 @@ public abstract class MouseMixin {
 
         double scaleFactor = client.getWindow().getScaleFactor();
 
-        int mouseX = (int) Math.round(fx / scaleFactor);
-        int mouseY = (int) Math.round(fy / scaleFactor);
+        int mouseX = (int) (fx / scaleFactor);
+        int mouseY = (int) (fy / scaleFactor);
 
         VeraApp top = Vera.getTopHierarchyApp();
         Vera.forAllVisibleApps(app -> {
