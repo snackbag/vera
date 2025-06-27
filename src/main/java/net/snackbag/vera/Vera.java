@@ -24,6 +24,8 @@ public class Vera {
     public static final String FONT_DEFAULT = provider.getDefaultFontName();
     public static final String FONT_ARIAL = "minecraft:arial";
 
+    public static long renderCacheId = 0;
+
     public static void forVisibleAndAllowedApps(Consumer<VeraApp> handler) {
         final List<VeraApp> handledApps = new ArrayList<>();
         if (!MCVeraData.appHierarchy.isEmpty()) {

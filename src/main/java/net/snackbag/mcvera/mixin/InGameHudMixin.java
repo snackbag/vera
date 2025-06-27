@@ -11,6 +11,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
+    @Inject(at = @At(value = "HEAD"), method = "render")
+    private void mcvera$beginRender(DrawContext context, float tickDelta, CallbackInfo ci) {
+        Vera.renderCacheId = System.currentTimeMillis();
+    }
+
     @Inject(at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;enableBlend()V", shift = At.Shift.AFTER, ordinal = 0, remap = false), method = "render")
     private void mcvera$renderBelowVignette(DrawContext context, float tickDelta, CallbackInfo ci) {
         Vera.renderer.renderApps(VWindowPositioningFlag.BELOW_VIGNETTE);
