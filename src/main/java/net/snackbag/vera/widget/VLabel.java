@@ -20,6 +20,8 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
 
         setStyle("background-color", VColor.transparent());
         setStyle("font", VFont.create());
+
+        adjustSize();
     }
 
     public String getText() {
