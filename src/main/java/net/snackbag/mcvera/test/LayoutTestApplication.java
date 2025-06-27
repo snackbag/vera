@@ -15,18 +15,15 @@ public class LayoutTestApplication extends VeraApp {
         new VShortcut(this, "escape", this::hide).alsoAdd();
 
         VLayout layout = new VVLayout(this, 0, 0);
-        VLabel label = new VLabel("I'm a test", this).alsoAdd(); layout.addElement(label);
-        VLabel label2 = new VLabel("I'm another test", this).alsoAdd(); layout.addElement(label2);
+        new VLabel("I'm a test", this).alsoAddTo(layout);
+        new VLabel("I'm another test", this).alsoAddTo(layout);
 
-        VLayout secondLayout = new VHLayout(this, 0, 0);
-        VLabel horiz1 = new VLabel("1", this).alsoAdd(); secondLayout.addElement(horiz1);
-        VLabel horiz2 = new VLabel("2", this).alsoAdd(); secondLayout.addElement(horiz2);
+        VLayout secondLayout = new VHLayout(this, 0, 0).alsoAddTo(layout);
+        new VLabel("1", this).alsoAddTo(secondLayout);
+        new VLabel("2", this).alsoAddTo(secondLayout);
 
-        VLayout thirdLayout = new VVLayout(this, 0, 0);
-        VLabel label3 = new VLabel("oh?", this).alsoAdd(); thirdLayout.addElement(label3);
-        VLabel label4 = new VLabel("oh!!!!", this).alsoAdd(); thirdLayout.addElement(label4);
-
-        secondLayout.addElement(thirdLayout);
-        layout.addElement(secondLayout);
+        VLayout thirdLayout = new VVLayout(this, 0, 0).alsoAddTo(secondLayout);
+        new VLabel("oh?", this).alsoAddTo(thirdLayout);
+        new VLabel("oh!!!!", this).alsoAddTo(thirdLayout);
     }
 }
