@@ -1,13 +1,24 @@
 package net.snackbag.vera.layout;
 
 import net.snackbag.vera.VElement;
+import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VeraApp;
+import org.joml.Vector2i;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class VLayout extends VElement {
     private final List<VElement> elements = new ArrayList<>();
+
+    /**
+     * ID for the last position cache call. To be compared with the current render cache ID
+     *
+     * @reason So we don't calculate the positions of widgets for each getX or getY call
+     */
+    private long cacheId = 0;
+    private final HashMap<VElement, Vector2i> cache = new HashMap<>();
 
     public VLayout(VeraApp app, int x, int y, int width, int height) {
         super(app, x, y, width, height);
@@ -21,6 +32,15 @@ public abstract class VLayout extends VElement {
     @Override
     public int getHeight() {
         return height < 0 ? calculateElementsHeight() : Math.min(calculateElementsHeight(), height);
+    }
+
+    public abstract Vector2i posOf(VElement elem);
+
+    private void checkCache() {
+        if (cacheId != Vera.renderCacheId) {
+            cache.clear();
+            cacheId = Vera.renderCacheId;
+        }
     }
 
     public int calculateElementsHeight() {
