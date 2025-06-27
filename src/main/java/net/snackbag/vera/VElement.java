@@ -32,8 +32,8 @@ public abstract class VElement {
 
         addVisibilityCondition(() -> visible);
 
-        this.x = x;
-        this.y = y;
+        this._x = x;
+        this._y = y;
         this.width = width;
         this.height = height;
     }
@@ -77,11 +77,11 @@ public abstract class VElement {
     //
 
     public int getX() {
-        return layout != null ? layout.posOf(this).x : x;
+        return layout != null ? layout.posOf(this).x : _x;
     }
 
     public int getY() {
-        return layout != null ? layout.posOf(this).y : y;
+        return layout != null ? layout.posOf(this).y : _y;
     }
 
     public void move(int both) {
@@ -89,8 +89,8 @@ public abstract class VElement {
     }
 
     public void move(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this._x = x;
+        this._y = y;
     }
 
     public int getWidth() {
