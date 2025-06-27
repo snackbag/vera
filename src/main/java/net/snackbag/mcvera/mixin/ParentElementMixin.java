@@ -18,8 +18,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public interface ParentElementMixin {
     @Inject(method = "mouseClicked", at = @At("HEAD"))
     private void mcvera$handleMouseClick(double mouseXRaw, double mouseYRaw, int button, CallbackInfoReturnable<Boolean> cir) {
-        int mouseX = (int) mouseXRaw;
-        int mouseY = (int) mouseYRaw;
+        int mouseX = (int) Math.round(mouseXRaw);
+        int mouseY = (int) Math.round(mouseYRaw);
         boolean justChanged = false;
 
         VMouseButton btn = VMouseButton.fromInt(button);
@@ -66,8 +66,8 @@ public interface ParentElementMixin {
 
     @Inject(method = "mouseReleased", at = @At("HEAD"))
     private void mcvera$handleMouseRelease(double mouseXRaw, double mouseYRaw, int button, CallbackInfoReturnable<Boolean> cir) {
-        int mouseX = (int) mouseXRaw;
-        int mouseY = (int) mouseYRaw;
+        int mouseX = (int) Math.round(mouseXRaw);
+        int mouseY = (int) Math.round(mouseYRaw);
 
         VMouseButton btn = VMouseButton.fromInt(button);
 
@@ -95,8 +95,8 @@ public interface ParentElementMixin {
 
     @Inject(method = "mouseScrolled", at = @At("HEAD"))
     private void mcvera$handleMouseScroll(double mouseXRaw, double mouseYRaw, double amount, CallbackInfoReturnable<Boolean> cir) {
-        int mouseX = (int) mouseXRaw;
-        int mouseY = (int) mouseYRaw;
+        int mouseX = (int) Math.round(mouseXRaw);
+        int mouseY = (int) Math.round(mouseYRaw);
 
         MCVeraData.asTopHierarchy(app -> handleScrollEvents(app.getTopWidgetAt(mouseX, mouseY), mouseX, mouseY, amount));
         Vera.forAllVisibleApps(app -> {
