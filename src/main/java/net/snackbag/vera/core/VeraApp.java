@@ -194,6 +194,7 @@ public abstract class VeraApp {
     }
 
     public void addWidget(VWidget<?> widget) {
+        if (widgets.contains(widget)) return;
         this.widgets.add(widget);
     }
 
