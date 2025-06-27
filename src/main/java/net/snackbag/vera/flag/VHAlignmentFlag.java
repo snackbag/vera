@@ -1,6 +1,6 @@
 package net.snackbag.vera.flag;
 
-public enum VAlignmentFlag {
+public enum VHAlignmentFlag {
     LEFT,
     CENTER,
     RIGHT

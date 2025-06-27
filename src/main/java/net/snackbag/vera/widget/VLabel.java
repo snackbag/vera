@@ -2,14 +2,14 @@ package net.snackbag.vera.widget;
 
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
-import net.snackbag.vera.flag.VAlignmentFlag;
+import net.snackbag.vera.flag.VHAlignmentFlag;
 import net.snackbag.vera.modifier.VPaddingWidget;
 import net.snackbag.vera.style.StyleState;
 
 public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
     private String text;
     private V4Int padding;
-    private VAlignmentFlag alignment;
+    private VHAlignmentFlag alignment;
 
     public VLabel(String text, VeraApp app) {
         super(0, 0, 100, 16, app);
@@ -17,7 +17,7 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
         this.text = text;
         this.padding = new V4Int(4);
         this.focusOnClick = false;
-        alignment = VAlignmentFlag.LEFT;
+        alignment = VHAlignmentFlag.LEFT;
 
         setStyle("background-color", VColor.transparent());
         setStyle("font", VFont.create());
@@ -63,11 +63,11 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
         return getY() - padding.get1();
     }
 
-    public VAlignmentFlag getAlignment() {
+    public VHAlignmentFlag getAlignment() {
         return alignment;
     }
 
-    public void setAlignment(VAlignmentFlag alignment) {
+    public void setAlignment(VHAlignmentFlag alignment) {
         this.alignment = alignment;
     }
 

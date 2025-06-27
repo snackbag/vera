@@ -2,7 +2,7 @@ package net.snackbag.mcvera.test;
 
 import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
-import net.snackbag.vera.flag.VAlignmentFlag;
+import net.snackbag.vera.flag.VHAlignmentFlag;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
@@ -71,7 +71,7 @@ public class TestApplication extends VeraApp {
         });
 
         VLabel centerLabel = new VLabel("CENTER", this).alsoAdd();
-        centerLabel.setAlignment(VAlignmentFlag.CENTER);
+        centerLabel.setAlignment(VHAlignmentFlag.CENTER);
         centerLabel.setStyle("background-color", VColor.black());
         centerLabel.modifyFontColor("font").rgb(255, 255, 255);
         centerLabel.move(220, 10);
@@ -80,7 +80,7 @@ public class TestApplication extends VeraApp {
         centerLabel.setStyle("cursor", VCursorShape.ALL_RESIZE);
 
         VLabel rightLabel = new VLabel("RIGHT", this).alsoAdd();
-        rightLabel.setAlignment(VAlignmentFlag.RIGHT);
+        rightLabel.setAlignment(VHAlignmentFlag.RIGHT);
         rightLabel.setStyle("background-color", VColor.black());
         rightLabel.modifyFontColor("font").rgb(255, 255, 255);
         rightLabel.move(100, 10);
