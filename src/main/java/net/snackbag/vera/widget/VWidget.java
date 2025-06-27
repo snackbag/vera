@@ -4,6 +4,7 @@ import net.snackbag.vera.VElement;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.event.*;
+import net.snackbag.vera.layout.VLayout;
 import net.snackbag.vera.style.StyleState;
 
 import java.nio.file.Path;
@@ -302,6 +303,14 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
     public T alsoAdd() {
         app.addWidget(this);
+        return (T) this;
+    }
+
+    @Override
+    public T alsoAddTo(VLayout layout) {
+        super.alsoAddTo(layout);
+        alsoAdd();
+
         return (T) this;
     }
 }
