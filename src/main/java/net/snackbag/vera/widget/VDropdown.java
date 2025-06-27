@@ -153,8 +153,6 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
     @Override
     public void handleBuiltinEvent(String event, Object... args) {
-        super.handleBuiltinEvent(event, args);
-
         int x = getX();
         int y = getY();
 
@@ -168,7 +166,6 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
                     }
 
                     setFocused(false);
-                    return;
                 }
             }
 
@@ -181,7 +178,6 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
                     }
 
                     setFocused(false);
-                    return;
                 }
             }
 
@@ -194,29 +190,28 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
                     }
 
                     setFocused(false);
-                    return;
                 }
             }
 
             case "mouse-move" -> {
-                if (!isFocused()) {
-                    hoveredItem = null;
-                    return;
+                if (!isFocused()) hoveredItem = null;
+                else {
+                    // Get mouse position relative to the dropdown's top-left corner
+                    int argX = (int) args[0];
+                    int argY = (int) args[1];
+
+                    int mouseX = argX - x;
+                    int mouseY = argY - y;
+
+                    Item item = getItemAt(mouseX, mouseY);
+                    hoveredItem = (item != null) ? items.indexOf(item) : null;
                 }
-
-                // Get mouse position relative to the dropdown's top-left corner
-                int argX = (int) args[0];
-                int argY = (int) args[1];
-
-                int mouseX = argX - x;
-                int mouseY = argY - y;
-
-                Item item = getItemAt(mouseX, mouseY);
-                hoveredItem = (item != null) ? items.indexOf(item) : null;
             }
 
             case "hover-leave" -> hoveredItem = null;
         }
+
+        super.handleBuiltinEvent(event, args);
     }
 
     private int getItemIndexAt(int mouseY) {
