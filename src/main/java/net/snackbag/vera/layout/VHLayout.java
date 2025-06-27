@@ -15,10 +15,10 @@ public class VHLayout extends VLayout {
 
     @Override
     public void rebuild() {
-        int x = 0;
+        int x = getX();
 
         for (VElement elem : elements) {
-            cache.put(elem, new Vector2i(x, y));
+            cache.put(elem, new Vector2i(x, getY()));
 
             x += elem.getWidth();
         }
