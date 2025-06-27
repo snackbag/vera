@@ -34,7 +34,12 @@ public abstract class VLayout extends VElement {
         return height < 0 ? calculateElementsHeight() : Math.min(calculateElementsHeight(), height);
     }
 
-    public abstract Vector2i posOf(VElement elem);
+    public Vector2i posOf(VElement elem) {
+        checkCache();
+
+        if (!cache.containsKey(elem)) throw new RuntimeException("Layout cache does not contain requested element");
+        return cache.get(elem);
+    }
 
     private void checkCache() {
         if (cacheId != Vera.renderCacheId) {
