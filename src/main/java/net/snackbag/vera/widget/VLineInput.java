@@ -143,7 +143,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
 
     public void setText(String text) {
         this.text = text;
-        events.fireEvent("vline-change");
+        events.fire("vline-change");
     }
 
     public boolean isSelectingText() {
@@ -289,32 +289,32 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         // Handle word navigation
         else if (isDown(GLFW.GLFW_KEY_LEFT) && isAltDown() && cursorPos > 0) {
             cursorPos = Math.max(0, jumpToWordStart(cursorPos));
-            events.fireEvent("vline-cursor-move");
-            events.fireEvent("vline-cursor-move-left");
+            events.fire("vline-cursor-move");
+            events.fire("vline-cursor-move-left");
         } else if (isDown(GLFW.GLFW_KEY_RIGHT) && isAltDown() && cursorPos < text.length()) {
             cursorPos = Math.min(text.length(), jumpToWordEnd(cursorPos));
-            events.fireEvent("vline-cursor-move");
-            events.fireEvent("vline-cursor-move-right");
+            events.fire("vline-cursor-move");
+            events.fire("vline-cursor-move-right");
         }
         // Handle line navigation
         else if (isDown(GLFW.GLFW_KEY_LEFT) && isCtrlDown()) {
             cursorPos = 0;
-            events.fireEvent("vline-cursor-move");
-            events.fireEvent("vline-cursor-move-left");
+            events.fire("vline-cursor-move");
+            events.fire("vline-cursor-move-left");
         } else if (isDown(GLFW.GLFW_KEY_RIGHT) && isCtrlDown()) {
             cursorPos = text.length();
-            events.fireEvent("vline-cursor-move");
-            events.fireEvent("vline-cursor-move-right");
+            events.fire("vline-cursor-move");
+            events.fire("vline-cursor-move-right");
         }
         // Handle character navigation
         else if (keyCode == GLFW.GLFW_KEY_LEFT && cursorPos > 0) {
             cursorPos = Math.max(0, cursorPos - 1);
-            events.fireEvent("vline-cursor-move");
-            events.fireEvent("vline-cursor-move-left");
+            events.fire("vline-cursor-move");
+            events.fire("vline-cursor-move-left");
         } else if (keyCode == GLFW.GLFW_KEY_RIGHT && cursorPos < text.length()) {
             cursorPos = Math.min(text.length(), cursorPos + 1);
-            events.fireEvent("vline-cursor-move");
-            events.fireEvent("vline-cursor-move-right");
+            events.fire("vline-cursor-move");
+            events.fire("vline-cursor-move-right");
         }
 
         super.keyPressed(keyCode, scanCode, modifiers);
@@ -346,12 +346,12 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
 
         cursorPos = newPos;
         textSelection.endPos = newPos;
-        events.fireEvent("vline-cursor-move");
+        events.fire("vline-cursor-move");
     }
 
     private void insertText(String insertion) {
         if (maxChars > -1 && text.length() + insertion.length() > maxChars) {
-            events.fireEvent("vline-add-char-limited", insertion.charAt(0));
+            events.fire("vline-add-char-limited", insertion.charAt(0));
             return;
         }
 
@@ -359,7 +359,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         String back = text.substring(cursorPos);
         text = front + insertion + back;
         cursorPos += insertion.length();
-        events.fireEvent("vline-change");
+        events.fire("vline-change");
     }
 
     private void deleteSelectedText() {
@@ -373,7 +373,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         text = front + back;
         cursorPos = start;
         clearTextSelection();
-        events.fireEvent("vline-change");
+        events.fire("vline-change");
     }
 
     private void replaceSelectedText(String replacement) {
@@ -383,7 +383,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         int end = Math.max(textSelection.startPos, textSelection.endPos);
 
         if (maxChars > -1 && text.length() - (end - start) + replacement.length() > maxChars) {
-            events.fireEvent("vline-add-char-limited", replacement.charAt(0));
+            events.fire("vline-add-char-limited", replacement.charAt(0));
             return;
         }
 
@@ -392,7 +392,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         text = front + replacement + back;
         cursorPos = start + replacement.length();
         clearTextSelection();
-        events.fireEvent("vline-change");
+        events.fire("vline-change");
     }
 
 
@@ -457,7 +457,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
                 int end = Math.max(textSelection.startPos, textSelection.endPos);
 
                 if (maxChars > -1 && text.length() - (end - start) + 1 > maxChars) {
-                    events.fireEvent("vline-add-char-limited", chr);
+                    events.fire("vline-add-char-limited", chr);
                     return;
                 }
 
@@ -467,11 +467,11 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
                 text = front + chr + back;
                 cursorPos = start + 1;
                 clearTextSelection();
-                events.fireEvent("vline-change");
+                events.fire("vline-change");
             } else {
                 // Normal character insertion
                 if (maxChars > -1 && text.length() >= maxChars) {
-                    events.fireEvent("vline-add-char-limited", chr);
+                    events.fire("vline-add-char-limited", chr);
                     return;
                 }
 
@@ -480,7 +480,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
 
                 text = front + chr + back;
                 cursorPos += 1;
-                events.fireEvent("vline-change");
+                events.fire("vline-change");
             }
         }
         super.charTyped(chr, modifiers);
@@ -559,7 +559,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         builder.delete(start, end);
         text = builder.toString();
         cursorPos = Math.min(start, text.length());
-        events.fireEvent("vline-change");
+        events.fire("vline-change");
     }
 
     public static class TextSelection {

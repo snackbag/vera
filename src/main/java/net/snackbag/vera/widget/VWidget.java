@@ -171,8 +171,8 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public void setHovered(boolean hovered) {
         // If changed
         if (this.hovered != hovered) {
-            if (hovered) events.fireEvent("hover");
-            else events.fireEvent("hover-leave");
+            if (hovered) events.fire("hover");
+            else events.fire("hover-leave");
         }
 
         this.hovered = hovered;

@@ -66,30 +66,30 @@ public class VTabWidget extends VWidget<VTabWidget> {
 
             case "left-click" -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                events.fireEvent("vtabwidget-tab-left-click", hoveredTab);
+                events.fire("vtabwidget-tab-left-click", hoveredTab);
                 setActiveTab(hoveredTab);
             }
             case "left-click-release" -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                events.fireEvent("vtabwidget-tab-left-click-release", hoveredTab);
+                events.fire("vtabwidget-tab-left-click-release", hoveredTab);
             }
 
             case "middle-click" -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                events.fireEvent("vtabwidget-tab-middle-click", hoveredTab);
+                events.fire("vtabwidget-tab-middle-click", hoveredTab);
             }
             case "middle-click-release" -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                events.fireEvent("vtabwidget-tab-middle-click-release", hoveredTab);
+                events.fire("vtabwidget-tab-middle-click-release", hoveredTab);
             }
 
             case "right-click" -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                events.fireEvent("vtabwidget-tab-right-click", hoveredTab);
+                events.fire("vtabwidget-tab-right-click", hoveredTab);
             }
             case "right-click-release" -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                events.fireEvent("vtabwidget-tab-right-click-release", hoveredTab);
+                events.fire("vtabwidget-tab-right-click-release", hoveredTab);
             }
         }
 
@@ -116,7 +116,7 @@ public class VTabWidget extends VWidget<VTabWidget> {
 
             if (relativeX >= currentX && relativeX < currentX + totalTabWidth) {
                 if (hoveredTab != null && hoveredTab != index) {
-                    events.fireEvent("vtabwidget-tab-hover-change", hoveredTab);
+                    events.fire("vtabwidget-tab-hover-change", hoveredTab);
                 }
 
                 hoveredTab = index;

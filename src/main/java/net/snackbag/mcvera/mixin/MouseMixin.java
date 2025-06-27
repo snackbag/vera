@@ -2,7 +2,6 @@ package net.snackbag.mcvera.mixin;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
-import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
@@ -35,7 +34,7 @@ public abstract class MouseMixin {
             if (app.isRequiresHierarchy() && app != top) return;
 
             VWidget<?> widget = app.getTopWidgetAt(mouseX, mouseY);
-            if (widget != null) widget.events.fireEvent("mouse-move", mouseX, mouseY);
+            if (widget != null) widget.events.fire("mouse-move", mouseX, mouseY);
             else if (app.getCursorShape() != VCursorShape.DEFAULT) app.setCursorShape(VCursorShape.DEFAULT);
         });
     }

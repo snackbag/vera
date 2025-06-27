@@ -201,10 +201,10 @@ public abstract class VeraApp {
         if (!widgets.contains(widget)) return;
 
         if (isFocusedWidget(widget)) setFocusedWidget(null);
-        if (widget.isLeftClickDown()) widget.events.fireEvent("left-click-release");
-        if (widget.isMiddleClickDown()) widget.events.fireEvent("middle-click-release");
-        if (widget.isRightClickDown()) widget.events.fireEvent("right-click-release");
-        if (widget.isHovered()) widget.events.fireEvent("hover-leave");
+        if (widget.isLeftClickDown()) widget.events.fire("left-click-release");
+        if (widget.isMiddleClickDown()) widget.events.fire("middle-click-release");
+        if (widget.isRightClickDown()) widget.events.fire("right-click-release");
+        if (widget.isHovered()) widget.events.fire("hover-leave");
 
         this.widgets.remove(widget);
     }
@@ -273,8 +273,8 @@ public abstract class VeraApp {
             VWidget<?> oldWidget = this.focusedWidget;
             this.focusedWidget = widget;
 
-            if (oldWidget != null) oldWidget.events.fireEvent("focus-state-change");
-            if (widget != null) widget.events.fireEvent("focus-state-change");
+            if (oldWidget != null) oldWidget.events.fire("focus-state-change");
+            if (widget != null) widget.events.fire("focus-state-change");
         }
     }
 

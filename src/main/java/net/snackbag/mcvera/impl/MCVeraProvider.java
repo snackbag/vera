@@ -134,7 +134,7 @@ public class MCVeraProvider {
         if (top != null && top.isPointOverThis(x, y)) {
             VWidget<?> widget = top.getTopWidgetAt(x, y);
             if (widget != null) {
-                widget.events.fireEvent("files-dropped", paths);
+                widget.events.fire("files-dropped", paths);
                 return;
             }
         }
@@ -146,7 +146,7 @@ public class MCVeraProvider {
 
             VWidget<?> widget = app.getTopWidgetAt(x, y);
             if (widget != null) {
-                widget.events.fireEvent("files-dropped", paths);
+                widget.events.fire("files-dropped", paths);
                 didSomething.set(true);
             }
         });

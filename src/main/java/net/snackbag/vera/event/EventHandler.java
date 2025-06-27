@@ -17,7 +17,7 @@ public class EventHandler {
         this.element = element;
     }
 
-    public void fireEvent(String name, Object... args) {
+    public void fire(String name, Object... args) {
         if (preprocessor != null) preprocessor.call(name, args);
 
         if (!executors.containsKey(name)) return;
