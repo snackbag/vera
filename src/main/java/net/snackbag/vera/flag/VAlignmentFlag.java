@@ -1,4 +1,4 @@
-package net.snackbag.vera.core;
+package net.snackbag.vera.flag;
 
 public enum VAlignmentFlag {
     LEFT,

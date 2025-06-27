@@ -2,6 +2,7 @@ package net.snackbag.vera.widget;
 
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
+import net.snackbag.vera.flag.VAlignmentFlag;
 import net.snackbag.vera.modifier.VPaddingWidget;
 import net.snackbag.vera.style.StyleState;
 
