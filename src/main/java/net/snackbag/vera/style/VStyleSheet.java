@@ -63,12 +63,13 @@ public class VStyleSheet {
         setKey(widget, key, object, StyleState.DEFAULT);
     }
 
+    public void setKey(String clazz, String key, Object object) {
+        setKey(clazz, key, object, StyleState.DEFAULT);
+    }
+
     public void setKey(VWidget<?> widget, String key, Object value, @Nullable StyleState state) {
         if (state == null) state = StyleState.DEFAULT;
-        if (value.getClass().isArray()) {
-            int length = Array.getLength(value);
-            if (length == 1) value = Array.get(value, 0);
-        }
+        value = potentiallyUnpackArray(value);
 
         StyleValueType res = getReservation(key);
         StyleValueType valRes = StyleValueType.get(value, res);
@@ -83,6 +84,25 @@ public class VStyleSheet {
         if (!widgetSpecificStyles.containsKey(widget)) widgetSpecificStyles.put(widget, new HashMap<>());
         if (!widgetSpecificStyles.get(widget).containsKey(key)) widgetSpecificStyles.get(widget).put(key, new HashMap<>());
         widgetSpecificStyles.get(widget).get(key).put(state, value);
+    }
+
+    public void setKey(String clazz, String key, Object value, @Nullable StyleState state) {
+        if (state == null) state = StyleState.DEFAULT;
+        value = potentiallyUnpackArray(value);
+
+        StyleValueType res = getReservation(key);
+        StyleValueType valRes = StyleValueType.get(value, res);
+
+        if (res != null) {
+            if (valRes != res)
+                throw new RuntimeException("Cannot set key %s (for class %s), because it is reserved for type %s. Received: %s".formatted(key, clazz, res, valRes));
+        } else reserveType(key, valRes);
+
+        value = StyleValueType.convert(value, valRes);
+
+        if (!styleClasses.containsKey(clazz)) styleClasses.put(clazz, new HashMap<>());
+        if (!styleClasses.get(clazz).containsKey(key)) styleClasses.get(clazz).put(key, new HashMap<>());
+        styleClasses.get(clazz).get(key).put(state, value);
     }
 
     public VColor.ColorModifier modifyKeyAsColor(VWidget<?> widget, String key) {
@@ -103,6 +123,15 @@ public class VStyleSheet {
 
     public HashMap<String, HashMap<StyleState, Object>> getClassStyles(String clazz) {
         return styleClasses.getOrDefault(clazz, new HashMap<>());
+    }
+
+    private Object potentiallyUnpackArray(Object value) {
+        if (value.getClass().isArray()) {
+            int length = Array.getLength(value);
+            if (length == 1) value = Array.get(value, 0);
+        }
+
+        return value;
     }
 
     public HashMap<String, HashMap<StyleState, Object>> mixClasses(LinkedHashSet<String> classes) {
