@@ -37,6 +37,10 @@ public class DragHandler {
         if (!isDragging()) return;
         if (button != DragHandler.button) return;
 
+        clear();
+    }
+
+    public static void clear() {
         DragHandler.target = null;
         DragHandler.button = null;
         DragHandler.beginPos = null;
