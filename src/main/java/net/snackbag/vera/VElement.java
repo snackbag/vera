@@ -39,6 +39,7 @@ public abstract class VElement {
         this.height = height;
 
         onLayoutSwap(layout -> this.layout = layout); // event gets called. we use the event itself to change the layout
+        onLayoutRemove(() -> this.layout = null);
     }
 
     public void handleBuiltinEvent(String name, Object... args) {}
@@ -77,6 +78,10 @@ public abstract class VElement {
 
     public void onLayoutSwap(Consumer<VLayout> executor) {
         events.register("elem-layout-swap", args -> executor.accept((VLayout) args[0]));
+    }
+
+    public void onLayoutRemove(Runnable executor) {
+        events.register("elem-layout-remove", args -> executor.run());
     }
 
     //

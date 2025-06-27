@@ -63,4 +63,16 @@ public abstract class VLayout extends VElement {
         elements.add(elem);
         elem.events.fire("elem-layout-swap", this);
     }
+
+    public boolean removeElement(VElement elem) {
+        if (!elements.contains(elem)) return false;
+
+        elem.events.fire("elem-layout-remove");
+        return elements.remove(elem);
+    }
+
+    public void clear() {
+        for (VElement elem : elements) elem.events.fire("elem-layout-remove");
+        elements.clear();
+    }
 }
