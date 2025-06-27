@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: Rewrite VDropdown from scratch
 public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
     private final List<Item> items;
     private VFont font;
