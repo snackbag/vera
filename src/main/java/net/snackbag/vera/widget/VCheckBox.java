@@ -46,8 +46,9 @@ public class VCheckBox extends VWidget<VCheckBox> {
 
     @Override
     public void handleBuiltinEvent(String event, Object... args) {
-        if (event.equals("left-click")) setChecked(!checked);
         super.handleBuiltinEvent(event, args);
+
+        if (event.equals("left-click")) setChecked(!checked);
     }
 
     public boolean isChecked() {

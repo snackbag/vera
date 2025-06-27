@@ -58,6 +58,8 @@ public class VTabWidget extends VWidget<VTabWidget> {
 
     @Override
     public void handleBuiltinEvent(String event, Object... args) {
+        super.handleBuiltinEvent(event, args);
+
         switch (event) {
             case "mouse-move" -> getHoveredTabIndex((int) args[0]);
 
@@ -92,8 +94,6 @@ public class VTabWidget extends VWidget<VTabWidget> {
                 events.fire("vtabwidget-tab-right-click-release", hoveredTab);
             }
         }
-
-        super.handleBuiltinEvent(event, args);
     }
 
     public boolean isValidTabIndex(@Nullable Integer index) {

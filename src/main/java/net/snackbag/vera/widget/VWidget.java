@@ -27,8 +27,6 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
         this.rotation = 0;
 
-        addVisibilityCondition(() -> visible);
-
         setStyle("overlay", VColor.transparent());
         setStyle("cursor", VCursorShape.DEFAULT);
 
@@ -36,9 +34,6 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         setStyle("border-color", new V4Color(VColor.black()));
         setStyle("border-size", new V4Int(0));
     }
-
-    @Override
-    public abstract void render();
 
     public int getHitboxX() {
         return getX();

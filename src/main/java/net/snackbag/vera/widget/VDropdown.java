@@ -150,6 +150,8 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
     @Override
     public void handleBuiltinEvent(String event, Object... args) {
+        super.handleBuiltinEvent(event, args);
+
         switch (event) {
             case "left-click" -> {
                 if (isFocused()) {
@@ -209,8 +211,6 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
             case "hover-leave" -> hoveredItem = null;
         }
-
-        super.handleBuiltinEvent(event, args);
     }
 
     private int getItemIndexAt(int mouseY) {

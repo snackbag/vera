@@ -15,7 +15,7 @@ public abstract class VElement {
     protected int width;
     protected int height;
 
-    public boolean visible;
+    public boolean visible = true;
 
     public final EventHandler events;
     public final VeraApp app;
@@ -26,6 +26,8 @@ public abstract class VElement {
 
         this.events = new EventHandler(this);
         this.events.preprocessor = this::handleBuiltinEvent;
+
+        addVisibilityCondition(() -> visible);
 
         this.x = x;
         this.y = y;

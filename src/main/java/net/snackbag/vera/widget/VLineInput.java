@@ -95,14 +95,14 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
 
     @Override
     public void handleBuiltinEvent(String event, Object... args) {
+        super.handleBuiltinEvent(event, args);
+
         if (event.equals("left-click")) {
             textSelection.clear();
 
             if (Vera.getMouseX() < x) cursorPos = 0;
             else if (Vera.getMouseX() > x + Vera.provider.getTextWidth(text, font)) cursorPos = text.length();
         }
-
-        super.handleBuiltinEvent(event, args);
     }
 
     public VFont getFont() {
