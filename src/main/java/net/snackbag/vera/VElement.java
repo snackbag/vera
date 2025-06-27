@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public abstract class VElement {
-    protected int x;
-    protected int y;
+    protected int _x;
+    protected int _y;
     protected int width;
     protected int height;
 
