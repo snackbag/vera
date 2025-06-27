@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class VLayout extends VElement {
-    private final List<VElement> elements = new ArrayList<>();
+    protected final List<VElement> elements = new ArrayList<>();
 
     /**
      * ID for the last position cache call. To be compared with the current render cache ID
