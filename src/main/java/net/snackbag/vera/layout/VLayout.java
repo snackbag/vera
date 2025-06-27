@@ -18,7 +18,7 @@ public abstract class VLayout extends VElement {
      * @reason So we don't calculate the positions of widgets for each getX or getY call
      */
     private long cacheId = 0;
-    private final HashMap<VElement, Vector2i> cache = new HashMap<>();
+    protected final HashMap<VElement, Vector2i> cache = new HashMap<>();
 
     public VLayout(VeraApp app, int x, int y, int width, int height) {
         super(app, x, y, width, height);
