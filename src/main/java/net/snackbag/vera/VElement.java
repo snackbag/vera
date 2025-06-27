@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public abstract class VElement {
@@ -36,6 +37,8 @@ public abstract class VElement {
         this._y = y;
         this.width = width;
         this.height = height;
+
+        onLayoutSwap(layout -> this.layout = layout); // event gets called. we use the event itself to change the layout
     }
 
     public void handleBuiltinEvent(String name, Object... args) {}
@@ -70,6 +73,10 @@ public abstract class VElement {
 
     public void sendMessage(VElement element, String type, @Nullable Object content) {
         element.events.fire("elem-message", new VWidgetMessageEvent.Context(this, type, content));
+    }
+
+    public void onLayoutSwap(Consumer<VLayout> executor) {
+        events.register("elem-layout-swap", args -> executor.accept((VLayout) args[0]));
     }
 
     //
@@ -117,6 +124,4 @@ public abstract class VElement {
         this.width = width;
         this.height = height;
     }
-
-    public
 }

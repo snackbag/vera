@@ -61,6 +61,6 @@ public abstract class VLayout extends VElement {
     public void addElement(VElement elem) {
         if (elements.contains(elem)) return;
         elements.add(elem);
-        elem.layout = this;
+        elem.events.fire("elem-layout-swap", this);
     }
 }
