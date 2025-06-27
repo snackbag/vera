@@ -37,6 +37,9 @@ public class VTabWidget extends VWidget<VTabWidget> {
         int marginX = 0;
         int i = -1;
 
+        int x = getX();
+        int y = getY();
+
         for (String key : tabs.keySet()) {
             int textWidth = Vera.provider.getTextWidth(key, font);
 

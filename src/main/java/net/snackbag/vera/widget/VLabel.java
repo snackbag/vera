@@ -54,12 +54,12 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
 
     @Override
     public int getHitboxX() {
-        return x - padding.get4();
+        return getX() - padding.get4();
     }
 
     @Override
     public int getHitboxY() {
-        return y - padding.get1();
+        return getY() - padding.get1();
     }
 
     public VAlignmentFlag getAlignment() {
@@ -95,6 +95,9 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
         StyleState state = createStyleState();
         VFont font = getStyle("font", state);
         VColor backgroundColor = getStyle("background-color", state);
+
+        int x = getX();
+        int y = getY();
 
         Vera.renderer.drawRect(
                 app,

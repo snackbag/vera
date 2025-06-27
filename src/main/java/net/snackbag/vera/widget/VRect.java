@@ -17,6 +17,6 @@ public class VRect extends VWidget<VRect> {
     public void render() {
         StyleState state = createStyleState();
 
-        Vera.renderer.drawRect(app, x, y, width, height, rotation, getStyle("color", state));
+        Vera.renderer.drawRect(app, getX(), getY(), width, height, rotation, getStyle("color", state));
     }
 }

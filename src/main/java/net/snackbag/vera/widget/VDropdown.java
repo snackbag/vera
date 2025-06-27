@@ -40,6 +40,9 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         StyleState state = createStyleState();
         VColor backgroundColor = getStyle("background-color", state);
 
+        int x = getX();
+        int y = getY();
+
         Vera.renderer.drawRect(
                 app, getHitboxX(), getHitboxY(), getHitboxWidth(), getHitboxHeight(),
                 0, backgroundColor
@@ -118,12 +121,12 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
     @Override
     public int getHitboxX() {
-        return x - padding.get3();
+        return getX() - padding.get3();
     }
 
     @Override
     public int getHitboxY() {
-        return y - padding.get1();
+        return getY() - padding.get1();
     }
 
     @Override
@@ -151,6 +154,9 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
     @Override
     public void handleBuiltinEvent(String event, Object... args) {
         super.handleBuiltinEvent(event, args);
+
+        int x = getX();
+        int y = getY();
 
         switch (event) {
             case "left-click" -> {

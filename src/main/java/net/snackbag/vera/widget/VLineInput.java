@@ -48,6 +48,9 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         VColor backgroundColor = getStyle("background-color", state);
         VColor textSelectionColor = getStyle("select-color", state);
 
+        int x = getX();
+        int y = getY();
+
         Vera.renderer.drawRect(
                 app,
                 getHitboxX() + app.getX(),
@@ -96,6 +99,8 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
     @Override
     public void handleBuiltinEvent(String event, Object... args) {
         super.handleBuiltinEvent(event, args);
+
+        int x = getX();
 
         if (event.equals("left-click")) {
             textSelection.clear();
@@ -440,12 +445,12 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
 
     @Override
     public int getHitboxX() {
-        return x - padding.get4();
+        return getX() - padding.get4();
     }
 
     @Override
     public int getHitboxY() {
-        return y - padding.get1();
+        return getY() - padding.get1();
     }
 
     @Override

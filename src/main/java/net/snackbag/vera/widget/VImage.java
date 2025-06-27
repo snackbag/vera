@@ -22,6 +22,6 @@ public class VImage extends VWidget<VImage> {
         StyleState state = createStyleState();
         Identifier src = getStyle("src", state);
 
-        Vera.renderer.drawImage(app, x, y, width, height, rotation, src);
+        Vera.renderer.drawImage(app, getX(), getY(), width, height, rotation, src);
     }
 }
