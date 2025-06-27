@@ -37,7 +37,7 @@ public abstract class VLayout extends VElement {
     public Vector2i posOf(VElement elem) {
         checkCache();
 
-        if (!cache.containsKey(elem)) throw new RuntimeException("Layout cache does not contain requested element");
+        if (!cache.containsKey(elem)) throw new RuntimeException("Layout cache does not contain requested element '%s'".formatted(elem.toString()));
         return cache.get(elem);
     }
 
@@ -61,5 +61,6 @@ public abstract class VLayout extends VElement {
     public void addElement(VElement elem) {
         if (elements.contains(elem)) return;
         elements.add(elem);
+        elem.layout = this;
     }
 }
