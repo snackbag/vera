@@ -35,6 +35,8 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         setStyle("border-size", new V4Int(0));
     }
 
+    public abstract void render();
+
     public int getHitboxX() {
         return getX();
     }

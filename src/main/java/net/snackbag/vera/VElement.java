@@ -35,7 +35,6 @@ public abstract class VElement {
         this.height = height;
     }
 
-    public abstract void render();
     public void handleBuiltinEvent(String name, Object... args) {}
 
     //
