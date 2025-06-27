@@ -310,6 +310,11 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         app.removeWidget(this);
     }
 
+    public T alsoAddClass(String clazz) {
+        classes.add(clazz);
+        return (T) this;
+    }
+
     public T alsoAdd() {
         app.addWidget(this);
         return (T) this;
