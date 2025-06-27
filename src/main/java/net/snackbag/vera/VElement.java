@@ -3,6 +3,7 @@ package net.snackbag.vera;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.EventHandler;
 import net.snackbag.vera.event.VWidgetMessageEvent;
+import net.snackbag.vera.layout.VLayout;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ public abstract class VElement {
     public final EventHandler events;
     public final VeraApp app;
     private final List<Supplier<Boolean>> visibilityConditions = new ArrayList<>();
+
+    protected @Nullable VLayout layout;
 
     public VElement(VeraApp app, int x, int y, int width, int height) {
         this.app = app;
@@ -74,11 +77,11 @@ public abstract class VElement {
     //
 
     public int getX() {
-        return x;
+        return layout != null ? layout.posOf(this).x : x;
     }
 
     public int getY() {
-        return y;
+        return layout != null ? layout.posOf(this).y : y;
     }
 
     public void move(int both) {
@@ -114,4 +117,6 @@ public abstract class VElement {
         this.width = width;
         this.height = height;
     }
+
+    public
 }
