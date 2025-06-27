@@ -11,8 +11,8 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
     private V4Int padding;
     private VHAlignmentFlag alignment;
 
-    public VLabel(String text, VeraApp app) {
-        super(0, 0, 100, 16, app);
+    public VLabel(String text, int x, int y, int width, int height, VeraApp app) {
+        super(x, y, width, height, app);
 
         this.text = text;
         this.padding = new V4Int(4);
@@ -21,6 +21,10 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
 
         setStyle("background-color", VColor.transparent());
         setStyle("font", VFont.create());
+    }
+
+    public VLabel(String text, VeraApp app) {
+        this(text, 0, 0, 100, 16, app);
 
         adjustSize();
     }
