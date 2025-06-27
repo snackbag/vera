@@ -6,6 +6,7 @@ import net.snackbag.vera.core.*;
 import net.snackbag.vera.event.*;
 import net.snackbag.vera.layout.VLayout;
 import net.snackbag.vera.style.StyleState;
+import net.snackbag.vera.util.DragHandler;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -87,6 +88,14 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         if (leftClickDown) return StyleState.LEFT_CLICKED;
         else if (middleClickDown) return StyleState.MIDDLE_CLICKED;
         else if (rightClickDown) return StyleState.RIGHT_CLICKED;
+
+        else if (DragHandler.isDragging() && DragHandler.target == this) {
+            return switch (DragHandler.button) {
+                case LEFT -> StyleState.LC_DRAGGING;
+                case MIDDLE -> StyleState.MC_DRAGGING;
+                case RIGHT -> StyleState.RC_DRAGGING;
+            };
+        }
 
         // Hover as last, since everything else is hover too
         else if (isHovered()) return StyleState.HOVERED;
