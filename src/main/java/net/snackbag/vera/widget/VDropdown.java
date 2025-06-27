@@ -166,6 +166,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
                     }
 
                     setFocused(false);
+                    return;
                 }
             }
 
@@ -178,6 +179,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
                     }
 
                     setFocused(false);
+                    return;
                 }
             }
 
@@ -190,6 +192,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
                     }
 
                     setFocused(false);
+                    return;
                 }
             }
 
