@@ -13,6 +13,15 @@ public class VHLayout extends VLayout {
         this(app, x, y, -1, -1);
     }
 
+    public VHLayout(VLayout parent, int width, int height) {
+        this(parent.app, 0, 0, width, height);
+        this.alsoAddTo(parent);
+    }
+
+    public VHLayout(VLayout parent) {
+        this(parent, -1, -1);
+    }
+
     @Override
     public void rebuild() {
         int x = getX();
