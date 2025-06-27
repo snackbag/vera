@@ -124,4 +124,9 @@ public abstract class VElement {
         this.width = width;
         this.height = height;
     }
+
+    public <T extends VElement> T alsoAddTo(VLayout layout) {
+        layout.addElement(this);
+        return (T) this;
+    }
 }
