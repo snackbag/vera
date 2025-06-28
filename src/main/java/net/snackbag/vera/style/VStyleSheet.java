@@ -103,7 +103,7 @@ public class VStyleSheet {
 
         value = StyleValueType.convert(value, valRes);
 
-        styleClasses.put(clazz, key, state, value);
+        classStyles.put(clazz, key, state, value);
     }
 
     public VColor.ColorModifier modifyKeyAsColor(VWidget<?> widget, String key) {
@@ -145,7 +145,7 @@ public class VStyleSheet {
 
         // Apply changes if everything went fine
         typeRegistry = mergedTypeRegistry;
-        styleClasses.moldWith(target.styleClasses);
+        classStyles.moldWith(target.classStyles);
         widgetSpecificStyles.moldWith(target.widgetSpecificStyles);
     }
 
@@ -153,7 +153,7 @@ public class VStyleSheet {
         final HashMap<String, HashMap<StyleState, Object>> values = new HashMap<>();
 
         for (String clazz : classes) {
-            HashMap<String, HashMap<StyleState, Object>> styles = styleClasses.getPart(clazz);
+            HashMap<String, HashMap<StyleState, Object>> styles = classStyles.getPart(clazz);
             for (String key : styles.keySet()) values.put(key, styles.get(key));
         }
 
