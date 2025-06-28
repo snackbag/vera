@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 public class VStyleSheet {
-    private final HashMap<VWidget<?>, HashMap<String, HashMap<StyleState, Object>>> widgetSpecificStyles = new HashMap<>();
-    private final HashMap<String, HashMap<String, HashMap<StyleState, Object>>> styleClasses = new HashMap<>();
-    private final HashMap<String, StyleValueType> typeRegistry = new HashMap<>();
+    private HashMap<VWidget<?>, HashMap<String, HashMap<StyleState, Object>>> widgetSpecificStyles = new HashMap<>();
+    private HashMap<String, HashMap<String, HashMap<StyleState, Object>>> styleClasses = new HashMap<>();
+    private HashMap<String, StyleValueType> typeRegistry = new HashMap<>();
 
     public VStyleSheet() {
         // Generic
