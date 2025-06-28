@@ -36,7 +36,7 @@ public class StyleTestApplication extends VeraApp {
         VStyleSheet sheet = new VStyleSheet();
 
         sheet.setKey("label", "font", VFont.create());
-        sheet.setKey("label", "font", VFont.create().withColor(VColor.of(20)), StyleState.HOVERED);
+        sheet.setKey("label", "font", VFont.create().withColor(VColor.MC_GOLD), StyleState.HOVERED);
 
         return sheet;
     }
