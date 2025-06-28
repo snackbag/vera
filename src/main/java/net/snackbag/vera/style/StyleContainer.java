@@ -1,8 +1,5 @@
 package net.snackbag.vera.style;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.HashMap;
 
 /**
