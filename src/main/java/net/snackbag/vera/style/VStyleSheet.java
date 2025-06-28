@@ -10,8 +10,10 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 public class VStyleSheet {
-    private final StyleContainer<VWidget<?>> widgetSpecificStyles = new StyleContainer<>();
-    private final StyleContainer<String> styleClasses = new StyleContainer<>();
+    private final StyleContainer<VWidget<?>> widgetSpecificStyles = new StyleContainer<>(); // like HTML #IDs
+    private final StyleContainer<String> classStyles = new StyleContainer<>(); // like CSS .classes
+    private final StyleContainer<Class<?>> globalStyles = new StyleContainer<>(); // like HTML <tags/>
+
     private HashMap<String, StyleValueType> typeRegistry = new HashMap<>();
 
     public VStyleSheet() {
