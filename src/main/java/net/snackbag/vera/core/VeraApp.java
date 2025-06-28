@@ -333,4 +333,8 @@ public abstract class VeraApp {
     public void charTyped(char chr, int modifiers) {
         if (hasFocusedWidget()) getFocusedWidget().charTyped(chr, modifiers);
     }
+
+    public void mergeStyleSheet(VStyleSheet target) {
+        styleSheet.addSheet(target);
+    }
 }
