@@ -1,0 +1,23 @@
+VeraApp {
+    background-color: (0 0 0 0.40);
+}
+
+VLabel {
+    color: black;
+    background-color: white;
+
+    padding: 5px 15px;
+    border: 1px (0 0 0);
+    border-opacity: 0.5;
+
+    cursor: pointer;
+    transition: 0.1s;
+}
+
+VLabel:hover {
+    background-filter: "sub" 20;
+}
+
+VLabel:clicked {
+    background-filter: "sub" 40;
+}

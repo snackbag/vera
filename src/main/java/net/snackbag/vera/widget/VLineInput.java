@@ -6,6 +6,7 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.event.VCharLimitedEvent;
 import net.snackbag.vera.modifier.VPaddingWidget;
+import net.snackbag.vera.style.StyleState;
 import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
@@ -16,13 +17,10 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
     private VFont font;
     private VFont placeholderFont;
 
-    private @Nullable VColor cursorColor;
     private int cursorPos;
     private TextSelection textSelection;
-    private VColor textSelectionColor;
     private int maxChars;
 
-    private VColor backgroundColor;
     private V4Int padding;
 
     public VLineInput(VeraApp app) {
@@ -32,20 +30,27 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         this.placeholderText = "";
         this.font = VFont.create();
         this.placeholderFont = VFont.create().withColor(VColor.black().withOpacity(0.5f));
-        this.cursorColor = null;
         this.cursorPos = 0;
         this.textSelection = new TextSelection();
-        this.textSelectionColor = VColor.of(0, 120, 215, 0.2f);
+        setStyle("select-color", VColor.of(0, 120, 215, 0.2f));
         this.maxChars = -1;
 
-        this.backgroundColor = VColor.transparent();
+        setStyle("background-color", VColor.transparent());
         this.padding = new V4Int(4);
 
-        setHoverCursor(VCursorShape.TEXT);
+        setStyle("cursor", StyleState.HOVERED, VCursorShape.TEXT);
     }
 
     @Override
     public void render() {
+        StyleState state = createStyleState();
+
+        VColor backgroundColor = getStyle("background-color", state);
+        VColor textSelectionColor = getStyle("select-color", state);
+
+        int x = getX();
+        int y = getY();
+
         Vera.renderer.drawRect(
                 app,
                 getHitboxX() + app.getX(),
@@ -93,14 +98,16 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
 
     @Override
     public void handleBuiltinEvent(String event, Object... args) {
+        super.handleBuiltinEvent(event, args);
+
+        int x = getX();
+
         if (event.equals("left-click")) {
             textSelection.clear();
 
             if (Vera.getMouseX() < x) cursorPos = 0;
             else if (Vera.getMouseX() > x + Vera.provider.getTextWidth(text, font)) cursorPos = text.length();
         }
-
-        super.handleBuiltinEvent(event, args);
     }
 
     public VFont getFont() {
@@ -135,25 +142,13 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         return new VColor.ColorModifier(font.getColor(), (color) -> setFont(font.withColor(color)));
     }
 
-    public VColor getBackgroundColor() {
-        return backgroundColor;
-    }
-
-    public void setBackgroundColor(VColor backgroundColor) {
-        this.backgroundColor = backgroundColor;
-    }
-
-    public VColor.ColorModifier modifyBackgroundColor() {
-        return new VColor.ColorModifier(backgroundColor, this::setBackgroundColor);
-    }
-
     public String getText() {
         return text;
     }
 
     public void setText(String text) {
         this.text = text;
-        fireEvent("vline-change");
+        events.fire("vline-change");
     }
 
     public boolean isSelectingText() {
@@ -177,18 +172,6 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         textSelection.setEndPos(end);
     }
 
-    public VColor getTextSelectionColor() {
-        return textSelectionColor;
-    }
-
-    public void setTextSelectionColor(VColor textSelectionColor) {
-        this.textSelectionColor = textSelectionColor;
-    }
-
-    public VColor.ColorModifier modifyTextSelectionColor() {
-        return new VColor.ColorModifier(textSelectionColor, this::setTextSelectionColor);
-    }
-
     public int getMaxChars() {
         return maxChars;
     }
@@ -210,23 +193,23 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
     }
 
     public void onLineChanged(Runnable runnable) {
-        registerEventExecutor("vline-change", runnable);
+        events.register("vline-change", runnable);
     }
 
     public void onCursorMove(Runnable runnable) {
-        registerEventExecutor("vline-cursor-move", runnable);
+        events.register("vline-cursor-move", runnable);
     }
 
     public void onCursorMoveLeft(Runnable runnable) {
-        registerEventExecutor("vline-cursor-move-left", runnable);
+        events.register("vline-cursor-move-left", runnable);
     }
 
     public void onCursorMoveRight(Runnable runnable) {
-        registerEventExecutor("vline-cursor-move-right", runnable);
+        events.register("vline-cursor-move-right", runnable);
     }
 
     public void onAddCharLimited(VCharLimitedEvent runnable) {
-        registerEventExecutor("vline-add-char-limited", args -> runnable.run((char) args[0]));
+        events.register("vline-add-char-limited", args -> runnable.run((char) args[0]));
     }
 
     @Override
@@ -311,32 +294,32 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         // Handle word navigation
         else if (isDown(GLFW.GLFW_KEY_LEFT) && isAltDown() && cursorPos > 0) {
             cursorPos = Math.max(0, jumpToWordStart(cursorPos));
-            fireEvent("vline-cursor-move");
-            fireEvent("vline-cursor-move-left");
+            events.fire("vline-cursor-move");
+            events.fire("vline-cursor-move-left");
         } else if (isDown(GLFW.GLFW_KEY_RIGHT) && isAltDown() && cursorPos < text.length()) {
             cursorPos = Math.min(text.length(), jumpToWordEnd(cursorPos));
-            fireEvent("vline-cursor-move");
-            fireEvent("vline-cursor-move-right");
+            events.fire("vline-cursor-move");
+            events.fire("vline-cursor-move-right");
         }
         // Handle line navigation
         else if (isDown(GLFW.GLFW_KEY_LEFT) && isCtrlDown()) {
             cursorPos = 0;
-            fireEvent("vline-cursor-move");
-            fireEvent("vline-cursor-move-left");
+            events.fire("vline-cursor-move");
+            events.fire("vline-cursor-move-left");
         } else if (isDown(GLFW.GLFW_KEY_RIGHT) && isCtrlDown()) {
             cursorPos = text.length();
-            fireEvent("vline-cursor-move");
-            fireEvent("vline-cursor-move-right");
+            events.fire("vline-cursor-move");
+            events.fire("vline-cursor-move-right");
         }
         // Handle character navigation
         else if (keyCode == GLFW.GLFW_KEY_LEFT && cursorPos > 0) {
             cursorPos = Math.max(0, cursorPos - 1);
-            fireEvent("vline-cursor-move");
-            fireEvent("vline-cursor-move-left");
+            events.fire("vline-cursor-move");
+            events.fire("vline-cursor-move-left");
         } else if (keyCode == GLFW.GLFW_KEY_RIGHT && cursorPos < text.length()) {
             cursorPos = Math.min(text.length(), cursorPos + 1);
-            fireEvent("vline-cursor-move");
-            fireEvent("vline-cursor-move-right");
+            events.fire("vline-cursor-move");
+            events.fire("vline-cursor-move-right");
         }
 
         super.keyPressed(keyCode, scanCode, modifiers);
@@ -368,12 +351,12 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
 
         cursorPos = newPos;
         textSelection.endPos = newPos;
-        fireEvent("vline-cursor-move");
+        events.fire("vline-cursor-move");
     }
 
     private void insertText(String insertion) {
         if (maxChars > -1 && text.length() + insertion.length() > maxChars) {
-            fireEvent("vline-add-char-limited", insertion.charAt(0));
+            events.fire("vline-add-char-limited", insertion.charAt(0));
             return;
         }
 
@@ -381,7 +364,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         String back = text.substring(cursorPos);
         text = front + insertion + back;
         cursorPos += insertion.length();
-        fireEvent("vline-change");
+        events.fire("vline-change");
     }
 
     private void deleteSelectedText() {
@@ -395,7 +378,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         text = front + back;
         cursorPos = start;
         clearTextSelection();
-        fireEvent("vline-change");
+        events.fire("vline-change");
     }
 
     private void replaceSelectedText(String replacement) {
@@ -405,7 +388,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         int end = Math.max(textSelection.startPos, textSelection.endPos);
 
         if (maxChars > -1 && text.length() - (end - start) + replacement.length() > maxChars) {
-            fireEvent("vline-add-char-limited", replacement.charAt(0));
+            events.fire("vline-add-char-limited", replacement.charAt(0));
             return;
         }
 
@@ -414,7 +397,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         text = front + replacement + back;
         cursorPos = start + replacement.length();
         clearTextSelection();
-        fireEvent("vline-change");
+        events.fire("vline-change");
     }
 
 
@@ -433,16 +416,10 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         this.cursorPos = cursorPos;
     }
 
-    public @Nullable VColor getCursorColor() {
-        return cursorColor;
-    }
-
     public VColor getCursorColorSafe() {
-        return cursorColor == null ? font.getColor() : cursorColor;
-    }
+        VColor style = getStyleOrDefault("cursor-color", null);
 
-    public void setCursorColor(@Nullable VColor cursorColor) {
-        this.cursorColor = cursorColor;
+        return style == null ? font.getColor() : style;
     }
 
     @Override
@@ -468,12 +445,12 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
 
     @Override
     public int getHitboxX() {
-        return x - padding.get4();
+        return getX() - padding.get4();
     }
 
     @Override
     public int getHitboxY() {
-        return y - padding.get1();
+        return getY() - padding.get1();
     }
 
     @Override
@@ -485,7 +462,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
                 int end = Math.max(textSelection.startPos, textSelection.endPos);
 
                 if (maxChars > -1 && text.length() - (end - start) + 1 > maxChars) {
-                    fireEvent("vline-add-char-limited", chr);
+                    events.fire("vline-add-char-limited", chr);
                     return;
                 }
 
@@ -495,11 +472,11 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
                 text = front + chr + back;
                 cursorPos = start + 1;
                 clearTextSelection();
-                fireEvent("vline-change");
+                events.fire("vline-change");
             } else {
                 // Normal character insertion
                 if (maxChars > -1 && text.length() >= maxChars) {
-                    fireEvent("vline-add-char-limited", chr);
+                    events.fire("vline-add-char-limited", chr);
                     return;
                 }
 
@@ -508,7 +485,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
 
                 text = front + chr + back;
                 cursorPos += 1;
-                fireEvent("vline-change");
+                events.fire("vline-change");
             }
         }
         super.charTyped(chr, modifiers);
@@ -587,7 +564,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         builder.delete(start, end);
         text = builder.toString();
         cursorPos = Math.min(start, text.length());
-        fireEvent("vline-change");
+        events.fire("vline-change");
     }
 
     public static class TextSelection {
