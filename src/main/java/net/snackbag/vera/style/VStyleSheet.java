@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 public class VStyleSheet {
-    private HashMap<VWidget<?>, HashMap<String, HashMap<StyleState, Object>>> widgetSpecificStyles = new HashMap<>();
-    private HashMap<String, HashMap<String, HashMap<StyleState, Object>>> styleClasses = new HashMap<>();
+    private final StyleContainer<VWidget<?>> widgetSpecificStyles = new StyleContainer<>();
+    private final StyleContainer<String> styleClasses = new StyleContainer<>();
     private HashMap<String, StyleValueType> typeRegistry = new HashMap<>();
 
     public VStyleSheet() {
@@ -44,11 +44,6 @@ public class VStyleSheet {
     public <T> T getKey(VWidget<?> widget, String key, @Nullable StyleState state) {
         if (state == null) state = StyleState.DEFAULT;
 
-        if (widgetSpecificStyles.containsKey(widget) && widgetSpecificStyles.get(widget).containsKey(key)) {
-            if (!widgetSpecificStyles.get(widget).get(key).containsKey(state)) return getKey(widget, key, state.fallback);
-            return (T) widgetSpecificStyles.get(widget).get(key).get(state);
-        }
-
         HashMap<String, HashMap<StyleState, Object>> mixed = mixClasses(widget.classes);
 
         if (mixed.containsKey(key)) {
@@ -56,6 +51,14 @@ public class VStyleSheet {
             return (T) mixed.get(key).get(state);
         }
 
+        // if widget contains key
+        if (widgetSpecificStyles.hasKey(widget, key)) {
+            // if it doesn't contain the state return with the fallback
+            if (!widgetSpecificStyles.hasState(widget, key, state)) return getKey(widget, key, state.fallback);
+            return widgetSpecificStyles.getState(widget, key, state);
+        }
+
+        // if nothing worked, return null
         return null;
     }
 
@@ -81,9 +84,7 @@ public class VStyleSheet {
 
         value = StyleValueType.convert(value, valRes);
 
-        if (!widgetSpecificStyles.containsKey(widget)) widgetSpecificStyles.put(widget, new HashMap<>());
-        if (!widgetSpecificStyles.get(widget).containsKey(key)) widgetSpecificStyles.get(widget).put(key, new HashMap<>());
-        widgetSpecificStyles.get(widget).get(key).put(state, value);
+        widgetSpecificStyles.put(widget, key, state, value);
     }
 
     public void setKey(String clazz, String key, Object value, @Nullable StyleState state) {
@@ -100,9 +101,7 @@ public class VStyleSheet {
 
         value = StyleValueType.convert(value, valRes);
 
-        if (!styleClasses.containsKey(clazz)) styleClasses.put(clazz, new HashMap<>());
-        if (!styleClasses.get(clazz).containsKey(key)) styleClasses.get(clazz).put(key, new HashMap<>());
-        styleClasses.get(clazz).get(key).put(state, value);
+        styleClasses.put(clazz, key, state, value);
     }
 
     public VColor.ColorModifier modifyKeyAsColor(VWidget<?> widget, String key) {
@@ -119,10 +118,6 @@ public class VStyleSheet {
 
     public @Nullable StyleValueType getReservation(String key) {
         return typeRegistry.getOrDefault(key, null);
-    }
-
-    public HashMap<String, HashMap<StyleState, Object>> getClassStyles(String clazz) {
-        return styleClasses.getOrDefault(clazz, new HashMap<>());
     }
 
     private Object potentiallyUnpackArray(Object value) {
@@ -146,59 +141,17 @@ public class VStyleSheet {
                 throw new UnsupportedOperationException("Cannot merge two sheets with different type registry entries. Received %s:%s; already %s".formatted(key, type, mergedTypeRegistry.get(key)));
         }
 
-        // Merge style classes
-        HashMap<String, HashMap<String, HashMap<StyleState, Object>>> mergedStyleClasses = new HashMap<>(styleClasses);
-
-        for (String clazz : target.styleClasses.keySet()) {
-            for (String key : target.styleClasses.get(clazz).keySet()) {
-                for (StyleState state : target.styleClasses.get(clazz).get(key).keySet()) {
-                    if (!mergedStyleClasses.containsKey(clazz)) {
-                        mergedStyleClasses.put(clazz, target.styleClasses.get(clazz));
-                        continue;
-                    }
-
-                    if (!mergedStyleClasses.get(clazz).containsKey(key)) {
-                        mergedStyleClasses.get(clazz).put(key, target.styleClasses.get(clazz).get(key));
-                        continue;
-                    }
-
-                    mergedStyleClasses.get(clazz).get(key).put(state, target.styleClasses.get(clazz).get(key).get(state));
-                }
-            }
-        }
-
-        // Merge widget specific styles
-        HashMap<VWidget<?>, HashMap<String, HashMap<StyleState, Object>>> mergedWidgetSpecificStyles = new HashMap<>(widgetSpecificStyles);
-
-        for (VWidget<?> widget : target.widgetSpecificStyles.keySet()) {
-            for (String key : target.widgetSpecificStyles.get(widget).keySet()) {
-                for (StyleState state : target.widgetSpecificStyles.get(widget).get(key).keySet()) {
-                    if (!mergedWidgetSpecificStyles.containsKey(widget)) {
-                        mergedWidgetSpecificStyles.put(widget, target.widgetSpecificStyles.get(widget));
-                        continue;
-                    }
-
-                    if (!mergedWidgetSpecificStyles.get(widget).containsKey(key)) {
-                        mergedWidgetSpecificStyles.get(widget).put(key, target.widgetSpecificStyles.get(widget).get(key));
-                        continue;
-                    }
-
-                    mergedWidgetSpecificStyles.get(widget).get(key).put(state, target.widgetSpecificStyles.get(widget).get(key).get(state));
-                }
-            }
-        }
-
         // Apply changes if everything went fine
         typeRegistry = mergedTypeRegistry;
-        styleClasses = mergedStyleClasses;
-        widgetSpecificStyles = mergedWidgetSpecificStyles;
+        styleClasses.moldWith(target.styleClasses);
+        widgetSpecificStyles.moldWith(target.widgetSpecificStyles);
     }
 
     public HashMap<String, HashMap<StyleState, Object>> mixClasses(LinkedHashSet<String> classes) {
         final HashMap<String, HashMap<StyleState, Object>> values = new HashMap<>();
 
         for (String clazz : classes) {
-            HashMap<String, HashMap<StyleState, Object>> styles = getClassStyles(clazz);
+            HashMap<String, HashMap<StyleState, Object>> styles = styleClasses.getPart(clazz);
             for (String key : styles.keySet()) values.put(key, styles.get(key));
         }
 
