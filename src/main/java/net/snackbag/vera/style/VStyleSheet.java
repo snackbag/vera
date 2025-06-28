@@ -134,6 +134,66 @@ public class VStyleSheet {
         return value;
     }
 
+    public void addSheet(VStyleSheet target) {
+        // Merge type registries
+        HashMap<String, StyleValueType> mergedTypeRegistry = new HashMap<>(typeRegistry);
+
+        for (String key : target.typeRegistry.keySet()) {
+            StyleValueType type = target.typeRegistry.get(key);
+
+            if (!mergedTypeRegistry.containsKey(key)) mergedTypeRegistry.put(key, type);
+            else if (mergedTypeRegistry.get(key) != type)
+                throw new UnsupportedOperationException("Cannot merge two sheets with different type registry entries. Received %s:%s; already %s".formatted(key, type, mergedTypeRegistry.get(key)));
+        }
+
+        // Merge style classes
+        HashMap<String, HashMap<String, HashMap<StyleState, Object>>> mergedStyleClasses = new HashMap<>(styleClasses);
+
+        for (String clazz : target.styleClasses.keySet()) {
+            for (String key : target.styleClasses.get(clazz).keySet()) {
+                for (StyleState state : target.styleClasses.get(clazz).get(key).keySet()) {
+                    if (!mergedStyleClasses.containsKey(clazz)) {
+                        mergedStyleClasses.put(clazz, target.styleClasses.get(clazz));
+                        continue;
+                    }
+
+                    if (!mergedStyleClasses.get(clazz).containsKey(key)) {
+                        mergedStyleClasses.get(clazz).put(key, target.styleClasses.get(clazz).get(key));
+                        continue;
+                    }
+
+                    mergedStyleClasses.get(clazz).get(key).put(state, target.styleClasses.get(clazz).get(key).get(state));
+                }
+            }
+        }
+
+        // Merge widget specific styles
+        HashMap<VWidget<?>, HashMap<String, HashMap<StyleState, Object>>> mergedWidgetSpecificStyles = new HashMap<>(widgetSpecificStyles);
+
+        for (VWidget<?> widget : target.widgetSpecificStyles.keySet()) {
+            for (String key : target.widgetSpecificStyles.get(widget).keySet()) {
+                for (StyleState state : target.widgetSpecificStyles.get(widget).get(key).keySet()) {
+                    if (!mergedWidgetSpecificStyles.containsKey(widget)) {
+                        mergedWidgetSpecificStyles.put(widget, target.widgetSpecificStyles.get(widget));
+                        continue;
+                    }
+
+                    if (!mergedWidgetSpecificStyles.get(widget).containsKey(key)) {
+                        mergedWidgetSpecificStyles.get(widget).put(key, target.widgetSpecificStyles.get(widget).get(key));
+                        continue;
+                    }
+
+                    mergedWidgetSpecificStyles.get(widget).get(key).put(state, target.widgetSpecificStyles.get(widget).get(key).get(state));
+                }
+            }
+        }
+
+        // Apply changes if everything went fine
+        typeRegistry = mergedTypeRegistry;
+        styleClasses = mergedStyleClasses;
+        widgetSpecificStyles = mergedWidgetSpecificStyles;
+    }
+
     public HashMap<String, HashMap<StyleState, Object>> mixClasses(LinkedHashSet<String> classes) {
         final HashMap<String, HashMap<StyleState, Object>> values = new HashMap<>();
 
