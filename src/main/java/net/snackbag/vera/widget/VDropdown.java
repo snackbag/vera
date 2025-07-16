@@ -29,11 +29,8 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         items = new ArrayList<>();
         font = VFont.create();
         hoverFont = VFont.create();
-        setStyle("background-color", VColor.white());
         itemHoverColor = VColor.white().sub(30);
         padding = new V4Int(5, 10);
-
-        setStyle("cursor", StyleState.HOVERED, VCursorShape.POINTING_HAND);
     }
 
     @Override
