@@ -11,9 +11,6 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class VTabWidget extends VWidget<VTabWidget> {
-    private int itemSpacingLeft = 4;
-    private int itemSpacingRight = 4;
-
     private final LinkedHashMap<String, List<VWidget<?>>> tabs = new LinkedHashMap<>();
     private @Nullable Integer activeTab = null;
     private @Nullable Integer hoveredTab = null;
@@ -29,6 +26,8 @@ public class VTabWidget extends VWidget<VTabWidget> {
         VFont font = getStyle("font", state);
         VColor defaultBackgroundColor = getStyle("background-color", state);
         VColor selectedBackgroundColor = getStyle("background-color-selected", state);
+        int itemSpacingLeft = getStyle("item-spacing-left", state);
+        int itemSpacingRight = getStyle("item-spacing-right", state);
 
         int marginX = 0;
         int i = -1;
@@ -105,12 +104,18 @@ public class VTabWidget extends VWidget<VTabWidget> {
     }
 
     public int getHoveredTabIndex(int mouseX) {
+        StyleState state = createStyleState();
+
+        VFont font = getStyle("font", state);
+        int itemSpacingLeft = getStyle("item-spacing-left", state);
+        int itemSpacingRight = getStyle("item-spacing-right", state);
+
         int relativeX = mouseX - getHitboxX();
         int currentX = 0;
         int index = 0;
 
         for (String tabName : tabs.keySet()) {
-            int textWidth = Vera.provider.getTextWidth(tabName, getStyle("font", createStyleState()));
+            int textWidth = Vera.provider.getTextWidth(tabName, font);
             int totalTabWidth = itemSpacingLeft + textWidth + itemSpacingRight;
 
             if (relativeX >= currentX && relativeX < currentX + totalTabWidth) {
@@ -199,10 +204,14 @@ public class VTabWidget extends VWidget<VTabWidget> {
     public int getHitboxWidth() {
         StyleState state = createStyleState();
 
+        VFont font = getStyle("font", state);
+        int itemSpacingLeft = getStyle("item-spacing-left", state);
+        int itemSpacingRight = getStyle("item-spacing-right", state);
+
         int currentX = 0;
 
         for (String tabName : tabs.keySet()) {
-            int textWidth = Vera.provider.getTextWidth(tabName, getStyle("font", state));
+            int textWidth = Vera.provider.getTextWidth(tabName, font);
             int totalTabWidth = itemSpacingLeft + textWidth + itemSpacingRight;
 
             currentX += totalTabWidth;
@@ -237,21 +246,5 @@ public class VTabWidget extends VWidget<VTabWidget> {
 
     public VColor.ColorModifier modifyBackgroundColor() {
         return app.styleSheet.modifyKeyAsColor(this, "background-color");
-    }
-
-    public int getItemSpacingLeft() {
-        return itemSpacingLeft;
-    }
-
-    public void setItemSpacingLeft(int itemSpacingLeft) {
-        this.itemSpacingLeft = itemSpacingLeft;
-    }
-
-    public int getItemSpacingRight() {
-        return itemSpacingRight;
-    }
-
-    public void setItemSpacingRight(int itemSpacingRight) {
-        this.itemSpacingRight = itemSpacingRight;
     }
 }
