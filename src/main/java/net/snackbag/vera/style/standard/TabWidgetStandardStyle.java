@@ -11,9 +11,4 @@ public class TabWidgetStandardStyle implements VStandardStyle {
     public void apply(VStyleSheet sheet) {
         sheet.setKey(VTabWidget.class, "cursor", VCursorShape.POINTING_HAND, StyleState.HOVERED);
     }
-
-    @Override
-    public void reserve(VStyleSheet sheet) {
-        sheet.reserveType("cursor", StyleValueType.CURSOR);
-    }
 }
