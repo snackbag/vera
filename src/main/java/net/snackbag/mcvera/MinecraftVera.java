@@ -15,6 +15,7 @@ public class MinecraftVera implements ModInitializer {
 	public void onInitialize() {
 		LOGGER.info("Loading Vera...");
 
+		// sorted alphabetically
 		Vera.registrar.registerStandardStyle(new WidgetStandardStyle());
 		Vera.registrar.registerStandardStyle(new LabelStandardStyle());
 		Vera.registrar.registerStandardStyle(new RectStandardStyle());
@@ -22,5 +23,6 @@ public class MinecraftVera implements ModInitializer {
 		Vera.registrar.registerStandardStyle(new LineInputStandardStyle());
 		Vera.registrar.registerStandardStyle(new ImageStandardStyle());
 		Vera.registrar.registerStandardStyle(new DropdownStandardStyle());
+		Vera.registrar.registerStandardStyle(new CheckBoxStandardStyle());
 	}
 }

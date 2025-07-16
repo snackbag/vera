@@ -17,11 +17,6 @@ public class VStyleSheet {
 
     private HashMap<String, StyleValueType> typeRegistry = new HashMap<>();
 
-    public VStyleSheet() {
-        // Checkbox
-        reserveType("src-checked", StyleValueType.IDENTIFIER);
-    }
-
     public <T> T getKey(VWidget<?> widget, String key) {
         return getKey(widget, key, StyleState.DEFAULT);
     }
