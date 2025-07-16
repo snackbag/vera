@@ -138,18 +138,39 @@ public class VStyleSheet {
     }
 
     public VColor.ColorModifier modifyKeyAsColor(VWidget<?> widget, String key) {
-        return new VColor.ColorModifier(getKey(widget, key), color -> setKey(widget, key, color));
+        return modifyKeyAsColor(widget, key, StyleState.DEFAULT);
+    }
+
+    public VColor.ColorModifier modifyKeyAsColor(VWidget<?> widget, String key, @Nullable StyleState state) {
+        if (state == null) state = StyleState.DEFAULT;
+
+        @Nullable StyleState finalState = state;
+        return new VColor.ColorModifier(getKey(widget, key, state), color -> setKey(widget, key, color, finalState));
     }
 
     public VFont.FontModifier modifyKeyAsFont(VWidget<?> widget, String key) {
-        return new VFont.FontModifier(getKey(widget, key), font -> setKey(widget, key, font));
+        return modifyKeyAsFont(widget, key, StyleState.DEFAULT);
+    }
+
+    public VFont.FontModifier modifyKeyAsFont(VWidget<?> widget, String key, @Nullable StyleState state) {
+        if (state == null) state = StyleState.DEFAULT;
+
+        @Nullable StyleState finalState = state;
+        return new VFont.FontModifier(getKey(widget, key, state), font -> setKey(widget, key, font, finalState));
     }
 
     public VColor.ColorModifier modifyKeyAsFontColor(VWidget<?> widget, String key) {
+        return modifyKeyAsColor(widget, key, StyleState.DEFAULT);
+    }
+
+    public VColor.ColorModifier modifyKeyAsFontColor(VWidget<?> widget, String key, @Nullable StyleState state) {
+        if (state == null) state = StyleState.DEFAULT;
+
         // this is cursed
+        @Nullable StyleState finalState = state;
         return new VColor.ColorModifier(
-                ((VFont) getKey(widget, key)).getColor(),
-                color -> modifyKeyAsFont(widget, key).color(color)
+                ((VFont) getKey(widget, key, state)).getColor(),
+                color -> modifyKeyAsFont(widget, key, finalState).color(color)
         );
     }
 
