@@ -2,6 +2,7 @@ package net.snackbag.mcvera.test;
 
 import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
+import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.flag.VHAlignmentFlag;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
@@ -60,7 +61,7 @@ public class TestApplication extends VeraApp {
         label.setStyle("padding", 5);
         label.move(10);
         label.setStyle("background-color", VColor.black());
-        label.modifyFont("font").color(VColor.white());
+        label.modifyFont().color(VColor.white());
         label.adjustSize();
         label.onHover(() -> {
             label.setText("Hovered");
@@ -73,7 +74,7 @@ public class TestApplication extends VeraApp {
         VLabel centerLabel = new VLabel("CENTER", 220, 10, 100, 16, this).alsoAdd();
         centerLabel.setAlignment(VHAlignmentFlag.CENTER);
         centerLabel.setStyle("background-color", VColor.black());
-        centerLabel.modifyFontColor("font").rgb(255, 255, 255);
+        centerLabel.modifyFontColor().rgb(255, 255, 255);
         centerLabel.setStyle("border-color", VColor.MC_BLUE, VColor.MC_GOLD, VColor.MC_RED, VColor.MC_GREEN);
         centerLabel.setStyle("border-size", 5, 10, 8, 16);
         centerLabel.setStyle("cursor", VCursorShape.ALL_RESIZE);
@@ -81,7 +82,7 @@ public class TestApplication extends VeraApp {
         VLabel rightLabel = new VLabel("RIGHT", 100, 10, 100, 16, this).alsoAdd();
         rightLabel.setAlignment(VHAlignmentFlag.RIGHT);
         rightLabel.setStyle("background-color", VColor.black());
-        rightLabel.modifyFontColor("font").rgb(255, 255, 255);
+        rightLabel.modifyFontColor().rgb(255, 255, 255);
         rightLabel.setStyle("border-color", VColor.white());
         rightLabel.setStyle("border-size", 1);
         rightLabel.onRightClick(() -> System.out.println(Vera.openFileSelector("test", Path.of("/Volumes/Media"), null)));
