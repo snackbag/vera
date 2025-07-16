@@ -15,6 +15,7 @@ public class MCVeraRegistrar {
 
     public void applyStandardWidgetStyles(VStyleSheet sheet) {
         for (VStandardStyle standardStyle : standardStyles) {
+            standardStyle.reserve(sheet);
             standardStyle.apply(sheet);
         }
     }
