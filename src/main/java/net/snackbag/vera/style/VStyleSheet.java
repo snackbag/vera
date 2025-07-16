@@ -18,15 +18,8 @@ public class VStyleSheet {
 
     public VStyleSheet() {
         // Generic
-        reserveType("overlay", StyleValueType.COLOR);
-        reserveType("background-color", StyleValueType.COLOR);
         reserveType("color", StyleValueType.COLOR);
         reserveType("src", StyleValueType.IDENTIFIER);
-        reserveType("cursor", StyleValueType.CURSOR);
-
-        // Border
-        reserveType("border-color", StyleValueType.V4COLOR);
-        reserveType("border-size", StyleValueType.V4INT);
 
         // Checkbox
         reserveType("src-checked", StyleValueType.IDENTIFIER);
@@ -34,9 +27,6 @@ public class VStyleSheet {
         // Line Input
         reserveType("select-color", StyleValueType.COLOR);
         reserveType("color-cursor", StyleValueType.COLOR);
-
-        // Font
-        reserveType("font", StyleValueType.FONT);
     }
 
     public <T> T getKey(VWidget<?> widget, String key) {
