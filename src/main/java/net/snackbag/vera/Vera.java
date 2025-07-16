@@ -3,10 +3,10 @@ package net.snackbag.vera;
 import net.minecraft.client.MinecraftClient;
 import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.mcvera.impl.MCVeraProvider;
+import net.snackbag.mcvera.impl.MCVeraRegistrar;
 import net.snackbag.mcvera.impl.MCVeraRenderer;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.flag.VWindowPositioningFlag;
-import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.system.MemoryStack;
@@ -20,6 +20,7 @@ import java.util.function.Consumer;
 public class Vera {
     public static final MCVeraProvider provider = new MCVeraProvider();
     public static final MCVeraRenderer renderer = new MCVeraRenderer();
+    public static final MCVeraRegistrar registrar = new MCVeraRegistrar();
 
     public static final String FONT_DEFAULT = provider.getDefaultFontName();
     public static final String FONT_ARIAL = "minecraft:arial";
