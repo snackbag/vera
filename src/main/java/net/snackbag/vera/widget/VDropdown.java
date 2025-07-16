@@ -4,6 +4,7 @@ import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.event.VItemSwitchEvent;
+import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.style.StyleState;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // TODO: Rewrite VDropdown from scratch
-public class VDropdown extends VWidget<VDropdown> {
+public class VDropdown extends VWidget<VDropdown> implements VHasFont {
     private final List<Item> items;
     private VColor itemHoverColor;
 
@@ -245,14 +246,6 @@ public class VDropdown extends VWidget<VDropdown> {
         events.fire("vdropdown-item-switch", selectedItem);
     }
 
-    public VFont.FontModifier modifyFont() {
-        return app.styleSheet.modifyKeyAsFont(this, "font");
-    }
-
-    public VColor.ColorModifier modifyFontColor() {
-        return app.styleSheet.modifyKeyAsFontColor(this, "font");
-    }
-
     public void addItem(String name) {
         items.add(new Item(name, null, null, null, null, null));
     }
@@ -279,6 +272,11 @@ public class VDropdown extends VWidget<VDropdown> {
 
     public List<Item> getItems() {
         return items;
+    }
+
+    @Override
+    public VeraApp getApp() {
+        return app;
     }
 
     public static class Item {
