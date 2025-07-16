@@ -26,9 +26,11 @@ public class VStyleSheet {
 
         // if widget contains key
         if (widgetSpecificStyles.hasKey(widget, key)) {
-            // if it doesn't contain the state return with the fallback
-            if (!widgetSpecificStyles.hasState(widget, key, state)) return getKey(widget, key, state.fallback);
-            return widgetSpecificStyles.getState(widget, key, state);
+            // if widget has state, return
+            if (widgetSpecificStyles.hasState(widget, key, state)) return widgetSpecificStyles.getState(widget, key, state);
+
+            // if widget state has fallback, attempt
+            if (state.fallback != null) return getKey(widget, key, state.fallback);
         }
 
         // if class contains key
