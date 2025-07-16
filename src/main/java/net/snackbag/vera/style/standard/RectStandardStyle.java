@@ -8,11 +8,11 @@ import net.snackbag.vera.widget.VRect;
 public class RectStandardStyle implements VStandardStyle {
     @Override
     public void apply(VStyleSheet sheet) {
-        sheet.setKey(VRect.class, "color", VColor.black());
+        sheet.setKey(VRect.class, "background-color", VColor.black());
     }
 
     @Override
     public void reserve(VStyleSheet sheet) {
-        sheet.reserveType("color", StyleValueType.COLOR);
+        sheet.reserveType("background-color", StyleValueType.COLOR);
     }
 }
