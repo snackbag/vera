@@ -13,7 +13,7 @@ import net.snackbag.vera.widget.*;
 import java.nio.file.Path;
 
 public class TestApplication extends VeraApp {
-    public static final TestApplication INSTANCE = new TestApplication();
+    public static TestApplication INSTANCE = new TestApplication();
 
     public TestApplication() {
         super();

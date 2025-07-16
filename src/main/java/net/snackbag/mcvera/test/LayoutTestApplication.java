@@ -8,7 +8,7 @@ import net.snackbag.vera.layout.VVLayout;
 import net.snackbag.vera.widget.VLabel;
 
 public class LayoutTestApplication extends VeraApp {
-    public static final LayoutTestApplication INSTANCE = new LayoutTestApplication();
+    public static LayoutTestApplication INSTANCE = new LayoutTestApplication();
 
     @Override
     public void init() {

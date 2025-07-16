@@ -11,7 +11,7 @@ import net.snackbag.vera.widget.VLabel;
 import net.snackbag.vera.widget.VRect;
 
 public class StyleTestApplication extends VeraApp {
-    public static final StyleTestApplication INSTANCE = new StyleTestApplication();
+    public static StyleTestApplication INSTANCE = new StyleTestApplication();
 
     @Override
     public void init() {
