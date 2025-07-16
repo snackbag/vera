@@ -14,8 +14,6 @@ import java.util.List;
 // TODO: Rewrite VDropdown from scratch
 public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
     private final List<Item> items;
-    private VFont font;
-    private VFont hoverFont;
     private VColor itemHoverColor;
     private V4Int padding;
 
@@ -27,8 +25,6 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         super(0, 0, 100, 16, app);
 
         items = new ArrayList<>();
-        font = VFont.create();
-        hoverFont = VFont.create();
         itemHoverColor = VColor.white().sub(30);
         padding = new V4Int(5, 10);
     }
@@ -36,7 +32,9 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
     @Override
     public void render() {
         StyleState state = createStyleState();
+
         VColor backgroundColor = getStyle("background-color", state);
+        VFont font = getStyle("font", state);
 
         int x = getX();
         int y = getY();
@@ -74,7 +72,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
                     );
                 }
 
-                Vera.renderer.drawText(app, textX, textY, 0, item.name, isHovered ? hoverFont : font);
+                Vera.renderer.drawText(app, textX, textY, 0, item.name, font);
             }
         } else {
             Vera.renderer.drawText(app, x, y, 0, getItems().get(selectedItem).name, font);
@@ -95,22 +93,6 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
     public void setItemHoverColor(VColor itemHoveredColor) {
         this.itemHoverColor = itemHoveredColor;
-    }
-
-    public VFont getHoverFont() {
-        return hoverFont;
-    }
-
-    public void setHoverFont(VFont hoverFont) {
-        this.hoverFont = hoverFont;
-    }
-
-    public VColor.ColorModifier modifyHoverFontColor() {
-        return new VColor.ColorModifier(hoverFont.getColor(), (color) -> setHoverFont(hoverFont.withColor(color)));
-    }
-
-    public VFont.FontModifier modifyHoverFont() {
-        return new VFont.FontModifier(hoverFont, this::setHoverFont);
     }
 
     public VColor.ColorModifier modifyItemHoverColor() {
@@ -134,6 +116,8 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
     @Override
     public int getHitboxHeight() {
+        VFont font = getStyle("font", createStyleState());
+
         return !isFocused() ?
                 font.getSize() / 2 + padding.get1() + padding.get2() :
                 items.size() * (font.getSize() / 2 + itemSpacing) + padding.get1() + padding.get2();
@@ -217,6 +201,7 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
     private int getItemIndexAt(int mouseY) {
         if (mouseY < 0) return -1;
+        VFont font = getStyle("font", createStyleState());
 
         int index = mouseY / (itemSpacing + font.getSize() / 2);
         return items.size() < index ? -1 : index;
@@ -267,20 +252,12 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
         events.fire("vdropdown-item-switch", selectedItem);
     }
 
-    public VFont getFont() {
-        return font;
-    }
-
-    public void setFont(VFont font) {
-        this.font = font;
-    }
-
     public VFont.FontModifier modifyFont() {
-        return new VFont.FontModifier(font, this::setFont);
+        return app.styleSheet.modifyKeyAsFont(this, "font");
     }
 
     public VColor.ColorModifier modifyFontColor() {
-        return new VColor.ColorModifier(font.getColor(), (color) -> setFont(font.withColor(color)));
+        return app.styleSheet.modifyKeyAsFontColor(this, "font");
     }
 
     public void addItem(String name) {

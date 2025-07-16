@@ -2,6 +2,7 @@ package net.snackbag.vera.style.standard;
 
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
+import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.style.StyleState;
 import net.snackbag.vera.style.StyleValueType;
 import net.snackbag.vera.style.VStyleSheet;
@@ -12,10 +13,12 @@ public class DropdownStandardStyle implements VStandardStyle {
     public void apply(VStyleSheet sheet) {
         sheet.setKey(VDropdown.class, "background-color", VColor.white());
         sheet.setKey(VDropdown.class, "cursor", VCursorShape.POINTING_HAND, StyleState.HOVERED);
+        sheet.setKey(VDropdown.class, "font", VFont.create());
     }
 
     @Override
     public void reserve(VStyleSheet sheet) {
         sheet.reserveType("background-color", StyleValueType.COLOR);
+        sheet.reserveType("font", StyleValueType.FONT);
     }
 }
