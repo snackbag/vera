@@ -1,6 +1,5 @@
 package net.snackbag.vera.style.standard;
 
-import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.style.StyleState;
 import net.snackbag.vera.style.StyleValueType;
