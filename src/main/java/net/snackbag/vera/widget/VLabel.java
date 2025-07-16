@@ -3,9 +3,10 @@ package net.snackbag.vera.widget;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.flag.VHAlignmentFlag;
+import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.style.StyleState;
 
-public class VLabel extends VWidget<VLabel> {
+public class VLabel extends VWidget<VLabel> implements VHasFont {
     private String text;
     private VHAlignmentFlag alignment;
 
@@ -70,16 +71,13 @@ public class VLabel extends VWidget<VLabel> {
         this.height = Vera.provider.getTextHeight(text, font);
     }
 
+    @Override
+    public VeraApp getApp() {
+        return app;
+    }
+
     public VColor.ColorModifier modifyColor(String key) {
         return app.styleSheet.modifyKeyAsColor(this, key);
-    }
-
-    public VFont.FontModifier modifyFont(String key) {
-        return app.styleSheet.modifyKeyAsFont(this, key);
-    }
-
-    public VColor.ColorModifier modifyFontColor(String key) {
-        return app.styleSheet.modifyKeyAsFontColor(this, key);
     }
 
     @Override

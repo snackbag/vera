@@ -4,13 +4,14 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.style.StyleState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
 
-public class VTabWidget extends VWidget<VTabWidget> {
+public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
     private final LinkedHashMap<String, List<VWidget<?>>> tabs = new LinkedHashMap<>();
     private @Nullable Integer activeTab = null;
     private @Nullable Integer hoveredTab = null;
@@ -232,19 +233,16 @@ public class VTabWidget extends VWidget<VTabWidget> {
         this.activeTab = activeTab;
     }
 
-    public VFont.FontModifier modifyFont() {
-        return app.styleSheet.modifyKeyAsFont(this, "font");
-    }
-
-    public VColor.ColorModifier modifyFontColor() {
-        return app.styleSheet.modifyKeyAsFontColor(this, "font");
-    }
-
     public VColor.ColorModifier modifyBackgroundColorSelected() {
         return app.styleSheet.modifyKeyAsColor(this, "background-color-selected");
     }
 
     public VColor.ColorModifier modifyBackgroundColor() {
         return app.styleSheet.modifyKeyAsColor(this, "background-color");
+    }
+
+    @Override
+    public VeraApp getApp() {
+        return app;
     }
 }
