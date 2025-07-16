@@ -28,8 +28,6 @@ public class VTabWidget extends VWidget<VTabWidget> {
         font = VFont.create();
         selectedBackgroundColor = VColor.white();
         defaultBackgroundColor = VColor.white().sub(40);
-
-        setStyle("cursor",  StyleState.HOVERED, VCursorShape.POINTING_HAND);
     }
 
     @Override
