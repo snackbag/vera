@@ -2,7 +2,6 @@ package net.snackbag.vera.widget;
 
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
-import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.style.StyleState;
@@ -12,7 +11,6 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class VTabWidget extends VWidget<VTabWidget> {
-    private VFont font;
     private VColor selectedBackgroundColor;
     private VColor defaultBackgroundColor;
     private int itemSpacingLeft = 4;
@@ -25,13 +23,15 @@ public class VTabWidget extends VWidget<VTabWidget> {
     public VTabWidget(VeraApp app, String... tabs) {
         super(0, 0, 100, 16, app);
 
-        font = VFont.create();
         selectedBackgroundColor = VColor.white();
         defaultBackgroundColor = VColor.white().sub(40);
     }
 
     @Override
     public void render() {
+        StyleState state = createStyleState();
+        VFont font = getStyle("font", state);
+
         int marginX = 0;
         int i = -1;
 
@@ -112,7 +112,7 @@ public class VTabWidget extends VWidget<VTabWidget> {
         int index = 0;
 
         for (String tabName : tabs.keySet()) {
-            int textWidth = Vera.provider.getTextWidth(tabName, font);
+            int textWidth = Vera.provider.getTextWidth(tabName, getStyle("font", createStyleState()));
             int totalTabWidth = itemSpacingLeft + textWidth + itemSpacingRight;
 
             if (relativeX >= currentX && relativeX < currentX + totalTabWidth) {
@@ -194,15 +194,17 @@ public class VTabWidget extends VWidget<VTabWidget> {
 
     @Override
     public int getHitboxHeight() {
-        return font.getSize() / 2 + 4;
+        return ((VFont) getStyle("font", createStyleState())).getSize() / 2 + 4;
     }
 
     @Override
     public int getHitboxWidth() {
+        StyleState state = createStyleState();
+
         int currentX = 0;
 
         for (String tabName : tabs.keySet()) {
-            int textWidth = Vera.provider.getTextWidth(tabName, font);
+            int textWidth = Vera.provider.getTextWidth(tabName, getStyle("font", state));
             int totalTabWidth = itemSpacingLeft + textWidth + itemSpacingRight;
 
             currentX += totalTabWidth;
@@ -223,20 +225,12 @@ public class VTabWidget extends VWidget<VTabWidget> {
         this.activeTab = activeTab;
     }
 
-    public VFont getFont() {
-        return font;
-    }
-
-    public void setFont(VFont font) {
-        this.font = font;
-    }
-
     public VFont.FontModifier modifyFont() {
-        return new VFont.FontModifier(font, this::setFont);
+        return app.styleSheet.modifyKeyAsFont(this, "font");
     }
 
     public VColor.ColorModifier modifyFontColor() {
-        return new VColor.ColorModifier(font.getColor(), (color) -> setFont(getFont().withColor(color)));
+        return app.styleSheet.modifyKeyAsFontColor(this, "font");
     }
 
     public VColor getSelectedBackgroundColor() {
