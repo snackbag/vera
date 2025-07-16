@@ -3,6 +3,7 @@ package net.snackbag.vera.style;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.widget.VWidget;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Array;
@@ -36,13 +37,6 @@ public class VStyleSheet {
     public <T> T getKey(VWidget<?> widget, String key, @Nullable StyleState state) {
         if (state == null) state = StyleState.DEFAULT;
 
-        HashMap<String, HashMap<StyleState, Object>> mixed = mixClasses(widget.classes);
-
-        if (mixed.containsKey(key)) {
-            if (!mixed.get(key).containsKey(state)) return getKey(widget, key, state.fallback);
-            return (T) mixed.get(key).get(state);
-        }
-
         // if widget contains key
         if (widgetSpecificStyles.hasKey(widget, key)) {
             // if it doesn't contain the state return with the fallback
@@ -50,8 +44,48 @@ public class VStyleSheet {
             return widgetSpecificStyles.getState(widget, key, state);
         }
 
-        // if nothing worked, return null
-        return null;
+        // if class contains key
+        HashMap<String, HashMap<StyleState, Object>> mixed = mixClasses(widget.classes);
+
+        if (mixed.containsKey(key)) {
+            if (!mixed.get(key).containsKey(state)) return getKey(widget, key, state.fallback);
+            return (T) mixed.get(key).get(state);
+        }
+
+        // if nothing worked, try standard keys or return null
+        return getStandardKey(widget.getClass(), key, state);
+    }
+
+    /**
+     * Resolves a standard style key by traversing the class hierarchy and style states.
+     * <p>
+     * Step by step:<br/>
+     * 1. If <code>clazz</code> is <code>null</code>, return <code>null</code><br/>
+     * 2. If <code>clazz</code> is not registered in {@link VStyleSheet#standardStyles}, recurse into its superclass<br/>
+     * 3. If the specified <code>key</code> is not defined for this class, recurse into its superclass<br/>
+     * 4. Check if the given <code>state</code> is defined:<br/>
+     * &nbsp;&nbsp;&nbsp;&nbsp;- If not, and {@link StyleState#fallback} exists, retry with the fallback state on the same class<br/>
+     * &nbsp;&nbsp;&nbsp;&nbsp;- If fallback also fails or is <code>null</code>, recurse into the superclass with the original state
+     */
+    public <T> @Nullable T getStandardKey(@Nullable Class<?> clazz, String key, @NotNull StyleState state) {
+        if (clazz == null) return null;
+
+        // if class isn't registered, attempt super
+        if (!standardStyles.hasPart(clazz)) return getStandardKey(clazz.getSuperclass(), key, state);
+
+        // if no key found, attempt super
+        if (!standardStyles.hasKey(clazz, key)) return getStandardKey(clazz.getSuperclass(), key, state);
+
+        // if no state found, return same class but fallback state
+        if (!standardStyles.hasState(clazz, key, state)) {
+            // if fallback state is null, attempt superclass
+            if (state.fallback == null) return getStandardKey(clazz.getSuperclass(), key, state);
+
+            // try fallback state
+            return getStandardKey(clazz, key, state.fallback);
+        }
+
+        return standardStyles.getState(clazz, key, state);
     }
 
     public void setKey(VWidget<?> widget, String key, Object object) {
