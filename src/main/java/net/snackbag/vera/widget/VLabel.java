@@ -88,8 +88,7 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
     }
 
     public VColor.ColorModifier modifyFontColor(String key) {
-        // TODO: More elegant solution
-        return new VColor.ColorModifier(((VFont) app.styleSheet.getKey(this, key)).getColor(), color -> app.styleSheet.modifyKeyAsFont(this, key).color(color));
+        return app.styleSheet.modifyKeyAsFontColor(this, key);
     }
 
     @Override

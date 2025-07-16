@@ -145,6 +145,14 @@ public class VStyleSheet {
         return new VFont.FontModifier(getKey(widget, key), font -> setKey(widget, key, font));
     }
 
+    public VColor.ColorModifier modifyKeyAsFontColor(VWidget<?> widget, String key) {
+        // this is cursed
+        return new VColor.ColorModifier(
+                ((VFont) getKey(widget, key)).getColor(),
+                color -> modifyKeyAsFont(widget, key).color(color)
+        );
+    }
+
     public void reserveType(String key, StyleValueType type) { // TODO: make safer (aka stop if already reserved or values inside)
         typeRegistry.put(key, type);
     }
