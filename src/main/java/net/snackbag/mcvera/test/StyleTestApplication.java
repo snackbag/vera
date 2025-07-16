@@ -24,7 +24,7 @@ public class StyleTestApplication extends VeraApp {
                 .alsoAdd();
 
         VRect testRect = new VRect(VColor.black(), this).alsoAdd();
-        testRect.setStyle("color", StyleState.HOVERED, VColor.white());
+        testRect.setStyle("background-color", StyleState.HOVERED, VColor.white());
 
         testRect.setStyle("cursor", StyleState.HOVERED, VCursorShape.POINTING_HAND);
         testRect.setStyle("cursor", StyleState.CLICKED, VCursorShape.ALL_RESIZE);
