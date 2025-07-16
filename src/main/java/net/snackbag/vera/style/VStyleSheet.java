@@ -18,15 +18,8 @@ public class VStyleSheet {
     private HashMap<String, StyleValueType> typeRegistry = new HashMap<>();
 
     public VStyleSheet() {
-        // Generic
-        reserveType("src", StyleValueType.IDENTIFIER);
-
         // Checkbox
         reserveType("src-checked", StyleValueType.IDENTIFIER);
-
-        // Line Input
-        reserveType("select-color", StyleValueType.COLOR);
-        reserveType("color-cursor", StyleValueType.COLOR);
     }
 
     public <T> T getKey(VWidget<?> widget, String key) {
