@@ -57,7 +57,7 @@ public class TestApplication extends VeraApp {
         label.onRightClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
         label.onFilesDropped(System.out::println);
 
-        label.setPadding(5);
+        label.setStyle("padding", 5);
         label.move(10);
         label.setStyle("background-color", VColor.black());
         label.modifyFont("font").color(VColor.white());
