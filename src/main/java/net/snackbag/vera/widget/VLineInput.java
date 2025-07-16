@@ -5,21 +5,18 @@ import net.minecraft.client.util.InputUtil;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.event.VCharLimitedEvent;
-import net.snackbag.vera.modifier.VPaddingWidget;
 import net.snackbag.vera.style.StyleState;
 import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
-public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
+public class VLineInput extends VWidget<VLineInput> {
     private String text;
     private String placeholderText;
 
     private int cursorPos;
     private TextSelection textSelection;
     private int maxChars;
-
-    private V4Int padding;
 
     public VLineInput(VeraApp app) {
         super(0, 0, 100, 20, app);
@@ -29,8 +26,6 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         this.cursorPos = 0;
         this.textSelection = new TextSelection();
         this.maxChars = -1;
-
-        this.padding = new V4Int(4);
     }
 
     @Override
@@ -407,20 +402,11 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
     }
 
     @Override
-    public V4Int getPadding() {
-        return padding;
-    }
-
-    @Override
-    public void setPadding(V4Int padding) {
-        this.padding = padding;
-    }
-
-    @Override
     public int getHitboxWidth() {
         StyleState state = createStyleState();
 
         VFont font = getStyle("font", state);
+        V4Int padding = getStyle("padding", state);
 
         return Math.max(width, Vera.provider.getTextWidth(text, font)) + padding.get3() + padding.get4();
     }
@@ -430,6 +416,7 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         StyleState state = createStyleState();
 
         VFont font = getStyle("font", state);
+        V4Int padding = getStyle("padding", state);
 
         return Vera.provider.getTextHeight(text, font) + padding.get1() + padding.get2();
     }
@@ -437,11 +424,13 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
 
     @Override
     public int getHitboxX() {
+        V4Int padding = getStyle("padding", createStyleState());
         return getX() - padding.get4();
     }
 
     @Override
     public int getHitboxY() {
+        V4Int padding = getStyle("padding", createStyleState());
         return getY() - padding.get1();
     }
 
