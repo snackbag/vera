@@ -176,6 +176,7 @@ public class VStyleSheet {
 
         // Apply changes if everything went fine
         typeRegistry = mergedTypeRegistry;
+        standardStyles.moldWith(target.standardStyles);
         classStyles.moldWith(target.classStyles);
         widgetSpecificStyles.moldWith(target.widgetSpecificStyles);
     }
