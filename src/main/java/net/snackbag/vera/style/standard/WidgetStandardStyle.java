@@ -27,5 +27,6 @@ public class WidgetStandardStyle implements VStandardStyle {
         sheet.reserveType("border-size", StyleValueType.V4INT);
 
         // TODO: add background-color
+        // TODO: add padding
     }
 }
