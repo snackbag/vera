@@ -5,12 +5,14 @@ import net.minecraft.client.util.InputUtil;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.event.VCharLimitedEvent;
+import net.snackbag.vera.modifier.VHasFont;
+import net.snackbag.vera.modifier.VHasPlaceholderFont;
 import net.snackbag.vera.style.StyleState;
 import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
-public class VLineInput extends VWidget<VLineInput> {
+public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPlaceholderFont {
     private String text;
     private String placeholderText;
 
@@ -102,20 +104,9 @@ public class VLineInput extends VWidget<VLineInput> {
         }
     }
 
-    public VFont.FontModifier modifyFont() {
-        return app.styleSheet.modifyKeyAsFont(this, "font");
-    }
-
-    public VColor.ColorModifier modifyFontColor() {
-        return app.styleSheet.modifyKeyAsFontColor(this, "font");
-    }
-
-    public VFont.FontModifier modifyPlaceholderFont() {
-        return app.styleSheet.modifyKeyAsFont(this, "placeholder-font");
-    }
-
-    public VColor.ColorModifier modifyPlaceholderFontColor() {
-        return app.styleSheet.modifyKeyAsFontColor(this, "placeholder-font");
+    @Override
+    public VeraApp getApp() {
+        return app;
     }
 
     public String getText() {
