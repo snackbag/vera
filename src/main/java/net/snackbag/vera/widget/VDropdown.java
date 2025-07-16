@@ -12,8 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 // TODO: Rewrite VDropdown from scratch
+// 16/7/2025 jesus christ what a shitty thing. dont even bother making this work nice.
+//           rewrite scheduled for once we have VCompound
 public class VDropdown extends VWidget<VDropdown> implements VHasFont {
     private final List<Item> items;
+    public VFont itemHoverFont;
     private VColor itemHoverColor;
 
     private int selectedItem = 0;
@@ -24,6 +27,7 @@ public class VDropdown extends VWidget<VDropdown> implements VHasFont {
         super(0, 0, 100, 16, app);
 
         items = new ArrayList<>();
+        itemHoverFont = VFont.create();
         itemHoverColor = VColor.white().sub(30);
     }
 
@@ -70,7 +74,7 @@ public class VDropdown extends VWidget<VDropdown> implements VHasFont {
                     );
                 }
 
-                Vera.renderer.drawText(app, textX, textY, 0, item.name, font);
+                Vera.renderer.drawText(app, textX, textY, 0, item.name, isHovered ? itemHoverFont : font);
             }
         } else {
             Vera.renderer.drawText(app, x, y, 0, getItems().get(selectedItem).name, font);
