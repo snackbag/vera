@@ -9,7 +9,6 @@ public class VRect extends VWidget<VRect> {
     public VRect(VColor color, VeraApp app) {
         super(0, 0, 20, 20, app);
 
-        setStyle("color", color);
         this.focusOnClick = false;
     }
 

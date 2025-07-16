@@ -19,7 +19,6 @@ public class VStyleSheet {
 
     public VStyleSheet() {
         // Generic
-        reserveType("color", StyleValueType.COLOR);
         reserveType("src", StyleValueType.IDENTIFIER);
 
         // Checkbox
