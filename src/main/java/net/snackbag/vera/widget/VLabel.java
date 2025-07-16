@@ -3,19 +3,16 @@ package net.snackbag.vera.widget;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.flag.VHAlignmentFlag;
-import net.snackbag.vera.modifier.VPaddingWidget;
 import net.snackbag.vera.style.StyleState;
 
-public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
+public class VLabel extends VWidget<VLabel> {
     private String text;
-    private V4Int padding;
     private VHAlignmentFlag alignment;
 
     public VLabel(String text, int x, int y, int width, int height, VeraApp app) {
         super(x, y, width, height, app);
 
         this.text = text;
-        this.padding = new V4Int(4);
         this.focusOnClick = false;
         alignment = VHAlignmentFlag.LEFT;
     }
@@ -35,32 +32,26 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
     }
 
     @Override
-    public V4Int getPadding() {
-        return padding;
-    }
-
-    @Override
-    public void setPadding(V4Int padding) {
-        this.padding = padding;
-    }
-
-    @Override
     public int getHitboxWidth() {
+        V4Int padding = getStyle("padding", createStyleState());
         return width + padding.get3() + padding.get4();
     }
 
     @Override
     public int getHitboxHeight() {
+        V4Int padding = getStyle("padding", createStyleState());
         return height + padding.get1() + padding.get2();
     }
 
     @Override
     public int getHitboxX() {
+        V4Int padding = getStyle("padding", createStyleState());
         return getX() - padding.get4();
     }
 
     @Override
     public int getHitboxY() {
+        V4Int padding = getStyle("padding", createStyleState());
         return getY() - padding.get1();
     }
 
@@ -94,8 +85,10 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
     @Override
     public void render() {
         StyleState state = createStyleState();
+
         VFont font = getStyle("font", state);
         VColor backgroundColor = getStyle("background-color", state);
+        V4Int padding = getStyle("padding", state);
 
         int x = getX();
         int y = getY();
