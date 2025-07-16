@@ -160,7 +160,7 @@ public class VStyleSheet {
     }
 
     public VColor.ColorModifier modifyKeyAsFontColor(VWidget<?> widget, String key) {
-        return modifyKeyAsColor(widget, key, StyleState.DEFAULT);
+        return modifyKeyAsFontColor(widget, key, StyleState.DEFAULT);
     }
 
     public VColor.ColorModifier modifyKeyAsFontColor(VWidget<?> widget, String key, @Nullable StyleState state) {
