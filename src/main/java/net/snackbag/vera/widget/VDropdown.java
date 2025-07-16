@@ -4,7 +4,6 @@ import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.event.VItemSwitchEvent;
-import net.snackbag.vera.modifier.VPaddingWidget;
 import net.snackbag.vera.style.StyleState;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,10 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 // TODO: Rewrite VDropdown from scratch
-public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
+public class VDropdown extends VWidget<VDropdown> {
     private final List<Item> items;
     private VColor itemHoverColor;
-    private V4Int padding;
 
     private int selectedItem = 0;
     private int itemSpacing = 0;
@@ -26,7 +24,6 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
         items = new ArrayList<>();
         itemHoverColor = VColor.white().sub(30);
-        padding = new V4Int(5, 10);
     }
 
     @Override
@@ -101,36 +98,32 @@ public class VDropdown extends VWidget<VDropdown> implements VPaddingWidget {
 
     @Override
     public int getHitboxX() {
+        V4Int padding = getStyle("padding", createStyleState());
         return getX() - padding.get3();
     }
 
     @Override
     public int getHitboxY() {
+        V4Int padding = getStyle("padding", createStyleState());
         return getY() - padding.get1();
     }
 
     @Override
     public int getHitboxWidth() {
+        V4Int padding = getStyle("padding", createStyleState());
         return width + padding.get3() + padding.get4();
     }
 
     @Override
     public int getHitboxHeight() {
-        VFont font = getStyle("font", createStyleState());
+        StyleState state = createStyleState();
+
+        VFont font = getStyle("font", state);
+        V4Int padding = getStyle("padding", state);
 
         return !isFocused() ?
                 font.getSize() / 2 + padding.get1() + padding.get2() :
                 items.size() * (font.getSize() / 2 + itemSpacing) + padding.get1() + padding.get2();
-    }
-
-    @Override
-    public V4Int getPadding() {
-        return padding;
-    }
-
-    @Override
-    public void setPadding(V4Int padding) {
-        this.padding = padding;
     }
 
     @Override
