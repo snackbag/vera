@@ -101,7 +101,7 @@ public class TestApplication extends VeraApp {
         dropdown.addItem("buger", () -> System.out.println("pressed"));
         dropdown.move(90);
         dropdown.setItemSpacing(16);
-        dropdown.modifyHoverFont().color(VColor.white());
+        dropdown.modifyFont(StyleState.HOVERED).color(VColor.white());
         dropdown.setItemHoverColor(VColor.black());
         dropdown.onFocusStateChange(() -> System.out.println("focus state change: " + dropdown.isFocused()));
 
