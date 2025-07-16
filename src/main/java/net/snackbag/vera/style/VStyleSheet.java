@@ -62,7 +62,7 @@ public class VStyleSheet {
         setKey(clazz, key, object, StyleState.DEFAULT);
     }
 
-    public void setKey(Class<VWidget<?>> clazz, String key, Object object) {
+    public void setKey(Class<?> clazz, String key, Object object) {
         setKey(clazz, key, object, StyleState.DEFAULT);
     }
 
@@ -98,7 +98,7 @@ public class VStyleSheet {
         classStyles.put(clazz, key, state, value);
     }
 
-    public void setKey(Class<VWidget<?>> clazz, String key, Object value, @Nullable StyleState state) {
+    public void setKey(Class<?> clazz, String key, Object value, @Nullable StyleState state) {
         if (state == null) state = StyleState.DEFAULT;
         value = potentiallyUnpackArray(value);
 
