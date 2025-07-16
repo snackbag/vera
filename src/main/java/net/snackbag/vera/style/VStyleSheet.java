@@ -122,7 +122,7 @@ public class VStyleSheet {
         return new VFont.FontModifier(getKey(widget, key), font -> setKey(widget, key, font));
     }
 
-    public void reserveType(String key, StyleValueType type) {
+    public void reserveType(String key, StyleValueType type) { // TODO: make safer (aka stop if already reserved or values inside)
         typeRegistry.put(key, type);
     }
 
