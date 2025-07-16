@@ -11,8 +11,6 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class VTabWidget extends VWidget<VTabWidget> {
-    private VColor selectedBackgroundColor;
-    private VColor defaultBackgroundColor;
     private int itemSpacingLeft = 4;
     private int itemSpacingRight = 4;
 
@@ -22,15 +20,15 @@ public class VTabWidget extends VWidget<VTabWidget> {
 
     public VTabWidget(VeraApp app) {
         super(0, 0, 100, 16, app);
-
-        selectedBackgroundColor = VColor.white();
-        defaultBackgroundColor = VColor.white().sub(40);
     }
 
     @Override
     public void render() {
         StyleState state = createStyleState();
+
         VFont font = getStyle("font", state);
+        VColor defaultBackgroundColor = getStyle("background-color", state);
+        VColor selectedBackgroundColor = getStyle("background-color-selected", state);
 
         int marginX = 0;
         int i = -1;
@@ -233,28 +231,12 @@ public class VTabWidget extends VWidget<VTabWidget> {
         return app.styleSheet.modifyKeyAsFontColor(this, "font");
     }
 
-    public VColor getSelectedBackgroundColor() {
-        return selectedBackgroundColor;
+    public VColor.ColorModifier modifyBackgroundColorSelected() {
+        return app.styleSheet.modifyKeyAsColor(this, "background-color-selected");
     }
 
-    public void setSelectedBackgroundColor(VColor backgroundColor) {
-        this.selectedBackgroundColor = backgroundColor;
-    }
-
-    public VColor.ColorModifier modifySelectedBackgroundColor() {
-        return new VColor.ColorModifier(selectedBackgroundColor, this::setSelectedBackgroundColor);
-    }
-
-    public VColor getDefaultBackgroundColor() {
-        return defaultBackgroundColor;
-    }
-
-    public void setDefaultBackgroundColor(VColor defaultBackgroundColor) {
-        this.defaultBackgroundColor = defaultBackgroundColor;
-    }
-
-    public VColor.ColorModifier modifyDefaultBackgroundColor() {
-        return new VColor.ColorModifier(defaultBackgroundColor, this::setDefaultBackgroundColor);
+    public VColor.ColorModifier modifyBackgroundColor() {
+        return app.styleSheet.modifyKeyAsColor(this, "background-color");
     }
 
     public int getItemSpacingLeft() {
