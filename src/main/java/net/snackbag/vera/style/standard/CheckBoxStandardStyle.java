@@ -10,7 +10,6 @@ import net.snackbag.vera.widget.VCheckBox;
 public class CheckBoxStandardStyle implements VStandardStyle {
     @Override
     public void apply(VStyleSheet sheet) {
-        sheet.setKey(VCheckBox.class, "overlay", VColor.transparent());
         sheet.setKey(VCheckBox.class, "cursor", VCursorShape.POINTING_HAND, StyleState.HOVERED);
     }
 
