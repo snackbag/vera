@@ -25,5 +25,7 @@ public class WidgetStandardStyle implements VStandardStyle {
         sheet.reserveType("cursor", StyleValueType.CURSOR);
         sheet.reserveType("border-color", StyleValueType.V4COLOR);
         sheet.reserveType("border-size", StyleValueType.V4INT);
+
+        // TODO: add background-color
     }
 }
