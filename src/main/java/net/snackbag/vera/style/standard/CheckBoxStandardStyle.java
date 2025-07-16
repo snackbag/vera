@@ -16,8 +16,6 @@ public class CheckBoxStandardStyle implements VStandardStyle {
 
     @Override
     public void reserve(VStyleSheet sheet) {
-        sheet.reserveType("overlay", StyleValueType.COLOR);
-        sheet.reserveType("cursor", StyleValueType.CURSOR);
         sheet.reserveType("src", StyleValueType.IDENTIFIER);
         sheet.reserveType("src-checked", StyleValueType.IDENTIFIER);
     }
