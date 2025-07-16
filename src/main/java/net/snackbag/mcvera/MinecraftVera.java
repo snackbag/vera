@@ -15,14 +15,15 @@ public class MinecraftVera implements ModInitializer {
 	public void onInitialize() {
 		LOGGER.info("Loading Vera...");
 
-		// sorted alphabetically
+		// sorted by "complicatedness" & importance
 		Vera.registrar.registerStandardStyle(new WidgetStandardStyle());
-		Vera.registrar.registerStandardStyle(new LabelStandardStyle());
+
 		Vera.registrar.registerStandardStyle(new RectStandardStyle());
+		Vera.registrar.registerStandardStyle(new ImageStandardStyle());
+		Vera.registrar.registerStandardStyle(new CheckBoxStandardStyle());
+		Vera.registrar.registerStandardStyle(new LabelStandardStyle());
+		Vera.registrar.registerStandardStyle(new DropdownStandardStyle());
 		Vera.registrar.registerStandardStyle(new TabWidgetStandardStyle());
 		Vera.registrar.registerStandardStyle(new LineInputStandardStyle());
-		Vera.registrar.registerStandardStyle(new ImageStandardStyle());
-		Vera.registrar.registerStandardStyle(new DropdownStandardStyle());
-		Vera.registrar.registerStandardStyle(new CheckBoxStandardStyle());
 	}
 }
