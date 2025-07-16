@@ -1,7 +1,9 @@
 package net.snackbag.vera.modifier;
 
 import net.snackbag.vera.core.V4Int;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.ScheduledForRemoval(inVersion = "1.11")
 @Deprecated(forRemoval = true, since = "1.10")
 public interface VPaddingWidget {
     V4Int getPadding();
