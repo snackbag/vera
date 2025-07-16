@@ -20,7 +20,7 @@ public class VTabWidget extends VWidget<VTabWidget> {
     private @Nullable Integer activeTab = null;
     private @Nullable Integer hoveredTab = null;
 
-    public VTabWidget(VeraApp app, String... tabs) {
+    public VTabWidget(VeraApp app) {
         super(0, 0, 100, 16, app);
 
         selectedBackgroundColor = VColor.white();
