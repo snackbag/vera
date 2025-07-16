@@ -12,7 +12,7 @@ import java.util.LinkedHashSet;
 public class VStyleSheet {
     private final StyleContainer<VWidget<?>> widgetSpecificStyles = new StyleContainer<>(); // like HTML #IDs
     private final StyleContainer<String> classStyles = new StyleContainer<>(); // like CSS .classes
-    private final StyleContainer<Class<?>> globalStyles = new StyleContainer<>(); // like HTML <tags/>
+    private final StyleContainer<Class<?>> standardStyles = new StyleContainer<>(); // like HTML <tags/>
 
     private HashMap<String, StyleValueType> typeRegistry = new HashMap<>();
 
@@ -72,6 +72,10 @@ public class VStyleSheet {
         setKey(clazz, key, object, StyleState.DEFAULT);
     }
 
+    public void setKey(Class<VWidget<?>> clazz, String key, Object object) {
+        setKey(clazz, key, object, StyleState.DEFAULT);
+    }
+
     public void setKey(VWidget<?> widget, String key, Object value, @Nullable StyleState state) {
         if (state == null) state = StyleState.DEFAULT;
         value = potentiallyUnpackArray(value);
@@ -85,7 +89,6 @@ public class VStyleSheet {
         } else reserveType(key, valRes);
 
         value = StyleValueType.convert(value, valRes);
-
         widgetSpecificStyles.put(widget, key, state, value);
     }
 
@@ -102,8 +105,23 @@ public class VStyleSheet {
         } else reserveType(key, valRes);
 
         value = StyleValueType.convert(value, valRes);
-
         classStyles.put(clazz, key, state, value);
+    }
+
+    public void setKey(Class<VWidget<?>> clazz, String key, Object value, @Nullable StyleState state) {
+        if (state == null) state = StyleState.DEFAULT;
+        value = potentiallyUnpackArray(value);
+
+        StyleValueType res = getReservation(key);
+        StyleValueType valRes = StyleValueType.get(value, res);
+
+        if (res != null) {
+            if (valRes != res)
+                throw new RuntimeException("Cannot set standard key %s (for class %s), because it is reserved for type %s. Received: %s".formatted(key, clazz, res, valRes));
+        } else reserveType(key, valRes);
+
+        value = StyleValueType.convert(value, valRes);
+        standardStyles.put(clazz, key, state, value);
     }
 
     public VColor.ColorModifier modifyKeyAsColor(VWidget<?> widget, String key) {
