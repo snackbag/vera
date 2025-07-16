@@ -15,6 +15,7 @@ public class MinecraftVera implements ModInitializer {
 	public void onInitialize() {
 		LOGGER.info("Loading Vera...");
 
+		LOGGER.info("Registering standard styles");
 		// sorted by "complicatedness" & importance
 		Vera.registrar.registerStandardStyle(new WidgetStandardStyle());
 
