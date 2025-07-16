@@ -14,8 +14,6 @@ import org.lwjgl.glfw.GLFW;
 public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
     private String text;
     private String placeholderText;
-    private VFont font;
-    private VFont placeholderFont;
 
     private int cursorPos;
     private TextSelection textSelection;
@@ -28,8 +26,6 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
 
         this.text = "";
         this.placeholderText = "";
-        this.font = VFont.create();
-        this.placeholderFont = VFont.create().withColor(VColor.black().withOpacity(0.5f));
         this.cursorPos = 0;
         this.textSelection = new TextSelection();
         this.maxChars = -1;
@@ -41,6 +37,8 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
     public void render() {
         StyleState state = createStyleState();
 
+        VFont font = getStyle("font", state);
+        VFont placeholderFont = getStyle("placeholder-font", state);
         VColor backgroundColor = getStyle("background-color", state);
         VColor textSelectionColor = getStyle("select-color", state);
 
@@ -96,6 +94,9 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
     public void handleBuiltinEvent(String event, Object... args) {
         super.handleBuiltinEvent(event, args);
 
+        StyleState state = createStyleState();
+        VFont font = getStyle("font", state);
+
         int x = getX();
 
         if (event.equals("left-click")) {
@@ -106,36 +107,20 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         }
     }
 
-    public VFont getFont() {
-        return font;
-    }
-
-    public void setFont(VFont font) {
-        this.font = font;
-    }
-
-    public VFont getPlaceholderFont() {
-        return placeholderFont;
-    }
-
-    public void setPlaceholderFont(VFont placeholderFont) {
-        this.placeholderFont = placeholderFont;
-    }
-
     public VFont.FontModifier modifyFont() {
-        return new VFont.FontModifier(font, this::setFont);
+        return app.styleSheet.modifyKeyAsFont(this, "font");
     }
 
     public VColor.ColorModifier modifyFontColor() {
-        return new VColor.ColorModifier(font.getColor(), (color) -> setFont(font.withColor(color)));
+        return app.styleSheet.modifyKeyAsFontColor(this, "font");
     }
 
     public VFont.FontModifier modifyPlaceholderFont() {
-        return new VFont.FontModifier(font, this::setPlaceholderFont);
+        return app.styleSheet.modifyKeyAsFont(this, "placeholder-font");
     }
 
     public VColor.ColorModifier modifyPlaceholderFontColor() {
-        return new VColor.ColorModifier(font.getColor(), (color) -> setFont(font.withColor(color)));
+        return app.styleSheet.modifyKeyAsFontColor(this, "placeholder-font");
     }
 
     public String getText() {
@@ -413,7 +398,10 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
     }
 
     public VColor getCursorColorSafe() {
-        VColor style = getStyleOrDefault("cursor-color", null);
+        StyleState state = createStyleState();
+
+        VColor style = getStyleOrDefault("cursor-color", null, state);
+        VFont font = getStyle("font", state);
 
         return style == null ? font.getColor() : style;
     }
@@ -430,11 +418,19 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
 
     @Override
     public int getHitboxWidth() {
+        StyleState state = createStyleState();
+
+        VFont font = getStyle("font", state);
+
         return Math.max(width, Vera.provider.getTextWidth(text, font)) + padding.get3() + padding.get4();
     }
 
     @Override
     public int getHitboxHeight() {
+        StyleState state = createStyleState();
+
+        VFont font = getStyle("font", state);
+
         return Vera.provider.getTextHeight(text, font) + padding.get1() + padding.get2();
     }
 
