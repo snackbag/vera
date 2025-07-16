@@ -28,13 +28,6 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         super(app, x, y, width, height);
 
         this.rotation = 0;
-
-        setStyle("overlay", VColor.transparent());
-        setStyle("cursor", VCursorShape.DEFAULT);
-
-        // Border
-        setStyle("border-color", new V4Color(VColor.black()));
-        setStyle("border-size", new V4Int(0));
     }
 
     public abstract void render();
