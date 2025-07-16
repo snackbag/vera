@@ -17,6 +17,5 @@ public class DropdownStandardStyle implements VStandardStyle {
     @Override
     public void reserve(VStyleSheet sheet) {
         sheet.reserveType("background-color", StyleValueType.COLOR);
-        sheet.reserveType("cursor", StyleValueType.CURSOR);
     }
 }

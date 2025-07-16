@@ -19,6 +19,5 @@ public class LineInputStandardStyle implements VStandardStyle {
     public void reserve(VStyleSheet sheet) {
         sheet.reserveType("select-color", StyleValueType.COLOR);
         sheet.reserveType("background-color", StyleValueType.COLOR);
-        sheet.reserveType("cursor", StyleValueType.CURSOR);
     }
 }
