@@ -32,13 +32,9 @@ public class VLineInput extends VWidget<VLineInput> implements VPaddingWidget {
         this.placeholderFont = VFont.create().withColor(VColor.black().withOpacity(0.5f));
         this.cursorPos = 0;
         this.textSelection = new TextSelection();
-        setStyle("select-color", VColor.of(0, 120, 215, 0.2f));
         this.maxChars = -1;
 
-        setStyle("background-color", VColor.transparent());
         this.padding = new V4Int(4);
-
-        setStyle("cursor", StyleState.HOVERED, VCursorShape.TEXT);
     }
 
     @Override
