@@ -6,6 +6,7 @@ import net.snackbag.vera.core.*;
 import net.snackbag.vera.event.*;
 import net.snackbag.vera.layout.VLayout;
 import net.snackbag.vera.style.StyleState;
+import net.snackbag.vera.style.animation.AnimationEngine;
 import net.snackbag.vera.util.DragHandler;
 
 import java.nio.file.Path;
@@ -22,6 +23,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     private boolean rightClickDown = false;
     private StyleState prevStyleState = StyleState.DEFAULT;
 
+    public final AnimationEngine animations = new AnimationEngine(this);
     public final LinkedHashSet<String> classes = new LinkedHashSet<>();
 
     public VWidget(int x, int y, int width, int height, VeraApp app) {
