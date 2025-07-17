@@ -6,6 +6,7 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.flag.VWindowPositioningFlag;
 import net.snackbag.vera.style.VStyleSheet;
+import net.snackbag.vera.style.animation.pipeline.VeraPipeline;
 import net.snackbag.vera.util.Geometry;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
@@ -15,6 +16,7 @@ import java.util.*;
 
 public abstract class VeraApp {
     public final VStyleSheet styleSheet = new VStyleSheet();
+    public final VeraPipeline pipeline = new VeraPipeline(this);
 
     private final List<VWidget<?>> widgets;
     private final HashMap<String, VShortcut> shortcuts;
