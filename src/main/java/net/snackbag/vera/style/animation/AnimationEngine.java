@@ -52,6 +52,6 @@ public class AnimationEngine {
         if (cache.containsKey(style)) return (T) cache.get(style);
 
         StyleValueType type = StyleValueType.get(value, null);
-        return widget.app.pipeline.applyCompositions(this, style, type, value);
+        return widget.app.pipeline.applyComposites(this, style, type, value);
     }
 }
