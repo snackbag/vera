@@ -1,6 +1,8 @@
 package net.snackbag.vera.style.animation;
 
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.style.animation.easing.Easings;
+import net.snackbag.vera.style.animation.easing.VEasing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,13 +13,15 @@ public class VAnimation {
     public final VeraApp app;
 
     public final int unwindTime;
+    public final VEasing unwindEasing;
     public final LoopMode loopMode;
 
     private final List<VKeyframe> keyframes = new ArrayList<>();
 
-    public VAnimation(String name, int unwindTime, LoopMode loopMode, VeraApp app) {
+    public VAnimation(String name, int unwindTime, VEasing unwindEasing, LoopMode loopMode, VeraApp app) {
         this.name = name;
         this.unwindTime = unwindTime;
+        this.unwindEasing = unwindEasing;
         this.loopMode = loopMode;
 
         this.app = app;
