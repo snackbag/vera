@@ -1,8 +1,10 @@
 package net.snackbag.vera.style.animation;
 
 import net.snackbag.vera.style.StyleValueType;
+import net.snackbag.vera.style.animation.easing.Easings;
 import net.snackbag.vera.style.animation.easing.VEasing;
 import net.snackbag.vera.util.Once;
+import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import java.util.HashMap;
@@ -13,7 +15,7 @@ public class VKeyframe {
     protected final int stayTime;
     protected final HashMap<String, Pair<StyleValueType, Object>> styles = new HashMap<>();
 
-    public VEasing easeIn;
+    public @NotNull VEasing easeIn = Easings.LINEAR;
 
     public VKeyframe(int transitionTime, int stayTime) {
         this.transitionTime = transitionTime;
