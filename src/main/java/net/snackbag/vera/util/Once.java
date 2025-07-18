@@ -47,4 +47,15 @@ public class Once<T> {
         if (value == null) throw new NullPointerException("Cannot get value that isn't set");
         return value;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Once<?> once)) return false;
+        return Objects.equals(value, once.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
+    }
 }
