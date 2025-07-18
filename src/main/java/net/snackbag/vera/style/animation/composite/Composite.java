@@ -9,6 +9,9 @@ public abstract class Composite {
     public Once<VeraPipeline> pipeline;
     public long frameTime = 0;
 
+    /**
+     * This method is called per-frame and is entirely independent of the given style. Therefore, the name uniform.
+     */
     public void generateUniforms() {}
     public abstract <T> T apply(AnimationEngine engine, String style, StyleValueType type, T in);
 }
