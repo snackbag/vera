@@ -10,8 +10,4 @@ public abstract class Composite {
 
     public void generateUniforms() {}
     public abstract <T> T apply(AnimationEngine engine, String style, StyleValueType type, T in);
-
-    protected boolean isOf(StyleValueType type, String style, ) {
-
-    }
 }
