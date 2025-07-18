@@ -37,6 +37,7 @@ public class VAnimation {
 
         private LoopMode loopMode = LoopMode.NONE;
         private int unwindTime = 0;
+        private VEasing unwindEasing = Easings.LINEAR;
 
         private final List<VKeyframe> keyframes = new ArrayList<>();
 
@@ -55,6 +56,11 @@ public class VAnimation {
             return this;
         }
 
+        public Builder unwindEasing(VEasing easing) {
+            this.unwindEasing = easing;
+            return this;
+        }
+
         public Builder keyframe(int transitionMs, Consumer<VKeyframe> frame, int stayMs) {
             VKeyframe target = new VKeyframe(transitionMs, stayMs);
             frame.accept(target);
@@ -64,7 +70,7 @@ public class VAnimation {
         }
 
         public VAnimation build() {
-            VAnimation animation = new VAnimation(name, unwindTime, loopMode, app);
+            VAnimation animation = new VAnimation(name, unwindTime, unwindEasing, loopMode, app);
 
             for (VKeyframe frame : keyframes) {
                 animation.addKeyframe(frame);
