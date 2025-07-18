@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class Once<T> {
     @Nullable
-    private T value;
+    private T value = null;
 
     /**
      * Sets the value if not already set
