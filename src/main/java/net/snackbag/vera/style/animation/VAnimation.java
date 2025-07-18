@@ -76,7 +76,7 @@ public class VAnimation {
                 animation.addKeyframe(frame);
             }
 
-            return new VAnimation(name, unwindTime, loopMode, app);
+            return animation;
         }
     }
 }
