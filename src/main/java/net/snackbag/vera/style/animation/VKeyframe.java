@@ -1,6 +1,7 @@
 package net.snackbag.vera.style.animation;
 
 import net.snackbag.vera.style.StyleValueType;
+import net.snackbag.vera.style.animation.easing.VEasing;
 import net.snackbag.vera.util.Once;
 import oshi.util.tuples.Pair;
 
@@ -11,6 +12,8 @@ public class VKeyframe {
     protected final int transitionTime;
     protected final int stayTime;
     protected final HashMap<String, Pair<StyleValueType, Object>> styles = new HashMap<>();
+
+    public VEasing easeIn;
 
     public VKeyframe(int transitionTime, int stayTime) {
         this.transitionTime = transitionTime;
