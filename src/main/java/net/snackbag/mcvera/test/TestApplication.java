@@ -1,24 +1,20 @@
 package net.snackbag.mcvera.test;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
-import net.snackbag.vera.core.VAlignmentFlag;
+import net.snackbag.vera.core.VFont;
+import net.snackbag.vera.flag.VHAlignmentFlag;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
+import net.snackbag.vera.style.StyleState;
 import net.snackbag.vera.widget.*;
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
-import java.awt.*;
 import java.nio.file.Path;
-import java.util.Arrays;
 
 public class TestApplication extends VeraApp {
-    public static final TestApplication INSTANCE = new TestApplication();
+    public static TestApplication INSTANCE = new TestApplication();
 
     public TestApplication() {
         super();
@@ -49,23 +45,23 @@ public class TestApplication extends VeraApp {
         input.onMouseMove((x, y) -> System.out.println("x=" + x + ", y=" + y));
 
         input.move(50);
-        input.setBackgroundColor(VColor.white());
+        input.setStyle("background-color", VColor.white());
         setFocusedWidget(input);
 
         VLabel label = new VLabel("Hello world!", this).alsoAdd();
 
-        label.onMouseDragLeft((oldX, oldY, newX, newY) -> setCursorShape(VCursorShape.VERTICAL_RESIZE));
+        label.onMouseDragLeft((ctx) -> setCursorShape(VCursorShape.VERTICAL_RESIZE));
         label.onLeftClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
-        label.onMouseDragMiddle((oldX, oldY, newX, newY) -> setCursorShape(VCursorShape.ALL_RESIZE));
+        label.onMouseDragMiddle((ctx) -> setCursorShape(VCursorShape.ALL_RESIZE));
         label.onMiddleClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
-        label.onMouseDragRight((oldX, oldY, newX, newY) -> setCursorShape(VCursorShape.HORIZONTAL_RESIZE));
+        label.onMouseDragRight((ctx) -> setCursorShape(VCursorShape.HORIZONTAL_RESIZE));
         label.onRightClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
         label.onFilesDropped(System.out::println);
 
-        label.setPadding(5);
+        label.setStyle("padding", 5);
         label.move(10);
-        label.setBackgroundColor(VColor.black());
-        label.setFont(label.getFont().withColor(VColor.white()));
+        label.setStyle("background-color", VColor.black());
+        label.modifyFont().color(VColor.white());
         label.adjustSize();
         label.onHover(() -> {
             label.setText("Hovered");
@@ -75,30 +71,29 @@ public class TestApplication extends VeraApp {
             label.setText("Not hovered");
         });
 
-        VLabel centerLabel = new VLabel("CENTER", this).alsoAdd();
-        centerLabel.setAlignment(VAlignmentFlag.CENTER);
-        centerLabel.setBackgroundColor(VColor.black());
+        VLabel centerLabel = new VLabel("CENTER", 220, 10, 100, 16, this).alsoAdd();
+        centerLabel.setAlignment(VHAlignmentFlag.CENTER);
+        centerLabel.setStyle("background-color", VColor.black());
         centerLabel.modifyFontColor().rgb(255, 255, 255);
-        centerLabel.move(220, 10);
-        centerLabel.setBorder(VColor.MC_BLUE, VColor.MC_GOLD, VColor.MC_RED, VColor.MC_GREEN);
-        centerLabel.setBorderSize(5, 10, 8, 16);
-        centerLabel.setHoverCursor(VCursorShape.ALL_RESIZE);
+        centerLabel.setStyle("border-color", VColor.MC_BLUE, VColor.MC_GOLD, VColor.MC_RED, VColor.MC_GREEN);
+        centerLabel.setStyle("border-size", 5, 10, 8, 16);
+        centerLabel.setStyle("cursor", VCursorShape.ALL_RESIZE);
 
-        VLabel rightLabel = new VLabel("RIGHT", this).alsoAdd();
-        rightLabel.setAlignment(VAlignmentFlag.RIGHT);
-        rightLabel.setBackgroundColor(VColor.black());
+        VLabel rightLabel = new VLabel("RIGHT", 100, 10, 100, 16, this).alsoAdd();
+        rightLabel.setAlignment(VHAlignmentFlag.RIGHT);
+        rightLabel.setStyle("background-color", VColor.black());
         rightLabel.modifyFontColor().rgb(255, 255, 255);
-        rightLabel.move(100, 10);
-        rightLabel.setBorder(VColor.white());
-        rightLabel.setBorderSize(1);
+        rightLabel.setStyle("border-color", VColor.white());
+        rightLabel.setStyle("border-size", 1);
         rightLabel.onRightClick(() -> System.out.println(Vera.openFileSelector("test", Path.of("/Volumes/Media"), null)));
 
         VImage image = new VImage(
-                Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/dirt.png"),
+                "minecraft:textures/block/dirt.png",
                 32, 32, this).alsoAdd();
         image.move(0, 30);
         image.onMiddleClick(this::hideCursor);
         image.onMiddleClickRelease(this::showCursor);
+        image.setStyle("src", StyleState.HOVERED, "minecraft:textures/block/diamond_block.png");
 
         VDropdown dropdown = new VDropdown(this).alsoAdd();
         dropdown.addItem("coolio");
@@ -107,7 +102,7 @@ public class TestApplication extends VeraApp {
         dropdown.addItem("buger", () -> System.out.println("pressed"));
         dropdown.move(90);
         dropdown.setItemSpacing(16);
-        dropdown.modifyHoverFont().color(VColor.white());
+        dropdown.itemHoverFont = VFont.create().withColor(VColor.white());
         dropdown.setItemHoverColor(VColor.black());
         dropdown.onFocusStateChange(() -> System.out.println("focus state change: " + dropdown.isFocused()));
 
@@ -115,7 +110,7 @@ public class TestApplication extends VeraApp {
 
         VCheckBox checkbox = new VCheckBox(this).alsoAdd();
         checkbox.move(20, 140);
-        checkbox.setHoverOverlayColor(VColor.white().withOpacity(0.4f));
+        checkbox.setStyle("overlay", StyleState.HOVERED, VColor.white().withOpacity(0.4f));
 
         checkbox.onCheckStateChange((state) -> {
             if (!state) removeWidget(checkbox);

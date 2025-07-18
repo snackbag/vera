@@ -12,10 +12,12 @@ import net.snackbag.vera.widget.VWidget;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MCVeraProvider {
     public void handleAppInitialization(VeraApp app) {
         MCVeraData.applications.add(app);
+        Vera.registrar.applyStandardWidgetStyles(app.styleSheet);
         MinecraftClient.getInstance().send(app::init);
         MinecraftClient.getInstance().send(app::update);
 
@@ -28,7 +30,7 @@ public class MCVeraProvider {
     public void handleAppShow(VeraApp app) {
         if (app.isVisible()) return;
 
-        MCVeraData.visibleApplications.add(app);
+        MCVeraData.visibleApplications.get(app.getPositioning()).add(app);
         if (app.isMouseRequired()) MCVeraData.appsWithMouseRequired += 1;
         MinecraftClient client = MinecraftClient.getInstance();
         client.send(app::update);
@@ -44,7 +46,7 @@ public class MCVeraProvider {
         if (!app.isVisible()) return;
 
         if (app.isMouseRequired()) MCVeraData.appsWithMouseRequired -= 1;
-        MCVeraData.visibleApplications.remove(app);
+        MCVeraData.visibleApplications.get(app.getPositioning()).remove(app);
         MinecraftClient client = MinecraftClient.getInstance();
         client.send(app::update);
 
@@ -101,15 +103,11 @@ public class MCVeraProvider {
     }
 
     public void handleKeyPressed(int keyCode, int scanCode, int modifiers) {
-        for (VeraApp app : MCVeraData.visibleApplications) {
-            app.keyPressed(keyCode, scanCode, modifiers);
-        }
+        Vera.forVisibleAndAllowedApps(app -> app.keyPressed(keyCode, scanCode, modifiers));
     }
 
     public void handleCharTyped(char chr, int modifiers) {
-        for (VeraApp app : MCVeraData.visibleApplications) {
-            app.charTyped(chr, modifiers);
-        }
+        Vera.forVisibleAndAllowedApps(app -> app.charTyped(chr, modifiers));
     }
 
     public String getDefaultFontName() {
@@ -129,8 +127,29 @@ public class MCVeraProvider {
     }
 
     public void handleFilesDropped(List<Path> paths) {
-        Vera.forHoveredWidget(Vera.getMouseX(), Vera.getMouseY(), (widget) -> {
-            widget.fireEvent("files-dropped", paths);
+        VeraApp top = MCVeraData.getTopHierarchy();
+
+        int x = Vera.getMouseX();
+        int y = Vera.getMouseY();
+
+        if (top != null && top.isPointOverThis(x, y)) {
+            VWidget<?> widget = top.getTopWidgetAt(x, y);
+            if (widget != null) {
+                widget.events.fire("files-dropped", paths);
+                return;
+            }
+        }
+
+        AtomicBoolean didSomething = new AtomicBoolean(false);
+        Vera.forAllVisibleApps(app -> {
+            if (didSomething.get()) return;
+            if (!app.isPointOverThis(x, y)) return;
+
+            VWidget<?> widget = app.getTopWidgetAt(x, y);
+            if (widget != null) {
+                widget.events.fire("files-dropped", paths);
+                didSomething.set(true);
+            }
         });
     }
 }

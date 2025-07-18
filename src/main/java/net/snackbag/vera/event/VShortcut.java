@@ -5,9 +5,9 @@ import net.snackbag.vera.core.VeraApp;
 import org.apache.commons.lang3.SystemUtils;
 
 public class VShortcut {
-    private final VeraApp app;
+    public final VeraApp app;
     private final String combination;
-    private final boolean transformOSX;
+    public final boolean transformOSX;
     private Runnable event;
 
     public VShortcut(VeraApp app, String combination, Runnable event) {
@@ -19,10 +19,6 @@ public class VShortcut {
         this.combination = combination.toLowerCase().replace(" ", "");
         this.event = event;
         this.transformOSX = transformOSX;
-    }
-
-    public VeraApp getApp() {
-        return app;
     }
 
     public String getCombination() {
@@ -43,10 +39,6 @@ public class VShortcut {
 
     public void setEvent(Runnable event) {
         this.event = event;
-    }
-
-    public boolean shouldTransformOSX() {
-        return transformOSX;
     }
 
     public void run() {
