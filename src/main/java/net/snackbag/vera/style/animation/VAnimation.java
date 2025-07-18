@@ -12,9 +12,12 @@ public class VAnimation {
 
     private final List<VKeyframe> keyframes = new ArrayList<>();
 
-    public VAnimation(String name, int discardTime) {
+    public VAnimation(String name, int unwindTime, LoopMode loopMode, VeraApp app) {
         this.name = name;
-        this.discardTime = discardTime;
+        this.unwindTime = unwindTime;
+        this.loopMode = loopMode;
+
+        this.app = app;
     }
 
     public void addKeyframe(VKeyframe keyframe) {
