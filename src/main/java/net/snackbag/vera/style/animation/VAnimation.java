@@ -5,7 +5,10 @@ import java.util.List;
 
 public class VAnimation {
     public final String name;
-    public final int discardTime;
+    public final VeraApp app;
+
+    public final int unwindTime;
+    public final LoopMode loopMode;
 
     private final List<VKeyframe> keyframes = new ArrayList<>();
 
