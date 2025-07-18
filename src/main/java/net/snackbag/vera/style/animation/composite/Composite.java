@@ -1,11 +1,12 @@
-package net.snackbag.vera.style.animation.pipeline.composite;
+package net.snackbag.vera.style.animation.composite;
 
 import net.snackbag.vera.style.StyleValueType;
 import net.snackbag.vera.style.animation.AnimationEngine;
-import net.snackbag.vera.style.animation.pipeline.VeraPipeline;
+import net.snackbag.vera.style.animation.VeraPipeline;
+import net.snackbag.vera.util.Once;
 
 public abstract class Composite {
-    protected VeraPipeline pipeline;
+    public Once<VeraPipeline> pipeline;
 
     public void generateUniforms() {}
     public abstract <T> T apply(AnimationEngine engine, String style, StyleValueType type, T in);
