@@ -38,6 +38,15 @@ public class Once<T> {
     }
 
     /**
+     * Checks whether the value is set or not
+     *
+     * @return if the value is set
+     */
+    public boolean isSet() {
+        return value != null;
+    }
+
+    /**
      * Gets the set value if not null
      *
      * @return the value
