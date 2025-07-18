@@ -24,6 +24,20 @@ public class Once<T> {
     }
 
     /**
+     * Sets the value if not already set without throwing exceptions
+     *
+     * @param value the value to set
+     * @return <code>true</code> if value could be set, <code>false</code> if unable to set
+     */
+    public boolean setSafe(T value) {
+        if (value == null) return false;
+        if (this.value != null) return false;
+
+        this.value = value;
+        return true;
+    }
+
+    /**
      * Gets the set value if not null
      *
      * @return the value
