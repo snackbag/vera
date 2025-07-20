@@ -5,6 +5,7 @@ import net.snackbag.vera.style.animation.easing.Easings;
 import net.snackbag.vera.style.animation.easing.VEasing;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -24,6 +25,7 @@ public class VAnimation {
     public final LoopMode loopMode;
 
     private final List<VKeyframe> keyframes = new ArrayList<>();
+    private final HashMap<String, Integer> styleAffections = new HashMap<>();
 
     public VAnimation(String name, int unwindTime, VEasing unwindEasing, LoopMode loopMode, VeraApp app) {
         this.name = name;
@@ -36,6 +38,10 @@ public class VAnimation {
 
     public void addKeyframe(VKeyframe keyframe) {
         this.keyframes.add(keyframe);
+
+        for (String key : keyframe.styles.keySet()) {
+            styleAffections.merge(key, 1, Integer::sum);
+        }
     }
 
     public static class Builder {
