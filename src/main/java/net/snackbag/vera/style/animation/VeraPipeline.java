@@ -42,7 +42,7 @@ public class VeraPipeline {
                 isNewFrame = true;
             }
 
-            in = pass.apply(ctx, isNewFrame);
+            in = pass.apply(ctx, in, isNewFrame);
         }
 
         return in;
