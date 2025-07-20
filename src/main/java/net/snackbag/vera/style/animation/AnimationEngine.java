@@ -59,4 +59,14 @@ public class AnimationEngine {
         StyleValueType type = StyleValueType.get(value, null);
         return widget.app.pipeline.applyComposites(this, style, type, value);
     }
+
+    /**
+     * Gets the time an animation has been active since, if it isn't active at all it will return -1
+     *
+     * @param animation the animation to check
+     * @return when the animation was started
+     */
+    public long getTimeSinceActive(VAnimation animation) {
+        return activeAnimations.getOrDefault(animation, -1L);
+    }
 }
