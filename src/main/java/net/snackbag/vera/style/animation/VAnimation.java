@@ -27,6 +27,8 @@ public class VAnimation {
     private final List<VKeyframe> keyframes = new ArrayList<>();
     private final HashMap<String, Integer> styleAffections = new HashMap<>();
 
+    private int totalTime = 0;
+
     public VAnimation(String name, int unwindTime, VEasing unwindEasing, LoopMode loopMode, VeraApp app) {
         this.name = name;
         this.unwindTime = unwindTime;
@@ -42,10 +44,16 @@ public class VAnimation {
         for (String key : keyframe.styles.keySet()) {
             styleAffections.merge(key, 1, Integer::sum);
         }
+
+        totalTime += keyframe.cumulatedTime;
     }
 
     public boolean affects(String style) {
         return styleAffections.containsKey(style);
+    }
+
+    public int getTotalTime() {
+        return totalTime;
     }
 
     public static class Builder {
