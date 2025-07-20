@@ -10,7 +10,7 @@ public abstract class Composite {
     public long frameTime = 0;
 
     /**
-     * This method is called per-frame and is entirely independent of the given style. Therefore, the name uniform.
+     * This method is called per-frame and is entirely independent of the given style. Hence, the name uniform.
      */
     public void generateUniforms() {}
     public abstract <T> T apply(Context<T> ctx);
