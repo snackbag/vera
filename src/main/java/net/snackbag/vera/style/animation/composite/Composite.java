@@ -6,7 +6,7 @@ import net.snackbag.vera.style.animation.VeraPipeline;
 import net.snackbag.vera.util.Once;
 
 public abstract class Composite {
-    public Once<VeraPipeline> pipeline;
+    public Once<VeraPipeline> pipeline = new Once<>();
     public long frameTime = 0;
 
     /**
