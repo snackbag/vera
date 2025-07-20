@@ -44,6 +44,10 @@ public class VAnimation {
         }
     }
 
+    public boolean affects(String style) {
+        return styleAffections.containsKey(style);
+    }
+
     public static class Builder {
         private final String name;
         private final VeraApp app;
