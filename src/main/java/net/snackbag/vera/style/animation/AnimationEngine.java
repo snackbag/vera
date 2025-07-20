@@ -28,7 +28,12 @@ public class AnimationEngine {
     }
 
     public void activate(VAnimation animation) {
-        activeAnimations.add(animation);
+        activate(animation, false);
+    }
+
+    public void activate(VAnimation animation, boolean override) {
+        if (!override && activeAnimations.containsKey(animation)) return;
+        activeAnimations.put(animation, System.currentTimeMillis());
     }
 
     public @Nullable VAnimation getIfActive(String name) {
