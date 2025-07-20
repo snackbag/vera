@@ -13,7 +13,7 @@ public abstract class Composite {
      * This method is called per-frame and is entirely independent of the given style. Hence, the name uniform.
      */
     public void generateUniforms() {}
-    public abstract <T> T apply(Context<T> ctx);
+    public abstract <T> T apply(Context<T> ctx, boolean isNewFrame);
 
     public record Context<T>(AnimationEngine engine, String style, StyleValueType type, T in) {
     }

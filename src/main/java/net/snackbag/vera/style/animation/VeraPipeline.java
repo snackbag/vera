@@ -33,14 +33,16 @@ public class VeraPipeline {
 
     public <T> T applyComposites(AnimationEngine engine, String style, StyleValueType type, T in) {
         Composite.Context<T> ctx = new Composite.Context<T>(engine,style, type, in);
+        boolean isNewFrame = false;
 
         for (Composite pass : passes) {
             if (pass.frameTime != Vera.renderCacheId) {
                 pass.frameTime = Vera.renderCacheId;
                 pass.generateUniforms();
+                isNewFrame = true;
             }
 
-            in = pass.apply(ctx);
+            in = pass.apply(ctx, isNewFrame);
         }
 
         return in;
