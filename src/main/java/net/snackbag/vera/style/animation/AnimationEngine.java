@@ -14,7 +14,7 @@ import java.util.LinkedHashSet;
  */
 public class AnimationEngine {
     public final VWidget<?> widget;
-    private final LinkedHashSet<VAnimation> activeAnimations = new LinkedHashSet<>();
+    private final HashMap<VAnimation, Long> activeAnimations = new HashMap<>();
 
     private long cacheId = 0;
     private final HashMap<String, Object> cache = new HashMap<>();
@@ -24,7 +24,7 @@ public class AnimationEngine {
     }
 
     public boolean isActive(String name) {
-        return activeAnimations.stream().anyMatch(anim -> anim.name.equals(name));
+        return activeAnimations.keySet().stream().anyMatch(anim -> anim.name.equals(name));
     }
 
     public void activate(VAnimation animation) {
@@ -32,11 +32,11 @@ public class AnimationEngine {
     }
 
     public @Nullable VAnimation getIfActive(String name) {
-        return activeAnimations.stream().filter(anim -> anim.name.equals(name)).findFirst().orElse(null);
+        return activeAnimations.keySet().stream().filter(anim -> anim.name.equals(name)).findFirst().orElse(null);
     }
 
     public VAnimation[] getAllActive() {
-        return activeAnimations.toArray(new VAnimation[0]);
+        return activeAnimations.keySet().toArray(new VAnimation[0]);
     }
 
     public void checkCache() {
