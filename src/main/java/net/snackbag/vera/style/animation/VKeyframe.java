@@ -33,4 +33,8 @@ public class VKeyframe {
     public int getCombinedTime() {
         return transitionTime + stayTime;
     }
+
+    public boolean affects(String style) {
+        return styles.containsKey(style);
+    }
 }
