@@ -8,6 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Represents an animation template scoped to a specific {@link VeraApp} instance.
+ * <p/>
+ * Animations are app-specific and should not be shared across multiple apps.
+ * If you need to reuse an animation in different apps, define a method that
+ * generates a new instance of the animation for each target app.
+ */
 public class VAnimation {
     public final String name;
     public final VeraApp app;
