@@ -15,6 +15,6 @@ public abstract class Composite {
     public void generateUniforms() {}
     public abstract <T> T apply(Context<T> ctx, T in, boolean isNewFrame);
 
-    public record Context<T>(AnimationEngine engine, String style, StyleValueType type, T in) {
+    public record Context<T>(AnimationEngine engine, String style, StyleValueType type, T original) {
     }
 }
