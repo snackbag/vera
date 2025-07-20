@@ -29,4 +29,8 @@ public class VKeyframe {
         Object converted = StyleValueType.convert(value, reservation);
         styles.put(key, new Pair<>(reservation, converted));
     }
+
+    public int getCombinedTime() {
+        return transitionTime + stayTime;
+    }
 }
