@@ -28,9 +28,15 @@ public class AnimationComposite extends Composite {
 
         for (VAnimation animation : localAnimations) {
             if (!animation.affects(style)) continue;
-            if (isNewFrame) {
-                precalculatedStyles.put(
-                        animation,
+
+            boolean animationCached = precalculatedStyles.containsKey(animation);
+
+            // If animation isn't cached or the key isn't cached
+            if (!animationCached || !precalculatedStyles.get(animation).containsKey(style)) {
+                if (!animationCached) precalculatedStyles.put(animation, new HashMap<>());
+
+                precalculatedStyles.get(animation).put(
+                        style,
                         animation.calculateStyle(
                                 style,
                                 System.currentTimeMillis() - engine.getTimeSinceActive(animation)
