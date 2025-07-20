@@ -13,6 +13,7 @@ public class VKeyframe {
     protected final Once<VAnimation> animation = new Once<>();
     protected final int transitionTime;
     protected final int stayTime;
+    protected final int cumulatedTime;
     protected final HashMap<String, Pair<StyleValueType, Object>> styles = new HashMap<>();
 
     public @NotNull VEasing easeIn = Easings.LINEAR;
@@ -20,6 +21,7 @@ public class VKeyframe {
     public VKeyframe(int transitionTime, int stayTime) {
         this.transitionTime = transitionTime;
         this.stayTime = stayTime;
+        this.cumulatedTime = this.transitionTime + this.stayTime;
     }
 
     public void style(String key, Object value) {
@@ -28,10 +30,6 @@ public class VKeyframe {
 
         Object converted = StyleValueType.convert(value, reservation);
         styles.put(key, new Pair<>(reservation, converted));
-    }
-
-    public int getCombinedTime() {
-        return transitionTime + stayTime;
     }
 
     public boolean affects(String style) {
