@@ -48,10 +48,10 @@ public enum StyleValueType {
             if (bias == IDENTIFIER && s.matches("^[\\w-./]*:[\\w-./]*$")) return IDENTIFIER;
             else if (bias == CURSOR && EnumUtils.getEnumIgnoreCase(VCursorShape.class, s) != null) return CURSOR;
             return STRING;
-        }
-
-        else if (val instanceof V4Color || (bias == V4COLOR && (val instanceof VColor[] || val instanceof VColor))) return V4COLOR;
-        else if (val instanceof V4Int || (bias == V4INT && (val instanceof int[] || val instanceof Integer[] || val instanceof Integer))) return V4INT;
+        } else if (val instanceof V4Color || (bias == V4COLOR && (val instanceof VColor[] || val instanceof VColor)))
+            return V4COLOR;
+        else if (val instanceof V4Int || (bias == V4INT && (val instanceof int[] || val instanceof Integer[] || val instanceof Integer)))
+            return V4INT;
         else if (val instanceof Identifier) return IDENTIFIER;
         else if (val instanceof VCursorShape) return CURSOR;
         else if (val instanceof Integer) return INT;
@@ -74,7 +74,8 @@ public enum StyleValueType {
                 case 1 -> new V4Int(v[0]);
                 case 2 -> new V4Int(v[0], v[1]);
                 case 4 -> new V4Int(v[0], v[1], v[2], v[3]);
-                default -> throw new RuntimeException("invalid V4Int format. Length must be 1, 2 or 4. Provided: %d".formatted(v.length));
+                default ->
+                        throw new RuntimeException("invalid V4Int format. Length must be 1, 2 or 4. Provided: %d".formatted(v.length));
             };
         }
 
@@ -85,7 +86,8 @@ public enum StyleValueType {
                 case 1 -> new V4Color(v[0]);
                 case 2 -> new V4Color(v[0], v[1]);
                 case 4 -> new V4Color(v[0], v[1], v[2], v[3]);
-                default -> throw new RuntimeException("invalid V4Color format. Length must be 1, 2 or 4. Provided: %d".formatted(v.length));
+                default ->
+                        throw new RuntimeException("invalid V4Color format. Length must be 1, 2 or 4. Provided: %d".formatted(v.length));
             };
         }
 
