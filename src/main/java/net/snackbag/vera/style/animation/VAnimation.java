@@ -1,8 +1,11 @@
 package net.snackbag.vera.style.animation;
 
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.style.StyleValueType;
 import net.snackbag.vera.style.animation.easing.Easings;
 import net.snackbag.vera.style.animation.easing.VEasing;
+import org.jetbrains.annotations.Nullable;
+import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +49,50 @@ public class VAnimation {
 
     public boolean affects(String style) {
         return styleAffections.containsKey(style);
+    }
+
+    public <T> @Nullable T calculateStyle(String style, T original, StyleValueType svt, long ms) {
+        // TODO: implement loop modes
+
+        if (!affects(style)) {
+            return null;
+        }
+
+        int margin = 0;
+        for (int i = 0; i < keyframes.size(); i++) {
+            VKeyframe frame = keyframes.get(i);
+
+            if (!(ms > margin && ms < margin + frame.cumulatedTime)) {
+                margin += frame.cumulatedTime;
+                continue;
+            }
+
+            int time = (int) ms - margin;
+            boolean isTransition = time <= frame.transitionTime;
+
+            if (!isTransition) return (T) frame.styles.get(style).getB();
+
+            T before;
+            T after = getStyleForKeyframeDeep(i, style);
+
+            if (i > 0) before = getStyleForKeyframeDeep(i - 1, style);
+            else before = original;
+
+            return (T) svt.animationTransition.apply(before, after, frame.easeIn, ms / (float) frame.transitionTime);
+        }
+
+        return original;
+    }
+
+    public <T> T getStyleForKeyframeDeep(int targetIndex, String style) {
+        VKeyframe target = keyframes.get(targetIndex);
+
+        for (int i = targetIndex; !target.styles.containsKey(style); i--) {
+            target = keyframes.get(i - 1);
+        }
+
+        Pair<StyleValueType, Object> pair = target.styles.get(style);
+        return (T) StyleValueType.convert(pair.getB(), pair.getA());
     }
 
     public int getTotalTime() {
