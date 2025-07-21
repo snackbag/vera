@@ -4,6 +4,7 @@ import net.snackbag.vera.style.StyleValueType;
 import net.snackbag.vera.style.animation.AnimationEngine;
 import net.snackbag.vera.style.animation.VeraPipeline;
 import net.snackbag.vera.util.Once;
+import net.snackbag.vera.widget.VWidget;
 
 public abstract class Composite {
     public Once<VeraPipeline> pipeline = new Once<>();
