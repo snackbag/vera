@@ -66,15 +66,19 @@ public class VAnimation {
                 int timeInFrame = (int) ms - margin;
                 boolean isTransition = timeInFrame <= frame.transitionTime;
 
-            if (!isTransition) return (T) frame.styles.get(style).getB();
+                if (!isTransition) return (T) frame.styles.get(style).getB();
 
-            T before;
-            T after = getStyleForKeyframeDeep(i, style);
+                T before;
+                T after = getStyleForKeyframeDeep(i, style);
 
-            if (i > 0) before = getStyleForKeyframeDeep(i - 1, style);
-            else before = original;
+                if (i > 0) before = getStyleForKeyframeDeep(i - 1, style);
+                else before = original;
 
-            return (T) svt.animationTransition.apply(before, after, frame.easeIn, ms / (float) frame.transitionTime);
+                float progress = timeInFrame / (float) frame.transitionTime;
+
+                return (T) svt.animationTransition.apply(before, after, frame.easeIn, progress);
+            }
+
             margin += frame.cumulatedTime;
         }
 
