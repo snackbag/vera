@@ -4,6 +4,7 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.style.StyleValueType;
 import net.snackbag.vera.style.animation.composite.Composite;
+import net.snackbag.vera.widget.VWidget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 public class VeraPipeline {
     public final VeraApp app;
     private final List<Composite> passes = new ArrayList<>();
+    private final List<VWidget<?>> cleanWidgets = new ArrayList<>();
 
     public VeraPipeline(VeraApp app) {
         this.app = app;
@@ -38,10 +40,12 @@ public class VeraPipeline {
         for (Composite pass : passes) {
             if (pass.frameTime != Vera.renderCacheId) {
                 pass.frameTime = Vera.renderCacheId;
+                cleanWidgets.clear();
                 pass.generateUniforms();
                 isNewFrame = true;
             }
 
+            if (!cleanWidgets.contains(engine.widget)) pass.applyWidget(engine.widget);
             in = pass.applyStyle(ctx, in, isNewFrame);
         }
 
