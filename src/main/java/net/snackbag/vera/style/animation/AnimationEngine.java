@@ -15,6 +15,7 @@ import java.util.LinkedHashSet;
 public class AnimationEngine {
     public final VWidget<?> widget;
     private final HashMap<VAnimation, Long> activeAnimations = new HashMap<>();
+    private final HashMap<VAnimation, Long> animationHistory = new HashMap<>();
 
     private long cacheId = 0;
     private final HashMap<String, Object> cache = new HashMap<>();
@@ -27,6 +28,10 @@ public class AnimationEngine {
         return activeAnimations.keySet().stream().anyMatch(anim -> anim.name.equals(name));
     }
 
+    public boolean isUnwinding(String name) {
+
+    }
+
     public void activate(VAnimation animation) {
         activate(animation, false);
     }
@@ -36,8 +41,19 @@ public class AnimationEngine {
         activeAnimations.put(animation, System.currentTimeMillis());
     }
 
-    public @Nullable VAnimation getIfActive(String name) {
-        return activeAnimations.keySet().stream().filter(anim -> anim.name.equals(name)).findFirst().orElse(null);
+    public @Nullable VAnimation getIfEverActive(String name) {
+        return activeAnimations.keySet()
+                .stream()
+                .filter(anim -> anim.name.equals(name))
+                .findFirst()
+
+                .orElse(
+                        animationHistory.keySet()
+                                .stream()
+                                .filter(anim -> anim.name.equals(name))
+                                .findFirst()
+                                .orElse(null)
+                );
     }
 
     public VAnimation[] getAllActive() {
