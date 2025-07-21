@@ -5,26 +5,42 @@ import net.snackbag.mcvera.MinecraftVera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.core.v4.V4Color;
 import net.snackbag.vera.core.v4.V4Int;
+import net.snackbag.vera.style.animation.easing.VEasing;
 import org.apache.commons.lang3.EnumUtils;
 import org.jetbrains.annotations.Nullable;
 
 public enum StyleValueType {
-    STRING(""),
-    IDENTIFIER(Identifier.of(MinecraftVera.MOD_ID, "empty")),
-    INT(0),
-    FLOAT(0.0F),
+    STRING("", (f, t, e, d) -> d > 0.5 ? t : f),
+    IDENTIFIER(Identifier.of(MinecraftVera.MOD_ID, "empty"), (f, t, e, d) -> d > 0.5 ? t : f),
+    INT(0, (from, to, easing, delta) -> easing.apply(from, to, delta)),
+    FLOAT(0.0F, (from, to, easing, delta) -> easing.apply(from, to, delta)),
 
-    COLOR(VColor.black()),
-    FONT(VFont.create()),
-    CURSOR(VCursorShape.DEFAULT),
+    COLOR(VColor.black(), (from, to, easing, delta) -> from.ease(easing, to, delta)),
+    FONT(VFont.create(), (from, to, easing, delta) ->
+            VFont.create().withColor(from.getColor().ease(easing, to.getColor(), delta))
+                    .withSize(easing.apply(from.getSize(), to.getSize(), delta))
+                    .withName(delta > 0.5 ? to.getName() : from.getName())),
+    CURSOR(VCursorShape.DEFAULT, (f, t, e, d) -> d > 0.5 ? t : f),
 
-    V4INT(new V4Int(0)),
-    V4COLOR(new V4Color(VColor.black()));
+    V4INT(new V4Int(0), (from, to, easing, delta) -> new V4Int(
+            easing.apply(from.get1(), to.get1(), delta),
+            easing.apply(from.get2(), to.get2(), delta),
+            easing.apply(from.get3(), to.get3(), delta),
+            easing.apply(from.get4(), to.get4(), delta)
+    )),
+    V4COLOR(new V4Color(VColor.black()), (from, to, easing, delta) -> new V4Color(
+            from.get1().ease(easing, to.get1(), delta),
+            from.get2().ease(easing, to.get2(), delta),
+            from.get3().ease(easing, to.get3(), delta),
+            from.get4().ease(easing, to.get4(), delta)
+    ));
 
     public final Object standard;
+    public final EaseContext<Object> animationTransition;
 
-    StyleValueType(Object standard) {
+    <T> StyleValueType(T standard, EaseContext<T> animationTransition) {
         this.standard = standard;
+        this.animationTransition = (EaseContext<Object>) animationTransition;
     }
 
     public static StyleValueType get(Object val, @Nullable StyleValueType bias) {
@@ -77,5 +93,10 @@ public enum StyleValueType {
 
         else if (to == FLOAT && value instanceof Double v) return v.floatValue();
         return value;
+    }
+
+    @FunctionalInterface
+    public interface EaseContext<T> {
+        T apply(T in, T out, VEasing easing, float delta);
     }
 }
