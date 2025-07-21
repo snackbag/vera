@@ -28,6 +28,8 @@ public class VKeyframe {
         StyleValueType reservation = animation.get().app.styleSheet.getReservation(key);
         if (reservation == null) throw new UnsupportedOperationException("Cannot set keyframe style to unreserved style key");
 
+        animation.get().styleAffections.merge(key, 1, Integer::sum);
+
         Object converted = StyleValueType.convert(value, reservation);
         styles.put(key, new Pair<>(reservation, converted));
     }
