@@ -67,7 +67,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     }
 
     public <V> V getStyle(String key, StyleState state) {
-        return app.styleSheet.getKey(this, key, state);
+        return animations.animateStyle(key, app.styleSheet.getKey(this, key, state));
     }
 
     public <V> V getStyleOrDefault(String key, V dflt) {
