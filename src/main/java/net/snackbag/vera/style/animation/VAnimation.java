@@ -25,7 +25,7 @@ public class VAnimation {
     public final LoopMode loopMode;
 
     private final List<VKeyframe> keyframes = new ArrayList<>();
-    private final HashMap<String, Integer> styleAffections = new HashMap<>();
+    protected final HashMap<String, Integer> styleAffections = new HashMap<>();
 
     private int totalTime = 0;
 
