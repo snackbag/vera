@@ -60,7 +60,7 @@ public class VAnimation {
         private int unwindTime = 0;
         private VEasing unwindEasing = Easings.LINEAR;
 
-        private final List<VKeyframe> keyframes = new ArrayList<>();
+        private final List<Pair<VKeyframe, Consumer<VKeyframe>>> keyframes = new ArrayList<>();
 
         public Builder(VeraApp app, String name) {
             this.name = name;
@@ -83,18 +83,16 @@ public class VAnimation {
         }
 
         public Builder keyframe(int transitionMs, Consumer<VKeyframe> frame, int stayMs) {
-            VKeyframe target = new VKeyframe(transitionMs, stayMs);
-            frame.accept(target);
-
-            keyframes.add(target);
+            keyframes.add(new Pair<>(new VKeyframe(transitionMs, stayMs), frame));
             return this;
         }
 
         public VAnimation build() {
             VAnimation animation = new VAnimation(name, unwindTime, unwindEasing, loopMode, app);
 
-            for (VKeyframe frame : keyframes) {
-                animation.addKeyframe(frame);
+            for (Pair<VKeyframe, Consumer<VKeyframe>> frame : keyframes) {
+                animation.addKeyframe(frame.getA());
+                frame.getB().accept(frame.getA());
             }
 
             return animation;
