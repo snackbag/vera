@@ -32,7 +32,7 @@ public class AnimationEngine {
     }
 
     public void activate(VAnimation animation, boolean override) {
-        if (!override && activeAnimations.containsKey(animation)) return;
+        if (!override && isActive(animation.name)) return;
         activeAnimations.put(animation, System.currentTimeMillis());
     }
 
