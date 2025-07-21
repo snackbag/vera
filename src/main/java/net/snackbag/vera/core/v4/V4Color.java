@@ -1,4 +1,6 @@
-package net.snackbag.vera.core;
+package net.snackbag.vera.core.v4;
+
+import net.snackbag.vera.core.VColor;
 
 public class V4Color {
     private final VColor v1;

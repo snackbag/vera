@@ -1,6 +1,6 @@
 package net.snackbag.vera.style.standard;
 
-import net.snackbag.vera.core.V4Int;
+import net.snackbag.vera.core.v4.V4Int;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.style.StyleValueType;

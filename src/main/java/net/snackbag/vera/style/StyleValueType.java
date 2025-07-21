@@ -3,6 +3,8 @@ package net.snackbag.vera.style;
 import net.minecraft.util.Identifier;
 import net.snackbag.mcvera.MinecraftVera;
 import net.snackbag.vera.core.*;
+import net.snackbag.vera.core.v4.V4Color;
+import net.snackbag.vera.core.v4.V4Int;
 import org.apache.commons.lang3.EnumUtils;
 import org.jetbrains.annotations.Nullable;
 

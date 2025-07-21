@@ -3,6 +3,8 @@ package net.snackbag.vera.widget;
 import net.snackbag.vera.VElement;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
+import net.snackbag.vera.core.v4.V4Color;
+import net.snackbag.vera.core.v4.V4Int;
 import net.snackbag.vera.event.*;
 import net.snackbag.vera.layout.VLayout;
 import net.snackbag.vera.style.StyleState;
