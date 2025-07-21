@@ -10,6 +10,11 @@ public class AnimationComposite extends Composite {
     private final HashMap<AnimationEngine, VAnimation[]> animations = new HashMap<>();
 
     @Override
+    public void generateUniforms() {
+        animations.clear();
+    }
+
+    @Override
     public void applyWidget(VWidget<?> widget) {
         animations.put(widget.animations, widget.animations.getAllActive());
     }
