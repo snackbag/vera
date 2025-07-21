@@ -54,6 +54,7 @@ public class AnimationEngine {
     public <T> T animateStyle(String style, T value) {
         checkCache();
 
+        if (value == null) return null;
         if (cache.containsKey(style)) return (T) cache.get(style);
 
         StyleValueType type = StyleValueType.get(value, null);
