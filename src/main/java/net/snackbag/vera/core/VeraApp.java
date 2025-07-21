@@ -154,6 +154,15 @@ public abstract class VeraApp {
         this.width = width;
     }
 
+    public void setSize(int both) {
+        setSize(both, both);
+    }
+
+    public void setSize(int width, int height) {
+        setWidth(width);
+        setHeight(height);
+    }
+
     public void move(int x, int y) {
         this.x = x;
         this.y = y;
