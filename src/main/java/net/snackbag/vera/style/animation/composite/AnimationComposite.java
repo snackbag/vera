@@ -10,7 +10,7 @@ public class AnimationComposite extends Composite {
     private final HashMap<VAnimation, HashMap<String, Object>> precalculatedStyles = new HashMap<>();
 
     @Override
-    public <T> T apply(Context<T> ctx, T in, boolean isNewFrame) {
+    public <T> T applyStyle(Context<T> ctx, T in, boolean isNewFrame) {
         AnimationEngine engine = ctx.engine();
 
         if (isNewFrame) {
