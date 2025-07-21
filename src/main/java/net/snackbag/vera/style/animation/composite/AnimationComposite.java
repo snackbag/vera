@@ -2,6 +2,7 @@ package net.snackbag.vera.style.animation.composite;
 
 import net.snackbag.vera.style.animation.AnimationEngine;
 import net.snackbag.vera.style.animation.VAnimation;
+import net.snackbag.vera.widget.VWidget;
 
 import java.util.HashMap;
 
@@ -10,41 +11,21 @@ public class AnimationComposite extends Composite {
     private final HashMap<VAnimation, HashMap<String, Object>> precalculatedStyles = new HashMap<>();
 
     @Override
+    public void applyWidget(VWidget<?> widget) {
+        animations.put(widget.animations, widget.animations.getAllActive());
+    }
+
+    @Override
     public <T> T applyStyle(Context<T> ctx, T in, boolean isNewFrame) {
+        // No caching necessary, since this is done earlier.
+
         AnimationEngine engine = ctx.engine();
 
-        if (isNewFrame) {
-            animations.put(engine, engine.getAllActive());
-            precalculatedStyles.clear();
-        }
-
         T out = in;
-        VAnimation[] localAnimations = animations.get(engine);
-
-        // If no animations active, return the input
-        if (localAnimations == null) return out;
-
-        String style = ctx.style();
-
-        for (VAnimation animation : localAnimations) {
-            if (!animation.affects(style)) continue;
-
-            boolean animationCached = precalculatedStyles.containsKey(animation);
-
-            // If animation isn't cached or the key isn't cached
-            if (!animationCached || !precalculatedStyles.get(animation).containsKey(style)) {
-                if (!animationCached) precalculatedStyles.put(animation, new HashMap<>());
-
-                precalculatedStyles.get(animation).put(
-                        style,
-                        animation.calculateStyle(
-                                style,
-                                System.currentTimeMillis() - engine.getTimeSinceActive(animation)
-                        )
-                );
-            }
-
-            out = (T) precalculatedStyles.get(animation).get(style);
+        for (VAnimation animation : animations.get(engine)) {
+            // No need to check affects, since calculateStyle does this internally
+            T rv = animation.calculateStyle(ctx.style(), ctx.original(), ctx.type(), System.currentTimeMillis() - engine.getTimeSinceActive(animation));
+            if (rv != null) out = rv;
         }
 
         return out;
