@@ -7,6 +7,7 @@ import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.style.StyleState;
 import net.snackbag.vera.style.VStyleSheet;
+import net.snackbag.vera.style.animation.VAnimation;
 import net.snackbag.vera.widget.VLabel;
 import net.snackbag.vera.widget.VRect;
 
@@ -30,6 +31,15 @@ public class StyleTestApplication extends VeraApp {
         testRect.setStyle("cursor", StyleState.CLICKED, VCursorShape.ALL_RESIZE);
 
         testRect.onMouseDragLeft((ctx) -> testRect.move(testRect.getX() + ctx.moveX(), testRect.getY() + ctx.moveY()));
+
+        new VShortcut(this, "a", () -> {
+            testRect.animations.activate(
+                    new VAnimation.Builder(this, "test")
+                            .keyframe(1000, frame -> frame.style("background-color", VColor.MC_GOLD), 2000)
+                            .keyframe(1000, frame -> frame.style("background-color", VColor.MC_RED), 2000)
+                            .build()
+            );
+        }).alsoAdd();
     }
 
     public VStyleSheet createStyleSheet() {
