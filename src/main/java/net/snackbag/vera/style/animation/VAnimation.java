@@ -40,6 +40,7 @@ public class VAnimation {
 
     public void addKeyframe(VKeyframe keyframe) {
         this.keyframes.add(keyframe);
+        keyframe.animation.set(this);
 
         for (String key : keyframe.styles.keySet()) {
             styleAffections.merge(key, 1, Integer::sum);
