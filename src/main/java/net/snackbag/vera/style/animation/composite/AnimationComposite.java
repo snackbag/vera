@@ -8,7 +8,6 @@ import java.util.HashMap;
 
 public class AnimationComposite extends Composite {
     private final HashMap<AnimationEngine, VAnimation[]> animations = new HashMap<>();
-    private final HashMap<VAnimation, HashMap<String, Object>> precalculatedStyles = new HashMap<>();
 
     @Override
     public void applyWidget(VWidget<?> widget) {
