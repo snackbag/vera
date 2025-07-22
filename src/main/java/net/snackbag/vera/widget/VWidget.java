@@ -9,6 +9,7 @@ import net.snackbag.vera.event.*;
 import net.snackbag.vera.layout.VLayout;
 import net.snackbag.vera.style.StyleState;
 import net.snackbag.vera.style.animation.AnimationEngine;
+import net.snackbag.vera.style.animation.VAnimation;
 import net.snackbag.vera.util.DragHandler;
 
 import java.nio.file.Path;
@@ -242,6 +243,14 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
     public void onFilesDropped(VFilesDroppedEvent runnable) {
         events.register("files-dropped", args -> runnable.run((List<Path>) args[0]));
+    }
+
+    public void onAnimationBegin(VAnimationBeginEvent runnable) {
+        events.register(Events.Animation.BEGIN, args -> runnable.run((VAnimation) args[0]));
+    }
+
+    public void onAnimationFinish(VAnimationFinishEvent runnable) {
+        events.register(Events.Animation.FINISH, args -> runnable.run((VAnimation) args[0], (long) args[1]));
     }
 
     @Override
