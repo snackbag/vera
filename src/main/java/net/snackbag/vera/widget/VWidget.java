@@ -249,6 +249,14 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         events.register(Events.Animation.BEGIN, args -> runnable.run((VAnimation) args[0]));
     }
 
+    public void onAnimationUnwindBegin(VAnimationUnwindEvent runnable) {
+        events.register(Events.Animation.UNWIND_BEGIN, args -> runnable.run((VAnimation) args[0]));
+    }
+
+    public void onAnimationRewindBegin(VAnimationRewindEvent runnable) {
+        events.register(Events.Animation.REWIND_BEGIN, args -> runnable.run((VAnimation) args[0]));
+    }
+
     public void onAnimationFinish(VAnimationFinishEvent runnable) {
         events.register(Events.Animation.FINISH, args -> runnable.run((VAnimation) args[0], (long) args[1]));
     }
