@@ -105,6 +105,10 @@ public class AnimationEngine {
         return unwindingAnimations.keySet().toArray(new VAnimation[0]);
     }
 
+    public VAnimation[] getAllRewinding() {
+        return rewindingAnimations.keySet().toArray(new VAnimation[0]);
+    }
+
     public void checkCache() {
         if (cacheId != Vera.renderCacheId) {
             cache.clear();
