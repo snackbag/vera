@@ -56,9 +56,7 @@ public class VAnimation {
     public <T> @Nullable T calculateStyle(String style, T original, StyleValueType svt, long timeSinceActive) {
         // TODO: implement loop modes
 
-        if (!affects(style)) {
-            return null;
-        }
+        if (!affects(style)) return null;
 
         int margin = 0;
         for (int i = 0; i < keyframes.size(); i++) {
