@@ -17,6 +17,7 @@ public class AnimationEngine {
     public final VWidget<?> widget;
     private final HashMap<VAnimation, Long> activeAnimations = new HashMap<>();
     private final HashMap<VAnimation, Long> unwindingAnimations = new HashMap<>();
+    private final HashMap<VAnimation, RewindContext> rewindingAnimations = new HashMap<>();
 
     private long cacheId = 0;
     private final HashMap<String, Object> cache = new HashMap<>();
@@ -128,4 +129,16 @@ public class AnimationEngine {
     public long getTimeSinceUnwinding(VAnimation animation) {
         return unwindingAnimations.getOrDefault(animation, -1L);
     }
+
+    public @Nullable RewindContext getRewindContext(VAnimation animation) {
+        return rewindingAnimations.getOrDefault(animation, null);
+    }
+
+    /**
+     * Context for animation rewinding
+     *
+     * @param since the timestamp when the animation started rewinding
+     * @param unwindProgress the amount of millisecond progress the unwinding has already made
+     */
+    public record RewindContext(Long since, int unwindProgress) {}
 }
