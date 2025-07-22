@@ -1,12 +1,12 @@
 package net.snackbag.vera.style.animation;
 
 import net.snackbag.vera.Vera;
+import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.style.StyleValueType;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 
 /**
  * Per-widget handler for animations. This is after stylesheet.getKey, so there is no differentiation between
@@ -15,7 +15,6 @@ import java.util.LinkedHashSet;
 public class AnimationEngine {
     public final VWidget<?> widget;
     private final HashMap<VAnimation, Long> activeAnimations = new HashMap<>();
-    private final HashMap<VAnimation, Long> animationHistory = new HashMap<>();
 
     private long cacheId = 0;
     private final HashMap<String, Object> cache = new HashMap<>();
@@ -28,8 +27,11 @@ public class AnimationEngine {
         return activeAnimations.keySet().stream().anyMatch(anim -> anim.name.equals(name));
     }
 
-    public boolean isUnwinding(String name) {
-
+    /**
+     * Moves animations from {@link #activeAnimations} to {@link #animationHistory} and back dependent on their state.
+     * Called in {@link net.snackbag.mcvera.impl.MCVeraRenderer#renderApp(VeraApp)}
+     */
+    public void update() {
     }
 
     public void activate(VAnimation animation) {
@@ -46,14 +48,7 @@ public class AnimationEngine {
                 .stream()
                 .filter(anim -> anim.name.equals(name))
                 .findFirst()
-
-                .orElse(
-                        animationHistory.keySet()
-                                .stream()
-                                .filter(anim -> anim.name.equals(name))
-                                .findFirst()
-                                .orElse(null)
-                );
+                .orElse(null);
     }
 
     public VAnimation[] getAllActive() {
