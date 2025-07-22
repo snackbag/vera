@@ -40,7 +40,7 @@ public class Events {
 
     // Checkbox
     public static class CheckBox {
-        public static final String CHECKED = "vcheckbox-checked";
+        public static final String CHECK_STATE_CHANGED = "vcheckbox-check-state-changed";
     }
 
     // Dropdown
