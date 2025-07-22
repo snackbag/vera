@@ -53,7 +53,7 @@ public class VAnimation {
         return styleAffections.containsKey(style);
     }
 
-    public <T> @Nullable T calculateStyle(String style, T original, StyleValueType svt, long timeSinceActive) {
+    public <T> @Nullable T calculateStyle(String style, T original, StyleValueType svt, long timeSinceActive, boolean addMonotoneEnd) {
         // TODO: implement loop modes
 
         if (!affects(style)) return null;
@@ -80,6 +80,10 @@ public class VAnimation {
             }
 
             margin += frame.cumulatedTime;
+        }
+
+        if (addMonotoneEnd && timeSinceActive >= totalTime - unwindTime && timeSinceActive <= totalTime) {
+            return (T) keyframes.get(keyframes.size() - 1).styles.get(style).getB();
         }
 
         return original;
