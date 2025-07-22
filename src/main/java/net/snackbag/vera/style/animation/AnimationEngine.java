@@ -33,10 +33,17 @@ public class AnimationEngine {
     }
 
     /**
-     * Moves animations from {@link #activeAnimations} to {@link #animationHistory} and back dependent on their state.
+     * Unwinds animations whenever they come to their end.
      * Called in {@link net.snackbag.mcvera.impl.MCVeraRenderer#renderApp(VeraApp)}
      */
     public void update() {
+        final long time = System.currentTimeMillis();
+
+        for (VAnimation animation : activeAnimations.keySet()) {
+            if (time - getTimeSinceActive(animation) >= animation.getTotalTime() - animation.unwindTime) {
+                unwind(animation);
+            }
+        }
     }
 
     public void activate(VAnimation animation) {
