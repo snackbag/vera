@@ -4,6 +4,7 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.event.Events;
 import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.style.StyleState;
 import org.jetbrains.annotations.Nullable;
@@ -60,37 +61,37 @@ public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
         super.handleBuiltinEvent(event, args);
 
         switch (event) {
-            case "mouse-move" -> getHoveredTabIndex((int) args[0]);
+            case Events.Widget.MOUSE_MOVE -> getHoveredTabIndex((int) args[0]);
 
-            case "hover-enter" -> getHoveredTabIndex(Vera.getMouseX());
-            case "hover-leave" -> hoveredTab = null;
+            case Events.Widget.HOVER -> getHoveredTabIndex(Vera.getMouseX());
+            case Events.Widget.HOVER_LEAVE -> hoveredTab = null;
 
-            case "left-click" -> {
+            case Events.Widget.LEFT_CLICK -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                events.fire("vtabwidget-tab-left-click", hoveredTab);
+                events.fire(Events.TabWidget.TAB_LEFT_CLICK, hoveredTab);
                 setActiveTab(hoveredTab);
             }
-            case "left-click-release" -> {
+            case Events.Widget.LEFT_CLICK_RELEASE -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                events.fire("vtabwidget-tab-left-click-release", hoveredTab);
+                events.fire(Events.TabWidget.TAB_LEFT_CLICK_RELEASE, hoveredTab);
             }
 
-            case "middle-click" -> {
+            case Events.Widget.MIDDLE_CLICK -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                events.fire("vtabwidget-tab-middle-click", hoveredTab);
+                events.fire(Events.TabWidget.TAB_MIDDLE_CLICK, hoveredTab);
             }
-            case "middle-click-release" -> {
+            case Events.Widget.MIDDLE_CLICK_RELEASE -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                events.fire("vtabwidget-tab-middle-click-release", hoveredTab);
+                events.fire(Events.TabWidget.TAB_MIDDLE_CLICK_RELEASE, hoveredTab);
             }
 
-            case "right-click" -> {
+            case Events.Widget.RIGHT_CLICK -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                events.fire("vtabwidget-tab-right-click", hoveredTab);
+                events.fire(Events.TabWidget.TAB_RIGHT_CLICK, hoveredTab);
             }
-            case "right-click-release" -> {
+            case Events.Widget.RIGHT_CLICK_RELEASE -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                events.fire("vtabwidget-tab-right-click-release", hoveredTab);
+                events.fire(Events.TabWidget.TAB_RIGHT_CLICK_RELEASE, hoveredTab);
             }
         }
     }
@@ -121,7 +122,7 @@ public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
 
             if (relativeX >= currentX && relativeX < currentX + totalTabWidth) {
                 if (hoveredTab != null && hoveredTab != index) {
-                    events.fire("vtabwidget-tab-hover-change", hoveredTab);
+                    events.fire(Events.TabWidget.TAB_HOVER_CHANGE, hoveredTab);
                 }
 
                 hoveredTab = index;
@@ -140,31 +141,31 @@ public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
     }
 
     public void onTabHoverChange(Consumer<Integer> runnable) {
-        events.register("vtabwidget-tab-hover-change", (args) -> runnable.accept((int) args[0]));
+        events.register(Events.TabWidget.TAB_HOVER_CHANGE, (args) -> runnable.accept((int) args[0]));
     }
 
     public void onTabLeftClick(Consumer<Integer> runnable) {
-        events.register("vtabwidget-tab-left-click", (args) -> runnable.accept((int) args[0]));
+        events.register(Events.TabWidget.TAB_LEFT_CLICK, (args) -> runnable.accept((int) args[0]));
     }
 
     public void onTabLeftClickRelease(Consumer<Integer> runnable) {
-        events.register("vtabwidget-tab-left-click-release", (args) -> runnable.accept((int) args[0]));
+        events.register(Events.TabWidget.TAB_LEFT_CLICK_RELEASE, (args) -> runnable.accept((int) args[0]));
     }
 
     public void onTabMiddleClick(Consumer<Integer> runnable) {
-        events.register("vtabwidget-tab-middle-click", (args) -> runnable.accept((int) args[0]));
+        events.register(Events.TabWidget.TAB_MIDDLE_CLICK, (args) -> runnable.accept((int) args[0]));
     }
 
     public void onTabMiddleClickRelease(Consumer<Integer> runnable) {
-        events.register("vtabwidget-tab-middle-click-release", (args) -> runnable.accept((int) args[0]));
+        events.register(Events.TabWidget.TAB_MIDDLE_CLICK_RELEASE, (args) -> runnable.accept((int) args[0]));
     }
 
     public void onTabRightClick(Consumer<Integer> runnable) {
-        events.register("vtabwidget-tab-right-click", (args) -> runnable.accept((int) args[0]));
+        events.register(Events.TabWidget.TAB_RIGHT_CLICK, (args) -> runnable.accept((int) args[0]));
     }
 
     public void onTabRightClickRelease(Consumer<Integer> runnable) {
-        events.register("vtabwidget-tab-right-click-release", (args) -> runnable.accept((int) args[0]));
+        events.register(Events.TabWidget.TAB_RIGHT_CLICK_RELEASE, (args) -> runnable.accept((int) args[0]));
     }
 
     public void addTab(String tab, VWidget<?>... widgets) {
