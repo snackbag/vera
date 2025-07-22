@@ -34,6 +34,10 @@ public class AnimationEngine {
         return unwindingAnimations.keySet().stream().anyMatch(anim -> anim.name.equals(name));
     }
 
+    public boolean isRewinding(String name) {
+        return rewindingAnimations.keySet().stream().anyMatch(anim -> anim.name.equals(name));
+    }
+
     /**
      * Unwinds animations whenever they come to their end.
      * Called in {@link net.snackbag.mcvera.impl.MCVeraRenderer#renderApp(VeraApp)}
