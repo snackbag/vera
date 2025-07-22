@@ -100,6 +100,18 @@ public class VAnimation {
         return totalTime;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof VAnimation animation)) return false;
+        return Objects.equals(name, animation.name) && Objects.equals(app, animation.app);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, app);
+    }
+
+
     public static class Builder {
         private final String name;
         private final VeraApp app;
