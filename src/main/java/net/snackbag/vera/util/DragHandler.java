@@ -2,6 +2,7 @@ package net.snackbag.vera.util;
 
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VMouseButton;
+import net.snackbag.vera.event.Events;
 import net.snackbag.vera.event.VMouseDragEvent;
 import net.snackbag.vera.widget.VWidget;
 import org.joml.Vector2i;
@@ -75,9 +76,9 @@ public class DragHandler {
 
     private static void fireEvents() {
         switch (button) {
-            case LEFT -> target.events.fire("mouse-drag-left", createContext());
-            case MIDDLE -> target.events.fire("mouse-drag-middle", createContext());
-            case RIGHT -> target.events.fire("mouse-drag-right", createContext());
+            case LEFT -> target.events.fire(Events.Widget.DRAG_LEFT_CLICK, createContext());
+            case MIDDLE -> target.events.fire(Events.Widget.DRAG_MIDDLE_CLICK, createContext());
+            case RIGHT -> target.events.fire(Events.Widget.DRAG_RIGHT_CLICK, createContext());
         }
     }
 }
