@@ -39,14 +39,8 @@ public class StyleTestApplication extends VeraApp {
 
         testRect.onMouseDragLeft((ctx) -> testRect.move(testRect.getX() + ctx.moveX(), testRect.getY() + ctx.moveY()));
 
-        new VShortcut(this, "a", () -> {
-            testRect.animations.activate(
-                    new VAnimation.Builder(this, "test")
-                            .keyframe(1000, frame -> frame.style("background-color", VColor.MC_GOLD), 2000)
-                            .keyframe(1000, frame -> frame.style("background-color", VColor.MC_RED), 2000)
-                            .build()
-            );
-        }).alsoAdd();
+        new VShortcut(this, "a", () -> testRect.animations.activate(testAnimation)).alsoAdd();
+        new VShortcut(this, "b", () -> testRect.animations.unwind(testAnimation)).alsoAdd();
     }
 
     public VStyleSheet createStyleSheet() {
