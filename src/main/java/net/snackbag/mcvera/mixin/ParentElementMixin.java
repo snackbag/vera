@@ -5,6 +5,7 @@ import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VMouseButton;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.event.Events;
 import net.snackbag.vera.util.DragHandler;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
@@ -56,9 +57,9 @@ public interface ParentElementMixin {
         if (widget == null) return;
 
         switch (button) {
-            case LEFT -> widget.events.fire("left-click");
-            case RIGHT -> widget.events.fire("right-click");
-            case MIDDLE -> widget.events.fire("middle-click");
+            case LEFT -> widget.events.fire(Events.Widget.LEFT_CLICK);
+            case RIGHT -> widget.events.fire(Events.Widget.RIGHT_CLICK);
+            case MIDDLE -> widget.events.fire(Events.Widget.MIDDLE_CLICK);
         }
 
         DragHandler.down(button, widget);
@@ -87,9 +88,9 @@ public interface ParentElementMixin {
         if (widget == null) return;
 
         switch (button) {
-            case LEFT -> widget.events.fire("left-click-release");
-            case RIGHT -> widget.events.fire("right-click-release");
-            case MIDDLE -> widget.events.fire("middle-click-release");
+            case LEFT -> widget.events.fire(Events.Widget.LEFT_CLICK_RELEASE);
+            case RIGHT -> widget.events.fire(Events.Widget.RIGHT_CLICK_RELEASE);
+            case MIDDLE -> widget.events.fire(Events.Widget.MIDDLE_CLICK_RELEASE);
         }
     }
 
@@ -110,6 +111,6 @@ public interface ParentElementMixin {
     @Unique
     private void handleScrollEvents(@Nullable VWidget<?> widget, int x, int y, double amount) {
         if (widget == null) return;
-        widget.events.fire("mouse-scroll", x, y, amount);
+        widget.events.fire(Events.Widget.SCROLL, x, y, amount);
     }
 }
