@@ -78,9 +78,15 @@ public class AnimationEngine {
     }
 
     public void rewind(VAnimation animation, boolean override) {
+        if (!unwindingAnimations.containsKey(animation)) return;
         if (!override && isRewinding(animation.name)) return;
 
+        long time = System.currentTimeMillis();
+
         widget.events.fire(Events.Animation.REWIND_BEGIN, animation);
+
+        long unwindingSince = unwindingAnimations.remove(animation);
+        rewindingAnimations.put(animation, new RewindContext(time, (int) (time - unwindingSince)));
     }
 
     public @Nullable VAnimation getIfEverActive(String name) {
