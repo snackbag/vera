@@ -41,6 +41,7 @@ public class StyleTestApplication extends VeraApp {
 
         new VShortcut(this, "a", () -> testRect.animations.activate(testAnimation)).alsoAdd();
         new VShortcut(this, "u", () -> testRect.animations.unwind(testAnimation)).alsoAdd();
+        new VShortcut(this, "r", () -> testRect.animations.rewind(testAnimation)).alsoAdd();
         new VShortcut(this, "k", () -> testRect.animations.kill(testAnimation)).alsoAdd();
     }
 
