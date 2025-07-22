@@ -14,6 +14,13 @@ import net.snackbag.vera.widget.VRect;
 public class StyleTestApplication extends VeraApp {
     public static StyleTestApplication INSTANCE = new StyleTestApplication();
 
+    private final VAnimation testAnimation = new VAnimation.Builder(this, "test")
+            .unwindTime(2000)
+
+            .keyframe(1000, frame -> frame.style("background-color", VColor.MC_GOLD), 2000)
+            .keyframe(1000, frame -> frame.style("background-color", VColor.MC_RED), 2000)
+            .build();
+
     @Override
     public void init() {
         new VShortcut(this, "escape", this::hide).alsoAdd();
