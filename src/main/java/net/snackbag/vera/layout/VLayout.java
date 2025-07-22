@@ -3,6 +3,7 @@ package net.snackbag.vera.layout;
 import net.snackbag.vera.VElement;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.event.Events;
 import org.joml.Vector2i;
 
 import java.util.ArrayList;
@@ -61,18 +62,18 @@ public abstract class VLayout extends VElement {
     public void addElement(VElement elem) {
         if (elements.contains(elem)) return;
         elements.add(elem);
-        elem.events.fire("elem-layout-swap", this);
+        elem.events.fire(Events.Element.LAYOUT_SWAP, this);
     }
 
     public boolean removeElement(VElement elem) {
         if (!elements.contains(elem)) return false;
 
-        elem.events.fire("elem-layout-remove");
+        elem.events.fire(Events.Element.LAYOUT_REMOVE);
         return elements.remove(elem);
     }
 
     public void clear() {
-        for (VElement elem : elements) elem.events.fire("elem-layout-remove");
+        for (VElement elem : elements) elem.events.fire(Events.Element.LAYOUT_REMOVE);
         elements.clear();
     }
 }
