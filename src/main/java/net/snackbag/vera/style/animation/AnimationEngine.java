@@ -66,6 +66,8 @@ public class AnimationEngine {
 
     public void unwind(VAnimation animation, boolean override) {
         if (!override && isUnwinding(animation.name)) return;
+
+        widget.events.fire(Events.Animation.UNWIND_BEGIN, animation);
         unwindingAnimations.put(animation, System.currentTimeMillis());
     }
 
