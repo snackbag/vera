@@ -9,7 +9,7 @@ import net.snackbag.vera.flag.VWindowPositioningFlag;
 import net.snackbag.vera.style.VStyleSheet;
 import net.snackbag.vera.style.animation.VeraPipeline;
 import net.snackbag.vera.style.animation.composite.AnimationComposite;
-import net.snackbag.vera.style.animation.composite.UnwindComposite;
+import net.snackbag.vera.style.animation.composite.WindingComposite;
 import net.snackbag.vera.util.Geometry;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
@@ -65,7 +65,7 @@ public abstract class VeraApp {
 
     public void loadComposites() {
         pipeline.addPass(new AnimationComposite());
-        pipeline.addPass(new UnwindComposite());
+        pipeline.addPass(new WindingComposite());
     }
 
     public void setCursorVisible(boolean cursorVisible) {

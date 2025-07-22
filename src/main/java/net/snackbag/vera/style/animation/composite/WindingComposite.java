@@ -3,7 +3,7 @@ package net.snackbag.vera.style.animation.composite;
 import net.snackbag.vera.style.animation.AnimationEngine;
 import net.snackbag.vera.style.animation.VAnimation;
 
-public class UnwindComposite extends Composite {
+public class WindingComposite extends Composite {
     private long time;
 
     @Override
