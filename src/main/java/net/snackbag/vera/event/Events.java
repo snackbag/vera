@@ -6,7 +6,8 @@ public class Events {
     public static class Animation {
         public static final String BEGIN = "animation-begin";
         public static final String FINISH = "animation-finish";
-        public static final String UNWIND_BEGIN = "animation-unwind-begin"; // TODO: implement
+        public static final String UNWIND_BEGIN = "animation-unwind-begin";
+        public static final String REWIND_BEGIN = "animation-rewind-begin";
     }
 
     // Element
