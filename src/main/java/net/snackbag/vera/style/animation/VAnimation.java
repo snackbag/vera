@@ -37,6 +37,7 @@ public class VAnimation {
         this.name = name;
         this.unwindTime = unwindTime;
         this.unwindEasing = unwindEasing;
+        this.totalTime = unwindTime;
         this.loopMode = loopMode;
 
         this.app = app;
