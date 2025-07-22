@@ -15,6 +15,7 @@ import java.util.HashMap;
 public class AnimationEngine {
     public final VWidget<?> widget;
     private final HashMap<VAnimation, Long> activeAnimations = new HashMap<>();
+    private final HashMap<VAnimation, Long> unwindingAnimations = new HashMap<>();
 
     private long cacheId = 0;
     private final HashMap<String, Object> cache = new HashMap<>();
@@ -25,6 +26,10 @@ public class AnimationEngine {
 
     public boolean isActive(String name) {
         return activeAnimations.keySet().stream().anyMatch(anim -> anim.name.equals(name));
+    }
+
+    public boolean isUnwinding(String name) {
+        return unwindingAnimations.keySet().stream().anyMatch(anim -> anim.name.equals(name));
     }
 
     /**
@@ -43,6 +48,15 @@ public class AnimationEngine {
         activeAnimations.put(animation, System.currentTimeMillis());
     }
 
+    public void unwind(VAnimation animation) {
+        unwind(animation, false);
+    }
+
+    public void unwind(VAnimation animation, boolean override) {
+        if (!override && isUnwinding(animation.name)) return;
+        unwindingAnimations.put(animation, System.currentTimeMillis());
+    }
+
     public @Nullable VAnimation getIfEverActive(String name) {
         return activeAnimations.keySet()
                 .stream()
@@ -53,6 +67,10 @@ public class AnimationEngine {
 
     public VAnimation[] getAllActive() {
         return activeAnimations.keySet().toArray(new VAnimation[0]);
+    }
+
+    public VAnimation[] getAllUnwinding() {
+        return unwindingAnimations.keySet().toArray(new VAnimation[0]);
     }
 
     public void checkCache() {
@@ -80,5 +98,9 @@ public class AnimationEngine {
      */
     public long getTimeSinceActive(VAnimation animation) {
         return activeAnimations.getOrDefault(animation, -1L);
+    }
+
+    public long getTimeSinceUnwinding(VAnimation animation) {
+        return unwindingAnimations.getOrDefault(animation, -1L);
     }
 }
