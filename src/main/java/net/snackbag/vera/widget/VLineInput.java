@@ -5,6 +5,7 @@ import net.minecraft.client.util.InputUtil;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.core.v4.V4Int;
+import net.snackbag.vera.event.Events;
 import net.snackbag.vera.event.VCharLimitedEvent;
 import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.modifier.VHasPlaceholderFont;
@@ -97,7 +98,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
         int x = getX();
 
-        if (event.equals("left-click")) {
+        if (event.equals(Events.Widget.LEFT_CLICK)) {
             textSelection.clear();
 
             if (Vera.getMouseX() < x) cursorPos = 0;
@@ -116,7 +117,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
     public void setText(String text) {
         this.text = text;
-        events.fire("vline-change");
+        events.fire(Events.LineInput.CHANGE);
     }
 
     public boolean isSelectingText() {
@@ -161,23 +162,23 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     }
 
     public void onLineChanged(Runnable runnable) {
-        events.register("vline-change", runnable);
+        events.register(Events.LineInput.CHANGE, runnable);
     }
 
     public void onCursorMove(Runnable runnable) {
-        events.register("vline-cursor-move", runnable);
+        events.register(Events.LineInput.CURSOR_MOVE, runnable);
     }
 
     public void onCursorMoveLeft(Runnable runnable) {
-        events.register("vline-cursor-move-left", runnable);
+        events.register(Events.LineInput.CURSOR_MOVE_LEFT, runnable);
     }
 
     public void onCursorMoveRight(Runnable runnable) {
-        events.register("vline-cursor-move-right", runnable);
+        events.register(Events.LineInput.CURSOR_MOVE_RIGHT, runnable);
     }
 
     public void onAddCharLimited(VCharLimitedEvent runnable) {
-        events.register("vline-add-char-limited", args -> runnable.run((char) args[0]));
+        events.register(Events.LineInput.ADD_CHAR_LIMITED, args -> runnable.run((char) args[0]));
     }
 
     @Override
@@ -262,32 +263,32 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         // Handle word navigation
         else if (isDown(GLFW.GLFW_KEY_LEFT) && isAltDown() && cursorPos > 0) {
             cursorPos = Math.max(0, jumpToWordStart(cursorPos));
-            events.fire("vline-cursor-move");
-            events.fire("vline-cursor-move-left");
+            events.fire(Events.LineInput.CURSOR_MOVE);
+            events.fire(Events.LineInput.CURSOR_MOVE_LEFT);
         } else if (isDown(GLFW.GLFW_KEY_RIGHT) && isAltDown() && cursorPos < text.length()) {
             cursorPos = Math.min(text.length(), jumpToWordEnd(cursorPos));
-            events.fire("vline-cursor-move");
-            events.fire("vline-cursor-move-right");
+            events.fire(Events.LineInput.CURSOR_MOVE);
+            events.fire(Events.LineInput.CURSOR_MOVE_LEFT);
         }
         // Handle line navigation
         else if (isDown(GLFW.GLFW_KEY_LEFT) && isCtrlDown()) {
             cursorPos = 0;
-            events.fire("vline-cursor-move");
-            events.fire("vline-cursor-move-left");
+            events.fire(Events.LineInput.CURSOR_MOVE);
+            events.fire(Events.LineInput.CURSOR_MOVE_LEFT);
         } else if (isDown(GLFW.GLFW_KEY_RIGHT) && isCtrlDown()) {
             cursorPos = text.length();
-            events.fire("vline-cursor-move");
-            events.fire("vline-cursor-move-right");
+            events.fire(Events.LineInput.CURSOR_MOVE);
+            events.fire(Events.LineInput.CURSOR_MOVE_RIGHT);
         }
         // Handle character navigation
         else if (keyCode == GLFW.GLFW_KEY_LEFT && cursorPos > 0) {
             cursorPos = Math.max(0, cursorPos - 1);
-            events.fire("vline-cursor-move");
-            events.fire("vline-cursor-move-left");
+            events.fire(Events.LineInput.CURSOR_MOVE);
+            events.fire(Events.LineInput.CURSOR_MOVE_LEFT);
         } else if (keyCode == GLFW.GLFW_KEY_RIGHT && cursorPos < text.length()) {
             cursorPos = Math.min(text.length(), cursorPos + 1);
-            events.fire("vline-cursor-move");
-            events.fire("vline-cursor-move-right");
+            events.fire(Events.LineInput.CURSOR_MOVE);
+            events.fire(Events.LineInput.CURSOR_MOVE_RIGHT);
         }
 
         super.keyPressed(keyCode, scanCode, modifiers);
@@ -319,12 +320,12 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
         cursorPos = newPos;
         textSelection.endPos = newPos;
-        events.fire("vline-cursor-move");
+        events.fire(Events.LineInput.CURSOR_MOVE);
     }
 
     private void insertText(String insertion) {
         if (maxChars > -1 && text.length() + insertion.length() > maxChars) {
-            events.fire("vline-add-char-limited", insertion.charAt(0));
+            events.fire(Events.LineInput.ADD_CHAR_LIMITED, insertion.charAt(0));
             return;
         }
 
@@ -332,7 +333,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         String back = text.substring(cursorPos);
         text = front + insertion + back;
         cursorPos += insertion.length();
-        events.fire("vline-change");
+        events.fire(Events.LineInput.CHANGE);
     }
 
     private void deleteSelectedText() {
@@ -346,7 +347,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         text = front + back;
         cursorPos = start;
         clearTextSelection();
-        events.fire("vline-change");
+        events.fire(Events.LineInput.CHANGE);
     }
 
     private void replaceSelectedText(String replacement) {
@@ -356,7 +357,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         int end = Math.max(textSelection.startPos, textSelection.endPos);
 
         if (maxChars > -1 && text.length() - (end - start) + replacement.length() > maxChars) {
-            events.fire("vline-add-char-limited", replacement.charAt(0));
+            events.fire(Events.LineInput.ADD_CHAR_LIMITED, replacement.charAt(0));
             return;
         }
 
@@ -365,7 +366,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         text = front + replacement + back;
         cursorPos = start + replacement.length();
         clearTextSelection();
-        events.fire("vline-change");
+        events.fire(Events.LineInput.CHANGE);
     }
 
 
@@ -435,7 +436,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
                 int end = Math.max(textSelection.startPos, textSelection.endPos);
 
                 if (maxChars > -1 && text.length() - (end - start) + 1 > maxChars) {
-                    events.fire("vline-add-char-limited", chr);
+                    events.fire(Events.LineInput.ADD_CHAR_LIMITED, chr);
                     return;
                 }
 
@@ -445,11 +446,11 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
                 text = front + chr + back;
                 cursorPos = start + 1;
                 clearTextSelection();
-                events.fire("vline-change");
+                events.fire(Events.LineInput.CHANGE);
             } else {
                 // Normal character insertion
                 if (maxChars > -1 && text.length() >= maxChars) {
-                    events.fire("vline-add-char-limited", chr);
+                    events.fire(Events.LineInput.ADD_CHAR_LIMITED, chr);
                     return;
                 }
 
@@ -458,7 +459,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
                 text = front + chr + back;
                 cursorPos += 1;
-                events.fire("vline-change");
+                events.fire(Events.LineInput.CHANGE);
             }
         }
         super.charTyped(chr, modifiers);
@@ -537,7 +538,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         builder.delete(start, end);
         text = builder.toString();
         cursorPos = Math.min(start, text.length());
-        events.fire("vline-change");
+        events.fire(Events.LineInput.CHANGE);
     }
 
     public static class TextSelection {
