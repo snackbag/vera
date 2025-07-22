@@ -4,6 +4,7 @@ import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.core.v4.V4Int;
+import net.snackbag.vera.event.Events;
 import net.snackbag.vera.event.VItemSwitchEvent;
 import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.style.StyleState;
@@ -86,8 +87,8 @@ public class VDropdown extends VWidget<VDropdown> implements VHasFont {
     public void setFocused(boolean focused) {
         super.setFocused(focused);
 
-        if (focused) events.fire("vdropdown-selector-open");
-        else events.fire("vdropdown-selector-close");
+        if (focused) events.fire(Events.Dropdown.SELECTOR_OPEN);
+        else events.fire(Events.Dropdown.SELECTOR_CLOSE);
     }
 
     public VColor getItemHoverColor() {
@@ -138,7 +139,7 @@ public class VDropdown extends VWidget<VDropdown> implements VHasFont {
         int y = getY();
 
         switch (event) {
-            case "left-click" -> {
+            case Events.Widget.LEFT_CLICK -> {
                 if (isFocused()) {
                     Item target = getHoveredItem();
                     if (target != null && hoveredItem != null) {
@@ -151,7 +152,7 @@ public class VDropdown extends VWidget<VDropdown> implements VHasFont {
                 }
             }
 
-            case "right-click" -> {
+            case Events.Widget.RIGHT_CLICK -> {
                 if (isFocused()) {
                     Item target = getHoveredItem();
                     if (target != null && hoveredItem != null) {
@@ -164,7 +165,7 @@ public class VDropdown extends VWidget<VDropdown> implements VHasFont {
                 }
             }
 
-            case "middle-click" -> {
+            case Events.Widget.MIDDLE_CLICK -> {
                 if (isFocused()) {
                     Item target = getHoveredItem();
                     if (target != null && hoveredItem != null) {
@@ -177,7 +178,7 @@ public class VDropdown extends VWidget<VDropdown> implements VHasFont {
                 }
             }
 
-            case "mouse-move" -> {
+            case Events.Widget.MOUSE_MOVE -> {
                 if (!isFocused()) hoveredItem = null;
                 else {
                     // Get mouse position relative to the dropdown's top-left corner
@@ -192,7 +193,7 @@ public class VDropdown extends VWidget<VDropdown> implements VHasFont {
                 }
             }
 
-            case "hover-leave" -> hoveredItem = null;
+            case Events.Widget.HOVER_LEAVE -> hoveredItem = null;
         }
 
         super.handleBuiltinEvent(event, args);
@@ -207,15 +208,15 @@ public class VDropdown extends VWidget<VDropdown> implements VHasFont {
     }
 
     public void onItemSwitch(VItemSwitchEvent runnable) {
-        events.register("vdropdown-item-switch", args -> runnable.run((int) args[0]));
+        events.register(Events.Dropdown.ITEM_SWITCH, args -> runnable.run((int) args[0]));
     }
 
     public void onSelectorOpen(Runnable runnable) {
-        events.register("vdropdown-selector-open", runnable);
+        events.register(Events.Dropdown.SELECTOR_OPEN, runnable);
     }
 
     public void onSelectorClose(Runnable runnable) {
-        events.register("vdropdown-selector-close", runnable);
+        events.register(Events.Dropdown.SELECTOR_CLOSE, runnable);
     }
 
     private @Nullable Item getItemAt(int mouseX, int mouseY) {
@@ -248,7 +249,7 @@ public class VDropdown extends VWidget<VDropdown> implements VHasFont {
 
     public void setSelectedItem(int selectedItem) {
         this.selectedItem = selectedItem;
-        events.fire("vdropdown-item-switch", selectedItem);
+        events.fire(Events.Dropdown.ITEM_SWITCH, selectedItem);
     }
 
     public void addItem(String name) {
