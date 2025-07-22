@@ -2,6 +2,7 @@ package net.snackbag.vera.style.animation;
 
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.event.Events;
 import net.snackbag.vera.style.StyleValueType;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
