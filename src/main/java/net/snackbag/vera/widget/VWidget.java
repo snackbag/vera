@@ -176,73 +176,73 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public void setHovered(boolean hovered) {
         // If changed
         if (this.hovered != hovered) {
-            if (hovered) events.fire("hover");
-            else events.fire("hover-leave");
+            if (hovered) events.fire(Events.Widget.HOVER);
+            else events.fire(Events.Widget.HOVER_LEAVE);
         }
 
         this.hovered = hovered;
     }
 
     public void onHover(Runnable runnable) {
-        events.register("hover", runnable);
+        events.register(Events.Widget.HOVER, runnable);
     }
 
     public void onHoverLeave(Runnable runnable) {
-        events.register("hover-leave", runnable);
+        events.register(Events.Widget.HOVER_LEAVE, runnable);
     }
 
     public void onLeftClick(Runnable runnable) {
-        events.register("left-click", runnable);
+        events.register(Events.Widget.LEFT_CLICK, runnable);
     }
 
     public void onLeftClickRelease(Runnable runnable) {
-        events.register("left-click-release", runnable);
+        events.register(Events.Widget.LEFT_CLICK_RELEASE, runnable);
     }
 
     public void onRightClick(Runnable runnable) {
-        events.register("right-click", runnable);
+        events.register(Events.Widget.RIGHT_CLICK, runnable);
     }
 
     public void onRightClickRelease(Runnable runnable) {
-        events.register("right-click-release", runnable);
+        events.register(Events.Widget.RIGHT_CLICK_RELEASE, runnable);
     }
 
     public void onMiddleClick(Runnable runnable) {
-        events.register("middle-click", runnable);
+        events.register(Events.Widget.MIDDLE_CLICK, runnable);
     }
 
     public void onMiddleClickRelease(Runnable runnable) {
-        events.register("middle-click-release", runnable);
+        events.register(Events.Widget.MIDDLE_CLICK_RELEASE, runnable);
     }
 
     public void onMouseScroll(VMouseScrollEvent runnable) {
-        events.register("mouse-scroll", args -> runnable.run(
+        events.register(Events.Widget.SCROLL, args -> runnable.run(
                 (int) args[0], (int) args[1], (double) args[2])
         );
     }
 
     public void onMouseMove(VMouseMoveEvent runnable) {
-        events.register("mouse-move", args -> runnable.run((int) args[0], (int) args[1]));
+        events.register(Events.Widget.MOUSE_MOVE, args -> runnable.run((int) args[0], (int) args[1]));
     }
 
     public void onMouseDragLeft(VMouseDragEvent runnable) {
-        events.register("mouse-drag-left", args -> runnable.run((VMouseDragEvent.Context) args[0]));
+        events.register(Events.Widget.DRAG_LEFT_CLICK, args -> runnable.run((VMouseDragEvent.Context) args[0]));
     }
 
     public void onMouseDragRight(VMouseDragEvent runnable) {
-        events.register("mouse-drag-right", args -> runnable.run((VMouseDragEvent.Context) args[0]));
+        events.register(Events.Widget.DRAG_RIGHT_CLICK, args -> runnable.run((VMouseDragEvent.Context) args[0]));
     }
 
     public void onMouseDragMiddle(VMouseDragEvent runnable) {
-        events.register("mouse-drag-middle", args -> runnable.run((VMouseDragEvent.Context) args[0]));
+        events.register(Events.Widget.DRAG_MIDDLE_CLICK, args -> runnable.run((VMouseDragEvent.Context) args[0]));
     }
 
     public void onFocusStateChange(Runnable runnable) {
-        events.register("focus-state-change", runnable);
+        events.register(Events.Widget.FOCUS_STATE_CHANGE, runnable);
     }
 
     public void onFilesDropped(VFilesDroppedEvent runnable) {
-        events.register("files-dropped", args -> runnable.run((List<Path>) args[0]));
+        events.register(Events.Widget.FILES_DROPPED, args -> runnable.run((List<Path>) args[0]));
     }
 
     public void onAnimationBegin(VAnimationBeginEvent runnable) {
