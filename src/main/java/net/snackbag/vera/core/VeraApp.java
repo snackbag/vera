@@ -3,6 +3,7 @@ package net.snackbag.vera.core;
 import net.minecraft.client.MinecraftClient;
 import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.vera.Vera;
+import net.snackbag.vera.event.Events;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.flag.VWindowPositioningFlag;
 import net.snackbag.vera.style.VStyleSheet;
@@ -222,10 +223,10 @@ public abstract class VeraApp {
         if (!widgets.contains(widget)) return;
 
         if (isFocusedWidget(widget)) setFocusedWidget(null);
-        if (widget.isLeftClickDown()) widget.events.fire("left-click-release");
-        if (widget.isMiddleClickDown()) widget.events.fire("middle-click-release");
-        if (widget.isRightClickDown()) widget.events.fire("right-click-release");
-        if (widget.isHovered()) widget.events.fire("hover-leave");
+        if (widget.isLeftClickDown()) widget.events.fire(Events.Widget.LEFT_CLICK_RELEASE);
+        if (widget.isMiddleClickDown()) widget.events.fire(Events.Widget.MIDDLE_CLICK_RELEASE);
+        if (widget.isRightClickDown()) widget.events.fire(Events.Widget.RIGHT_CLICK_RELEASE);
+        if (widget.isHovered()) widget.events.fire(Events.Widget.HOVER_LEAVE);
 
         this.widgets.remove(widget);
     }
@@ -294,8 +295,8 @@ public abstract class VeraApp {
             VWidget<?> oldWidget = this.focusedWidget;
             this.focusedWidget = widget;
 
-            if (oldWidget != null) oldWidget.events.fire("focus-state-change");
-            if (widget != null) widget.events.fire("focus-state-change");
+            if (oldWidget != null) oldWidget.events.fire(Events.Widget.FOCUS_STATE_CHANGE);
+            if (widget != null) widget.events.fire(Events.Widget.FOCUS_STATE_CHANGE);
         }
     }
 
