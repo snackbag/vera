@@ -55,6 +55,11 @@ public class AnimationEngine {
         activeAnimations.put(animation, System.currentTimeMillis());
     }
 
+    public void kill(VAnimation animation) {
+        activeAnimations.remove(animation);
+        unwindingAnimations.remove(animation);
+    }
+
     public void unwind(VAnimation animation) {
         unwind(animation, false);
     }
