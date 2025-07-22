@@ -49,7 +49,8 @@ public class AnimationComposite extends Composite {
                     ctx.style(),
                     ctx.original(),
                     ctx.type(),
-                    animationTimes.get(animation)
+                    animationTimes.get(animation),
+                    true
             );
 
             if (rv != null) out = rv;
