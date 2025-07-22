@@ -1,0 +1,113 @@
+package net.snackbag.vera.style.animation;
+
+import net.snackbag.vera.Vera;
+import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.style.StyleValueType;
+import net.snackbag.vera.widget.VWidget;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+
+/**
+ * Per-widget handler for animations. This is after stylesheet.getKey, so there is no differentiation between
+ * widget-specific styles, class styles and standard styles.
+ */
+public class AnimationEngine {
+    public final VWidget<?> widget;
+    private final HashMap<VAnimation, Long> activeAnimations = new HashMap<>();
+    private final HashMap<VAnimation, Long> unwindingAnimations = new HashMap<>();
+
+    private long cacheId = 0;
+    private final HashMap<String, Object> cache = new HashMap<>();
+
+    public AnimationEngine(VWidget<?> widget) {
+        this.widget = widget;
+    }
+
+    public boolean isActive(String name) {
+        return activeAnimations.keySet().stream().anyMatch(anim -> anim.name.equals(name));
+    }
+
+    public boolean isUnwinding(String name) {
+        return unwindingAnimations.keySet().stream().anyMatch(anim -> anim.name.equals(name));
+    }
+
+    /**
+     * Unwinds animations whenever they come to their end.
+     * Called in {@link net.snackbag.mcvera.impl.MCVeraRenderer#renderApp(VeraApp)}
+     */
+    public void update() {
+        final long time = System.currentTimeMillis();
+
+        for (VAnimation animation : activeAnimations.keySet()) {
+            if (time - getTimeSinceActive(animation) >= animation.getTotalTime() - animation.unwindTime) {
+                unwind(animation);
+            }
+        }
+    }
+
+    public void activate(VAnimation animation) {
+        activate(animation, false);
+    }
+
+    public void activate(VAnimation animation, boolean override) {
+        if (!override && isActive(animation.name)) return;
+        activeAnimations.put(animation, System.currentTimeMillis());
+    }
+
+    public void unwind(VAnimation animation) {
+        unwind(animation, false);
+    }
+
+    public void unwind(VAnimation animation, boolean override) {
+        if (!override && isUnwinding(animation.name)) return;
+        unwindingAnimations.put(animation, System.currentTimeMillis());
+    }
+
+    public @Nullable VAnimation getIfEverActive(String name) {
+        return activeAnimations.keySet()
+                .stream()
+                .filter(anim -> anim.name.equals(name))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public VAnimation[] getAllActive() {
+        return activeAnimations.keySet().toArray(new VAnimation[0]);
+    }
+
+    public VAnimation[] getAllUnwinding() {
+        return unwindingAnimations.keySet().toArray(new VAnimation[0]);
+    }
+
+    public void checkCache() {
+        if (cacheId != Vera.renderCacheId) {
+            cache.clear();
+            cacheId = Vera.renderCacheId;
+        }
+    }
+
+    public <T> T animateStyle(String style, T value) {
+        checkCache();
+
+        if (value == null) return null;
+        if (cache.containsKey(style)) return (T) cache.get(style);
+
+        StyleValueType type = StyleValueType.get(value, null);
+        return widget.app.pipeline.applyComposites(this, style, type, value);
+    }
+
+    /**
+     * Gets the time an animation has been active since, if it isn't active at all it will return -1
+     *
+     * @param animation the animation to check
+     * @return when the animation was started
+     */
+    public long getTimeSinceActive(VAnimation animation) {
+        return activeAnimations.getOrDefault(animation, -1L);
+    }
+
+    public long getTimeSinceUnwinding(VAnimation animation) {
+        return unwindingAnimations.getOrDefault(animation, -1L);
+    }
+}

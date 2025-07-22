@@ -2,48 +2,31 @@ package net.snackbag.vera.widget;
 
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
-import net.snackbag.vera.modifier.VPaddingWidget;
+import net.snackbag.vera.core.v4.V4Int;
+import net.snackbag.vera.flag.VHAlignmentFlag;
+import net.snackbag.vera.modifier.VHasFont;
+import net.snackbag.vera.style.StyleState;
 
-public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
+public class VLabel extends VWidget<VLabel> implements VHasFont {
     private String text;
-    private VFont font;
-    private VColor backgroundColor;
-    private V4Int padding;
-    private VAlignmentFlag alignment;
+    private VHAlignmentFlag alignment;
 
-    public VLabel(String text, VeraApp app) {
-        super(0, 0, 100, 16, app);
+    public VLabel(String text, int x, int y, int width, int height, VeraApp app) {
+        super(x, y, width, height, app);
 
         this.text = text;
-        this.font = VFont.create();
-        this.backgroundColor = VColor.transparent();
-        this.padding = new V4Int(4);
         this.focusOnClick = false;
-        alignment = VAlignmentFlag.LEFT;
+        alignment = VHAlignmentFlag.LEFT;
+    }
+
+    public VLabel(String text, VeraApp app) {
+        this(text, 0, 0, 100, 16, app);
+
+        adjustSize();
     }
 
     public String getText() {
         return text;
-    }
-
-    public VFont getFont() {
-        return font;
-    }
-
-    public void setFont(VFont font) {
-        this.font = font;
-    }
-
-    public VColor getBackgroundColor() {
-        return backgroundColor;
-    }
-
-    public void setBackgroundColor(VColor backgroundColor) {
-        this.backgroundColor = backgroundColor;
-    }
-
-    public VColor.ColorModifier modifyBackgroundColor() {
-        return new VColor.ColorModifier(backgroundColor, this::setBackgroundColor);
     }
 
     public void setText(String text) {
@@ -51,59 +34,63 @@ public class VLabel extends VWidget<VLabel> implements VPaddingWidget {
     }
 
     @Override
-    public V4Int getPadding() {
-        return padding;
-    }
-
-    @Override
-    public void setPadding(V4Int padding) {
-        this.padding = padding;
-    }
-
-    public VFont.FontModifier modifyFont() {
-        return new VFont.FontModifier(font, this::setFont);
-    }
-
-    public VColor.ColorModifier modifyFontColor() {
-        return new VColor.ColorModifier(font.getColor(), (color) -> setFont(font.withColor(color)));
-    }
-
-    @Override
     public int getHitboxWidth() {
+        V4Int padding = getStyle("padding", createStyleState());
         return width + padding.get3() + padding.get4();
     }
 
     @Override
     public int getHitboxHeight() {
+        V4Int padding = getStyle("padding", createStyleState());
         return height + padding.get1() + padding.get2();
     }
 
     @Override
     public int getHitboxX() {
-        return x - padding.get4();
+        V4Int padding = getStyle("padding", createStyleState());
+        return getX() - padding.get4();
     }
 
     @Override
     public int getHitboxY() {
-        return y - padding.get1();
+        V4Int padding = getStyle("padding", createStyleState());
+        return getY() - padding.get1();
     }
 
-    public VAlignmentFlag getAlignment() {
+    public VHAlignmentFlag getAlignment() {
         return alignment;
     }
 
-    public void setAlignment(VAlignmentFlag alignment) {
+    public void setAlignment(VHAlignmentFlag alignment) {
         this.alignment = alignment;
     }
 
     public void adjustSize() {
+        VFont font = getStyle("font", createStyleState());
+
         this.width = Vera.provider.getTextWidth(text, font);
         this.height = Vera.provider.getTextHeight(text, font);
     }
 
     @Override
+    public VeraApp getApp() {
+        return app;
+    }
+
+    public VColor.ColorModifier modifyColor(String key) {
+        return app.styleSheet.modifyKeyAsColor(this, key);
+    }
+
+    @Override
     public void render() {
-        VeraApp app = getApp();
+        StyleState state = createStyleState();
+
+        VFont font = getStyle("font", state);
+        VColor backgroundColor = getStyle("background-color", state);
+        V4Int padding = getStyle("padding", state);
+
+        int x = getX();
+        int y = getY();
 
         Vera.renderer.drawRect(
                 app,
