@@ -53,7 +53,7 @@ public class VAnimation {
         return styleAffections.containsKey(style);
     }
 
-    public <T> @Nullable T calculateStyle(String style, T original, StyleValueType svt, long ms) {
+    public <T> @Nullable T calculateStyle(String style, T original, StyleValueType svt, long timeSinceActive) {
         // TODO: implement loop modes
 
         if (!affects(style)) {
@@ -64,8 +64,8 @@ public class VAnimation {
         for (int i = 0; i < keyframes.size(); i++) {
             VKeyframe frame = keyframes.get(i);
 
-            if (ms >= margin && ms <= margin + frame.cumulatedTime) {
-                int timeInFrame = (int) ms - margin;
+            if (timeSinceActive >= margin && timeSinceActive <= margin + frame.cumulatedTime) {
+                int timeInFrame = (int) timeSinceActive - margin;
                 boolean isTransition = timeInFrame <= frame.transitionTime;
 
                 if (!isTransition) return (T) frame.styles.get(style).getB();
