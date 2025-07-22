@@ -6,6 +6,7 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.event.Events;
 import net.snackbag.vera.event.VCheckedStateChange;
 import net.snackbag.vera.style.StyleState;
 
@@ -45,7 +46,7 @@ public class VCheckBox extends VWidget<VCheckBox> {
     public void handleBuiltinEvent(String event, Object... args) {
         super.handleBuiltinEvent(event, args);
 
-        if (event.equals("left-click")) setChecked(!checked);
+        if (event.equals(Events.Widget.LEFT_CLICK)) setChecked(!checked);
     }
 
     public boolean isChecked() {
@@ -55,10 +56,10 @@ public class VCheckBox extends VWidget<VCheckBox> {
     public void setChecked(boolean checked) {
         this.checked = checked;
 
-        events.fire("vcheckbox-checked", checked);
+        events.fire(Events.CheckBox.CHECKED, checked);
     }
 
     public void onCheckStateChange(VCheckedStateChange runnable) {
-        events.register("vcheckbox-checked", args -> runnable.run((boolean) args[0]));
+        events.register(Events.CheckBox.CHECKED, args -> runnable.run((boolean) args[0]));
     }
 }
