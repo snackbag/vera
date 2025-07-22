@@ -31,6 +31,21 @@ public class WindingComposite extends Composite {
             out = (T) ctx.type().animationTransition.apply(in, ctx.original(), animation.unwindEasing, delta);
         }
 
+        for (VAnimation animation : engine.getAllRewinding()) {
+            if (!animation.affects(ctx.style())) continue;
+            if (animation.unwindTime <= 0) continue;
+
+            AnimationEngine.RewindContext rewindCtx = engine.getRewindContext(animation);
+
+            long sinceRewinding = rewindCtx.since();
+            int unwindProgress = animation.unwindTime - rewindCtx.unwindProgress();
+            int relativeTime = (int) (time - sinceRewinding);
+
+            float delta = (unwindProgress + relativeTime) / (float) animation.unwindTime;
+
+            out = (T) ctx.type().animationTransition.apply(ctx.original(), in, animation.unwindEasing, delta);
+        }
+
         return out;
     }
 }
