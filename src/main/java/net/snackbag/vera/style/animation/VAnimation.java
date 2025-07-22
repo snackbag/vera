@@ -10,6 +10,7 @@ import oshi.util.tuples.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -111,6 +112,9 @@ public class VAnimation {
         return Objects.hash(name, app);
     }
 
+    public VKeyframe[] getKeyframes() {
+        return keyframes.toArray(new VKeyframe[0]);
+    }
 
     public static class Builder {
         private final String name;
