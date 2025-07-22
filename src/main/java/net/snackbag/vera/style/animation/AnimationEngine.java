@@ -64,6 +64,7 @@ public class AnimationEngine {
     public void kill(VAnimation animation) {
         activeAnimations.remove(animation);
         unwindingAnimations.remove(animation);
+        rewindingAnimations.remove(animation);
     }
 
     public void unwind(VAnimation animation) {
