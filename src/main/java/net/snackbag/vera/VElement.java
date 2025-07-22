@@ -2,6 +2,7 @@ package net.snackbag.vera;
 
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.EventHandler;
+import net.snackbag.vera.event.Events;
 import net.snackbag.vera.event.VWidgetMessageEvent;
 import net.snackbag.vera.layout.VLayout;
 import org.jetbrains.annotations.Nullable;
@@ -69,19 +70,19 @@ public abstract class VElement {
     //
 
     public void onMessage(VWidgetMessageEvent executor) {
-        events.register("elem-message", args -> executor.run((VWidgetMessageEvent.Context) args[0]));
+        events.register(Events.Element.MESSAGE,args -> executor.run((VWidgetMessageEvent.Context) args[0]));
     }
 
     public void sendMessage(VElement element, String type, @Nullable Object content) {
-        element.events.fire("elem-message", new VWidgetMessageEvent.Context(this, type, content));
+        element.events.fire(Events.Element.MESSAGE, new VWidgetMessageEvent.Context(this, type, content));
     }
 
     public void onLayoutSwap(Consumer<VLayout> executor) {
-        events.register("elem-layout-swap", args -> executor.accept((VLayout) args[0]));
+        events.register(Events.Element.LAYOUT_SWAP, args -> executor.accept((VLayout) args[0]));
     }
 
     public void onLayoutRemove(Runnable executor) {
-        events.register("elem-layout-remove", args -> executor.run());
+        events.register(Events.Element.LAYOUT_REMOVE, args -> executor.run());
     }
 
     //
