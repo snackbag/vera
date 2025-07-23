@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class AnimationEngine {
     public final VWidget<?> widget;
     private final HashMap<VAnimation, Long> activeAnimations = new HashMap<>();
-    private final HashMap<VAnimation, Long> unwindingAnimations = new HashMap<>();
+    private final HashMap<VAnimation, UnwindContext> unwindingAnimations = new HashMap<>();
     private final HashMap<VAnimation, RewindContext> rewindingAnimations = new HashMap<>();
 
     private long cacheId = 0;
@@ -74,8 +74,16 @@ public class AnimationEngine {
     public void unwind(VAnimation animation, boolean override) {
         if (!override && isUnwinding(animation.name)) return;
 
+        long time = System.currentTimeMillis();
+
         widget.events.fire(Events.Animation.UNWIND_BEGIN, animation);
-        unwindingAnimations.put(animation, System.currentTimeMillis());
+
+        long rewindingSince = time;
+        if (rewindingAnimations.containsKey(animation)) {
+            rewindingSince = rewindingAnimations.remove(animation).begun;
+        }
+
+        unwindingAnimations.put(animation, new UnwindContext(time, (int) (time - rewindingSince)));
     }
 
     public void rewind(VAnimation animation) {
@@ -90,7 +98,7 @@ public class AnimationEngine {
 
         widget.events.fire(Events.Animation.REWIND_BEGIN, animation);
 
-        long unwindingSince = unwindingAnimations.remove(animation);
+        long unwindingSince = unwindingAnimations.remove(animation).begun;
         rewindingAnimations.put(animation, new RewindContext(time, (int) (time - unwindingSince)));
     }
 
@@ -141,8 +149,8 @@ public class AnimationEngine {
         return activeAnimations.getOrDefault(animation, -1L);
     }
 
-    public long getTimeSinceUnwinding(VAnimation animation) {
-        return unwindingAnimations.getOrDefault(animation, -1L);
+    public @Nullable UnwindContext getTimeSinceUnwinding(VAnimation animation) {
+        return unwindingAnimations.getOrDefault(animation, null);
     }
 
     public @Nullable RewindContext getRewindContext(VAnimation animation) {
@@ -152,8 +160,16 @@ public class AnimationEngine {
     /**
      * Context for animation rewinding
      *
-     * @param since the timestamp when the animation started rewinding
-     * @param unwindProgress the amount of millisecond progress the unwinding has already made
+     * @param begun the timestamp when the animation started rewinding
+     * @param unwindProgress the amount of milliseconds the animation has already been unwinding
      */
-    public record RewindContext(Long since, int unwindProgress) {}
+    public record RewindContext(Long begun, int unwindProgress) {}
+
+    /**
+     * Context for animation unwinding
+     *
+     * @param begun the timestamp when the animation started unwinding
+     * @param rewindProgress the amount of milliseconds the animation has already been rewinding
+     */
+    public record UnwindContext(Long begun, int rewindProgress) {}
 }
