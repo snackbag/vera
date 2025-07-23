@@ -24,7 +24,7 @@ public class WindingComposite extends Composite {
                 continue;
             }
 
-            long sinceUnwinding = engine.getTimeSinceUnwinding(animation);
+            long sinceUnwinding = engine.getTimeSinceUnwinding(animation).begun();
             int relativeTime = (int) (time - sinceUnwinding);
             float delta = Math.min((float) relativeTime / (float) animation.unwindTime, 1f);
 
