@@ -21,6 +21,11 @@ public class StyleTestApplication extends VeraApp {
             .keyframe(1000, frame -> frame.style("background-color", VColor.MC_RED), 2000)
             .build();
 
+    private final VAnimation hoverAnimation = new VAnimation.Builder(this, "hover")
+            .unwindTime(100)
+            .keyframe(100, frame -> frame.style("background-color", VColor.MC_WHITE), 0)
+            .build();
+
     @Override
     public void init() {
         new VShortcut(this, "escape", this::hide).alsoAdd();
@@ -32,7 +37,9 @@ public class StyleTestApplication extends VeraApp {
                 .alsoAdd();
 
         VRect testRect = new VRect(VColor.black(), this).alsoAdd();
-        testRect.setStyle("background-color", StyleState.HOVERED, VColor.white());
+        testRect.onHover(() -> testRect.animations.activateOrRewind(hoverAnimation));
+        testRect.onHoverLeave(() -> testRect.animations.unwind(hoverAnimation));
+        //testRect.setStyle("background-color", StyleState.HOVERED, VColor.white());
 
         testRect.setStyle("cursor", StyleState.HOVERED, VCursorShape.POINTING_HAND);
         testRect.setStyle("cursor", StyleState.CLICKED, VCursorShape.ALL_RESIZE);
