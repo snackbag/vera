@@ -25,6 +25,7 @@ public class VAnimation {
     public final VeraApp app;
 
     public final int unwindTime;
+    public final boolean autoUnwindAtEnd;
     public final VEasing unwindEasing;
     public final LoopMode loopMode;
 
@@ -33,9 +34,10 @@ public class VAnimation {
 
     private int totalTime = 0;
 
-    public VAnimation(String name, int unwindTime, VEasing unwindEasing, LoopMode loopMode, VeraApp app) {
+    public VAnimation(String name, int unwindTime, boolean autoUnwindAtEnd, VEasing unwindEasing, LoopMode loopMode, VeraApp app) {
         this.name = name;
         this.unwindTime = unwindTime;
+        this.autoUnwindAtEnd = autoUnwindAtEnd;
         this.unwindEasing = unwindEasing;
         this.totalTime = unwindTime;
         this.loopMode = loopMode;
@@ -125,6 +127,7 @@ public class VAnimation {
 
         private LoopMode loopMode = LoopMode.NONE;
         private int unwindTime = 0;
+        private boolean autoUnwindAtEnd = false;
         private VEasing unwindEasing = Easings.LINEAR;
 
         private final List<Pair<VKeyframe, Consumer<VKeyframe>>> keyframes = new ArrayList<>();
@@ -144,6 +147,11 @@ public class VAnimation {
             return this;
         }
 
+        public Builder unwindOnFinish() {
+            this.autoUnwindAtEnd = true;
+            return this;
+        }
+
         public Builder unwindEasing(VEasing easing) {
             this.unwindEasing = easing;
             return this;
@@ -155,7 +163,7 @@ public class VAnimation {
         }
 
         public VAnimation build() {
-            VAnimation animation = new VAnimation(name, unwindTime, unwindEasing, loopMode, app);
+            VAnimation animation = new VAnimation(name, unwindTime, autoUnwindAtEnd, unwindEasing, loopMode, app);
 
             for (Pair<VKeyframe, Consumer<VKeyframe>> frame : keyframes) {
                 animation.addKeyframe(frame.getA());
