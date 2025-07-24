@@ -78,6 +78,7 @@ public class AnimationEngine {
 
     public void unwind(VAnimation animation, boolean override) {
         if (!override && isUnwinding(animation.name)) return;
+        if (!(activeAnimations.containsKey(animation) || !rewindingAnimations.containsKey(animation))) return;
 
         long time = System.currentTimeMillis();
         widget.events.fire(Events.Animation.UNWIND_BEGIN, animation);
