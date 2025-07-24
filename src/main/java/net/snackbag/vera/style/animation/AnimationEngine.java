@@ -100,6 +100,7 @@ public class AnimationEngine {
     }
 
     public void rewind(VAnimation animation, boolean override) {
+        if (!isActive(animation.name)) return;
         if (!unwindingAnimations.containsKey(animation)) return;
         if (!override && isRewinding(animation.name)) return;
 
