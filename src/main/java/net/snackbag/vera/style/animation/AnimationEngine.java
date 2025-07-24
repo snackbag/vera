@@ -27,6 +27,10 @@ public class AnimationEngine {
     }
 
     public boolean isActive(String name) {
+        return isUnbothered(name) || isUnwinding(name) || isRewinding(name);
+    }
+
+    public boolean isUnbothered(String name) {
         return activeAnimations.keySet().stream().anyMatch(anim -> anim.name.equals(name));
     }
 
@@ -57,7 +61,7 @@ public class AnimationEngine {
     }
 
     public void activate(VAnimation animation, boolean override) {
-        if (!override && isActive(animation.name)) return;
+        if (!override && isUnbothered(animation.name)) return;
         activeAnimations.put(animation, System.currentTimeMillis());
     }
 
@@ -78,7 +82,7 @@ public class AnimationEngine {
 
     public void unwind(VAnimation animation, boolean override) {
         if (!override && isUnwinding(animation.name)) return;
-        if (!(activeAnimations.containsKey(animation) || !rewindingAnimations.containsKey(animation))) return;
+        if (!(isUnbothered(animation.name) || !isRewinding(animation.name))) return;
 
         long time = System.currentTimeMillis();
         widget.events.fire(Events.Animation.UNWIND_BEGIN, animation);
