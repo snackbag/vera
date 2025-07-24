@@ -75,15 +75,18 @@ public class AnimationEngine {
         if (!override && isUnwinding(animation.name)) return;
 
         long time = System.currentTimeMillis();
-
         widget.events.fire(Events.Animation.UNWIND_BEGIN, animation);
 
-        long rewindingSince = time;
+        int rewindProgress = 0;
         if (rewindingAnimations.containsKey(animation)) {
-            rewindingSince = rewindingAnimations.remove(animation).begun;
+            RewindContext rewindCtx = rewindingAnimations.remove(animation);
+            int previousUnwindProgress = rewindCtx.unwindProgress();
+            int currentRewindTime = (int) (time - rewindCtx.begun());
+
+            rewindProgress = Math.max(0, previousUnwindProgress - currentRewindTime);
         }
 
-        unwindingAnimations.put(animation, new UnwindContext(time, (int) (time - rewindingSince)));
+        unwindingAnimations.put(animation, new UnwindContext(time, rewindProgress));
     }
 
     public void rewind(VAnimation animation) {
@@ -95,11 +98,12 @@ public class AnimationEngine {
         if (!override && isRewinding(animation.name)) return;
 
         long time = System.currentTimeMillis();
-
         widget.events.fire(Events.Animation.REWIND_BEGIN, animation);
 
-        long unwindingSince = unwindingAnimations.remove(animation).begun;
-        rewindingAnimations.put(animation, new RewindContext(time, (int) (time - unwindingSince)));
+        UnwindContext unwindCtx = unwindingAnimations.remove(animation);
+        int totalUnwindProgress = unwindCtx.rewindProgress() + (int) (time - unwindCtx.begun());
+
+        rewindingAnimations.put(animation, new RewindContext(time, totalUnwindProgress));
     }
 
     public @Nullable VAnimation getIfEverActive(String name) {
@@ -149,7 +153,7 @@ public class AnimationEngine {
         return activeAnimations.getOrDefault(animation, -1L);
     }
 
-    public @Nullable UnwindContext getTimeSinceUnwinding(VAnimation animation) {
+    public @Nullable UnwindContext getUnwindContext(VAnimation animation) {
         return unwindingAnimations.getOrDefault(animation, null);
     }
 
