@@ -137,10 +137,12 @@ public class AnimationEngine {
         checkCache();
 
         if (value == null) return null;
-        if (cache.containsKey(style)) return (T) cache.get(style);
+        if (!cache.containsKey(style)) {
+            StyleValueType type = StyleValueType.get(value, null);
+            cache.put(style, widget.app.pipeline.applyComposites(this, style, type, value));
+        }
 
-        StyleValueType type = StyleValueType.get(value, null);
-        return widget.app.pipeline.applyComposites(this, style, type, value);
+        return (T) cache.get(style);
     }
 
     /**
