@@ -16,6 +16,7 @@ public class StyleTestApplication extends VeraApp {
 
     private final VAnimation testAnimation = new VAnimation.Builder(this, "test")
             .unwindTime(2000)
+            .unwindOnFinish()
 
             .keyframe(1000, frame -> frame.style("background-color", VColor.MC_GOLD), 2000)
             .keyframe(1000, frame -> frame.style("background-color", VColor.MC_RED), 2000)
@@ -23,6 +24,7 @@ public class StyleTestApplication extends VeraApp {
 
     private final VAnimation hoverAnimation = new VAnimation.Builder(this, "hover")
             .unwindTime(100)
+
             .keyframe(100, frame -> frame.style("background-color", VColor.MC_WHITE), 0)
             .build();
 
