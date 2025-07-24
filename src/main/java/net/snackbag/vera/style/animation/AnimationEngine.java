@@ -77,6 +77,7 @@ public class AnimationEngine {
     }
 
     public void unwind(VAnimation animation, boolean override) {
+        if (!isActive(animation.name)) return;
         if (!override && isUnwinding(animation.name)) return;
         if (!(isUnbothered(animation.name) || !isRewinding(animation.name))) return;
 
