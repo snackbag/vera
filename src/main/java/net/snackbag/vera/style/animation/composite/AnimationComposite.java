@@ -50,7 +50,7 @@ public class AnimationComposite extends Composite {
                     ctx.original(),
                     ctx.type(),
                     animationTimes.get(animation),
-                    true
+                    animation.autoUnwindAtEnd
             );
 
             if (rv != null) out = rv;
