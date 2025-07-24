@@ -49,6 +49,8 @@ public class AnimationEngine {
             if (time - getTimeSinceActive(animation) >= animation.getTotalTime() - animation.unwindTime) {
                 unwind(animation);
             }
+
+            if (time - getTimeSinceActive(animation) >= animation.getTotalTime()) kill(animation);
         }
     }
 
