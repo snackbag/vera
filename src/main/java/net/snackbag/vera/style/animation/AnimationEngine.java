@@ -27,10 +27,6 @@ public class AnimationEngine {
     }
 
     public boolean isActive(String name) {
-        return isUnbothered(name) || isUnwinding(name) || isRewinding(name);
-    }
-
-    public boolean isUnbothered(String name) {
         return activeAnimations.keySet().stream().anyMatch(anim -> anim.name.equals(name));
     }
 
@@ -61,7 +57,7 @@ public class AnimationEngine {
     }
 
     public void activate(VAnimation animation, boolean override) {
-        if (!override && isUnbothered(animation.name)) return;
+        if (!override && isActive(animation.name)) return;
         activeAnimations.put(animation, System.currentTimeMillis());
     }
 
