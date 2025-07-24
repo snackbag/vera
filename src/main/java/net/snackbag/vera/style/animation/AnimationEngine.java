@@ -61,6 +61,11 @@ public class AnimationEngine {
         activeAnimations.put(animation, System.currentTimeMillis());
     }
 
+    public void activateOrRewind(VAnimation animation) {
+        if (isUnwinding(animation.name)) rewind(animation);
+        else activate(animation);
+    }
+
     public void kill(VAnimation animation) {
         activeAnimations.remove(animation);
         unwindingAnimations.remove(animation);
