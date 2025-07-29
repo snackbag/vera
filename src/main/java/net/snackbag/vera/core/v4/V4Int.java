@@ -1,4 +1,4 @@
-package net.snackbag.vera.core;
+package net.snackbag.vera.core.v4;
 
 public class V4Int {
     private final int v1;

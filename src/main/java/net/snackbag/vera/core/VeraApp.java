@@ -1,19 +1,26 @@
 package net.snackbag.vera.core;
 
 import net.minecraft.client.MinecraftClient;
+import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.vera.Vera;
+import net.snackbag.vera.event.Events;
 import net.snackbag.vera.event.VShortcut;
+import net.snackbag.vera.flag.VWindowPositioningFlag;
+import net.snackbag.vera.style.VStyleSheet;
+import net.snackbag.vera.style.animation.VeraPipeline;
+import net.snackbag.vera.style.animation.composite.AnimationComposite;
+import net.snackbag.vera.style.animation.composite.WindingComposite;
+import net.snackbag.vera.util.Geometry;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public abstract class VeraApp {
+    public final VStyleSheet styleSheet = new VStyleSheet();
+    public final VeraPipeline pipeline = new VeraPipeline(this);
+
     private final List<VWidget<?>> widgets;
     private final HashMap<String, VShortcut> shortcuts;
     private VColor backgroundColor;
@@ -27,7 +34,9 @@ public abstract class VeraApp {
     private int height;
 
     private boolean visible;
+    private boolean requiresHierarchy;
     private @Nullable VWidget<?> focusedWidget;
+    private VWindowPositioningFlag positioning;
 
     public VeraApp() {
         this(true);
@@ -49,6 +58,14 @@ public abstract class VeraApp {
         this.y = 0;
 
         this.visible = false;
+        setPositioning(VWindowPositioningFlag.SCREEN);
+
+        loadComposites();
+    }
+
+    public void loadComposites() {
+        pipeline.addPass(new AnimationComposite());
+        pipeline.addPass(new WindingComposite());
     }
 
     public void setCursorVisible(boolean cursorVisible) {
@@ -138,6 +155,15 @@ public abstract class VeraApp {
         this.width = width;
     }
 
+    public void setSize(int both) {
+        setSize(both, both);
+    }
+
+    public void setSize(int width, int height) {
+        setWidth(width);
+        setHeight(height);
+    }
+
     public void move(int x, int y) {
         this.x = x;
         this.y = y;
@@ -155,13 +181,41 @@ public abstract class VeraApp {
         return y;
     }
 
+    public void setRequiresHierarchy(boolean requires) {
+        if (MCVeraData.appHierarchy.contains(this) && !requires) {
+            MCVeraData.appHierarchy.remove(this);
+        }
+
+        MCVeraData.appHierarchy.add(this);
+        this.requiresHierarchy = requires;
+    }
+
+    public void moveToHierarchyTop() {
+        if (!requiresHierarchy) return;
+
+        MCVeraData.appHierarchy.remove(this);
+        MCVeraData.appHierarchy.add(0, this);
+    }
+
+    public boolean isRequiresHierarchy() {
+        return requiresHierarchy;
+    }
+
     public abstract void init();
 
     public List<VWidget<?>> getWidgets() {
         return new ArrayList<>(widgets);
     }
 
+    public List<VWidget<?>> getWidgetsReversed() {
+        List<VWidget<?>> widgets = getWidgets();
+        Collections.reverse(widgets);
+
+        return widgets;
+    }
+
     public void addWidget(VWidget<?> widget) {
+        if (widgets.contains(widget)) return;
         this.widgets.add(widget);
     }
 
@@ -169,10 +223,10 @@ public abstract class VeraApp {
         if (!widgets.contains(widget)) return;
 
         if (isFocusedWidget(widget)) setFocusedWidget(null);
-        if (widget.isLeftClickDown()) widget.fireEvent("left-click-release");
-        if (widget.isMiddleClickDown()) widget.fireEvent("middle-click-release");
-        if (widget.isRightClickDown()) widget.fireEvent("right-click-release");
-        if (widget.isHovered()) widget.fireEvent("hover-leave");
+        if (widget.isLeftClickDown()) widget.events.fire(Events.Widget.LEFT_CLICK_RELEASE);
+        if (widget.isMiddleClickDown()) widget.events.fire(Events.Widget.MIDDLE_CLICK_RELEASE);
+        if (widget.isRightClickDown()) widget.events.fire(Events.Widget.RIGHT_CLICK_RELEASE);
+        if (widget.isHovered()) widget.events.fire(Events.Widget.HOVER_LEAVE);
 
         this.widgets.remove(widget);
     }
@@ -210,31 +264,30 @@ public abstract class VeraApp {
         return List.copyOf(shortcuts.values());
     }
 
-    public List<VWidget<?>> getHoveredWidgets() {
-        return getHoveredWidgets(Vera.provider.getMouseX(), Vera.provider.getMouseY());
-    }
+    public @Nullable VWidget<?> getTopWidgetAt(int px, int py) {
+        int mx = px - x;
+        int my = py - y;
 
-    public List<VWidget<?>> getHoveredWidgets(int mouseX, int mouseY) {
-        return getWidgets().parallelStream()
-                .filter(widget -> isMouseOverWidget(widget, mouseX, mouseY))
+        return getWidgetsReversed().stream()
+                .filter(widget -> isPointOverWidget(widget, mx, my))
                 .filter(VWidget::visibilityConditionsPassed)
-                .collect(Collectors.toList());
+                .findFirst().orElse(null);
     }
 
-    private boolean isMouseOverWidget(VWidget<?> widget, int mouseX, int mouseY) {
+    private boolean isPointOverWidget(VWidget<?> widget, int px, int py) {
         if (!widget.visibilityConditionsPassed()) return false;
 
         int widgetX = widget.getHitboxX() + x;
         int widgetY = widget.getHitboxY() + y;
         int widgetWidth = widget.getHitboxWidth();
         int widgetHeight = widget.getHitboxHeight();
-        return mouseX >= widgetX && mouseX <= widgetX + widgetWidth &&
-                mouseY >= widgetY && mouseY <= widgetY + widgetHeight;
+        return Geometry.isInBox(px, py, widgetX, widgetY, widgetWidth, widgetHeight);
     }
 
-    public boolean isMouseOverApp(int mouseX, int mouseY) {
+    public boolean isPointOverThis(int px, int py) {
         if (!isVisible()) return false;
-        return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
+
+        return Geometry.isInBox(px, py, x, y, width, height);
     }
 
     public void setFocusedWidget(@Nullable VWidget<?> widget) {
@@ -242,8 +295,8 @@ public abstract class VeraApp {
             VWidget<?> oldWidget = this.focusedWidget;
             this.focusedWidget = widget;
 
-            if (oldWidget != null) oldWidget.fireEvent("focus-state-change");
-            if (widget != null) widget.fireEvent("focus-state-change");
+            if (oldWidget != null) oldWidget.events.fire(Events.Widget.FOCUS_STATE_CHANGE);
+            if (widget != null) widget.events.fire(Events.Widget.FOCUS_STATE_CHANGE);
         }
     }
 
@@ -273,11 +326,36 @@ public abstract class VeraApp {
         );
     }
 
+    public VWindowPositioningFlag getPositioning() {
+        return positioning;
+    }
+
+    public void setPositioning(VWindowPositioningFlag positioning) {
+        // make sure hashmaps exist
+        if (!MCVeraData.visibleApplications.containsKey(this.positioning))
+            MCVeraData.visibleApplications.put(this.positioning, new LinkedHashSet<>());
+        if (!MCVeraData.visibleApplications.containsKey(positioning))
+            MCVeraData.visibleApplications.put(positioning, new LinkedHashSet<>());
+
+        // if visible, then we can also add the app itself
+        if (isVisible()) {
+            MCVeraData.visibleApplications.get(positioning).add(this);
+        }
+
+        // doesn't matter if visible or not, we always remove it from its original
+        MCVeraData.visibleApplications.get(this.positioning).remove(this);
+        this.positioning = positioning;
+    }
+
     public void keyPressed(int keyCode, int scanCode, int modifiers) {
         if (hasFocusedWidget()) getFocusedWidget().keyPressed(keyCode, scanCode, modifiers);
     }
 
     public void charTyped(char chr, int modifiers) {
         if (hasFocusedWidget()) getFocusedWidget().charTyped(chr, modifiers);
+    }
+
+    public void mergeStyleSheet(VStyleSheet target) {
+        styleSheet.addSheet(target);
     }
 }

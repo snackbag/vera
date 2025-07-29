@@ -1,5 +1,7 @@
 package net.snackbag.vera.core;
 
+import net.snackbag.vera.style.animation.easing.VEasing;
+
 import java.util.function.Consumer;
 
 public class VColor {
@@ -154,6 +156,15 @@ public class VColor {
 
     public VColor sub(int red, int green, int blue) {
         return new VColor(Math.max(this.red - red, 0), Math.max(this.green - green, 0), Math.max(this.blue - blue, 0));
+    }
+
+    public VColor ease(VEasing easing, VColor target, float delta) {
+        return new VColor(
+                easing.apply(red, target.red, delta),
+                easing.apply(green, target.green, delta),
+                easing.apply(blue, target.blue, delta),
+                easing.apply(opacity, target.opacity, delta)
+        );
     }
 
     public static VColor transparent() {

@@ -10,6 +10,9 @@
         "defaultRequire": 1
     },
     "client": [
+        "DrawContextMixin",
+        "GameRendererMixin",
+        "InGameHudMixin",
         "KeyboardMixin",
         "MouseMixin",
         "ParentElementMixin",

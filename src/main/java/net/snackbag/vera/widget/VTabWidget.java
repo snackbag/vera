@@ -1,41 +1,41 @@
 package net.snackbag.vera.widget;
 
-import net.minecraft.client.MinecraftClient;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
-import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.event.Events;
+import net.snackbag.vera.modifier.VHasFont;
+import net.snackbag.vera.style.StyleState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
 
-public class VTabWidget extends VWidget<VTabWidget> {
-    private VFont font;
-    private VColor selectedBackgroundColor;
-    private VColor defaultBackgroundColor;
-    private int itemSpacingLeft = 4;
-    private int itemSpacingRight = 4;
-
+public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
     private final LinkedHashMap<String, List<VWidget<?>>> tabs = new LinkedHashMap<>();
     private @Nullable Integer activeTab = null;
     private @Nullable Integer hoveredTab = null;
 
-    public VTabWidget(VeraApp app, String... tabs) {
+    public VTabWidget(VeraApp app) {
         super(0, 0, 100, 16, app);
-
-        font = VFont.create();
-        selectedBackgroundColor = VColor.white();
-        defaultBackgroundColor = VColor.white().sub(40);
-
-        setHoverCursor(VCursorShape.POINTING_HAND);
     }
 
     @Override
     public void render() {
+        StyleState state = createStyleState();
+
+        VFont font = getStyle("font", state);
+        VColor defaultBackgroundColor = getStyle("background-color", state);
+        VColor selectedBackgroundColor = getStyle("background-color-selected", state);
+        int itemSpacingLeft = getStyle("item-spacing-left", state);
+        int itemSpacingRight = getStyle("item-spacing-right", state);
+
         int marginX = 0;
         int i = -1;
+
+        int x = getX();
+        int y = getY();
 
         for (String key : tabs.keySet()) {
             int textWidth = Vera.provider.getTextWidth(key, font);
@@ -58,42 +58,42 @@ public class VTabWidget extends VWidget<VTabWidget> {
 
     @Override
     public void handleBuiltinEvent(String event, Object... args) {
+        super.handleBuiltinEvent(event, args);
+
         switch (event) {
-            case "mouse-move" -> getHoveredTabIndex((int) args[0]);
+            case Events.Widget.MOUSE_MOVE -> getHoveredTabIndex((int) args[0]);
 
-            case "hover-enter" -> getHoveredTabIndex(Vera.getMouseX());
-            case "hover-leave" -> hoveredTab = null;
+            case Events.Widget.HOVER -> getHoveredTabIndex(Vera.getMouseX());
+            case Events.Widget.HOVER_LEAVE -> hoveredTab = null;
 
-            case "left-click" -> {
+            case Events.Widget.LEFT_CLICK -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-tab-left-click", hoveredTab);
+                events.fire(Events.TabWidget.TAB_LEFT_CLICK, hoveredTab);
                 setActiveTab(hoveredTab);
             }
-            case "left-click-release" -> {
+            case Events.Widget.LEFT_CLICK_RELEASE -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-tab-left-click-release", hoveredTab);
+                events.fire(Events.TabWidget.TAB_LEFT_CLICK_RELEASE, hoveredTab);
             }
 
-            case "middle-click" -> {
+            case Events.Widget.MIDDLE_CLICK -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-tab-middle-click", hoveredTab);
+                events.fire(Events.TabWidget.TAB_MIDDLE_CLICK, hoveredTab);
             }
-            case "middle-click-release" -> {
+            case Events.Widget.MIDDLE_CLICK_RELEASE -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-tab-middle-click-release", hoveredTab);
+                events.fire(Events.TabWidget.TAB_MIDDLE_CLICK_RELEASE, hoveredTab);
             }
 
-            case "right-click" -> {
+            case Events.Widget.RIGHT_CLICK -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-tab-right-click", hoveredTab);
+                events.fire(Events.TabWidget.TAB_RIGHT_CLICK, hoveredTab);
             }
-            case "right-click-release" -> {
+            case Events.Widget.RIGHT_CLICK_RELEASE -> {
                 if (!isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-tab-right-click-release", hoveredTab);
+                events.fire(Events.TabWidget.TAB_RIGHT_CLICK_RELEASE, hoveredTab);
             }
         }
-
-        super.handleBuiltinEvent(event, args);
     }
 
     public boolean isValidTabIndex(@Nullable Integer index) {
@@ -106,6 +106,12 @@ public class VTabWidget extends VWidget<VTabWidget> {
     }
 
     public int getHoveredTabIndex(int mouseX) {
+        StyleState state = createStyleState();
+
+        VFont font = getStyle("font", state);
+        int itemSpacingLeft = getStyle("item-spacing-left", state);
+        int itemSpacingRight = getStyle("item-spacing-right", state);
+
         int relativeX = mouseX - getHitboxX();
         int currentX = 0;
         int index = 0;
@@ -116,7 +122,7 @@ public class VTabWidget extends VWidget<VTabWidget> {
 
             if (relativeX >= currentX && relativeX < currentX + totalTabWidth) {
                 if (hoveredTab != null && hoveredTab != index) {
-                    fireEvent("vtabwidget-tab-hover-change", hoveredTab);
+                    events.fire(Events.TabWidget.TAB_HOVER_CHANGE, hoveredTab);
                 }
 
                 hoveredTab = index;
@@ -135,31 +141,31 @@ public class VTabWidget extends VWidget<VTabWidget> {
     }
 
     public void onTabHoverChange(Consumer<Integer> runnable) {
-        registerEventExecutor("vtabwidget-tab-hover-change", (args) -> runnable.accept((int) args[0]));
+        events.register(Events.TabWidget.TAB_HOVER_CHANGE, (args) -> runnable.accept((int) args[0]));
     }
 
     public void onTabLeftClick(Consumer<Integer> runnable) {
-        registerEventExecutor("vtabwidget-tab-left-click", (args) -> runnable.accept((int) args[0]));
+        events.register(Events.TabWidget.TAB_LEFT_CLICK, (args) -> runnable.accept((int) args[0]));
     }
 
     public void onTabLeftClickRelease(Consumer<Integer> runnable) {
-        registerEventExecutor("vtabwidget-tab-left-click-release", (args) -> runnable.accept((int) args[0]));
+        events.register(Events.TabWidget.TAB_LEFT_CLICK_RELEASE, (args) -> runnable.accept((int) args[0]));
     }
 
     public void onTabMiddleClick(Consumer<Integer> runnable) {
-        registerEventExecutor("vtabwidget-tab-middle-click", (args) -> runnable.accept((int) args[0]));
+        events.register(Events.TabWidget.TAB_MIDDLE_CLICK, (args) -> runnable.accept((int) args[0]));
     }
 
     public void onTabMiddleClickRelease(Consumer<Integer> runnable) {
-        registerEventExecutor("vtabwidget-tab-middle-click-release", (args) -> runnable.accept((int) args[0]));
+        events.register(Events.TabWidget.TAB_MIDDLE_CLICK_RELEASE, (args) -> runnable.accept((int) args[0]));
     }
 
     public void onTabRightClick(Consumer<Integer> runnable) {
-        registerEventExecutor("vtabwidget-tab-right-click", (args) -> runnable.accept((int) args[0]));
+        events.register(Events.TabWidget.TAB_RIGHT_CLICK, (args) -> runnable.accept((int) args[0]));
     }
 
     public void onTabRightClickRelease(Consumer<Integer> runnable) {
-        registerEventExecutor("vtabwidget-tab-right-click-release", (args) -> runnable.accept((int) args[0]));
+        events.register(Events.TabWidget.TAB_RIGHT_CLICK_RELEASE, (args) -> runnable.accept((int) args[0]));
     }
 
     public void addTab(String tab, VWidget<?>... widgets) {
@@ -193,11 +199,17 @@ public class VTabWidget extends VWidget<VTabWidget> {
 
     @Override
     public int getHitboxHeight() {
-        return font.getSize() / 2 + 4;
+        return ((VFont) getStyle("font", createStyleState())).getSize() / 2 + 4;
     }
 
     @Override
     public int getHitboxWidth() {
+        StyleState state = createStyleState();
+
+        VFont font = getStyle("font", state);
+        int itemSpacingLeft = getStyle("item-spacing-left", state);
+        int itemSpacingRight = getStyle("item-spacing-right", state);
+
         int currentX = 0;
 
         for (String tabName : tabs.keySet()) {
@@ -222,59 +234,16 @@ public class VTabWidget extends VWidget<VTabWidget> {
         this.activeTab = activeTab;
     }
 
-    public VFont getFont() {
-        return font;
+    public VColor.ColorModifier modifyBackgroundColorSelected() {
+        return app.styleSheet.modifyKeyAsColor(this, "background-color-selected");
     }
 
-    public void setFont(VFont font) {
-        this.font = font;
+    public VColor.ColorModifier modifyBackgroundColor() {
+        return app.styleSheet.modifyKeyAsColor(this, "background-color");
     }
 
-    public VFont.FontModifier modifyFont() {
-        return new VFont.FontModifier(font, this::setFont);
-    }
-
-    public VColor.ColorModifier modifyFontColor() {
-        return new VColor.ColorModifier(font.getColor(), (color) -> setFont(getFont().withColor(color)));
-    }
-
-    public VColor getSelectedBackgroundColor() {
-        return selectedBackgroundColor;
-    }
-
-    public void setSelectedBackgroundColor(VColor backgroundColor) {
-        this.selectedBackgroundColor = backgroundColor;
-    }
-
-    public VColor.ColorModifier modifySelectedBackgroundColor() {
-        return new VColor.ColorModifier(selectedBackgroundColor, this::setSelectedBackgroundColor);
-    }
-
-    public VColor getDefaultBackgroundColor() {
-        return defaultBackgroundColor;
-    }
-
-    public void setDefaultBackgroundColor(VColor defaultBackgroundColor) {
-        this.defaultBackgroundColor = defaultBackgroundColor;
-    }
-
-    public VColor.ColorModifier modifyDefaultBackgroundColor() {
-        return new VColor.ColorModifier(defaultBackgroundColor, this::setDefaultBackgroundColor);
-    }
-
-    public int getItemSpacingLeft() {
-        return itemSpacingLeft;
-    }
-
-    public void setItemSpacingLeft(int itemSpacingLeft) {
-        this.itemSpacingLeft = itemSpacingLeft;
-    }
-
-    public int getItemSpacingRight() {
-        return itemSpacingRight;
-    }
-
-    public void setItemSpacingRight(int itemSpacingRight) {
-        this.itemSpacingRight = itemSpacingRight;
+    @Override
+    public VeraApp getApp() {
+        return app;
     }
 }

@@ -8,36 +8,33 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RotationAxis;
+import net.snackbag.mcvera.MCVeraData;
+import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.flag.VWindowPositioningFlag;
 import net.snackbag.vera.widget.VWidget;
+import org.lwjgl.opengl.GL11;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 public class MCVeraRenderer {
-    private static MCVeraRenderer instance = null;
     public static DrawContext drawContext = null;
-
-    public static MCVeraRenderer getInstance() {
-        if (instance == null) {
-            instance = new MCVeraRenderer();
-        }
-
-        return instance;
-    }
 
     public void drawRect(VeraApp app, int x, int y, int width, int height, double rotation, VColor color) {
         MatrixStack stack = drawContext.getMatrices();
         stack.push();
 
-        int centerX = x + width / 2;
-        int centerY = y + height / 2;
+        float centerX = x + width / 2f;
+        float centerY = y + height / 2f;
 
         stack.translate(app.getX(), app.getY(), 0);
         stack.translate(centerX, centerY, 0);
         stack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float) rotation));
-        stack.translate(-width / 2, -height / 2, 0);
+        stack.translate(-width / 2f, -height / 2f, 0);
 
         drawContext.fill(0, 0, width, height, color.toInt());
 
@@ -66,20 +63,45 @@ public class MCVeraRenderer {
     }
 
     public void renderApp(VeraApp app) {
+        boolean blendEnabled = GL11.glIsEnabled(GL11.GL_BLEND);
+
         List<VWidget<?>> widgets = app.getWidgets();
-        RenderSystem.enableBlend();
+        if (!blendEnabled) RenderSystem.enableBlend();
 
         app.render();
-        List<VWidget<?>> hoveredWidgets = app.getHoveredWidgets();
+        VWidget<?> hoveredWidget = app.getTopWidgetAt(Vera.getMouseX(), Vera.getMouseY());
         for (VWidget<?> widget : widgets) {
-            widget.setHovered(hoveredWidgets.contains(widget));
+            if (widget != hoveredWidget && widget.isHovered()) widget.setHovered(false);
+            else if (widget == hoveredWidget && !widget.isHovered()) widget.setHovered(true);
+
+            widget.animations.update();
+
             if (widget.visibilityConditionsPassed()) {
                 widget.render();
                 widget.renderBorder();
+                widget.renderOverlay();
             }
         }
         app.renderAfterWidgets();
 
-        RenderSystem.disableBlend();
+        if (!blendEnabled) RenderSystem.disableBlend();
+    }
+
+    public void renderApps(VWindowPositioningFlag flag) {
+        LinkedHashSet<VeraApp> apps = MCVeraData.visibleApplications.getOrDefault(flag, new LinkedHashSet<>());
+        List<VeraApp> hierarchicApps = new ArrayList<>();
+
+        for (VeraApp app : apps) {
+            if (app.isRequiresHierarchy()) {
+                hierarchicApps.add(app);
+                continue;
+            }
+
+            Vera.renderer.renderApp(app);
+        }
+
+        for (VeraApp app : hierarchicApps) {
+            Vera.renderer.renderApp(app);
+        }
     }
 }

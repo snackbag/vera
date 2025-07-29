@@ -1,69 +1,41 @@
 package net.snackbag.vera.widget;
 
+import net.snackbag.vera.VElement;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
+import net.snackbag.vera.core.v4.V4Color;
+import net.snackbag.vera.core.v4.V4Int;
 import net.snackbag.vera.event.*;
-import org.jetbrains.annotations.Nullable;
+import net.snackbag.vera.layout.VLayout;
+import net.snackbag.vera.style.StyleState;
+import net.snackbag.vera.style.animation.AnimationEngine;
+import net.snackbag.vera.style.animation.VAnimation;
+import net.snackbag.vera.util.DragHandler;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.function.Supplier;
+import java.util.*;
 
-public abstract class VWidget<T extends VWidget<T>> {
-    protected int x;
-    protected int y;
-    protected int width;
-    protected int height;
+public abstract class VWidget<T extends VWidget<T>> extends VElement {
     protected double rotation;
-    protected V4Color border;
-    protected V4Int borderSize;
 
-    protected VeraApp app;
-    protected VCursorShape hoverCursor = VCursorShape.DEFAULT;
-    protected @Nullable VCursorShape cursorBeforeHover = null;
-    protected boolean focusOnClick = true;
+    public boolean focusOnClick = true;
     private boolean hovered = false;
-    private boolean visible = true;
 
     private boolean leftClickDown = false;
     private boolean middleClickDown = false;
     private boolean rightClickDown = false;
-    private int leftDragPreviousX = -1;
-    private int leftDragPreviousY = -1;
-    private int middleDragPreviousX = -1;
-    private int middleDragPreviousY = -1;
-    private int rightDragPreviousX = -1;
-    private int rightDragPreviousY = -1;
+    private StyleState prevStyleState = StyleState.DEFAULT;
 
-    private final HashMap<String, List<VEvent>> eventExecutors;
-    private final List<Supplier<Boolean>> visibilityConditions;
+    public final AnimationEngine animations = new AnimationEngine(this);
+    public final LinkedHashSet<String> classes = new LinkedHashSet<>();
 
     public VWidget(int x, int y, int width, int height, VeraApp app) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.app = app;
-        this.rotation = 0;
-        this.eventExecutors = new HashMap<>();
-        this.visibilityConditions = new ArrayList<>();
-        this.border = new V4Color(VColor.black());
-        this.borderSize = new V4Int(0);
+        super(app, x, y, width, height);
 
-        addVisibilityCondition(this::isVisible);
+        this.rotation = 0;
     }
 
     public abstract void render();
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
 
     public int getHitboxX() {
         return getX();
@@ -73,112 +45,98 @@ public abstract class VWidget<T extends VWidget<T>> {
         return getY();
     }
 
-    public int getWidth() {
-        return width;
-    }
-
     public int getHitboxWidth() {
         return getWidth();
-    }
-
-    public int getHeight() {
-        return height;
     }
 
     public int getHitboxHeight() {
         return getHeight();
     }
 
-    public void setWidth(int width) {
-        this.width = width;
+    @SuppressWarnings("unchecked")
+    public <V> void setStyle(String key, V... value) {
+        app.styleSheet.setKey(this, key, value);
     }
 
-    public void setHeight(int height) {
-        this.height = height;
+    @SuppressWarnings("unchecked")
+    public <V> void setStyle(String key, StyleState state, V... value) {
+        app.styleSheet.setKey(this, key, value, state);
     }
 
-    public V4Color getBorder() {
-        return border;
+    public <V> V getStyle(String key) {
+        return animations.animateStyle(key, app.styleSheet.getKey(this, key));
     }
 
-    public void setBorder(V4Color border) {
-        this.border = border;
+    public <V> V getStyle(String key, StyleState state) {
+        return animations.animateStyle(key, app.styleSheet.getKey(this, key, state));
     }
 
-    public void setBorder(VColor all) {
-        setBorder(new V4Color(all));
+    public <V> V getStyleOrDefault(String key, V dflt) {
+        V style = getStyle(key);
+        return style != null ? style : dflt;
     }
 
-    public void setBorder(VColor tb, VColor lr) {
-        setBorder(new V4Color(tb, lr));
+    public <V> V getStyleOrDefault(String key, V dflt, StyleState state) {
+        V style = getStyle(key, state);
+        return style != null ? style : dflt;
     }
 
-    public void setBorder(VColor top, VColor bottom, VColor left, VColor right) {
-        setBorder(new V4Color(top, bottom, left, right));
-    }
+    public StyleState createStyleState() {
+        // Clicks first
+        if (leftClickDown) return StyleState.LEFT_CLICKED;
+        else if (middleClickDown) return StyleState.MIDDLE_CLICKED;
+        else if (rightClickDown) return StyleState.RIGHT_CLICKED;
 
-    public V4Int getBorderSize() {
-        return borderSize;
-    }
+        else if (DragHandler.isDragging() && DragHandler.target == this) {
+            return switch (DragHandler.button) {
+                case LEFT -> StyleState.LC_DRAGGING;
+                case MIDDLE -> StyleState.MC_DRAGGING;
+                case RIGHT -> StyleState.RC_DRAGGING;
+            };
+        }
 
-    public void setBorderSize(V4Int borderSize) {
-        this.borderSize = borderSize;
-    }
-
-    public void setBorderSize(int all) {
-        setBorderSize(new V4Int(all));
-    }
-
-    public void setBorderSize(int tb, int lr) {
-        setBorderSize(new V4Int(tb, lr));
-    }
-
-    public void setBorderSize(int top, int bottom, int left, int right) {
-        setBorderSize(new V4Int(top, bottom, left, right));
+        // Hover as last, since everything else is hover too
+        else if (isHovered()) return StyleState.HOVERED;
+        else return StyleState.DEFAULT;
     }
 
     public void renderBorder() {
+        // TODO: [Render Rework] Better border rendering
+
+        StyleState state = createStyleState();
+
+        V4Color borderColor = getStyle("border-color", state);
+        V4Int borderSize = getStyle("border-size", state);
+
         // Top
-        Vera.renderer.drawRect(app, getHitboxX(), getHitboxY() - borderSize.get1(), getHitboxWidth(), borderSize.get1(), 0, border.get1());
+        Vera.renderer.drawRect(app, getHitboxX(), getHitboxY() - borderSize.get1(), getHitboxWidth(), borderSize.get1(), 0, borderColor.get1());
         if (borderSize.get3() > 0) {
-            Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY() - borderSize.get1(), borderSize.get3(), borderSize.get1(), 0, border.get1());
+            Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY() - borderSize.get1(), borderSize.get3(), borderSize.get1(), 0, borderColor.get1());
         }
 
         // Bottom
-        Vera.renderer.drawRect(app, getHitboxX(), getHitboxY() + getHitboxHeight(), getHitboxWidth(), borderSize.get2(), 0, border.get2());
+        Vera.renderer.drawRect(app, getHitboxX(), getHitboxY() + getHitboxHeight(), getHitboxWidth(), borderSize.get2(), 0, borderColor.get2());
         if (borderSize.get4() > 0) {
-            Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY() + getHitboxHeight(), borderSize.get4(), borderSize.get2(), 0, border.get2());
+            Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY() + getHitboxHeight(), borderSize.get4(), borderSize.get2(), 0, borderColor.get2());
         }
 
         // Left
-        Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY(), borderSize.get3(), getHitboxHeight(), 0, border.get3());
+        Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY(), borderSize.get3(), getHitboxHeight(), 0, borderColor.get3());
         if (borderSize.get2() > 0) {
-            Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY() + getHitboxHeight(), borderSize.get3(), borderSize.get2(), 0, border.get3());
+            Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY() + getHitboxHeight(), borderSize.get3(), borderSize.get2(), 0, borderColor.get3());
         }
 
         // Right
-        Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY(), borderSize.get4(), getHitboxHeight(), 0, border.get4());
+        Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY(), borderSize.get4(), getHitboxHeight(), 0, borderColor.get4());
         if (borderSize.get1() > 0) {
-            Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY() - borderSize.get1(), borderSize.get4(), borderSize.get1(), 0, border.get4());
+            Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY() - borderSize.get1(), borderSize.get4(), borderSize.get1(), 0, borderColor.get4());
         }
     }
 
-    public void setSize(int width, int height) {
-        setWidth(width);
-        setHeight(height);
-    }
+    public void renderOverlay() {
+        StyleState state = createStyleState();
 
-    public void setSize(int all) {
-        setSize(all, all);
-    }
-
-    public void move(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public void move(int both) {
-        move(both, both);
+        Vera.renderer.drawRect(app, getX(), getY(), width, height, 0, getStyle("overlay", state));
     }
 
     public boolean isLeftClickDown() {
@@ -197,10 +155,6 @@ public abstract class VWidget<T extends VWidget<T>> {
         return leftClickDown || middleClickDown || rightClickDown;
     }
 
-    public VeraApp getApp() {
-        return app;
-    }
-
     public double getRotation() {
         return rotation;
     }
@@ -209,7 +163,11 @@ public abstract class VWidget<T extends VWidget<T>> {
         this.rotation = rotation;
     }
 
-    public void update() {}
+    public void update() {
+        StyleState state = createStyleState();
+
+        app.setCursorShape(getStyle("cursor", state));
+    }
 
     public boolean isHovered() {
         return hovered;
@@ -218,140 +176,100 @@ public abstract class VWidget<T extends VWidget<T>> {
     public void setHovered(boolean hovered) {
         // If changed
         if (this.hovered != hovered) {
-            if (hovered) fireEvent("hover");
-            else fireEvent("hover-leave");
+            if (hovered) events.fire(Events.Widget.HOVER);
+            else events.fire(Events.Widget.HOVER_LEAVE);
         }
 
         this.hovered = hovered;
     }
 
     public void onHover(Runnable runnable) {
-        registerEventExecutor("hover", runnable);
+        events.register(Events.Widget.HOVER, runnable);
     }
 
     public void onHoverLeave(Runnable runnable) {
-        registerEventExecutor("hover-leave", runnable);
+        events.register(Events.Widget.HOVER_LEAVE, runnable);
     }
 
     public void onLeftClick(Runnable runnable) {
-        registerEventExecutor("left-click", runnable);
+        events.register(Events.Widget.LEFT_CLICK, runnable);
     }
 
     public void onLeftClickRelease(Runnable runnable) {
-        registerEventExecutor("left-click-release", runnable);
+        events.register(Events.Widget.LEFT_CLICK_RELEASE, runnable);
     }
 
     public void onRightClick(Runnable runnable) {
-        registerEventExecutor("right-click", runnable);
+        events.register(Events.Widget.RIGHT_CLICK, runnable);
     }
 
     public void onRightClickRelease(Runnable runnable) {
-        registerEventExecutor("right-click-release", runnable);
+        events.register(Events.Widget.RIGHT_CLICK_RELEASE, runnable);
     }
 
     public void onMiddleClick(Runnable runnable) {
-        registerEventExecutor("middle-click", runnable);
+        events.register(Events.Widget.MIDDLE_CLICK, runnable);
     }
 
     public void onMiddleClickRelease(Runnable runnable) {
-        registerEventExecutor("middle-click-release", runnable);
+        events.register(Events.Widget.MIDDLE_CLICK_RELEASE, runnable);
     }
 
     public void onMouseScroll(VMouseScrollEvent runnable) {
-        registerEventExecutor("mouse-scroll", args -> runnable.run(
+        events.register(Events.Widget.SCROLL, args -> runnable.run(
                 (int) args[0], (int) args[1], (double) args[2])
         );
     }
 
     public void onMouseMove(VMouseMoveEvent runnable) {
-        registerEventExecutor("mouse-move", args -> runnable.run((int) args[0], (int) args[1]));
+        events.register(Events.Widget.MOUSE_MOVE, args -> runnable.run((int) args[0], (int) args[1]));
     }
 
     public void onMouseDragLeft(VMouseDragEvent runnable) {
-        registerEventExecutor("mouse-drag-left", args -> runnable.run((int) args[0], (int) args[1], (int) args[2], (int) args[3]));
+        events.register(Events.Widget.DRAG_LEFT_CLICK, args -> runnable.run((VMouseDragEvent.Context) args[0]));
     }
 
     public void onMouseDragRight(VMouseDragEvent runnable) {
-        registerEventExecutor("mouse-drag-right", args -> runnable.run((int) args[0], (int) args[1], (int) args[2], (int) args[3]));
+        events.register(Events.Widget.DRAG_RIGHT_CLICK, args -> runnable.run((VMouseDragEvent.Context) args[0]));
     }
 
     public void onMouseDragMiddle(VMouseDragEvent runnable) {
-        registerEventExecutor("mouse-drag-middle", args -> runnable.run((int) args[0], (int) args[1], (int) args[2], (int) args[3]));
+        events.register(Events.Widget.DRAG_MIDDLE_CLICK, args -> runnable.run((VMouseDragEvent.Context) args[0]));
     }
 
     public void onFocusStateChange(Runnable runnable) {
-        registerEventExecutor("focus-state-change", runnable);
+        events.register(Events.Widget.FOCUS_STATE_CHANGE, runnable);
     }
 
     public void onFilesDropped(VFilesDroppedEvent runnable) {
-        registerEventExecutor("files-dropped", args -> runnable.run((List<Path>) args[0]));
+        events.register(Events.Widget.FILES_DROPPED, args -> runnable.run((List<Path>) args[0]));
     }
 
-    public void onMessage(VWidgetMessageEvent runnable) {
-        registerEventExecutor("widget-message", args -> runnable.run((VWidgetMessageEvent.Context) args[0]));
+    public void onAnimationBegin(VAnimationBeginEvent runnable) {
+        events.register(Events.Animation.BEGIN, args -> runnable.run((VAnimation) args[0]));
     }
 
-    public void sendMessage(VWidget<?> widget, String type) {
-        sendMessage(widget, type, null);
+    public void onAnimationUnwindBegin(VAnimationUnwindEvent runnable) {
+        events.register(Events.Animation.UNWIND_BEGIN, args -> runnable.run((VAnimation) args[0]));
     }
 
-    public void sendMessage(VWidget<?> widget, String type, @Nullable Object content) {
-        widget.fireEvent("widget-message", new VWidgetMessageEvent.Context(this, type, content));
+    public void onAnimationRewindBegin(VAnimationRewindEvent runnable) {
+        events.register(Events.Animation.REWIND_BEGIN, args -> runnable.run((VAnimation) args[0]));
     }
 
-    public void sendMessageAll(String type) {
-        sendMessageAll(type, null);
+    public void onAnimationFinish(VAnimationFinishEvent runnable) {
+        events.register(Events.Animation.FINISH, args -> runnable.run((VAnimation) args[0], (long) args[1]));
     }
 
-    public void sendMessageAll(String type, @Nullable Object content) {
-        VWidgetMessageEvent.Context ctx = new VWidgetMessageEvent.Context(this, type, content);
-        for (VWidget<?> widget : app.getWidgets()) widget.fireEvent("widget-message", ctx);
-    }
-
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
-    public void show() {
-        setVisible(true);
-    }
-
-    public void hide() {
-        setVisible(false);
-    }
-
-    public void registerEventExecutor(String event, VEvent executor) {
-        eventExecutors.computeIfAbsent(event, k -> new ArrayList<>()).add(executor);
-    }
-
-    public void registerEventExecutor(String event, Runnable runnable) {
-        registerEventExecutor(event, args -> runnable.run());
-    }
-
-    public void fireEvent(String event, Object... args) {
-        handleBuiltinEvent(event, args);
-
-        if (!eventExecutors.containsKey(event)) return;
-        eventExecutors.get(event).parallelStream().forEach(e -> e.run(args));
-    }
-
-    public void clearEvents() {
-        eventExecutors.clear();
-    }
-
-    public void clearEventsFor(String event) {
-        // IDE said I don't need a containsKey check
-        eventExecutors.remove(event);
-    }
-
+    @Override
     public void handleBuiltinEvent(String event, Object... args) {
+        StyleState state = createStyleState();
+        if (state != prevStyleState) update();
+        prevStyleState = state;
+
         switch (event) {
             case "left-click" -> {
-                if (shouldFocusOnClick()) {
+                if (focusOnClick) {
                     setFocused(true);
                 }
                 leftClickDown = true;
@@ -364,74 +282,29 @@ public abstract class VWidget<T extends VWidget<T>> {
             case "right-click-release" -> clearRightClickDown();
             case "middle-click-release" -> clearMiddleClickDown();
 
-            case "mouse-move" -> {
-                if (leftClickDown) {
-                    int newX = (int) args[0];
-                    int newY = (int) args[1];
-                    if (leftDragPreviousX != -1 || leftDragPreviousY != -1) fireEvent("mouse-drag-left", leftDragPreviousX, leftDragPreviousY, newX, newY);
-
-                    leftDragPreviousX = newX;
-                    leftDragPreviousY = newY;
-                } else if (rightClickDown) {
-                    int newX = (int) args[0];
-                    int newY = (int) args[1];
-
-                    if (rightDragPreviousX != -1 || rightDragPreviousY != -1) fireEvent("mouse-drag-right", rightDragPreviousX, rightDragPreviousY, newX, newY);
-
-                    rightDragPreviousX = newX;
-                    rightDragPreviousY = newY;
-                } else if (middleClickDown) {
-                    int newX = (int) args[0];
-                    int newY = (int) args[1];
-
-                    if (middleDragPreviousX != -1 || middleDragPreviousY != -1) fireEvent("mouse-drag-middle", middleDragPreviousX, middleDragPreviousY, newX, newY);
-
-                    middleDragPreviousX = newX;
-                    middleDragPreviousY = newY;
-                }
-            }
-
-            case "hover" -> {
-                cursorBeforeHover = app.getCursorShape();
-                app.setCursorShape(hoverCursor);
-            }
-
+            case "hover" -> app.setCursorShape(getStyle("cursor", state));
             case "hover-leave" -> {
                 clearLeftClickDown();
                 clearRightClickDown();
                 clearMiddleClickDown();
-
-                if (cursorBeforeHover == null) break;
-
-                app.setCursorShape(cursorBeforeHover);
             }
         }
+
+        state = createStyleState();
+        if (state != prevStyleState) update();
+        prevStyleState = state;
     }
 
     private void clearLeftClickDown() {
         leftClickDown = false;
-        leftDragPreviousX = -1;
-        leftDragPreviousY = -1;
     }
 
     private void clearRightClickDown() {
         rightClickDown = false;
-        rightDragPreviousX = -1;
-        rightDragPreviousY = -1;
     }
 
     private void clearMiddleClickDown() {
         middleClickDown = false;
-        middleDragPreviousX = -1;
-        middleDragPreviousY = -1;
-    }
-
-    public VCursorShape getHoverCursor() {
-        return hoverCursor;
-    }
-
-    public void setHoverCursor(@Nullable VCursorShape hoverCursor) {
-        this.hoverCursor = hoverCursor == null ? VCursorShape.DEFAULT : hoverCursor;
     }
 
     public boolean isFocused() {
@@ -443,14 +316,6 @@ public abstract class VWidget<T extends VWidget<T>> {
         else app.setFocusedWidget(null);
     }
 
-    public boolean shouldFocusOnClick() {
-        return focusOnClick;
-    }
-
-    public void setFocusOnClick(boolean focus) {
-        focusOnClick = focus;
-    }
-
     public void keyPressed(int keyCode, int scanCode, int modifiers) {}
 
     public void charTyped(char chr, int modifiers) {}
@@ -459,16 +324,21 @@ public abstract class VWidget<T extends VWidget<T>> {
         app.removeWidget(this);
     }
 
+    public T alsoAddClass(String clazz) {
+        classes.add(clazz);
+        return (T) this;
+    }
+
     public T alsoAdd() {
         app.addWidget(this);
         return (T) this;
     }
 
-    public void addVisibilityCondition(Supplier<Boolean> condition) {
-        visibilityConditions.add(condition);
-    }
+    @Override
+    public T alsoAddTo(VLayout layout) {
+        super.alsoAddTo(layout);
+        alsoAdd();
 
-    public boolean visibilityConditionsPassed() {
-        return visibilityConditions.parallelStream().allMatch(Supplier::get);
+        return (T) this;
     }
 }

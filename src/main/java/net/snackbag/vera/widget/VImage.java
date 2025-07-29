@@ -3,32 +3,25 @@ package net.snackbag.vera.widget;
 import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.style.StyleState;
 
 public class VImage extends VWidget<VImage> {
-    private Identifier path;
-
-    public VImage(Identifier path, int width, int height, VeraApp app) {
+    public VImage(Identifier src, int width, int height, VeraApp app) {
         super(0, 0, width, height, app);
 
-        this.path = path;
+        setStyle("src", src);
         this.focusOnClick = false;
     }
 
-    public Identifier getPath() {
-        return path;
-    }
-
-    public void setPath(Identifier path) {
-        this.path = path;
-    }
-
-    public void setPath(String path) {
-        setPath(new Identifier(path));
+    public VImage(String src, int width, int height, VeraApp app) {
+        this(new Identifier(src), width, height, app);
     }
 
     @Override
     public void render() {
-        VeraApp app = getApp();
-        Vera.renderer.drawImage(app, x, y, width, height, rotation, path);
+        StyleState state = createStyleState();
+        Identifier src = getStyle("src", state);
+
+        Vera.renderer.drawImage(app, getX(), getY(), width, height, rotation, src);
     }
 }

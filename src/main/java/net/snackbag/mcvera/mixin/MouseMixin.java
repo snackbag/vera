@@ -3,6 +3,11 @@ package net.snackbag.mcvera.mixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
 import net.snackbag.vera.Vera;
+import net.snackbag.vera.core.VCursorShape;
+import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.event.Events;
+import net.snackbag.vera.util.DragHandler;
+import net.snackbag.vera.widget.VWidget;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,12 +28,19 @@ public abstract class MouseMixin {
 
         double scaleFactor = client.getWindow().getScaleFactor();
 
-        int scaledX = (int) (fx / scaleFactor);
-        int scaledY = (int) (fy / scaleFactor);
+        int mouseX = (int) (fx / scaleFactor);
+        int mouseY = (int) (fy / scaleFactor);
 
-        Vera.forHoveredWidget(scaledX, scaledY, (widget) -> {
-            widget.fireEvent("mouse-move", scaledX, scaledY);
+        VeraApp top = Vera.getTopHierarchyApp();
+        Vera.forAllVisibleApps(app -> {
+            if (app.isRequiresHierarchy() && app != top) return;
+
+            VWidget<?> widget = app.getTopWidgetAt(mouseX, mouseY);
+            if (widget != null) widget.events.fire(Events.Widget.MOUSE_MOVE, mouseX, mouseY);
+            else if (app.getCursorShape() != VCursorShape.DEFAULT) app.setCursorShape(VCursorShape.DEFAULT);
         });
+
+        DragHandler.move();
     }
 
     @Inject(method = "onFilesDropped", at = @At("HEAD"))
