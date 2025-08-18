@@ -45,7 +45,8 @@ public class AnimationEngine {
     public void update() {
         final long time = System.currentTimeMillis();
 
-        for (VAnimation animation : activeAnimations.keySet()) {
+        HashMap<VAnimation, Long> animations = (HashMap<VAnimation, Long>) activeAnimations.clone();
+        for (VAnimation animation : animations.keySet()) {
             if (time - getTimeSinceActive(animation) >= animation.getTotalTime() - animation.unwindTime) {
                 unwind(animation);
             }
