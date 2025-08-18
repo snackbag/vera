@@ -73,9 +73,16 @@ public class AnimationEngine {
     }
 
     public void kill(VAnimation animation) {
-        activeAnimations.remove(animation);
-        unwindingAnimations.remove(animation);
-        rewindingAnimations.remove(animation);
+        Long begin = activeAnimations.remove(animation);
+        UnwindContext unwindCtx = unwindingAnimations.remove(animation);
+        RewindContext rewindCtx = rewindingAnimations.remove(animation);
+
+        Long unwindBegun = unwindCtx != null ? unwindCtx.begun : null;
+        Long rewindBegun = rewindCtx != null ? rewindCtx.begun : null;
+
+        Long nullableBegun = Vera.firstOf(Objects::nonNull, begin, unwindBegun, rewindBegun);
+
+        if (nullableBegun != null) widget.events.fire(Events.Animation.FINISH, animation, nullableBegun);
     }
 
     public void unwind(VAnimation animation) {
