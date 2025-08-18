@@ -61,6 +61,7 @@ public class AnimationEngine {
     public void activate(VAnimation animation, boolean override) {
         if (!override && isActive(animation.name)) return;
         activeAnimations.put(animation, System.currentTimeMillis());
+        widget.events.fire(Events.Animation.BEGIN, animation);
     }
 
     public void activateOrRewind(VAnimation animation) {
