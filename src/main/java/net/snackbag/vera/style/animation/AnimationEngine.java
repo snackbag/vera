@@ -8,6 +8,7 @@ import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Per-widget handler for animations. This is after stylesheet.getKey, so there is no differentiation between
@@ -51,7 +52,8 @@ public class AnimationEngine {
                 unwind(animation);
             }
 
-            if (time - getTimeSinceActive(animation) >= animation.getTotalTime()) kill(animation);
+            if (time - getTimeSinceActive(animation) >= animation.getTotalTime() && animation.loopMode == LoopMode.NONE)
+                kill(animation);
         }
     }
 
