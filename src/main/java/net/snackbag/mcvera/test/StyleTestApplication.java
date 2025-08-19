@@ -42,8 +42,13 @@ public class StyleTestApplication extends VeraApp {
 
         VRect testRect = new VRect(VColor.black(), this).alsoAdd();
         testRect.onHover(() -> testRect.animations.activateOrRewind(hoverAnimation));
-        testRect.onHoverLeave(() -> testRect.animations.unwind(hoverAnimation));
-        //testRect.setStyle("background-color", StyleState.HOVERED, VColor.white());
+        testRect.onHoverLeave(() -> {
+            testRect.setStyle("background-color", StyleState.HOVERED, VColor.black());
+            testRect.animations.unwind(hoverAnimation);
+        });
+        testRect.onAnimationFinish((animation, time) -> {
+            testRect.setStyle("background-color", StyleState.HOVERED, VColor.white());
+        });
 
         testRect.setStyle("cursor", StyleState.HOVERED, VCursorShape.POINTING_HAND);
         testRect.setStyle("cursor", StyleState.CLICKED, VCursorShape.ALL_RESIZE);
