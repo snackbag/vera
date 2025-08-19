@@ -31,6 +31,7 @@ public abstract class VElement {
 
         this.events = new EventHandler(this);
         this.events.preprocessor = this::handleBuiltinEvent;
+        this.events.postprocessor = this::afterBuiltinEvent;
 
         addVisibilityCondition(() -> visible);
 
@@ -44,6 +45,7 @@ public abstract class VElement {
     }
 
     public void handleBuiltinEvent(String name, Object... args) {}
+    public void afterBuiltinEvent(String name, Object... args) {}
 
     //
     // Visibility
