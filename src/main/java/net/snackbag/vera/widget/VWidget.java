@@ -282,17 +282,27 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
             case Events.Widget.RIGHT_CLICK_RELEASE -> clearRightClickDown();
             case Events.Widget.MIDDLE_CLICK_RELEASE -> clearMiddleClickDown();
 
-            case Events.Widget.HOVER -> app.setCursorShape(getStyle("cursor", state));
             case Events.Widget.HOVER_LEAVE -> {
                 clearLeftClickDown();
                 clearRightClickDown();
                 clearMiddleClickDown();
             }
         }
+    }
 
-        state = createStyleState();
-        if (state != prevStyleState) update();
-        prevStyleState = state;
+    @Override
+    public void afterBuiltinEvent(String name, Object... args) {
+        updateIfNeeded();
+    }
+
+    private void updateIfNeeded() {
+        StyleState state = createStyleState();
+        if (state != prevStyleState) {
+            update();
+            prevStyleState = state;
+
+            System.out.println("updated");
+        }
     }
 
     private void clearLeftClickDown() {
