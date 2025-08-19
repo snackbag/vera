@@ -9,7 +9,9 @@ import java.util.List;
 
 public class EventHandler {
     public final VElement element;
-    public @Nullable PreProcessorContext preprocessor;
+
+    public @Nullable EventHandler.Processor preprocessor; // called before event stack execution
+    public @Nullable EventHandler.Processor postprocessor; // called after event stack execution
 
     private final HashMap<String, List<VEvent>> executors = new HashMap<>();
 
@@ -20,8 +22,17 @@ public class EventHandler {
     public void fire(String name, Object... args) {
         if (preprocessor != null) preprocessor.call(name, args);
 
-        if (!executors.containsKey(name)) return;
+        if (!executors.containsKey(name)) {
+            doPostProcessor(name, args);
+            return;
+        }
+
         executors.get(name).parallelStream().forEach(e -> e.run(args));
+        doPostProcessor(name, args);
+    }
+
+    private void doPostProcessor(String name, Object... args) {
+        if (postprocessor != null) postprocessor.call(name, args);
     }
 
     public void register(String name, VEvent executor) {
@@ -41,7 +52,7 @@ public class EventHandler {
     }
 
     @FunctionalInterface
-    public interface PreProcessorContext {
+    public interface Processor {
         void call(String name, Object[] args);
     }
 }
