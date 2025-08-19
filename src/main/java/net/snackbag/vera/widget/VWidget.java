@@ -268,22 +268,22 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         prevStyleState = state;
 
         switch (event) {
-            case "left-click" -> {
+            case Events.Widget.LEFT_CLICK -> {
                 if (focusOnClick) {
                     setFocused(true);
                 }
                 leftClickDown = true;
             }
 
-            case "right-click" -> rightClickDown = true;
-            case "middle-click" -> middleClickDown = true;
+            case Events.Widget.RIGHT_CLICK -> rightClickDown = true;
+            case Events.Widget.MIDDLE_CLICK -> middleClickDown = true;
 
-            case "left-click-release" -> clearLeftClickDown();
-            case "right-click-release" -> clearRightClickDown();
-            case "middle-click-release" -> clearMiddleClickDown();
+            case Events.Widget.LEFT_CLICK_RELEASE -> clearLeftClickDown();
+            case Events.Widget.RIGHT_CLICK_RELEASE -> clearRightClickDown();
+            case Events.Widget.MIDDLE_CLICK_RELEASE -> clearMiddleClickDown();
 
-            case "hover" -> app.setCursorShape(getStyle("cursor", state));
-            case "hover-leave" -> {
+            case Events.Widget.HOVER -> app.setCursorShape(getStyle("cursor", state));
+            case Events.Widget.HOVER_LEAVE -> {
                 clearLeftClickDown();
                 clearRightClickDown();
                 clearMiddleClickDown();
