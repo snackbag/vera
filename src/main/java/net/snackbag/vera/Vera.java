@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class Vera {
     public static final MCVeraProvider provider = new MCVeraProvider();
@@ -90,5 +91,15 @@ public class Vera {
 
     public static boolean isTopHierarchy(VeraApp app) {
         return getTopHierarchyApp() == app;
+    }
+
+    @SafeVarargs
+    public static <T> @Nullable T firstOf(Predicate<? super T> evaluator, T... values) {
+        for (T v : values) {
+            if (v == null) continue;
+            if (evaluator.test(v)) return v;
+        }
+
+        return null;
     }
 }
