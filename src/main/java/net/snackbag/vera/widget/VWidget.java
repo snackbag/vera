@@ -263,10 +263,6 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
     @Override
     public void handleBuiltinEvent(String event, Object... args) {
-        StyleState state = createStyleState();
-        if (state != prevStyleState) update();
-        prevStyleState = state;
-
         switch (event) {
             case Events.Widget.LEFT_CLICK -> {
                 if (focusOnClick) {
