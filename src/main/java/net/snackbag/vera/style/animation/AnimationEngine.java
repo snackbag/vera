@@ -53,7 +53,9 @@ public class AnimationEngine {
             }
 
             if (time - getTimeSinceActive(animation) >= animation.getTotalTime() && animation.loopMode == LoopMode.NONE)
+                widget.events.fire(Events.Animation.FINISH, animation, getTimeSinceActive(animation));
                 kill(animation);
+            }
         }
     }
 
