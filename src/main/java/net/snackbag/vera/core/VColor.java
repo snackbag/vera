@@ -200,6 +200,16 @@ public class VColor {
             return this;
         }
 
+        public ColorModifier all(int all) {
+            rgb(all, all, all);
+            return this;
+        }
+
+        public ColorModifier rgb(VColor color) {
+            rgba(color.red, color.green, color.blue, color.opacity);
+            return this;
+        }
+
         public ColorModifier red(int r) {
             color = color.withRed(r);
             colorUpdater.accept(color);
