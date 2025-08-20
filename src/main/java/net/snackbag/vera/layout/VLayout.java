@@ -4,6 +4,7 @@ import net.snackbag.vera.VElement;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.Events;
+import net.snackbag.vera.flag.VLayoutAlignmentFlag;
 import org.joml.Vector2i;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 
 public abstract class VLayout extends VElement {
     protected final List<VElement> elements = new ArrayList<>();
+    public VLayoutAlignmentFlag alignment = VLayoutAlignmentFlag.START;
 
     /**
      * ID for the last position cache call. To be compared with the current render cache ID
