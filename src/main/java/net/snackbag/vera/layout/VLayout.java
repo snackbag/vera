@@ -34,7 +34,7 @@ public abstract class VLayout extends VElement {
 
     @Override
     public int getHeight() {
-        return height < 0 ? calculateElementsHeight() : Math.min(calculateElementsHeight(), height);
+        return height < 0 ? calculateElementsHeight() : height;
     }
 
     public Vector2i posOf(VElement elem) {
