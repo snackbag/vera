@@ -45,18 +45,6 @@ public class VLabel extends VWidget<VLabel> implements VHasFont {
         return height + padding.get1() + padding.get2();
     }
 
-    @Override
-    public int getEffectiveX() {
-        V4Int padding = getStyle("padding", createStyleState());
-        return getX() - padding.get4();
-    }
-
-    @Override
-    public int getEffectiveY() {
-        V4Int padding = getStyle("padding", createStyleState());
-        return getY() - padding.get1();
-    }
-
     public VHAlignmentFlag getAlignment() {
         return alignment;
     }
@@ -89,27 +77,23 @@ public class VLabel extends VWidget<VLabel> implements VHasFont {
         VColor backgroundColor = getStyle("background-color", state);
         V4Int padding = getStyle("padding", state);
 
-        int x = getX();
-        int y = getY();
-
         Vera.renderer.drawRect(
                 app,
-                getEffectiveX(),
-                getEffectiveY(),
+                getX(),
+                getY(),
                 getEffectiveWidth(),
                 getEffectiveHeight(),
                 rotation,
                 backgroundColor
         );
 
+        int usualX = getX() + padding.get3();
+        int usualY = getY() + padding.get1();
+
         switch (alignment) {
-            case LEFT -> Vera.renderer.drawText(app, x, y, rotation, text, font);
-            case CENTER -> {
-                int textWidth = Vera.provider.getTextWidth(text, font);
-                int centerX = getHitboxX() + (getHitboxWidth() - textWidth) / 2;
-                Vera.renderer.drawText(app, centerX, y, rotation, text, font);
-            }
-            case RIGHT -> Vera.renderer.drawText(app, getHitboxX() + getHitboxWidth() - padding.get4() - Vera.provider.getTextWidth(text, font), y, rotation, text, font);
+            case LEFT -> Vera.renderer.drawText(app, usualX, usualY, rotation, text, font);
+            case CENTER -> Vera.renderer.drawText(app, getX() + getWidth() / 2 - Vera.provider.getTextWidth(text, font) / 2, usualY, rotation, text, font);
+            case RIGHT -> Vera.renderer.drawText(app, getX() + getEffectiveWidth() - padding.get4() - Vera.provider.getTextWidth(text, font), usualY, rotation, text, font);
         }
     }
 }
