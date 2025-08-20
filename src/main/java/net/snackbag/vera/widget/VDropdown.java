@@ -16,6 +16,7 @@ import java.util.List;
 // TODO: Rewrite VDropdown from scratch
 // 16/7/2025 jesus christ what a shitty thing. dont even bother making this work nice.
 //           rewrite scheduled for once we have VCompound
+// 20/8/2025 oh my
 public class VDropdown extends VWidget<VDropdown> implements VHasFont {
     private final List<Item> items;
     public VFont itemHoverFont;
