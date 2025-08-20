@@ -296,8 +296,6 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         if (state != prevStyleState) {
             update();
             prevStyleState = state;
-
-            System.out.println("updated");
         }
     }
 
