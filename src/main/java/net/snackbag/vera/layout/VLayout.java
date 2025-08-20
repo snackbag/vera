@@ -57,7 +57,7 @@ public abstract class VLayout extends VElement {
     public abstract void rebuild();
 
     public int calculateElementsHeight() {
-        return elements.parallelStream()
+        return elements.stream()
                 .mapToInt(VElement::getHeight)
                 .sum();
     }
