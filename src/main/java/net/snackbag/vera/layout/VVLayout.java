@@ -29,7 +29,7 @@ public class VVLayout extends VLayout {
         for (VElement elem : elements) {
             cache.put(elem, new Vector2i(getX(), y));
 
-            y += elem.getHeight();
+            y += elem.getEffectiveHeight();
         }
     }
 

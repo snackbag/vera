@@ -58,13 +58,13 @@ public abstract class VLayout extends VElement {
 
     public int calculateElementsHeight() {
         return elements.stream()
-                .mapToInt(VElement::getHeight)
+                .mapToInt(VElement::getEffectiveHeight)
                 .sum();
     }
 
     public int calculateElementsWidth() {
         return elements.stream()
-                .mapToInt(VElement::getWidth)
+                .mapToInt(VElement::getEffectiveWidth)
                 .max().orElse(1);
     }
 
