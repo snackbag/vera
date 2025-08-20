@@ -27,10 +27,10 @@ public abstract class VLayout extends VElement {
         super(app, x, y, width, height);
     }
 
-//    @Override
-//    public int getWidth() {
-//        return width < 0 ? calculateElementsWidth() : Math.min(calculateElementsWidth(), width);
-//    }
+    @Override
+    public int getWidth() {
+        return width < 0 ? calculateElementsWidth() : width;
+    }
 
     @Override
     public int getHeight() {
@@ -60,6 +60,12 @@ public abstract class VLayout extends VElement {
         return elements.parallelStream()
                 .mapToInt(VElement::getHeight)
                 .sum();
+    }
+
+    public int calculateElementsWidth() {
+        return elements.stream()
+                .mapToInt(VElement::getWidth)
+                .max().orElse(1);
     }
 
     public void addElement(VElement elem) {
