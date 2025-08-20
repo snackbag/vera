@@ -46,10 +46,10 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
         Vera.renderer.drawRect(
                 app,
-                getHitboxX() + app.getX(),
-                getHitboxY() + app.getY(),
-                getHitboxWidth(),
-                getHitboxHeight(),
+                getEffectiveX() + app.getX(),
+                getEffectiveY() + app.getY(),
+                getEffectiveWidth(),
+                getEffectiveHeight(),
                 rotation,
                 backgroundColor
         );
@@ -395,7 +395,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     }
 
     @Override
-    public int getHitboxWidth() {
+    public int getEffectiveWidth() {
         StyleState state = createStyleState();
 
         VFont font = getStyle("font", state);
@@ -405,7 +405,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     }
 
     @Override
-    public int getHitboxHeight() {
+    public int getEffectiveHeight() {
         StyleState state = createStyleState();
 
         VFont font = getStyle("font", state);
@@ -416,13 +416,13 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
 
     @Override
-    public int getHitboxX() {
+    public int getEffectiveX() {
         V4Int padding = getStyle("padding", createStyleState());
         return getX() - padding.get4();
     }
 
     @Override
-    public int getHitboxY() {
+    public int getEffectiveY() {
         V4Int padding = getStyle("padding", createStyleState());
         return getY() - padding.get1();
     }

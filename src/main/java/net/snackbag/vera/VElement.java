@@ -99,6 +99,14 @@ public abstract class VElement {
         return layout != null ? layout.posOf(this).y : _y;
     }
 
+    public int getEffectiveX() {
+        return getX();
+    }
+
+    public int getEffectiveY() {
+        return getY();
+    }
+
     public void move(int both) {
         move(both, both);
     }
@@ -114,6 +122,14 @@ public abstract class VElement {
 
     public int getHeight() {
         return height;
+    }
+
+    public int getEffectiveWidth() {
+        return getWidth();
+    }
+
+    public int getEffectiveHeight() {
+        return getHeight();
     }
 
     public void setWidth(int width) {

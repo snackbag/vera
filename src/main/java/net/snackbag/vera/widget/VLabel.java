@@ -34,25 +34,25 @@ public class VLabel extends VWidget<VLabel> implements VHasFont {
     }
 
     @Override
-    public int getHitboxWidth() {
+    public int getEffectiveWidth() {
         V4Int padding = getStyle("padding", createStyleState());
         return width + padding.get3() + padding.get4();
     }
 
     @Override
-    public int getHitboxHeight() {
+    public int getEffectiveHeight() {
         V4Int padding = getStyle("padding", createStyleState());
         return height + padding.get1() + padding.get2();
     }
 
     @Override
-    public int getHitboxX() {
+    public int getEffectiveX() {
         V4Int padding = getStyle("padding", createStyleState());
         return getX() - padding.get4();
     }
 
     @Override
-    public int getHitboxY() {
+    public int getEffectiveY() {
         V4Int padding = getStyle("padding", createStyleState());
         return getY() - padding.get1();
     }
@@ -94,10 +94,10 @@ public class VLabel extends VWidget<VLabel> implements VHasFont {
 
         Vera.renderer.drawRect(
                 app,
-                getHitboxX(),
-                getHitboxY(),
-                getHitboxWidth(),
-                getHitboxHeight(),
+                getEffectiveX(),
+                getEffectiveY(),
+                getEffectiveWidth(),
+                getEffectiveHeight(),
                 rotation,
                 backgroundColor
         );

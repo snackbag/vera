@@ -44,7 +44,7 @@ public class VDropdown extends VWidget<VDropdown> implements VHasFont {
         int y = getY();
 
         Vera.renderer.drawRect(
-                app, getHitboxX(), getHitboxY(), getHitboxWidth(), getHitboxHeight(),
+                app, getEffectiveX(), getEffectiveY(), getEffectiveWidth(), getEffectiveHeight(),
                 0, backgroundColor
         );
 
@@ -59,9 +59,9 @@ public class VDropdown extends VWidget<VDropdown> implements VHasFont {
                 if (isHovered) {
                     Vera.renderer.drawRect(
                             app,
-                            getHitboxX(),
+                            getEffectiveX(),
                             y + (i * (itemSpacing + font.getSize() / 2)),
-                            getHitboxWidth(),
+                            getEffectiveWidth(),
                             font.getSize() / 2 + itemSpacing,
                             0, itemHoverColor
                     );
@@ -104,25 +104,25 @@ public class VDropdown extends VWidget<VDropdown> implements VHasFont {
     }
 
     @Override
-    public int getHitboxX() {
+    public int getEffectiveX() {
         V4Int padding = getStyle("padding", createStyleState());
         return getX() - padding.get3();
     }
 
     @Override
-    public int getHitboxY() {
+    public int getEffectiveY() {
         V4Int padding = getStyle("padding", createStyleState());
         return getY() - padding.get1();
     }
 
     @Override
-    public int getHitboxWidth() {
+    public int getEffectiveWidth() {
         V4Int padding = getStyle("padding", createStyleState());
         return width + padding.get3() + padding.get4();
     }
 
     @Override
-    public int getHitboxHeight() {
+    public int getEffectiveHeight() {
         StyleState state = createStyleState();
 
         VFont font = getStyle("font", state);

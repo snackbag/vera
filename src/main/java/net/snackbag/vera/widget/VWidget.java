@@ -38,19 +38,19 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public abstract void render();
 
     public int getHitboxX() {
-        return getX();
+        return getEffectiveX();
     }
 
     public int getHitboxY() {
-        return getY();
+        return getEffectiveY();
     }
 
     public int getHitboxWidth() {
-        return getWidth();
+        return getEffectiveWidth();
     }
 
     public int getHitboxHeight() {
-        return getHeight();
+        return getEffectiveHeight();
     }
 
     @SuppressWarnings("unchecked")
@@ -109,27 +109,27 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         V4Int borderSize = getStyle("border-size", state);
 
         // Top
-        Vera.renderer.drawRect(app, getHitboxX(), getHitboxY() - borderSize.get1(), getHitboxWidth(), borderSize.get1(), 0, borderColor.get1());
+        Vera.renderer.drawRect(app, getEffectiveX(), getEffectiveY() - borderSize.get1(), getEffectiveWidth(), borderSize.get1(), 0, borderColor.get1());
         if (borderSize.get3() > 0) {
-            Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY() - borderSize.get1(), borderSize.get3(), borderSize.get1(), 0, borderColor.get1());
+            Vera.renderer.drawRect(app, getEffectiveX() - borderSize.get3(), getEffectiveY() - borderSize.get1(), borderSize.get3(), borderSize.get1(), 0, borderColor.get1());
         }
 
         // Bottom
-        Vera.renderer.drawRect(app, getHitboxX(), getHitboxY() + getHitboxHeight(), getHitboxWidth(), borderSize.get2(), 0, borderColor.get2());
+        Vera.renderer.drawRect(app, getEffectiveX(), getEffectiveY() + getEffectiveHeight(), getEffectiveWidth(), borderSize.get2(), 0, borderColor.get2());
         if (borderSize.get4() > 0) {
-            Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY() + getHitboxHeight(), borderSize.get4(), borderSize.get2(), 0, borderColor.get2());
+            Vera.renderer.drawRect(app, getEffectiveX() + getEffectiveWidth(), getEffectiveY() + getEffectiveHeight(), borderSize.get4(), borderSize.get2(), 0, borderColor.get2());
         }
 
         // Left
-        Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY(), borderSize.get3(), getHitboxHeight(), 0, borderColor.get3());
+        Vera.renderer.drawRect(app, getEffectiveX() - borderSize.get3(), getEffectiveY(), borderSize.get3(), getEffectiveHeight(), 0, borderColor.get3());
         if (borderSize.get2() > 0) {
-            Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY() + getHitboxHeight(), borderSize.get3(), borderSize.get2(), 0, borderColor.get3());
+            Vera.renderer.drawRect(app, getEffectiveX() - borderSize.get3(), getEffectiveY() + getEffectiveHeight(), borderSize.get3(), borderSize.get2(), 0, borderColor.get3());
         }
 
         // Right
-        Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY(), borderSize.get4(), getHitboxHeight(), 0, borderColor.get4());
+        Vera.renderer.drawRect(app, getEffectiveX() + getEffectiveWidth(), getEffectiveY(), borderSize.get4(), getEffectiveHeight(), 0, borderColor.get4());
         if (borderSize.get1() > 0) {
-            Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY() - borderSize.get1(), borderSize.get4(), borderSize.get1(), 0, borderColor.get4());
+            Vera.renderer.drawRect(app, getEffectiveX() + getEffectiveWidth(), getEffectiveY() - borderSize.get1(), borderSize.get4(), borderSize.get1(), 0, borderColor.get4());
         }
     }
 

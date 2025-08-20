@@ -46,7 +46,7 @@ public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
             Vera.renderer.drawRect(app,
                     x + marginX - itemSpacingLeft, y,
                     itemSpacingLeft + itemSpacingRight + textWidth,
-                    getHitboxHeight(), 0,
+                    getEffectiveHeight(), 0,
                     activeTab != null && activeTab == i ? selectedBackgroundColor: defaultBackgroundColor
             );
 
@@ -112,7 +112,7 @@ public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
         int itemSpacingLeft = getStyle("item-spacing-left", state);
         int itemSpacingRight = getStyle("item-spacing-right", state);
 
-        int relativeX = mouseX - getHitboxX();
+        int relativeX = mouseX - getEffectiveX();
         int currentX = 0;
         int index = 0;
 
@@ -198,12 +198,12 @@ public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
     }
 
     @Override
-    public int getHitboxHeight() {
+    public int getEffectiveHeight() {
         return ((VFont) getStyle("font", createStyleState())).getSize() / 2 + 4;
     }
 
     @Override
-    public int getHitboxWidth() {
+    public int getEffectiveWidth() {
         StyleState state = createStyleState();
 
         VFont font = getStyle("font", state);
