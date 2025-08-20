@@ -12,7 +12,7 @@ public class LabelStandardStyle implements VStandardStyle {
     public void apply(VStyleSheet sheet) {
         sheet.setKey(VLabel.class, "background-color", VColor.transparent());
         sheet.setKey(VLabel.class, "font", VFont.create());
-        sheet.setKey(VLabel.class, "padding", new V4Int(4));
+        sheet.setKey(VLabel.class, "padding", new V4Int(0));
     }
 
     @Override
