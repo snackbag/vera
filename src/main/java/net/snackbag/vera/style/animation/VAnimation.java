@@ -1,6 +1,7 @@
 package net.snackbag.vera.style.animation;
 
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.style.StyleState;
 import net.snackbag.vera.style.StyleValueType;
 import net.snackbag.vera.style.animation.easing.Easings;
 import net.snackbag.vera.style.animation.easing.VEasing;
@@ -28,19 +29,26 @@ public class VAnimation {
     public final boolean autoUnwindAtEnd;
     public final VEasing unwindEasing;
     public final LoopMode loopMode;
+    public final @Nullable StyleState writeFinalStateTarget;
 
     private final List<VKeyframe> keyframes = new ArrayList<>();
     protected final HashMap<String, Integer> styleAffections = new HashMap<>();
 
     private int totalTime = 0;
 
-    public VAnimation(String name, int unwindTime, boolean autoUnwindAtEnd, VEasing unwindEasing, LoopMode loopMode, VeraApp app) {
+    public VAnimation(
+            String name,
+            int unwindTime, boolean autoUnwindAtEnd, VEasing unwindEasing,
+            LoopMode loopMode, @Nullable StyleState writeFinalStateTarget,
+            VeraApp app
+    ) {
         this.name = name;
         this.unwindTime = unwindTime;
         this.autoUnwindAtEnd = autoUnwindAtEnd;
         this.unwindEasing = unwindEasing;
         this.totalTime = unwindTime;
         this.loopMode = loopMode;
+        this.writeFinalStateTarget = writeFinalStateTarget;
 
         this.app = app;
     }
@@ -102,6 +110,17 @@ public class VAnimation {
         return (T) StyleValueType.convert(pair.getB(), pair.getA());
     }
 
+    public HashMap<String, Object> getFinalStyles() {
+        HashMap<String, Object> finalStyles = new HashMap<>();
+
+        if (keyframes.isEmpty()) return finalStyles;
+        for (String style : styleAffections.keySet()) {
+            finalStyles.put(style, getStyleForKeyframeDeep(keyframes.size() - 1, style));
+        }
+
+        return finalStyles;
+    }
+
     public int getTotalTime() {
         return totalTime;
     }
@@ -126,6 +145,7 @@ public class VAnimation {
         private final VeraApp app;
 
         private LoopMode loopMode = LoopMode.NONE;
+        private @Nullable StyleState keepFinalStyle = null;
         private int unwindTime = 0;
         private boolean autoUnwindAtEnd = false;
         private VEasing unwindEasing = Easings.LINEAR;
@@ -157,13 +177,18 @@ public class VAnimation {
             return this;
         }
 
+        public Builder keepFinalStyle(StyleState writeTo) {
+            this.keepFinalStyle = writeTo;
+            return this;
+        }
+
         public Builder keyframe(int transitionMs, Consumer<VKeyframe> frame, int stayMs) {
             keyframes.add(new Pair<>(new VKeyframe(transitionMs, stayMs), frame));
             return this;
         }
 
         public VAnimation build() {
-            VAnimation animation = new VAnimation(name, unwindTime, autoUnwindAtEnd, unwindEasing, loopMode, app);
+            VAnimation animation = new VAnimation(name, unwindTime, autoUnwindAtEnd, unwindEasing, loopMode, keepFinalStyle, app);
 
             for (Pair<VKeyframe, Consumer<VKeyframe>> frame : keyframes) {
                 animation.addKeyframe(frame.getA());

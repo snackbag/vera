@@ -54,6 +54,14 @@ public class AnimationEngine {
 
             if (time - getTimeSinceActive(animation) >= animation.getTotalTime() && animation.loopMode == LoopMode.NONE) {
                 widget.events.fire(Events.Animation.FINISH, animation, getTimeSinceActive(animation));
+
+                if (animation.writeFinalStateTarget != null) {
+                    HashMap<String, Object> finalStyles = animation.getFinalStyles();
+                    for (String key : finalStyles.keySet()) {
+                        widget.setStyle(key, animation.writeFinalStateTarget, finalStyles.get(key));
+                    }
+                }
+
                 kill(animation);
             }
         }
