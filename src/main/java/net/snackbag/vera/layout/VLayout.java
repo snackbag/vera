@@ -41,7 +41,7 @@ public abstract class VLayout extends VElement {
         checkCache();
 
         if (!cache.containsKey(elem)) throw new RuntimeException("Layout cache does not contain requested element '%s'".formatted(elem.toString()));
-        return cache.get(elem);
+        return applyAlignment(cache.get(elem));
     }
 
     private void checkCache() {
@@ -53,6 +53,7 @@ public abstract class VLayout extends VElement {
         }
     }
 
+    protected abstract Vector2i applyAlignment(Vector2i original);
     public abstract void rebuild();
 
     public int calculateElementsHeight() {
