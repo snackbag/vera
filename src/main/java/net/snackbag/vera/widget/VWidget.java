@@ -136,7 +136,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public void renderOverlay() {
         StyleState state = createStyleState();
 
-        Vera.renderer.drawRect(app, getX(), getY(), width, height, 0, getStyle("overlay", state));
+        Vera.renderer.drawRect(app, getEffectiveX(), getEffectiveY(), getEffectiveWidth(), getEffectiveHeight(), 0, getStyle("overlay", state));
     }
 
     public boolean isLeftClickDown() {
