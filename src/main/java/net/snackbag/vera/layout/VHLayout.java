@@ -32,4 +32,13 @@ public class VHLayout extends VLayout {
             x += elem.getWidth();
         }
     }
+
+    @Override
+    protected Vector2i applyAlignment(Vector2i original) {
+        return switch (alignment) {
+            case START -> original;
+            case CENTER -> new Vector2i(getWidth() / 2 - calculateElementsWidth() / 2 + original.x, original.y);
+            case END -> new Vector2i(getWidth() - calculateElementsWidth() + original.x, original.y);
+        };
+    }
 }
