@@ -37,7 +37,7 @@ public class VVLayout extends VLayout {
     protected Vector2i applyAlignment(Vector2i original) {
         return switch (alignment) {
             case START -> original;
-            case CENTER -> new Vector2i(original.x, getHeight() / 2 - calculateElementsHeight() / 2 + original.y / 2);
+            case CENTER -> new Vector2i(original.x, getHeight() / 2 - calculateElementsHeight() / 2 + original.y);
             case END -> new Vector2i(original.x, getHeight() - calculateElementsHeight() + original.y);
         };
     }
