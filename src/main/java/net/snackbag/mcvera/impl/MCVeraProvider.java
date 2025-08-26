@@ -21,11 +21,6 @@ public class MCVeraProvider {
         Vera.registrar.applyStandardWidgetStyles(app.styleSheet);
         MinecraftClient.getInstance().send(app::init);
         MinecraftClient.getInstance().send(app::update);
-
-        app.addShortcut(new VShortcut(app, "LeftCtrl+LeftAlt+LeftShift+D", () -> {
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of("Debug mode enabled"));
-            MCVeraData.debugApps.add(app);
-        }, false));
     }
 
     public void handleAppShow(VeraApp app) {
