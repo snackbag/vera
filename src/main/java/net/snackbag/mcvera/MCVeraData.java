@@ -14,7 +14,6 @@ public class MCVeraData {
     public static List<VeraApp> appHierarchy = new ArrayList<>();
 
     public static int appsWithMouseRequired = 0;
-    public static final Set<VeraApp> debugApps = new HashSet<>();
 
     public static final List<Integer> pressedKeys = new ArrayList<>();
     public static List<Integer> previousPressedKeys = new ArrayList<>();
