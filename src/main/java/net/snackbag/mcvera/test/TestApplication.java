@@ -22,7 +22,7 @@ public class TestApplication extends VeraApp {
 
     @Override
     public void init() {
-        VShortcut exit = new VShortcut(this, "escape", () -> {
+        new VShortcut(this, "escape", () -> {
             if (hasFocusedWidget()) {
                 setFocusedWidget(null);
                 return;
@@ -31,12 +31,9 @@ public class TestApplication extends VeraApp {
             this.hide();
         });
 
-        VShortcut changeMouseRequired = new VShortcut(this, "leftalt+m", () -> {
+        new VShortcut(this, "leftalt+m", () -> {
             setMouseRequired(!isMouseRequired());
         });
-
-        addShortcut(exit);
-        addShortcut(changeMouseRequired);
 
         VLineInput input = new VLineInput(this).alsoAdd();
         input.setMaxChars(15);

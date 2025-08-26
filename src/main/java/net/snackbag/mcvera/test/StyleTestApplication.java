@@ -33,7 +33,7 @@ public class StyleTestApplication extends VeraApp {
 
     @Override
     public void init() {
-        new VShortcut(this, "escape", this::hide).alsoAdd();
+        new VShortcut(this, "escape", this::hide);
 
         mergeStyleSheet(createStyleSheet());
 
@@ -50,10 +50,10 @@ public class StyleTestApplication extends VeraApp {
 
         testRect.onMouseDragLeft((ctx) -> testRect.move(testRect.getX() + ctx.moveX(), testRect.getY() + ctx.moveY()));
 
-        new VShortcut(this, "a", () -> testRect.animations.activate(testAnimation)).alsoAdd();
-        new VShortcut(this, "u", () -> testRect.animations.unwind(testAnimation)).alsoAdd();
-        new VShortcut(this, "r", () -> testRect.animations.rewind(testAnimation)).alsoAdd();
-        new VShortcut(this, "k", () -> testRect.animations.kill(testAnimation)).alsoAdd();
+        new VShortcut(this, "a", () -> testRect.animations.activate(testAnimation));
+        new VShortcut(this, "u", () -> testRect.animations.unwind(testAnimation));
+        new VShortcut(this, "r", () -> testRect.animations.rewind(testAnimation));
+        new VShortcut(this, "k", () -> testRect.animations.kill(testAnimation));
     }
 
     public VStyleSheet createStyleSheet() {

@@ -12,7 +12,7 @@ public class LayoutTestApplication extends VeraApp {
 
     @Override
     public void init() {
-        new VShortcut(this, "escape", this::hide).alsoAdd();
+        new VShortcut(this, "escape", this::hide);
 
         VLayout layout = new VVLayout(this, 0, 0);
         new VLabel("I'm a test", this).alsoAddTo(layout);
