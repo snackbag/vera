@@ -3,6 +3,7 @@ package net.snackbag.vera.event;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VeraApp;
 import org.apache.commons.lang3.SystemUtils;
+import org.jetbrains.annotations.ApiStatus;
 
 public class VShortcut {
     public final VeraApp app;
@@ -19,6 +20,8 @@ public class VShortcut {
         this.combination = combination.toLowerCase().replace(" ", "");
         this.event = event;
         this.transformOSX = transformOSX;
+
+        this.app.addShortcut(this);
     }
 
     public String getCombination() {
@@ -45,6 +48,12 @@ public class VShortcut {
         Vera.provider.handleRunShortcut(this);
     }
 
+    /**
+     * Deprecated since version 1.10, will be removed in 1.11. No longer needed since the app now already receives the
+     * shortcut on shortcut initialization.
+     */
+    @Deprecated(forRemoval = true, since = "1.10")
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.11")
     public VShortcut alsoAdd() {
         app.addShortcut(this);
         return this;
