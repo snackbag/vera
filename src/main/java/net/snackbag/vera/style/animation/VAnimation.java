@@ -46,7 +46,7 @@ public class VAnimation {
         this.unwindTime = unwindTime;
         this.autoUnwindAtEnd = autoUnwindAtEnd;
         this.unwindEasing = unwindEasing;
-        this.totalTime = unwindTime;
+        this.totalTime = autoUnwindAtEnd ? unwindTime : 0;
         this.loopMode = loopMode;
         this.writeFinalStateTarget = writeFinalStateTarget;
 

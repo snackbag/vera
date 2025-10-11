@@ -48,7 +48,7 @@ public class AnimationEngine {
 
         HashMap<VAnimation, Long> animations = (HashMap<VAnimation, Long>) activeAnimations.clone();
         for (VAnimation animation : animations.keySet()) {
-            if (time - getTimeSinceActive(animation) >= animation.getTotalTime() - animation.unwindTime) {
+            if ((time - getTimeSinceActive(animation) >= animation.getTotalTime() - animation.unwindTime) && animation.autoUnwindAtEnd) {
                 unwind(animation);
             }
 
