@@ -8,10 +8,7 @@ import net.snackbag.vera.style.animation.easing.VEasing;
 import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -22,6 +19,8 @@ import java.util.function.Consumer;
  * generates a new instance of the animation for each target app.
  */
 public class VAnimation {
+    public static final String INTERNAL_TRANSITION_ANIMATION_NAME = "vera-transition";
+
     public final String name;
     public final VeraApp app;
 
