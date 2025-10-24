@@ -36,3 +36,6 @@ Vera is a simple yet powerful Fabric UI library. There are currently no plans fo
 - More precise font options
 - Vertex & fragment shaders
 - Revised rendering API
+- Double buffer rendering
+- Vanilla-UI abilities
+- Widget Compounds
