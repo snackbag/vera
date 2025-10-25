@@ -135,6 +135,41 @@ public class VAnimation {
         return Objects.hash(name, app);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<VAnimation:" + name + "> (" + totalTime + "ms) {");
+        builder.append("\n");
+
+        for (VKeyframe frame : keyframes) {
+            builder.append("    -> ");
+            builder.append(frame.transitionTime);
+            builder.append("ms -- ");
+            builder.append(frame.stayTime);
+            builder.append("ms: ");
+            builder.append(frame.easeIn);
+            builder.append("\n");
+
+
+            for (String style : frame.styles.keySet()) {
+                Pair<StyleValueType, Object> val = frame.styles.get(style);
+
+                builder.append("        ");
+                builder.append(style);
+                builder.append(": ");
+                builder.append(val.getB());
+                builder.append(" (");
+                builder.append(val.getA());
+                builder.append(")\n");
+            }
+        }
+
+        builder.append("}");
+
+        return builder.toString();
+    }
+
     public VKeyframe[] getKeyframes() {
         return keyframes.toArray(new VKeyframe[0]);
     }
