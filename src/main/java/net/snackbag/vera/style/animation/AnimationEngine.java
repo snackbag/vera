@@ -42,7 +42,7 @@ public class AnimationEngine {
     }
 
     /**
-     * Unwinds animations whenever they come to their end.
+     * Unwinds or kills animations whenever they come to their end.
      * Called in {@link net.snackbag.mcvera.impl.MCVeraRenderer#renderApp(VeraApp)}
      */
     public void update() {
