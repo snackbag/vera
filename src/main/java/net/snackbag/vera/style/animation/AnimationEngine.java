@@ -67,6 +67,10 @@ public class AnimationEngine {
         }
     }
 
+    public HashMap<String, Object> getAffectedStyles(StyleState state) {
+        return widget.app.styleSheet.getResolvedKeys(widget, state);
+    }
+
     public void activate(VAnimation animation) {
         activate(animation, false);
     }
