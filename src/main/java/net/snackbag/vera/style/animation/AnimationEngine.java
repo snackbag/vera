@@ -3,7 +3,9 @@ package net.snackbag.vera.style.animation;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.Events;
+import net.snackbag.vera.style.StyleState;
 import net.snackbag.vera.style.StyleValueType;
+import net.snackbag.vera.style.animation.easing.VEasing;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
 
@@ -84,6 +86,38 @@ public class AnimationEngine {
     public void activateOrRewind(VAnimation animation) {
         if (isUnwinding(animation.name)) rewind(animation);
         else activate(animation);
+    }
+
+    public void activateTransition(StyleState from, StyleState target, int time, VEasing easing) {
+        activate(createTransitionAnimation(from, target, time, easing));
+    }
+
+    public VAnimation createTransitionAnimation(StyleState from, StyleState target, int time, VEasing easing) {
+        VAnimation.Builder builder = new VAnimation.Builder(widget.app, VAnimation.INTERNAL_TRANSITION_ANIMATION_NAME);
+
+        builder.unwindEasing(easing);
+        builder.unwindTime(time);
+
+        HashMap<String, Object> fromStyles = getAffectedStyles(from);
+        HashMap<String, Object> targetStyles = getAffectedStyles(target);
+        fromStyles.forEach(targetStyles::putIfAbsent);
+        targetStyles.forEach(fromStyles::putIfAbsent);
+
+        // beginning keyframe
+        builder.keyframe(0, frame -> {
+            for (String key : fromStyles.keySet()) {
+                frame.style(key, fromStyles.get(key));
+            }
+        }, 1);
+
+        // ending keyframe
+        builder.keyframe(time, frame -> {
+            for (String key : targetStyles.keySet()) {
+                frame.style(key, targetStyles.get(key));
+            }
+        }, 1);
+
+        return builder.build();
     }
 
     public void kill(VAnimation animation) {
