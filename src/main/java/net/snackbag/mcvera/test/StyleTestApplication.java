@@ -9,6 +9,7 @@ import net.snackbag.vera.style.StyleState;
 import net.snackbag.vera.style.VStyleSheet;
 import net.snackbag.vera.style.animation.LoopMode;
 import net.snackbag.vera.style.animation.VAnimation;
+import net.snackbag.vera.style.animation.easing.Easings;
 import net.snackbag.vera.widget.VLabel;
 import net.snackbag.vera.widget.VRect;
 
@@ -42,11 +43,14 @@ public class StyleTestApplication extends VeraApp {
                 .alsoAdd();
 
         VRect testRect = new VRect(VColor.black(), this).alsoAdd();
-        testRect.onHover(() -> testRect.animations.activateOrRewind(hoverAnimation));
-        //testRect.onHoverLeave(() -> testRect.animations.unwindOrActivateReversed(hoverAnimation));
+//        testRect.onHover(() -> testRect.animations.activateOrRewind(hoverAnimation));
+        testRect.onHover(() -> testRect.animations.activateTransition(StyleState.DEFAULT, StyleState.HOVERED, 5000, Easings.LINEAR));
+        testRect.onHoverLeave(() -> testRect.animations.activateTransition(StyleState.HOVERED, StyleState.DEFAULT, 5000, Easings.LINEAR));
+//        testRect.onHoverLeave(() -> testRect.animations.activate(hoverAnimation));
 
         testRect.setStyle("cursor", StyleState.HOVERED, VCursorShape.POINTING_HAND);
         testRect.setStyle("cursor", StyleState.CLICKED, VCursorShape.ALL_RESIZE);
+        testRect.setStyle("background-color", StyleState.HOVERED, VColor.white());
 
         testRect.onMouseDragLeft((ctx) -> testRect.move(testRect.getX() + ctx.moveX(), testRect.getY() + ctx.moveY()));
 
