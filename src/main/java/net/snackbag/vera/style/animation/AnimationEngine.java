@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 /**
- * Per-widget handler for animations. This is after stylesheet.getKey, so there is no differentiation between
+ * Per-widget handler for animations. This is after <code>stylesheet.getKey</code>, so there is no differentiation between
  * widget-specific styles, class styles and standard styles.
  */
 public class AnimationEngine {
