@@ -7,8 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Array;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 public class VStyleSheet {
     private final StyleContainer<VWidget<?>> widgetSpecificStyles = new StyleContainer<>(); // like HTML #IDs
@@ -43,6 +42,45 @@ public class VStyleSheet {
 
         // if nothing worked, try standard keys or return null
         return getStandardKey(widget.getClass(), key, state);
+    }
+
+    /**
+     * In this case, stacked means that also all keys from states below the
+     * given state are returned.
+     */
+    public Set<String> getKeysStacked(VWidget<?> widget, @Nullable StyleState state) {
+        if (state == null) state = StyleState.DEFAULT;
+
+        Set<String> keys = new HashSet<>();
+
+        // standard styles
+        keys.addAll(standardStyles.getKeysStacked(widget.getClass(), state));
+
+        // class styles
+        for (String clazz : widget.classes) {
+            keys.addAll(classStyles.getKeysStacked(clazz, state));
+        }
+
+        // widget specific
+        keys.addAll(widgetSpecificStyles.getKeysStacked(widget, state));
+
+        return keys;
+    }
+
+    /**
+     * Note: the resolved keys will return keys from states below the given state
+     */
+    public HashMap<String, Object> getResolvedKeys(VWidget<?> widget, @Nullable StyleState state) {
+        if (state == null) state = StyleState.DEFAULT;
+
+        Set<String> keys = getKeysStacked(widget, state);
+        HashMap<String, Object> buffer = new HashMap<>();
+
+        for (String key : keys) {
+            buffer.put(key, getKey(widget, key, state));
+        }
+
+        return buffer;
     }
 
     /**
