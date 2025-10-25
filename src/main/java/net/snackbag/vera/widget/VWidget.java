@@ -24,7 +24,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     private boolean leftClickDown = false;
     private boolean middleClickDown = false;
     private boolean rightClickDown = false;
-    private StyleState prevStyleState = StyleState.DEFAULT;
+    private StyleState handledPrevStyleState = StyleState.DEFAULT;
 
     public final AnimationEngine animations = new AnimationEngine(this);
     public final LinkedHashSet<String> classes = new LinkedHashSet<>();
@@ -293,9 +293,9 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
     private void updateIfNeeded() {
         StyleState state = createStyleState();
-        if (state != prevStyleState) {
+        if (state != handledPrevStyleState) {
             update();
-            prevStyleState = state;
+            handledPrevStyleState = state;
         }
     }
 
