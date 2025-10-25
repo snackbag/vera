@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Main Vera registry manager. Use with caution: there are (almost) no
+ * safety checks. Therefore, it is recommended to use the classes that directly
+ * implement registrar functionality than touching it yourself.
+ */
 public class MCVeraRegistrar {
     private final List<VStandardStyle> standardStyles = new ArrayList<>();
     private final HashMap<String, VEasing> easings = new HashMap<>();
