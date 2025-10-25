@@ -1,7 +1,9 @@
 package net.snackbag.vera.style.animation.easing;
 
 public class VLinearEasing extends VEasing {
-    protected VLinearEasing() {}
+    protected VLinearEasing() {
+        super("linear");
+    }
 
     @Override
     public float apply(float from, float to, float delta) {
