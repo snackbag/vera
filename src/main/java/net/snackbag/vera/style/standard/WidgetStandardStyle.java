@@ -6,6 +6,7 @@ import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.style.StyleValueType;
 import net.snackbag.vera.style.VStyleSheet;
+import net.snackbag.vera.style.animation.easing.Easings;
 import net.snackbag.vera.widget.VWidget;
 
 public class WidgetStandardStyle implements VStandardStyle {
@@ -17,6 +18,10 @@ public class WidgetStandardStyle implements VStandardStyle {
         // Border
         sheet.setKey(VWidget.class, "border-color", new V4Color(VColor.black()));
         sheet.setKey(VWidget.class, "border-size", new V4Int(0));
+
+        // Transition
+        sheet.setKey(VWidget.class, "transition", 0);
+        sheet.setKey(VWidget.class, "transition-easing", Easings.LINEAR);
     }
 
     @Override
@@ -25,6 +30,8 @@ public class WidgetStandardStyle implements VStandardStyle {
         sheet.reserveType("cursor", StyleValueType.CURSOR);
         sheet.reserveType("border-color", StyleValueType.V4COLOR);
         sheet.reserveType("border-size", StyleValueType.V4INT);
+        sheet.reserveType("transition", StyleValueType.INT);
+        sheet.reserveType("transition-easing", StyleValueType.EASING);
 
         // TODO: add background-color
         // TODO: add padding
