@@ -1,6 +1,10 @@
 package net.snackbag.vera.style;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Holds types, keys and states.
@@ -37,6 +41,99 @@ public class StyleContainer<T> {
 
     public <V> V getState(T part, String key, StyleState state) {
         return (V) getKey(part, key).get(state);
+    }
+
+
+    /**
+     * In this case, exact means that it does not resolve lower states and only
+     * gives the keys of exactly the given style state. Use {@link #getKeysStacked(Object, StyleState)}
+     * for deeper state resolve.
+     * <br/><br/>
+     * For example when requesting state <code>HOVERED</code>:
+     * <table>
+     *     <tr>
+     *         <th>Key</th>
+     *         <th>State</th>
+     *         <th>Returned</th>
+     *     </tr>
+     *     <tr>
+     *         <td>src</th>
+     *         <td>DEFAULT</th>
+     *         <td>No</th>
+     *     </tr>
+     *     <tr>
+     *         <td>overlay</th>
+     *         <td>HOVERED</th>
+     *         <td>Yes</th>
+     *     </tr>
+     *     <tr>
+     *         <td>font</td>
+     *         <td>CLICKED</td>
+     *         <td>No</td>
+     *     </tr>
+     * </table>
+     *
+     * @see #getKeysStacked(Object, StyleState)
+     */
+    public Set<String> getKeysExact(T part, @Nullable StyleState state) {
+        if (state == null) state = StyleState.DEFAULT;
+
+        Set<String> buffer = new HashSet<>();
+
+        var resolvedPart = getPart(part); // i'm sorry for using var but holy fuck
+        for (String key : resolvedPart.keySet()) {
+            for (StyleState keyState : resolvedPart.get(key).keySet()) {
+                if (keyState != state) continue;
+                buffer.add(key);
+            }
+        }
+
+        return buffer;
+    }
+
+    /**
+     * In this case, stacked means that also all keys from states below the
+     * given state are returned. Use {@link #getKeysExact(Object, StyleState)} for
+     * only the exact keys of a style state.
+     * <br/><br/>
+     * For example when requesting state <code>HOVERED</code>:
+     * <table>
+     *     <tr>
+     *         <th>Key</th>
+     *         <th>State</th>
+     *         <th>Returned</th>
+     *     </tr>
+     *     <tr>
+     *         <td>src</th>
+     *         <td>DEFAULT</th>
+     *         <td>Yes</th>
+     *     </tr>
+     *     <tr>
+     *         <td>overlay</th>
+     *         <td>HOVERED</th>
+     *         <td>Yes</th>
+     *     </tr>
+     *     <tr>
+     *         <td>font</td>
+     *         <td>CLICKED</td>
+     *         <td>No</td>
+     *     </tr>
+     * </table>
+     *
+     * @see #getKeysExact(Object, StyleState)
+     */
+    public Set<String> getKeysStacked(T part, @Nullable StyleState state) {
+        if (state == null) state = StyleState.DEFAULT;
+
+        Set<String> buffer = new HashSet<>();
+
+        StyleState next = state;
+        while (next != null) {
+            buffer.addAll(getKeysExact(part, next));
+            next = next.fallback;
+        }
+
+        return buffer;
     }
 
     public void put(T part, String key, StyleState state, Object value) {
