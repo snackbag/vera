@@ -40,4 +40,15 @@ public enum StyleState {
         this.identifier = identifier;
         this.fallback = fallback;
     }
+
+    public boolean inherits(StyleState state) {
+        StyleState next = this;
+
+        while (next != null) {
+            if (next == state) return true;
+            next = next.fallback;
+        }
+
+        return false;
+    }
 }
