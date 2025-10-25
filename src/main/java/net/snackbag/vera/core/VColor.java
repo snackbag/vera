@@ -1,6 +1,7 @@
 package net.snackbag.vera.core;
 
 import net.snackbag.vera.style.animation.easing.VEasing;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Consumer;
 
@@ -91,19 +92,43 @@ public class VColor {
         return opacity == 0;
     }
 
+    @Deprecated(since = "1.10", forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.11")
     public boolean sameColors(int red, int green, int blue) {
+        return hasSameColors(red, green, blue);
+    }
+
+    @Deprecated(since = "1.10", forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.11")
+    public boolean sameColors(VColor color) {
+        return hasSameColors(color);
+    }
+
+    public boolean hasSameColors(int red, int green, int blue) {
         return this.red == red && this.green == green && this.blue == blue;
     }
 
-    public boolean sameColors(VColor color) {
+    public boolean hasSameColors(VColor color) {
         return sameColors(color.red, color.green, color.blue);
     }
 
+    @Deprecated(since = "1.10", forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.11")
     public boolean same(int red, int green, int blue, float opacity) {
-        return sameColors(red, green, blue) && this.opacity == opacity;
+        return isSame(red, green, blue, opacity);
     }
 
+    @Deprecated(since = "1.10", forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.11")
     public boolean same(VColor color) {
+        return isSame(color);
+    }
+
+    public boolean isSame(int red, int green, int blue, float opacity) {
+        return hasSameColors(red, green, blue) && this.opacity == opacity;
+    }
+
+    public boolean isSame(VColor color) {
         return same(color.red, color.green, color.blue, color.opacity);
     }
 
