@@ -24,7 +24,8 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     private boolean leftClickDown = false;
     private boolean middleClickDown = false;
     private boolean rightClickDown = false;
-    private StyleState handledPrevStyleState = StyleState.DEFAULT;
+    private StyleState handledPrevStyleState = StyleState.DEFAULT; // constantly updates
+    private StyleState prevStyleState = StyleState.DEFAULT; // updates max once per frame, can be seen as the definite result
 
     public final AnimationEngine animations = new AnimationEngine(this);
     public final LinkedHashSet<String> classes = new LinkedHashSet<>();
@@ -138,6 +139,16 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
         Vera.renderer.drawRect(app, getEffectiveX(), getEffectiveY(), getEffectiveWidth(), getEffectiveHeight(), 0, getStyle("overlay", state));
     }
+
+    public void beforeRender() {
+        StyleState state = createStyleState();
+
+        if (state != prevStyleState) {
+            prevStyleState = state;
+        }
+    }
+
+    public void afterRender() {}
 
     public boolean isLeftClickDown() {
         return leftClickDown;
