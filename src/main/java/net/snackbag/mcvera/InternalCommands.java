@@ -1,10 +1,12 @@
 package net.snackbag.mcvera;
 
+import com.example.demo.DemoMod;
 import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.CommandRegistryAccess;
+import net.snackbag.mcvera.test.LayoutCenteringTestApplication;
 import net.snackbag.mcvera.test.LayoutTestApplication;
 import net.snackbag.mcvera.test.StyleTestApplication;
 import net.snackbag.mcvera.test.TestApplication;
@@ -31,12 +33,21 @@ public class InternalCommands {
                                 LayoutTestApplication.INSTANCE.show();
                                 return 1;
                             }))
+                            .then(ClientCommandManager.literal("layoutalignments").executes((ctx) -> {
+                                LayoutCenteringTestApplication.INSTANCE.show();
+                                return 1;
+                            }))
+                            .then(ClientCommandManager.literal("demo").executes(ctx -> {
+                                DemoMod.init();
+                                return 1;
+                            }))
                         )
                         .then(ClientCommandManager.literal("clear-tests")
                                 .executes((ctx) -> {
                                     TestApplication.INSTANCE = new TestApplication();
                                     StyleTestApplication.INSTANCE = new StyleTestApplication();
                                     LayoutTestApplication.INSTANCE = new LayoutTestApplication();
+                                    LayoutCenteringTestApplication.INSTANCE = new LayoutCenteringTestApplication();
                                     return 1;
                                 })
                         )
