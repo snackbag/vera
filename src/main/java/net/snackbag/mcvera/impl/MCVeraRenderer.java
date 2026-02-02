@@ -74,6 +74,7 @@ public class MCVeraRenderer {
             if (widget != hoveredWidget && widget.isHovered()) widget.setHovered(false);
             else if (widget == hoveredWidget && !widget.isHovered()) widget.setHovered(true);
 
+            widget.beforeRender();
             widget.animations.update();
 
             if (widget.visibilityConditionsPassed()) {
@@ -81,6 +82,8 @@ public class MCVeraRenderer {
                 widget.renderBorder();
                 widget.renderOverlay();
             }
+
+            widget.afterRender();
         }
         app.renderAfterWidgets();
 
