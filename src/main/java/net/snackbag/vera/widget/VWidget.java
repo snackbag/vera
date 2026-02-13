@@ -8,8 +8,6 @@ import net.snackbag.vera.core.v4.V4Int;
 import net.snackbag.vera.event.*;
 import net.snackbag.vera.layout.VLayout;
 import net.snackbag.vera.style.StyleState;
-import net.snackbag.vera.style.animation.AnimationEngine;
-import net.snackbag.vera.style.animation.VAnimation;
 import net.snackbag.vera.util.DragHandler;
 
 import java.nio.file.Path;
@@ -27,7 +25,6 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     private StyleState handledPrevStyleState = StyleState.DEFAULT; // constantly updates
     private StyleState prevStyleState = StyleState.DEFAULT; // updates max once per frame, can be seen as the definite result
 
-    public final AnimationEngine animations = new AnimationEngine(this);
     public final LinkedHashSet<String> classes = new LinkedHashSet<>();
 
     public VWidget(int x, int y, int width, int height, VeraApp app) {
@@ -83,6 +80,10 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     }
 
     public StyleState createStyleState() {
+        return createStyleState(true);
+    }
+
+    public StyleState createStyleState(boolean respectAnimationLocks) {
         // Clicks first
         if (leftClickDown) return StyleState.LEFT_CLICKED;
         else if (middleClickDown) return StyleState.MIDDLE_CLICKED;
@@ -148,7 +149,8 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         }
     }
 
-    public void afterRender() {}
+    public void afterRender() {
+    }
 
     public boolean isLeftClickDown() {
         return leftClickDown;

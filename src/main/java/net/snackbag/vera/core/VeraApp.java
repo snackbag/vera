@@ -7,9 +7,6 @@ import net.snackbag.vera.event.Events;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.flag.VWindowPositioningFlag;
 import net.snackbag.vera.style.VStyleSheet;
-import net.snackbag.vera.style.animation.VeraPipeline;
-import net.snackbag.vera.style.animation.composite.AnimationComposite;
-import net.snackbag.vera.style.animation.composite.WindingComposite;
 import net.snackbag.vera.util.Geometry;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
@@ -19,7 +16,6 @@ import java.util.*;
 
 public abstract class VeraApp {
     public final VStyleSheet styleSheet = new VStyleSheet();
-    public final VeraPipeline pipeline = new VeraPipeline(this);
 
     private final List<VWidget<?>> widgets;
     private final HashMap<String, VShortcut> shortcuts;
@@ -59,13 +55,6 @@ public abstract class VeraApp {
 
         this.visible = false;
         setPositioning(VWindowPositioningFlag.SCREEN);
-
-        loadComposites();
-    }
-
-    public void loadComposites() {
-        pipeline.addPass(new AnimationComposite());
-        pipeline.addPass(new WindingComposite());
     }
 
     public void setCursorVisible(boolean cursorVisible) {
