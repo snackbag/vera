@@ -10,6 +10,7 @@ public class VRect extends VWidget<VRect> {
         super(0, 0, 20, 20, app);
 
         this.focusOnClick = false;
+        setStyle("background-color", color);
     }
 
     @Override
