@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class Once<T> {
+public class VOnce<T> {
     @Nullable
     private T value = null;
 
@@ -59,7 +59,7 @@ public class Once<T> {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Once<?> once)) return false;
+        if (!(o instanceof VOnce<?> once)) return false;
         return Objects.equals(value, once.value);
     }
 
