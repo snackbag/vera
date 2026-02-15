@@ -33,7 +33,7 @@ public class VAnimation {
             VKeyframe frame = new VKeyframe(original); // copy keyframe
             HashMap<String, StyleValue> frameStyles = index.keyframeValueMap.get(original); // get all registered styles
 
-            // fill all styles & memorize
+            // populate all styles & memorize
             for (String style : index.styles) {
                 if (frame.styles.containsKey(style)) {
                     // skip & remove keys that weren't reserved when the index was created; fixes NPE
@@ -53,7 +53,7 @@ public class VAnimation {
                                     app.styleSheet.getKey(widget, style))
                     );
                 }
-                frame.style(style, styleMemory.get(style).value()); // actual filling
+                frame.style(style, styleMemory.get(style).value()); // actual populating
             }
 
             extendedFrames.add(frame);
