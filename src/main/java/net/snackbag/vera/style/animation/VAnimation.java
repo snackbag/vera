@@ -15,9 +15,14 @@ public class VAnimation {
     public String name;
     public List<VKeyframe> keyframes;
 
-    public VAnimation(String name, List<VKeyframe> keyframes) {
+    public VEasing unwindEasing;
+    public int unwindTime;
+
+    public VAnimation(String name, VEasing unwindEasing, int unwindTime, List<VKeyframe> keyframes) {
         this.name = name;
         this.keyframes = keyframes;
+        this.unwindEasing = unwindEasing;
+        this.unwindTime = unwindTime;
     }
 
     public CompiledAnimation compile(VeraApp app, VWidget<?> widget) {
@@ -62,6 +67,7 @@ public class VAnimation {
         return new CompiledAnimation(
                 app,
                 name, index.totalDuration,
+                unwindEasing, unwindTime,
                 extendedFrames, index.styles
         );
     }
@@ -74,6 +80,9 @@ public class VAnimation {
     public static class Builder {
         private final String name;
         private final List<VKeyframe> keyframes = new ArrayList<>();
+
+        private VEasing unwindEasing = VEasings.LINEAR;
+        private int unwindTime = 0;
 
         public Builder(String name) {
             this.name = name;
@@ -95,8 +104,18 @@ public class VAnimation {
             return this;
         }
 
+        public Builder unwindEasing(VEasing easing) {
+            this.unwindEasing = easing;
+            return this;
+        }
+
+        public Builder unwindTime(int ms) {
+            this.unwindTime = ms;
+            return this;
+        }
+
         public VAnimation build() {
-            return new VAnimation(name, keyframes);
+            return new VAnimation(name, unwindEasing, unwindTime, keyframes);
         }
     }
 }
