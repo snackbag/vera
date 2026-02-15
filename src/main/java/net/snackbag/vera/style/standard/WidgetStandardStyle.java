@@ -6,7 +6,7 @@ import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.style.StyleValueType;
 import net.snackbag.vera.style.VStyleSheet;
-import net.snackbag.vera.style.animation.easing.Easings;
+import net.snackbag.vera.style.animation.easing.VEasings;
 import net.snackbag.vera.widget.VWidget;
 
 public class WidgetStandardStyle implements VStandardStyle {
@@ -21,7 +21,7 @@ public class WidgetStandardStyle implements VStandardStyle {
 
         // Transition
         sheet.setKey(VWidget.class, "transition", 0);
-        sheet.setKey(VWidget.class, "transition-easing", Easings.LINEAR);
+        sheet.setKey(VWidget.class, "transition-easing", VEasings.LINEAR);
     }
 
     @Override
