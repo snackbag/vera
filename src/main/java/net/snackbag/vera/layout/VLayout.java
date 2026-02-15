@@ -3,7 +3,7 @@ package net.snackbag.vera.layout;
 import net.snackbag.vera.VElement;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VeraApp;
-import net.snackbag.vera.event.Events;
+import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.flag.VLayoutAlignmentFlag;
 import org.joml.Vector2i;
 
@@ -71,18 +71,18 @@ public abstract class VLayout extends VElement {
     public void addElement(VElement elem) {
         if (elements.contains(elem)) return;
         elements.add(elem);
-        elem.events.fire(Events.Element.LAYOUT_SWAP, this);
+        elem.events.fire(VEvents.Element.LAYOUT_SWAP, this);
     }
 
     public boolean removeElement(VElement elem) {
         if (!elements.contains(elem)) return false;
 
-        elem.events.fire(Events.Element.LAYOUT_REMOVE);
+        elem.events.fire(VEvents.Element.LAYOUT_REMOVE);
         return elements.remove(elem);
     }
 
     public void clear() {
-        for (VElement elem : elements) elem.events.fire(Events.Element.LAYOUT_REMOVE);
+        for (VElement elem : elements) elem.events.fire(VEvents.Element.LAYOUT_REMOVE);
         elements.clear();
     }
 }

@@ -1,7 +1,7 @@
 package net.snackbag.vera.event;
 
 // Sorted by :sparkle: the feeling that it looks nice :sparkle:
-public class Events {
+public class VEvents {
     // Animation
     public static class Animation {
         public static final String BEGIN = "animation-begin";

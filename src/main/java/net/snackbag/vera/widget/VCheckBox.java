@@ -4,7 +4,7 @@ import net.minecraft.util.Identifier;
 import net.snackbag.mcvera.MinecraftVera;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VeraApp;
-import net.snackbag.vera.event.Events;
+import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VCheckedStateChange;
 import net.snackbag.vera.style.StyleState;
 
@@ -44,7 +44,7 @@ public class VCheckBox extends VWidget<VCheckBox> {
     public void handleBuiltinEvent(String event, Object... args) {
         super.handleBuiltinEvent(event, args);
 
-        if (event.equals(Events.Widget.LEFT_CLICK)) setChecked(!checked);
+        if (event.equals(VEvents.Widget.LEFT_CLICK)) setChecked(!checked);
     }
 
     public boolean isChecked() {
@@ -54,10 +54,10 @@ public class VCheckBox extends VWidget<VCheckBox> {
     public void setChecked(boolean checked) {
         this.checked = checked;
 
-        events.fire(Events.CheckBox.CHECK_STATE_CHANGED, checked);
+        events.fire(VEvents.CheckBox.CHECK_STATE_CHANGED, checked);
     }
 
     public void onCheckStateChange(VCheckedStateChange runnable) {
-        events.register(Events.CheckBox.CHECK_STATE_CHANGED, args -> runnable.run((boolean) args[0]));
+        events.register(VEvents.CheckBox.CHECK_STATE_CHANGED, args -> runnable.run((boolean) args[0]));
     }
 }

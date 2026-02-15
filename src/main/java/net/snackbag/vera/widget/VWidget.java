@@ -189,109 +189,109 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public void setHovered(boolean hovered) {
         // If changed
         if (this.hovered != hovered) {
-            if (hovered) events.fire(Events.Widget.HOVER);
-            else events.fire(Events.Widget.HOVER_LEAVE);
+            if (hovered) events.fire(VEvents.Widget.HOVER);
+            else events.fire(VEvents.Widget.HOVER_LEAVE);
         }
 
         this.hovered = hovered;
     }
 
     public void onHover(Runnable runnable) {
-        events.register(Events.Widget.HOVER, runnable);
+        events.register(VEvents.Widget.HOVER, runnable);
     }
 
     public void onHoverLeave(Runnable runnable) {
-        events.register(Events.Widget.HOVER_LEAVE, runnable);
+        events.register(VEvents.Widget.HOVER_LEAVE, runnable);
     }
 
     public void onLeftClick(Runnable runnable) {
-        events.register(Events.Widget.LEFT_CLICK, runnable);
+        events.register(VEvents.Widget.LEFT_CLICK, runnable);
     }
 
     public void onLeftClickRelease(Runnable runnable) {
-        events.register(Events.Widget.LEFT_CLICK_RELEASE, runnable);
+        events.register(VEvents.Widget.LEFT_CLICK_RELEASE, runnable);
     }
 
     public void onRightClick(Runnable runnable) {
-        events.register(Events.Widget.RIGHT_CLICK, runnable);
+        events.register(VEvents.Widget.RIGHT_CLICK, runnable);
     }
 
     public void onRightClickRelease(Runnable runnable) {
-        events.register(Events.Widget.RIGHT_CLICK_RELEASE, runnable);
+        events.register(VEvents.Widget.RIGHT_CLICK_RELEASE, runnable);
     }
 
     public void onMiddleClick(Runnable runnable) {
-        events.register(Events.Widget.MIDDLE_CLICK, runnable);
+        events.register(VEvents.Widget.MIDDLE_CLICK, runnable);
     }
 
     public void onMiddleClickRelease(Runnable runnable) {
-        events.register(Events.Widget.MIDDLE_CLICK_RELEASE, runnable);
+        events.register(VEvents.Widget.MIDDLE_CLICK_RELEASE, runnable);
     }
 
     public void onMouseScroll(VMouseScrollEvent runnable) {
-        events.register(Events.Widget.SCROLL, args -> runnable.run(
+        events.register(VEvents.Widget.SCROLL, args -> runnable.run(
                 (int) args[0], (int) args[1], (double) args[2])
         );
     }
 
     public void onMouseMove(VMouseMoveEvent runnable) {
-        events.register(Events.Widget.MOUSE_MOVE, args -> runnable.run((int) args[0], (int) args[1]));
+        events.register(VEvents.Widget.MOUSE_MOVE, args -> runnable.run((int) args[0], (int) args[1]));
     }
 
     public void onMouseDragLeft(VMouseDragEvent runnable) {
-        events.register(Events.Widget.DRAG_LEFT_CLICK, args -> runnable.run((VMouseDragEvent.Context) args[0]));
+        events.register(VEvents.Widget.DRAG_LEFT_CLICK, args -> runnable.run((VMouseDragEvent.Context) args[0]));
     }
 
     public void onMouseDragRight(VMouseDragEvent runnable) {
-        events.register(Events.Widget.DRAG_RIGHT_CLICK, args -> runnable.run((VMouseDragEvent.Context) args[0]));
+        events.register(VEvents.Widget.DRAG_RIGHT_CLICK, args -> runnable.run((VMouseDragEvent.Context) args[0]));
     }
 
     public void onMouseDragMiddle(VMouseDragEvent runnable) {
-        events.register(Events.Widget.DRAG_MIDDLE_CLICK, args -> runnable.run((VMouseDragEvent.Context) args[0]));
+        events.register(VEvents.Widget.DRAG_MIDDLE_CLICK, args -> runnable.run((VMouseDragEvent.Context) args[0]));
     }
 
     public void onFocusStateChange(Runnable runnable) {
-        events.register(Events.Widget.FOCUS_STATE_CHANGE, runnable);
+        events.register(VEvents.Widget.FOCUS_STATE_CHANGE, runnable);
     }
 
     public void onFilesDropped(VFilesDroppedEvent runnable) {
-        events.register(Events.Widget.FILES_DROPPED, args -> runnable.run((List<Path>) args[0]));
+        events.register(VEvents.Widget.FILES_DROPPED, args -> runnable.run((List<Path>) args[0]));
     }
 
     public void onAnimationBegin(VAnimationBeginEvent runnable) {
-        events.register(Events.Animation.BEGIN, args -> runnable.run((VAnimation) args[0]));
+        events.register(VEvents.Animation.BEGIN, args -> runnable.run((VAnimation) args[0]));
     }
 
     public void onAnimationUnwindBegin(VAnimationUnwindEvent runnable) {
-        events.register(Events.Animation.UNWIND_BEGIN, args -> runnable.run((VAnimation) args[0]));
+        events.register(VEvents.Animation.UNWIND_BEGIN, args -> runnable.run((VAnimation) args[0]));
     }
 
     public void onAnimationRewindBegin(VAnimationRewindEvent runnable) {
-        events.register(Events.Animation.REWIND_BEGIN, args -> runnable.run((VAnimation) args[0]));
+        events.register(VEvents.Animation.REWIND_BEGIN, args -> runnable.run((VAnimation) args[0]));
     }
 
     public void onAnimationFinish(VAnimationFinishEvent runnable) {
-        events.register(Events.Animation.FINISH, args -> runnable.run((VAnimation) args[0], (long) args[1]));
+        events.register(VEvents.Animation.FINISH, args -> runnable.run((VAnimation) args[0], (long) args[1]));
     }
 
     @Override
     public void handleBuiltinEvent(String event, Object... args) {
         switch (event) {
-            case Events.Widget.LEFT_CLICK -> {
+            case VEvents.Widget.LEFT_CLICK -> {
                 if (focusOnClick) {
                     setFocused(true);
                 }
                 leftClickDown = true;
             }
 
-            case Events.Widget.RIGHT_CLICK -> rightClickDown = true;
-            case Events.Widget.MIDDLE_CLICK -> middleClickDown = true;
+            case VEvents.Widget.RIGHT_CLICK -> rightClickDown = true;
+            case VEvents.Widget.MIDDLE_CLICK -> middleClickDown = true;
 
-            case Events.Widget.LEFT_CLICK_RELEASE -> clearLeftClickDown();
-            case Events.Widget.RIGHT_CLICK_RELEASE -> clearRightClickDown();
-            case Events.Widget.MIDDLE_CLICK_RELEASE -> clearMiddleClickDown();
+            case VEvents.Widget.LEFT_CLICK_RELEASE -> clearLeftClickDown();
+            case VEvents.Widget.RIGHT_CLICK_RELEASE -> clearRightClickDown();
+            case VEvents.Widget.MIDDLE_CLICK_RELEASE -> clearMiddleClickDown();
 
-            case Events.Widget.HOVER_LEAVE -> {
+            case VEvents.Widget.HOVER_LEAVE -> {
                 clearLeftClickDown();
                 clearRightClickDown();
                 clearMiddleClickDown();
