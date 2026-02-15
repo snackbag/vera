@@ -1,6 +1,6 @@
 package net.snackbag.vera.util;
 
-public class Geometry {
+public class VGeometry {
     /**
      * Method to check whether a coordinate in within the boundaries of a box
      *

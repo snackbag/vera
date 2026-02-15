@@ -7,7 +7,7 @@ import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.flag.VWindowPositioningFlag;
 import net.snackbag.vera.style.VStyleSheet;
-import net.snackbag.vera.util.Geometry;
+import net.snackbag.vera.util.VGeometry;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
@@ -270,13 +270,13 @@ public abstract class VeraApp {
         int widgetY = widget.getHitboxY() + y;
         int widgetWidth = widget.getHitboxWidth();
         int widgetHeight = widget.getHitboxHeight();
-        return Geometry.isInBox(px, py, widgetX, widgetY, widgetWidth, widgetHeight);
+        return VGeometry.isInBox(px, py, widgetX, widgetY, widgetWidth, widgetHeight);
     }
 
     public boolean isPointOverThis(int px, int py) {
         if (!isVisible()) return false;
 
-        return Geometry.isInBox(px, py, x, y, width, height);
+        return VGeometry.isInBox(px, py, x, y, width, height);
     }
 
     public void setFocusedWidget(@Nullable VWidget<?> widget) {
