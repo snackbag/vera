@@ -16,11 +16,11 @@ public class VStyleSheet {
 
     private HashMap<String, StyleValueType> typeRegistry = new HashMap<>();
 
-    public <T> T getKey(VWidget<?> widget, String key) {
+    public @Nullable <T> T getKey(VWidget<?> widget, String key) {
         return getKey(widget, key, StyleState.DEFAULT);
     }
 
-    public <T> T getKey(VWidget<?> widget, String key, @Nullable StyleState state) {
+    public @Nullable <T> T getKey(VWidget<?> widget, String key, @Nullable StyleState state) {
         if (state == null) state = StyleState.DEFAULT;
 
         // if widget contains key
