@@ -24,9 +24,12 @@ public class VAnimation {
         VKeyframe.ListIndex index = VKeyframe.createIndex(keyframes, app.styleSheet);
 
         List<VKeyframe> extendedFrames = new ArrayList<>();
+        List<VKeyframe> loopingFrames = new ArrayList<>(keyframes);
         HashMap<String, StyleValue> styleMemory = new HashMap<>();
 
-        for (VKeyframe original : keyframes) {
+        loopingFrames.add(0, new VKeyframe(0, 0, VEasings.IMMEDIATE));
+
+        for (VKeyframe original : loopingFrames) {
             VKeyframe frame = new VKeyframe(original); // copy keyframe
             HashMap<String, StyleValue> frameStyles = index.keyframeValueMap.get(original); // get all registered styles
 
