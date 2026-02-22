@@ -48,15 +48,16 @@ public class AnimationEngine {
 
             // select active keyframe
             int kfIndex = animation.getKeyframeIndexAtTime(time);
-            float delta = animation.getKeyframeDelta(time);
 
             VKeyframe to = animation.keyframes.get(kfIndex);
             VKeyframe from = animation.keyframes.get(Math.max(kfIndex - 1, 0));
 
+            float delta = animation.getKeyframeDelta(time, from, to);
+
             StyleValueType reservation = widget.app.styleSheet.getReservation(key);
             return (T) reservation.animationTransition.apply(
                     from.styles.get(key), to.styles.get(key),
-                    from.easing, delta);
+                    to.easing, delta);
         }
 
         return value;
