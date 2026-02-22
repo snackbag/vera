@@ -76,4 +76,26 @@ public class CompiledAnimation {
 
         return keyframes.size() - 1;
     }
+
+    public int getKeyframeTimeAt(VKeyframe keyframe) {
+        int buffer = 0;
+
+        for (VKeyframe frame : keyframes) {
+            if (frame == keyframe) break;
+            buffer += frame.transitionTime + frame.stayTime;
+        }
+
+        return buffer;
+    }
+
+    public float getKeyframeDelta(int time, VKeyframe from, VKeyframe to) {
+        int fromTime = getKeyframeTimeAt(from) + from.transitionTime + from.stayTime;
+        int toTime = fromTime + to.transitionTime;
+
+        if (time > toTime) return 1f;
+        else if (time < toTime && time > fromTime) return (float) (time - fromTime) / (toTime - fromTime);
+
+        // time < fromTime
+        return 0f;
+    }
 }
