@@ -8,12 +8,15 @@ import net.snackbag.vera.core.v4.V4Int;
 import net.snackbag.vera.event.*;
 import net.snackbag.vera.layout.VLayout;
 import net.snackbag.vera.style.StyleState;
+import net.snackbag.vera.style.animation.AnimationEngine;
+import net.snackbag.vera.style.animation.VAnimation;
 import net.snackbag.vera.util.DragHandler;
 
 import java.nio.file.Path;
 import java.util.*;
 
 public abstract class VWidget<T extends VWidget<T>> extends VElement {
+    public AnimationEngine animations = new AnimationEngine(this);
     protected double rotation;
 
     public boolean focusOnClick = true;
@@ -62,10 +65,12 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     }
 
     public <V> V getStyle(String key) {
+//        return app.styleSheet.getKey(this, key);
         return animations.animateStyle(key, app.styleSheet.getKey(this, key));
     }
 
     public <V> V getStyle(String key, StyleState state) {
+//        return app.styleSheet.getKey(this, key, state);
         return animations.animateStyle(key, app.styleSheet.getKey(this, key, state));
     }
 
