@@ -19,7 +19,7 @@ public class VAnimation {
     public int unwindTime;
 
     public VAnimation(String name, VEasing unwindEasing, int unwindTime, List<VKeyframe> keyframes) {
-        this.name = name;
+        this.name = name.toLowerCase();
         this.keyframes = keyframes;
         this.unwindEasing = unwindEasing;
         this.unwindTime = unwindTime;
