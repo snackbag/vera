@@ -17,4 +17,8 @@ public class PlaybackContext {
     public float getProgress() {
         return Math.min((float) getRelativeTime() / animation.duration, 1.0f);
     }
+
+    public int getCurrentLoopNumber() {
+        return (int) Math.ceil((float) (System.currentTimeMillis() - startTime) / animation.duration);
+    }
 }
