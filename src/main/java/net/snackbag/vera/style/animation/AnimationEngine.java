@@ -48,7 +48,10 @@ public class AnimationEngine {
     }
 
     public void unwind(String name) {
-        if (active.containsKey(name)) active.get(name).unwind();
+        if (active.containsKey(name)) {
+            active.get(name).unwind();
+            widget.events.fire(VEvents.Animation.UNWIND_BEGIN, active.get(name).animation);
+        }
         else MinecraftVera.LOGGER.warn("Couldn't unwind %s, because it's not active".formatted(name));
     }
 
