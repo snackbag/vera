@@ -11,7 +11,7 @@ public class PlaybackContext {
     }
 
     public int getRelativeTime() {
-        return Math.toIntExact(System.currentTimeMillis() - startTime) % animation.duration;
+        return Math.toIntExact(System.currentTimeMillis() - startTime) % animation.duration; // TODO: loop modes
     }
 
     public float getProgress() {
