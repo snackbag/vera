@@ -15,6 +15,6 @@ public class PlaybackContext {
     }
 
     public float getProgress() {
-        return (float) getRelativeTime() / animation.duration;
+        return Math.min((float) getRelativeTime() / animation.duration, 1.0f);
     }
 }
