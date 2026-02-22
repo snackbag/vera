@@ -98,12 +98,14 @@ public class AnimationEngine {
     public void updateLifetimes() {
         for (Map.Entry<String, PlaybackContext> entry : active.entrySet()) {
             PlaybackContext ctx = entry.getValue();
+            String name = entry.getKey();
             CompiledAnimation animation = ctx.animation;
 
             if (animation.loopMode == VLoopMode.NONE && ctx.getProgress() >= 1.0f) {
-                // TODO: unwinding
-                stop(entry.getKey());
+                unwind(name);
             }
+
+            if (ctx.getWindingProgress() >= 1.0f) stop(name);
         }
     }
 }
