@@ -135,7 +135,9 @@ public class AnimationEngine {
                 unwind(name);
             }
 
-            if (ctx.getWindingProgress() >= 1.0f || (!animation.unwindAtEnd && ctx.getProgress() >= 1.0f)) stop(name);
+            if (ctx.getWindingProgress() >= 1.0f || (!animation.unwindAtEnd && ctx.getProgress() >= 1.0f && (ctx.getWindingProgress() == 0.0f || ctx.getWindingProgress() == 1.0f))) {
+                stop(name);
+            }
         }
     }
 
