@@ -18,13 +18,15 @@ public class VAnimation {
 
     public VEasing unwindEasing;
     public int unwindTime;
+    public boolean unwindAtEnd;
 
-    public VAnimation(String name, VLoopMode loopMode, VEasing unwindEasing, int unwindTime, List<VKeyframe> keyframes) {
+    public VAnimation(String name, VLoopMode loopMode, VEasing unwindEasing, int unwindTime, boolean unwindAtEnd, List<VKeyframe> keyframes) {
         this.name = name.toLowerCase();
         this.loopMode = loopMode;
         this.keyframes = keyframes;
         this.unwindEasing = unwindEasing;
         this.unwindTime = unwindTime;
+        this.unwindAtEnd = unwindAtEnd;
     }
 
     public CompiledAnimation compile(VeraApp app, VWidget<?> widget) {
@@ -80,7 +82,7 @@ public class VAnimation {
                 app,
                 name, index.totalDuration,
                 loopMode,
-                unwindEasing, unwindTime,
+                unwindEasing, unwindTime, unwindAtEnd,
                 extendedFrames, index.styles
         );
     }
@@ -97,6 +99,7 @@ public class VAnimation {
         private VLoopMode loopMode = VLoopMode.NONE;
         private VEasing unwindEasing = VEasings.LINEAR;
         private int unwindTime = 0;
+        private boolean unwindAtEnd = false;
 
         public Builder(String name) {
             this.name = name;
@@ -138,9 +141,13 @@ public class VAnimation {
             return this;
         }
 
+        public Builder unwindAtEnd() {
+            this.unwindAtEnd = true;
+            return this;
+        }
 
         public VAnimation build() {
-            return new VAnimation(name, loopMode, unwindEasing, unwindTime, keyframes);
+            return new VAnimation(name, loopMode, unwindEasing, unwindTime, unwindAtEnd, keyframes);
         }
     }
 }
