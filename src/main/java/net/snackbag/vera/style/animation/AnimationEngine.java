@@ -102,6 +102,7 @@ public class AnimationEngine {
             CompiledAnimation animation = ctx.animation;
 
             if (animation.loopMode == VLoopMode.NONE && ctx.getProgress() >= 1.0f) {
+            ctx.potentiallyResetWinding();
                 unwind(name);
             }
 

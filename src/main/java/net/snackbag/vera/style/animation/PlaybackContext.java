@@ -59,4 +59,12 @@ public class PlaybackContext {
         windingStartTime = System.currentTimeMillis();
         unwindingOrRewinding = true;
     }
+
+    public void potentiallyResetWinding() {
+        if (getWindingProgress() > 0.0f) return;
+
+        prevWindingProgress = 0f;
+        windingStartTime = -1;
+        unwindingOrRewinding = false;
+    }
 }
