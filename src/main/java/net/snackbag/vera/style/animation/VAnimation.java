@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class VAnimation {
+    public static final String INTERNAL_TRANSITION_NAME = "internal-vera-transition";
     public String name;
     public VLoopMode loopMode;
     public List<VKeyframe> keyframes;
