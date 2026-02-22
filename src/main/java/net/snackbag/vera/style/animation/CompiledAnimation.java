@@ -93,7 +93,7 @@ public class CompiledAnimation {
         int toTime = fromTime + to.transitionTime;
 
         if (time > toTime) return 1f;
-        else if (time < toTime && time > fromTime) return (float) (time - fromTime) / (toTime - fromTime);
+        else if (time > fromTime) return (float) (time - fromTime) / (toTime - fromTime); // time <= toTime already true
 
         // time < fromTime
         return 0f;
