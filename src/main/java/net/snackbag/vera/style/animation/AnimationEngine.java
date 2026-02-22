@@ -23,6 +23,7 @@ public class AnimationEngine {
 
         CompiledAnimation compiled = animation.compile(widget.app, widget);
         active.put(compiled.name, new PlaybackContext(compiled, System.currentTimeMillis()));
+        widget.events.fire(VEvents.Animation.BEGIN, animation);
     }
 
     public void startOrRewind(VAnimation animation) {
@@ -40,6 +41,8 @@ public class AnimationEngine {
             return;
         }
 
+        PlaybackContext ctx = active.get(name);
+        widget.events.fire(VEvents.Animation.FINISH, ctx.animation, ctx.startTime);
         active.remove(name);
     }
 
