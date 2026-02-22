@@ -75,7 +75,7 @@ public class MCVeraRenderer {
             else if (widget == hoveredWidget && !widget.isHovered()) widget.setHovered(true);
 
             widget.beforeRender();
-            widget.animations.update();
+            widget.animations.updateLifetimes();
 
             if (widget.visibilityConditionsPassed()) {
                 widget.render();

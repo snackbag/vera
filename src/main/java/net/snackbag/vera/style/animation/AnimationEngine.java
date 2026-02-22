@@ -61,4 +61,16 @@ public class AnimationEngine {
 
         return value;
     }
+
+    public void updateLifetimes() {
+        for (Map.Entry<String, PlaybackContext> entry : active.entrySet()) {
+            PlaybackContext ctx = entry.getValue();
+            CompiledAnimation animation = ctx.animation;
+
+            if (animation.loopMode == VLoopMode.NONE && ctx.getProgress() >= 1.0f) {
+                // TODO: unwinding
+                stop(entry.getKey());
+            }
+        }
+    }
 }
