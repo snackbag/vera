@@ -18,6 +18,17 @@ public class StyleTestApplication extends VeraApp {
                 frame.style("background-color", VColor.MC_RED);
             })
             .build();
+    private final VAnimation longTestAnimation = new VAnimation.Builder("long_test")
+            .keyframe(1000, 2000, frame -> {
+                frame.style("background-color", VColor.MC_RED);
+            })
+            .keyframe(1000, 5000, frame -> {
+                frame.style("background-color", VColor.MC_GOLD);
+            })
+            .keyframe(1000, 1000, frame -> {
+                frame.style("background-color", VColor.MC_WHITE);
+            })
+            .build();
 
     @Override
     public void init() {
@@ -30,7 +41,17 @@ public class StyleTestApplication extends VeraApp {
                 .alsoAdd();
 
         VRect testRect = new VRect(VColor.black(), this).alsoAdd();
-        testRect.onLeftClick(() -> testRect.animate(testAnimation));
+        testRect.onLeftClick(() -> {
+//            CompiledAnimation compiled = testAnimation.compile(this, testRect);
+//            System.out.println(compiled);
+//            CompiledAnimation compiled = longTestAnimation.compile(this, testRect);
+//            System.out.println(compiled);
+            testRect.animations.start(longTestAnimation);
+        });
+
+        testRect.onRightClick(() -> {
+            testRect.animations.stop(longTestAnimation);
+        });
     }
 
     public VStyleSheet createStyleSheet() {
