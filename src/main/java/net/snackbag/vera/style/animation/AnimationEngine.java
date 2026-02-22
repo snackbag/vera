@@ -114,7 +114,7 @@ public class AnimationEngine {
                     from.styles.get(key), to.styles.get(key),
                     to.easing, delta);
             T windingEase = (T) reservation.animationTransition.apply( // ease winding
-                    kfEase, widget.app.styleSheet.getKey(widget, key),
+                    kfEase, value,
                     animation.unwindEasing, ctx.getWindingProgress()
             );
             return windingEase;
