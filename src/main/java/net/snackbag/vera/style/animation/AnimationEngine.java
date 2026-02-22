@@ -26,7 +26,7 @@ public class AnimationEngine {
     }
 
     public void startOrRewind(VAnimation animation) {
-        if (active.containsKey(animation.name)) active.get(animation.name).rewind();
+        if (active.containsKey(animation.name)) rewind(animation);
         else start(animation);
     }
 
@@ -50,6 +50,26 @@ public class AnimationEngine {
     public void unwind(String name) {
         if (active.containsKey(name)) active.get(name).unwind();
         else MinecraftVera.LOGGER.warn("Couldn't unwind %s, because it's not active".formatted(name));
+    }
+
+    public void rewind(VAnimation animation) {
+        rewind(animation.name);
+    }
+
+    public void rewind(String name) {
+        if (!active.containsKey(name)) {
+            MinecraftVera.LOGGER.warn("Couldn't rewind %s, because it's not active".formatted(name));
+            return;
+        }
+
+        PlaybackContext ctx = active.get(name);
+        if (ctx.getWindingProgress() <= 0.0f) {
+            MinecraftVera.LOGGER.warn("Couldn't rewind %s, because it's not unwinding".formatted(name));
+            return;
+        }
+
+        ctx.rewind();
+        widget.events.fire(VEvents.Animation.REWIND_BEGIN, ctx.animation);
     }
 
     public <T> T animateStyle(String key, T value) {
