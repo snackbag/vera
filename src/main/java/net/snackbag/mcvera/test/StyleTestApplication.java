@@ -7,6 +7,7 @@ import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.style.StyleState;
 import net.snackbag.vera.style.VStyleSheet;
 import net.snackbag.vera.style.animation.VAnimation;
+import net.snackbag.vera.style.animation.VLoopMode;
 import net.snackbag.vera.widget.VLabel;
 import net.snackbag.vera.widget.VRect;
 
@@ -19,6 +20,7 @@ public class StyleTestApplication extends VeraApp {
             })
             .build();
     private final VAnimation longTestAnimation = new VAnimation.Builder("long_test")
+            .loopMode(VLoopMode.FORWARD_REPEAT)
             .keyframe(1000, 2000, frame -> {
                 frame.style("background-color", VColor.MC_RED);
             })

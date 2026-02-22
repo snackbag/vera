@@ -17,6 +17,7 @@ public class CompiledAnimation {
     public final VeraApp app;
 
     public final String name;
+    public final VLoopMode loopMode;
     public final VEasing unwindEasing;
     public final int unwindTime;
 
@@ -41,6 +42,7 @@ public class CompiledAnimation {
     protected CompiledAnimation(
             VeraApp app,
             String name, int duration,
+            VLoopMode loopMode,
             VEasing unwindEasing, int unwindTime,
             List<VKeyframe> keyframes, List<String> keys
     ) {
@@ -48,6 +50,7 @@ public class CompiledAnimation {
 
         this.name = name;
         this.duration = duration;
+        this.loopMode = loopMode;
         this.unwindEasing = unwindEasing;
         this.unwindTime = unwindTime;
         this.keyframes = keyframes;
@@ -77,7 +80,7 @@ public class CompiledAnimation {
         return keyframes.size() - 1;
     }
 
-    public int getKeyframeTimeAt(VKeyframe keyframe) {
+    public int getWhenKeyframe(VKeyframe keyframe) {
         int buffer = 0;
 
         for (VKeyframe frame : keyframes) {
@@ -89,7 +92,11 @@ public class CompiledAnimation {
     }
 
     public float getKeyframeDelta(int time, VKeyframe from, VKeyframe to) {
-        int fromTime = getKeyframeTimeAt(from) + from.transitionTime + from.stayTime;
+        return getKeyframeDelta(time, getWhenKeyframe(from), from, to);
+    }
+
+    public float getKeyframeDelta(int time, int whenFrom, VKeyframe from, VKeyframe to) {
+        int fromTime = whenFrom + from.transitionTime + from.stayTime;
         int toTime = fromTime + to.transitionTime;
 
         if (time > toTime) return 1f;

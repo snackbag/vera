@@ -11,7 +11,12 @@ public class PlaybackContext {
     }
 
     public int getRelativeTime() {
-        return Math.toIntExact(System.currentTimeMillis() - startTime) % animation.duration; // TODO: loop modes
+        int relative = Math.toIntExact(System.currentTimeMillis() - startTime);
+
+        return switch (animation.loopMode) {
+            case NONE -> relative;
+            case FORWARD_REPEAT -> relative % animation.duration;
+        };
     }
 
     public float getProgress() {

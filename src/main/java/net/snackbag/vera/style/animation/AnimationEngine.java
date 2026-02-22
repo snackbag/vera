@@ -45,16 +45,30 @@ public class AnimationEngine {
 
             int time = ctx.getRelativeTime();
 
-            // select active keyframe
+            // select active keyframes
             int kfIndex = animation.getKeyframeIndexAtTime(time);
+            int fromKfIndex = Math.max(kfIndex - 1, 0);
+            boolean loopSpoofed = false;
+
+            if (ctx.getCurrentLoopNumber() > 1) { // handle loop mode; spoof first keyframe with last one for smooth transition
+                if (fromKfIndex == 0) {
+                    fromKfIndex = animation.keyframes.size() - 1;
+                    loopSpoofed = true;
+                }
+            }
 
             VKeyframe to = animation.keyframes.get(kfIndex);
-            VKeyframe from = animation.keyframes.get(Math.max(kfIndex - 1, 0));
+            VKeyframe from = animation.keyframes.get(fromKfIndex);
 
-            float delta = animation.getKeyframeDelta(time, from, to);
+            int fromKfWhen = animation.getWhenKeyframe(from);
+            if (ctx.getCurrentLoopNumber() > 1 && loopSpoofed) { // handle loop mode; spoof beginning time for smooth transition
+                fromKfWhen = 0;
+            }
+
+            float delta = animation.getKeyframeDelta(time, fromKfWhen, from, to);
 
             StyleValueType reservation = widget.app.styleSheet.getReservation(key);
-            return (T) reservation.animationTransition.apply(
+            return (T) reservation.animationTransition.apply( // ease
                     from.styles.get(key), to.styles.get(key),
                     to.easing, delta);
         }

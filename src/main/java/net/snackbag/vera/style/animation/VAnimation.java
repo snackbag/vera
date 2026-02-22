@@ -13,13 +13,15 @@ import java.util.function.Consumer;
 
 public class VAnimation {
     public String name;
+    public VLoopMode loopMode;
     public List<VKeyframe> keyframes;
 
     public VEasing unwindEasing;
     public int unwindTime;
 
-    public VAnimation(String name, VEasing unwindEasing, int unwindTime, List<VKeyframe> keyframes) {
+    public VAnimation(String name, VLoopMode loopMode, VEasing unwindEasing, int unwindTime, List<VKeyframe> keyframes) {
         this.name = name.toLowerCase();
+        this.loopMode = loopMode;
         this.keyframes = keyframes;
         this.unwindEasing = unwindEasing;
         this.unwindTime = unwindTime;
@@ -64,9 +66,20 @@ public class VAnimation {
             extendedFrames.add(frame);
         }
 
+        if (loopMode == VLoopMode.FORWARD_REPEAT) { // add immediate end for smooth transition
+            VKeyframe frame = new VKeyframe(
+                    keyframes.get(keyframes.size() - 1),
+                    0,
+                    0,
+                    VEasings.IMMEDIATE
+            );
+            extendedFrames.add(frame);
+        }
+
         return new CompiledAnimation(
                 app,
                 name, index.totalDuration,
+                loopMode,
                 unwindEasing, unwindTime,
                 extendedFrames, index.styles
         );
@@ -81,6 +94,7 @@ public class VAnimation {
         private final String name;
         private final List<VKeyframe> keyframes = new ArrayList<>();
 
+        private VLoopMode loopMode = VLoopMode.NONE;
         private VEasing unwindEasing = VEasings.LINEAR;
         private int unwindTime = 0;
 
@@ -104,6 +118,11 @@ public class VAnimation {
             return this;
         }
 
+        public Builder loopMode(VLoopMode mode) {
+            this.loopMode = mode;
+            return this;
+        }
+
         public Builder unwindEasing(VEasing easing) {
             this.unwindEasing = easing;
             return this;
@@ -115,7 +134,7 @@ public class VAnimation {
         }
 
         public VAnimation build() {
-            return new VAnimation(name, unwindEasing, unwindTime, keyframes);
+            return new VAnimation(name, loopMode, unwindEasing, unwindTime, keyframes);
         }
     }
 }
