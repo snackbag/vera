@@ -124,7 +124,9 @@ public class AnimationEngine {
     }
 
     public void updateLifetimes() {
-        for (Map.Entry<String, PlaybackContext> entry : active.entrySet()) {
+        HashMap<String, PlaybackContext> copies = new HashMap<>(active); // fix concurrency crash
+
+        for (Map.Entry<String, PlaybackContext> entry : copies.entrySet()) {
             PlaybackContext ctx = entry.getValue();
             String name = entry.getKey();
             CompiledAnimation animation = ctx.animation;
