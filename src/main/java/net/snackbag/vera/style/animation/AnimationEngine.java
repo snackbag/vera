@@ -39,8 +39,7 @@ public class AnimationEngine {
     }
 
     public <T> T animateStyle(String key, T value) {
-        for (Map.Entry<String, PlaybackContext> entry : active.entrySet()) {
-            PlaybackContext ctx = entry.getValue();
+        for (PlaybackContext ctx : active.values()) {
             CompiledAnimation animation = ctx.animation;
             if (!animation.keys.contains(key)) continue;
 
