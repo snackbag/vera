@@ -46,7 +46,7 @@ public class PlaybackContext {
     }
 
     public void unwind() {
-        if (!unwindingOrRewinding) return; // if already unwinding
+        if (!unwindingOrRewinding && windingStartTime != -1) return; // if already unwinding
 
         prevWindingProgress = getWindingProgress();
         windingStartTime = System.currentTimeMillis();
