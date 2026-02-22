@@ -52,6 +52,10 @@ public class StyleTestApplication extends VeraApp {
         testRect.onRightClick(() -> {
             testRect.animations.unwind(longTestAnimation);
         });
+
+        testRect.setStyle("transition", 100);
+        testRect.setStyle("background-color", StyleState.HOVERED, VColor.white());
+        testRect.setStyle("background-color", StyleState.CLICKED, VColor.MC_RED);
     }
 
     public VStyleSheet createStyleSheet() {
