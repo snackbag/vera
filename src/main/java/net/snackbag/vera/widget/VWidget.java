@@ -83,11 +83,26 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     }
 
     public void animate(VAnimation animation) {
+        animate(animation, false);
+    }
+
+    public void animate(VAnimation animation, boolean override) {
+        if (override && isAnimationActive(animation.name)) stopAnimation(animation);
         animations.start(animation);
+    }
+
+    public void stopAnimation(VAnimation animation) {
+        stopAnimation(animation.name);
     }
 
     public void stopAnimation(String animation) {
         animations.stop(animation);
+    }
+
+    public void stopAllAnimations() {
+        for (String animation : animations.getActive()) {
+            stopAnimation(animation);
+        }
     }
 
     public void startOrRewindAnimation(VAnimation animation) {
@@ -95,7 +110,27 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     }
 
     public void unwindAnimation(VAnimation animation) {
+        unwindAnimation(animation.name);
+    }
+
+    public void unwindAnimation(String animation) {
         animations.unwind(animation);
+    }
+
+    public void rewindAnimation(VAnimation animation) {
+        rewindAnimation(animation.name);
+    }
+
+    public void rewindAnimation(String animation) {
+        animations.rewind(animation);
+    }
+
+    public boolean isAnimationActive(VAnimation animation) {
+        return isAnimationActive(animation.name);
+    }
+
+    public boolean isAnimationActive(String animation) {
+        return animations.isActive(animation);
     }
 
     public StyleState createStyleState() {
