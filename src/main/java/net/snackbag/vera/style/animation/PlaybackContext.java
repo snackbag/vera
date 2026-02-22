@@ -8,6 +8,7 @@ public class PlaybackContext {
 
     private float prevWindingProgress = 0f;
     private long windingStartTime = -1;
+    private int unwindStartRelativeTime = -1; // for the relative unwinding
     private boolean unwindingOrRewinding = false; // unwinding = false; rewinding = true
 
     public PlaybackContext(CompiledAnimation animation, long startTime) {
@@ -39,16 +40,20 @@ public class PlaybackContext {
     public float getWindingProgress() {
         if (windingStartTime == -1) return 0f;
 
-        float delta = (float) (System.currentTimeMillis() - windingStartTime) / animation.unwindTime;
+        int unwindTime = animation.unwindTime;
+        if (unwindTime == -1) unwindTime = unwindStartRelativeTime;
+
+        float delta = (float) (System.currentTimeMillis() - windingStartTime) / unwindTime;
         if (unwindingOrRewinding) return MathHelper.clamp(prevWindingProgress - delta, 0f, 1f); // is rewinding
         else return MathHelper.clamp(prevWindingProgress + delta, 0f, 1f); // is unwinding
     }
 
     public void unwind() {
         if (!unwindingOrRewinding && windingStartTime != -1) return; // if already unwinding
+        if (windingStartTime == -1) unwindStartRelativeTime = getRelativeTime();
 
         prevWindingProgress = getWindingProgress();
-        windingStartTime = System.currentTimeMillis();
+        windingStartTime = System.currentTimeMillis() - 1;
         unwindingOrRewinding = false;
     }
 
@@ -65,6 +70,7 @@ public class PlaybackContext {
 
         prevWindingProgress = 0f;
         windingStartTime = -1;
+        unwindStartRelativeTime = -1;
         unwindingOrRewinding = false;
     }
 }

@@ -101,8 +101,9 @@ public class AnimationEngine {
             String name = entry.getKey();
             CompiledAnimation animation = ctx.animation;
 
-            if (animation.loopMode == VLoopMode.NONE && ctx.getProgress() >= 1.0f) {
             ctx.potentiallyResetWinding();
+
+            if (animation.unwindAtEnd && animation.loopMode == VLoopMode.NONE && ctx.getProgress() >= 1.0f) {
                 unwind(name);
             }
 

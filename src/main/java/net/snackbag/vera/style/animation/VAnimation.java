@@ -133,6 +133,12 @@ public class VAnimation {
             return this;
         }
 
+        public Builder relativeUnwindTime() {
+            this.unwindTime = -1;
+            return this;
+        }
+
+
         public VAnimation build() {
             return new VAnimation(name, loopMode, unwindEasing, unwindTime, keyframes);
         }
