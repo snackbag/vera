@@ -9,7 +9,9 @@ import net.snackbag.vera.event.*;
 import net.snackbag.vera.layout.VLayout;
 import net.snackbag.vera.style.StyleState;
 import net.snackbag.vera.style.animation.AnimationEngine;
+import net.snackbag.vera.style.animation.CompiledAnimation;
 import net.snackbag.vera.style.animation.VAnimation;
+import net.snackbag.vera.style.animation.easing.VEasing;
 import net.snackbag.vera.util.DragHandler;
 
 import java.nio.file.Path;
@@ -27,6 +29,9 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     private boolean rightClickDown = false;
     private StyleState handledPrevStyleState = StyleState.DEFAULT; // constantly updates
     private StyleState prevStyleState = StyleState.DEFAULT; // updates max once per frame, can be seen as the definite result
+
+    private StyleState transitionOrigin = null;
+    private boolean isTransitionUnwinding = false;
 
     public final LinkedHashSet<String> classes = new LinkedHashSet<>();
 
@@ -199,6 +204,36 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         StyleState state = createStyleState();
 
         if (state != prevStyleState) {
+            Integer transitionTime = app.styleSheet.getKey(this, "transition", state);
+            VEasing transitionEasing = app.styleSheet.getKey(this, "transition-easing", state);
+
+            Transition: if (transitionTime > 0) {
+                if (transitionOrigin == state) {
+                    if (isTransitionUnwinding) rewindAnimation(VAnimation.INTERNAL_TRANSITION_NAME);
+                    else unwindAnimation(VAnimation.INTERNAL_TRANSITION_NAME);
+                    break Transition;
+                }
+
+                VAnimation.Builder builder = new VAnimation.Builder(VAnimation.INTERNAL_TRANSITION_NAME)
+                        .relativeUnwindTime()
+                        .unwindEasing(transitionEasing);
+
+                builder.keyframe(0, 1, frame -> {
+                    for (String key : app.styleSheet.getKeysStacked(this, prevStyleState)) {
+                        frame.style(key, getStyle(key, prevStyleState));
+                    }
+                });
+
+                builder.keyframe(transitionTime - 1, 0, frame -> {
+                    for (String key : app.styleSheet.getKeysStacked(this, state)) {
+                        frame.style(key, app.styleSheet.getKey(this, key, state));
+                    }
+                });
+
+                transitionOrigin = prevStyleState;
+                animate(builder.build(), true);
+            }
+
             prevStyleState = state;
         }
     }
@@ -350,6 +385,16 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
                 clearRightClickDown();
                 clearMiddleClickDown();
             }
+
+            case VEvents.Animation.FINISH -> {
+                CompiledAnimation animation = (CompiledAnimation) args[0];
+                if (animation.name.equals(VAnimation.INTERNAL_TRANSITION_NAME)) {
+                    transitionOrigin = null;
+                    isTransitionUnwinding = false;
+                }
+            }
+            case VEvents.Animation.UNWIND_BEGIN -> isTransitionUnwinding = true;
+            case VEvents.Animation.REWIND_BEGIN -> isTransitionUnwinding = false;
         }
     }
 
