@@ -66,6 +66,7 @@ public class CompiledAnimation {
         for (int i = 0; i < keyframes.size(); i++) {
             VKeyframe keyframe = keyframes.get(i);
 
+            if (keyframe.transitionTime <= 0 && keyframe.stayTime <= 0) continue;
             if (time > bufferTime && time < bufferTime + keyframe.transitionTime + keyframe.stayTime) {
                 return i;
             }
