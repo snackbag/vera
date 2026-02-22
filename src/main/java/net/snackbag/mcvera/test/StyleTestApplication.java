@@ -21,6 +21,8 @@ public class StyleTestApplication extends VeraApp {
             .build();
     private final VAnimation longTestAnimation = new VAnimation.Builder("long_test")
             .loopMode(VLoopMode.FORWARD_REPEAT)
+            .unwindTime(1000)
+
             .keyframe(1000, 2000, frame -> {
                 frame.style("background-color", VColor.MC_RED);
             })
@@ -44,11 +46,11 @@ public class StyleTestApplication extends VeraApp {
 
         VRect testRect = new VRect(VColor.black(), this).alsoAdd();
         testRect.onLeftClick(() -> {
-            testRect.animations.start(longTestAnimation);
+            testRect.animations.startOrRewind(longTestAnimation);
         });
 
         testRect.onRightClick(() -> {
-            testRect.animations.stop(longTestAnimation);
+            testRect.animations.unwind(longTestAnimation);
         });
     }
 

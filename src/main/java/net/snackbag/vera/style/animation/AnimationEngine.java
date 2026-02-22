@@ -25,6 +25,11 @@ public class AnimationEngine {
         active.put(compiled.name, new PlaybackContext(compiled, System.currentTimeMillis()));
     }
 
+    public void startOrRewind(VAnimation animation) {
+        if (active.containsKey(animation.name)) active.get(animation.name).rewind();
+        else start(animation);
+    }
+
     public void stop(VAnimation animation) {
         stop(animation.name);
     }
@@ -36,6 +41,15 @@ public class AnimationEngine {
         }
 
         active.remove(name);
+    }
+
+    public void unwind(VAnimation animation) {
+        unwind(animation.name);
+    }
+
+    public void unwind(String name) {
+        if (active.containsKey(name)) active.get(name).unwind();
+        else MinecraftVera.LOGGER.warn("Couldn't unwind %s, because it's not active".formatted(name));
     }
 
     public <T> T animateStyle(String key, T value) {
@@ -68,9 +82,14 @@ public class AnimationEngine {
             float delta = animation.getKeyframeDelta(time, fromKfWhen, from, to);
 
             StyleValueType reservation = widget.app.styleSheet.getReservation(key);
-            return (T) reservation.animationTransition.apply( // ease
+            T kfEase = (T) reservation.animationTransition.apply( // ease keyframe transition
                     from.styles.get(key), to.styles.get(key),
                     to.easing, delta);
+            T windingEase = (T) reservation.animationTransition.apply( // ease winding
+                    kfEase, widget.app.styleSheet.getKey(widget, key),
+                    animation.unwindEasing, ctx.getWindingProgress()
+            );
+            return windingEase;
         }
 
         return value;
