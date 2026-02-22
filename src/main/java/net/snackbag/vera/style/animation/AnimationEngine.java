@@ -49,10 +49,9 @@ public class AnimationEngine {
             // select active keyframe
             int kfIndex = animation.getKeyframeIndexAtTime(time);
             float delta = animation.getKeyframeDelta(time);
-            // TODO: reverse order because I did a stupid
-            VKeyframe from = animation.keyframes.get(kfIndex);
-            VKeyframe to = animation.keyframes.size() - 1 >= kfIndex ? from : animation.keyframes.get(kfIndex + 1);
-            System.out.println(time + " " + kfIndex);
+
+            VKeyframe to = animation.keyframes.get(kfIndex);
+            VKeyframe from = animation.keyframes.get(Math.max(kfIndex - 1, 0));
 
             StyleValueType reservation = widget.app.styleSheet.getReservation(key);
             return (T) reservation.animationTransition.apply(
