@@ -42,10 +42,6 @@ public class StyleTestApplication extends VeraApp {
 
         VRect testRect = new VRect(VColor.black(), this).alsoAdd();
         testRect.onLeftClick(() -> {
-//            CompiledAnimation compiled = testAnimation.compile(this, testRect);
-//            System.out.println(compiled);
-//            CompiledAnimation compiled = longTestAnimation.compile(this, testRect);
-//            System.out.println(compiled);
             testRect.animations.start(longTestAnimation);
         });
 
