@@ -69,8 +69,7 @@ public class VKeyframe {
                     String key = entry.getKey();
                     Object val = entry.getValue();
 
-                    if (styles.contains(key)) continue;
-                    styles.add(key);
+                    if (!styles.contains(key)) styles.add(key);
 
                     SheetCheck: if (sheet != null) {
                         StyleValueType res = sheet.getReservation(key);
