@@ -65,12 +65,10 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     }
 
     public <V> V getStyle(String key) {
-//        return app.styleSheet.getKey(this, key);
         return animations.animateStyle(key, app.styleSheet.getKey(this, key));
     }
 
     public <V> V getStyle(String key, StyleState state) {
-//        return app.styleSheet.getKey(this, key, state);
         return animations.animateStyle(key, app.styleSheet.getKey(this, key, state));
     }
 
@@ -82,6 +80,22 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public <V> V getStyleOrDefault(String key, V dflt, StyleState state) {
         V style = getStyle(key, state);
         return style != null ? style : dflt;
+    }
+
+    public void animate(VAnimation animation) {
+        animations.start(animation);
+    }
+
+    public void stopAnimation(String animation) {
+        animations.stop(animation);
+    }
+
+    public void startOrRewindAnimation(VAnimation animation) {
+        animations.startOrRewind(animation);
+    }
+
+    public void unwindAnimation(VAnimation animation) {
+        animations.unwind(animation);
     }
 
     public StyleState createStyleState() {
