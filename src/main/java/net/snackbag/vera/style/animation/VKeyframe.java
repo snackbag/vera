@@ -23,9 +23,13 @@ public class VKeyframe {
     }
 
     public VKeyframe(VKeyframe other) {
-        this.stayTime = other.stayTime;
-        this.transitionTime = other.transitionTime;
-        this.easing = other.easing;
+        this(other, other.transitionTime, other.stayTime, other.easing);
+    }
+
+    public VKeyframe(VKeyframe other, int transitionTime, int stayTime, VEasing easing) {
+        this.transitionTime = transitionTime;
+        this.stayTime = stayTime;
+        this.easing = easing;
 
         styles.putAll(other.styles);
     }
@@ -37,8 +41,8 @@ public class VKeyframe {
 
     public String dump() {
         StringBuilder sb = new StringBuilder();
-        sb.append("stayTime=").append(stayTime).append('\n');
         sb.append("transitionTime=").append(transitionTime).append('\n');
+        sb.append("stayTime=").append(stayTime).append('\n');
         sb.append("easing=").append(easing).append('\n');
         for (var e : styles.entrySet()) {
             sb.append(e.getKey()).append(" = ").append(e.getValue()).append('\n');
