@@ -2,7 +2,6 @@ package net.snackbag.vera.style.animation;
 
 import net.minecraft.util.math.MathHelper;
 
-// TODO: winding
 public class PlaybackContext {
     public final CompiledAnimation animation;
     public final long startTime;
