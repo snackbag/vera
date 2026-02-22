@@ -1,11 +1,13 @@
 package net.snackbag.vera.style.animation;
 
 import net.snackbag.mcvera.MinecraftVera;
+import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.style.StyleValueType;
 import net.snackbag.vera.widget.VWidget;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class AnimationEngine {
     public final VWidget<?> widget;
@@ -135,5 +137,13 @@ public class AnimationEngine {
 
             if (ctx.getWindingProgress() >= 1.0f || (!animation.unwindAtEnd && ctx.getProgress() >= 1.0f)) stop(name);
         }
+    }
+
+    public boolean isActive(String animation) {
+        return active.containsKey(animation.toLowerCase());
+    }
+
+    public Set<String> getActive() {
+        return active.keySet();
     }
 }
