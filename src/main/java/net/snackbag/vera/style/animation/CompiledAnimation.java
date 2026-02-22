@@ -59,4 +59,20 @@ public class CompiledAnimation {
         return "CompiledAnimation{name='%s', duration='%s', unwindEasing='%s', unwindTime=%s, keyframeCount=%s}"
                 .formatted(name, duration, unwindEasing, unwindTime, keyframes.size());
     }
+
+    public int getKeyframeIndexAtTime(int time) {
+        int bufferTime = 0;
+
+        for (int i = 0; i < keyframes.size(); i++) {
+            VKeyframe keyframe = keyframes.get(i);
+
+            if (time > bufferTime && time < bufferTime + keyframe.transitionTime + keyframe.stayTime) {
+                return i;
+            }
+
+            bufferTime += keyframe.transitionTime + keyframe.stayTime;
+        }
+
+        return keyframes.size() - 1;
+    }
 }
