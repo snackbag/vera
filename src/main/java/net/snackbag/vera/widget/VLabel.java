@@ -19,9 +19,13 @@ public class VLabel extends VWidget<VLabel> implements VHasFont {
         alignment = VHAlignmentFlag.LEFT;
     }
 
+    public VLabel(String text, int x, int y, VeraApp app) {
+        this(text, x, y, 100, 16, app);
+        adjustSize();
+    }
+
     public VLabel(String text, VeraApp app) {
         this(text, 0, 0, 100, 16, app);
-
         adjustSize();
     }
 
