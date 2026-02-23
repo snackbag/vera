@@ -266,8 +266,8 @@ public abstract class VeraApp {
     private boolean isPointOverWidget(VWidget<?> widget, int px, int py) {
         if (!widget.visibilityConditionsPassed()) return false;
 
-        int widgetX = widget.getHitboxX() + x;
-        int widgetY = widget.getHitboxY() + y;
+        int widgetX = widget.getHitboxX();
+        int widgetY = widget.getHitboxY();
         int widgetWidth = widget.getHitboxWidth();
         int widgetHeight = widget.getHitboxHeight();
         return VGeometry.isInBox(px, py, widgetX, widgetY, widgetWidth, widgetHeight);
