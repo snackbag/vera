@@ -1,6 +1,7 @@
 package net.snackbag.mcvera.test;
 
 import net.snackbag.vera.core.VColor;
+import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
@@ -44,13 +45,24 @@ public class StyleTestApplication extends VeraApp {
         testRect.setStyle("transition", 100);
         testRect.setStyle("background-color", StyleState.HOVERED, VColor.white());
         testRect.setStyle("background-color", StyleState.CLICKED, VColor.MC_RED);
+
+        // Moving & classes
+        VLabel testLabel = new VLabel("hello there", 40, 10, this)
+                .alsoAddClass("label")
+                .alsoAdd();
+
+        testLabel.onMouseDragLeft((ctx) -> testLabel.move(
+                testLabel.getX() + ctx.moveX(),
+                testLabel.getY() + ctx.moveY()
+        ));
     }
 
     public VStyleSheet createStyleSheet() {
         VStyleSheet sheet = new VStyleSheet();
 
-        sheet.setKey("label", "font", VFont.create());
+        sheet.setKey("label", "font", VFont.create().withColor(VColor.MC_GOLD.sub(80)));
         sheet.setKey("label", "font", VFont.create().withColor(VColor.MC_GOLD), StyleState.HOVERED);
+        sheet.setKey("label", "cursor", VCursorShape.POINTING_HAND, StyleState.HOVERED);
 
         return sheet;
     }
