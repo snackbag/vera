@@ -22,7 +22,7 @@ public enum StyleValueType {
                     .withSize(easing.apply(from.getSize(), to.getSize(), delta))
                     .withName(delta > 0.5 ? to.getName() : from.getName())),
     CURSOR(VCursorShape.DEFAULT, (f, t, e, d) -> d > 0.5 ? t : f),
-    EASING(VEasings.LINEAR, (f, t, e, d) -> d > 0.5 ? t : f),
+    EASING(VEasings.getDefault(), (f, t, e, d) -> d > 0.5 ? t : f),
 
     V4INT(new V4Int(0), (from, to, easing, delta) -> new V4Int(
             easing.apply(from.get1(), to.get1(), delta),

@@ -98,7 +98,7 @@ public class VAnimation {
         private final List<VKeyframe> keyframes = new ArrayList<>();
 
         private VLoopMode loopMode = VLoopMode.NONE;
-        private VEasing unwindEasing = VEasings.LINEAR;
+        private VEasing unwindEasing = VEasings.getDefault();
         private int unwindTime = 0;
         private boolean unwindAtEnd = false;
 
@@ -107,11 +107,11 @@ public class VAnimation {
         }
 
         public Builder keyframe(int stayMs, Consumer<VKeyframe> apply) {
-            return keyframe(0, stayMs, apply, VEasings.LINEAR);
+            return keyframe(0, stayMs, apply, VEasings.getDefault());
         }
 
         public Builder keyframe(int transitionMs, int stayMs, Consumer<VKeyframe> apply) {
-            return keyframe(transitionMs, stayMs, apply, VEasings.LINEAR);
+            return keyframe(transitionMs, stayMs, apply, VEasings.getDefault());
         }
 
         public Builder keyframe(int transitionMs, int stayMs, Consumer<VKeyframe> apply, VEasing easing) {

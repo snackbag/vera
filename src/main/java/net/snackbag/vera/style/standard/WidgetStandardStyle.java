@@ -21,7 +21,7 @@ public class WidgetStandardStyle implements VStandardStyle {
 
         // Transition
         sheet.setKey(VWidget.class, "transition", 0);
-        sheet.setKey(VWidget.class, "transition-easing", VEasings.LINEAR);
+        sheet.setKey(VWidget.class, "transition-easing", VEasings.getDefault());
     }
 
     @Override
