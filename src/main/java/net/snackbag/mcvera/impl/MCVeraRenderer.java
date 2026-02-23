@@ -90,6 +90,8 @@ public class MCVeraRenderer {
         }
         app.renderAfterWidgets();
 
+        if (app.isRequiresHierarchy() && !MCVeraData.isTopHierarchy(app)) app.renderHierarchyOverlay();
+
         if (!blendEnabled) RenderSystem.disableBlend();
     }
 
