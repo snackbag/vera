@@ -33,11 +33,9 @@ public class StyleTestApplication extends VeraApp {
 
         mergeStyleSheet(createStyleSheet());
 
-        new VLabel("helo", this)
-                .alsoAddClass("label")
-                .alsoAdd();
-
+        // Animations
         VRect testRect = new VRect(VColor.black(), this).alsoAdd();
+        testRect.move(10);
 
         testRect.onLeftClick(() -> testRect.animations.startOrRewind(longTestAnimation));
         testRect.onRightClick(() -> testRect.animations.unwind(longTestAnimation));
