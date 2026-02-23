@@ -18,6 +18,7 @@ import net.snackbag.vera.widget.VWidget;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -99,18 +100,16 @@ public class MCVeraRenderer {
         if (!MinecraftClient.getInstance().isRunning()) return;
 
         LinkedHashSet<VeraApp> apps = MCVeraData.visibleApplications.getOrDefault(flag, new LinkedHashSet<>());
-        List<VeraApp> hierarchicApps = new ArrayList<>();
 
         for (VeraApp app : apps) {
-            if (app.isRequiresHierarchy()) {
-                hierarchicApps.add(app);
-                continue;
-            }
-
+            if (app.isRequiresHierarchy()) continue;
             Vera.renderer.renderApp(app);
         }
 
+        List<VeraApp> hierarchicApps = new ArrayList<>(MCVeraData.appHierarchy);
+        Collections.reverse(hierarchicApps);
         for (VeraApp app : hierarchicApps) {
+            if (app.getPositioning() != flag) continue;
             Vera.renderer.renderApp(app);
         }
     }
