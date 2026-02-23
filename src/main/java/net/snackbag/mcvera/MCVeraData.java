@@ -34,4 +34,8 @@ public class MCVeraData {
     public static @Nullable VeraApp getTopHierarchy() {
         return appHierarchy.isEmpty() ? null : appHierarchy.get(0);
     }
+
+    public static boolean isTopHierarchy(VeraApp app) {
+        return appHierarchy.isEmpty() || appHierarchy.get(0) == app;
+    }
 }

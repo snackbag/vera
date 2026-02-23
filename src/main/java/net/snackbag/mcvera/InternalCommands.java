@@ -6,10 +6,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.CommandRegistryAccess;
-import net.snackbag.mcvera.test.LayoutCenteringTestApplication;
-import net.snackbag.mcvera.test.LayoutTestApplication;
-import net.snackbag.mcvera.test.StyleTestApplication;
-import net.snackbag.mcvera.test.TestApplication;
+import net.snackbag.mcvera.test.*;
 
 public class InternalCommands {
     public static void register(
@@ -21,26 +18,30 @@ public class InternalCommands {
         dispatcher.register(
                 ClientCommandManager.literal("vera")
                         .then(ClientCommandManager.literal("test")
-                            .then(ClientCommandManager.literal("generic").executes((ctx) -> {
-                                TestApplication.INSTANCE.show();
-                                return 1;
-                            }))
-                            .then(ClientCommandManager.literal("styles").executes((ctx) -> {
-                                StyleTestApplication.INSTANCE.show();
-                                return 1;
-                            }))
-                            .then(ClientCommandManager.literal("layout").executes((ctx) -> {
-                                LayoutTestApplication.INSTANCE.show();
-                                return 1;
-                            }))
-                            .then(ClientCommandManager.literal("layoutalignments").executes((ctx) -> {
-                                LayoutCenteringTestApplication.INSTANCE.show();
-                                return 1;
-                            }))
-                            .then(ClientCommandManager.literal("demo").executes(ctx -> {
-                                DemoMod.init();
-                                return 1;
-                            }))
+                                .then(ClientCommandManager.literal("generic").executes((ctx) -> {
+                                    TestApplication.INSTANCE.show();
+                                    return 1;
+                                }))
+                                .then(ClientCommandManager.literal("styles").executes((ctx) -> {
+                                    StyleTestApplication.INSTANCE.show();
+                                    return 1;
+                                }))
+                                .then(ClientCommandManager.literal("layout").executes((ctx) -> {
+                                    LayoutTestApplication.INSTANCE.show();
+                                    return 1;
+                                }))
+                                .then(ClientCommandManager.literal("layoutalignments").executes((ctx) -> {
+                                    LayoutCenteringTestApplication.INSTANCE.show();
+                                    return 1;
+                                }))
+                                .then(ClientCommandManager.literal("hierarchy").executes(ctx -> {
+                                    HierarchyTest.INSTANCE.start();
+                                    return 1;
+                                }))
+                                .then(ClientCommandManager.literal("demo").executes(ctx -> {
+                                    DemoMod.init();
+                                    return 1;
+                                }))
                         )
                         .then(ClientCommandManager.literal("clear-tests")
                                 .executes((ctx) -> {
@@ -48,6 +49,7 @@ public class InternalCommands {
                                     StyleTestApplication.INSTANCE = new StyleTestApplication();
                                     LayoutTestApplication.INSTANCE = new LayoutTestApplication();
                                     LayoutCenteringTestApplication.INSTANCE = new LayoutCenteringTestApplication();
+                                    HierarchyTest.INSTANCE = new HierarchyTest();
                                     return 1;
                                 })
                         )
