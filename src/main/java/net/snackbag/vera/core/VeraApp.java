@@ -2,6 +2,7 @@ package net.snackbag.vera.core;
 
 import net.minecraft.client.MinecraftClient;
 import net.snackbag.mcvera.MCVeraData;
+import net.snackbag.mcvera.MinecraftVera;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VShortcut;
@@ -181,7 +182,10 @@ public abstract class VeraApp {
     }
 
     public void moveToHierarchyTop() {
-        if (!requiresHierarchy) return;
+        if (!requiresHierarchy) {
+            MinecraftVera.LOGGER.warn("Failed to move app to top, because hierarchy isn't enabled");
+            return;
+        }
 
         MCVeraData.appHierarchy.remove(this);
         MCVeraData.appHierarchy.add(0, this);
