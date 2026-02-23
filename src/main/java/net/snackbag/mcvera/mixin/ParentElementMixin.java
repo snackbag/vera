@@ -15,6 +15,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Mixin(ParentElement.class)
 public interface ParentElementMixin {
     @Inject(method = "mouseClicked", at = @At("HEAD"))
@@ -25,10 +28,11 @@ public interface ParentElementMixin {
 
         VMouseButton btn = VMouseButton.fromInt(button);
 
-        VeraApp top = MCVeraData.getTopHierarchy();
+        List<VeraApp> hierarchicApps = new ArrayList<>(MCVeraData.appHierarchy);
+        for (VeraApp app : hierarchicApps) {
+            if (app.isPointOverThis(mouseX, mouseY)) {
+                if (MCVeraData.isTopHierarchy(app)) break;
 
-        for (VeraApp app : MCVeraData.appHierarchy) {
-            if (app.isPointOverThis(mouseX, mouseY) && top != app) {
                 app.moveToHierarchyTop();
                 justChanged = true;
                 break;
