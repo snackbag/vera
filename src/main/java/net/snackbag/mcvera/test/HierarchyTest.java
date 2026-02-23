@@ -4,6 +4,7 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.style.StyleState;
 import net.snackbag.vera.widget.VLabel;
 import net.snackbag.vera.widget.VRect;
@@ -37,6 +38,8 @@ public class HierarchyTest {
 
         @Override
         public void init() {
+            new VShortcut(this, "escape", this::hide);
+
             setBackgroundColor(VColor.MC_DARK_GRAY);
             setRequiresHierarchy(true);
 
