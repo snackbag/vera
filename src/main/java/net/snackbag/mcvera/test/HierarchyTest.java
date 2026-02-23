@@ -6,6 +6,7 @@ import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.style.StyleState;
 import net.snackbag.vera.widget.VLabel;
+import net.snackbag.vera.widget.VRect;
 
 public class HierarchyTest {
     public static HierarchyTest INSTANCE = new HierarchyTest();
@@ -42,6 +43,9 @@ public class HierarchyTest {
             styleSheet.setKey(VLabel.class, "font", VFont.create().withColor(VColor.white()));
             styleSheet.setKey(VLabel.class, "font", VFont.create().withColor(VColor.MC_AQUA), StyleState.HOVERED);
             styleSheet.setKey(VLabel.class, "transition", 250);
+
+            VRect mover = new VRect(VColor.black(), 0, 0, 100, 8, this).alsoAdd();
+            mover.onMouseDragLeft((ctx) -> move(getX() + ctx.moveX(), getY() + ctx.moveY()));
             new VLabel(name, this).alsoAdd();
         }
 
