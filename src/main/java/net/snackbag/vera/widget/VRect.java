@@ -7,7 +7,15 @@ import net.snackbag.vera.style.StyleState;
 
 public class VRect extends VWidget<VRect> {
     public VRect(VColor color, VeraApp app) {
-        super(0, 0, 20, 20, app);
+        this(color, 0, 0, 20, 20, app);
+    }
+
+    public VRect(VColor color, int x, int y, VeraApp app) {
+        this(color, x, y, 20, 20, app);
+    }
+
+    public VRect(VColor color, int x, int y, int width, int height, VeraApp app) {
+        super(x, y, width, height, app);
 
         this.focusOnClick = false;
         setStyle("background-color", color);
