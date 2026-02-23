@@ -91,6 +91,8 @@ public class MCVeraRenderer {
     }
 
     public void renderApps(VWindowPositioningFlag flag) {
+        if (!MinecraftClient.getInstance().isRunning()) return;
+
         LinkedHashSet<VeraApp> apps = MCVeraData.visibleApplications.getOrDefault(flag, new LinkedHashSet<>());
         List<VeraApp> hierarchicApps = new ArrayList<>();
 
