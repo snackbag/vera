@@ -1,6 +1,7 @@
 package net.snackbag.mcvera.mixin;
 
 import net.minecraft.client.render.GameRenderer;
+import net.snackbag.vera.InternalVera;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.flag.VWindowPositioningFlag;
 import org.spongepowered.asm.mixin.Mixin;
@@ -8,7 +9,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
@@ -31,5 +33,10 @@ public abstract class GameRendererMixin {
     private void mcvera$renderScreenAndTop(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         Vera.renderer.renderApps(VWindowPositioningFlag.SCREEN);
         Vera.renderer.renderApps(VWindowPositioningFlag.TOP);
+
+        List<Runnable> tasks = new ArrayList<>(InternalVera.getScheduledTasks());
+        InternalVera.clearScheduledTasks();
+
+        for (Runnable task : tasks) task.run();
     }
 }

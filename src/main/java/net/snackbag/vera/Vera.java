@@ -27,6 +27,7 @@ public class Vera {
     public static final String FONT_ARIAL = "minecraft:arial";
 
     public static long renderCacheId = 0;
+    protected static final ArrayList<Runnable> nextFrameTasks = new ArrayList<>();
 
     public static void forVisibleAndAllowedApps(Consumer<VeraApp> handler) {
         final List<VeraApp> handledApps = new ArrayList<>();
@@ -101,5 +102,13 @@ public class Vera {
         }
 
         return null;
+    }
+
+    /**
+     * Schedules a task to the next frame; run AFTER all Vera rendering
+     * @param runnable the task to execute
+     */
+    public static void scheduleToNextFrame(Runnable runnable) {
+        nextFrameTasks.add(runnable);
     }
 }
