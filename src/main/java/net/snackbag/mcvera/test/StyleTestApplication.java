@@ -15,23 +15,15 @@ public class StyleTestApplication extends VeraApp {
     public static StyleTestApplication INSTANCE = new StyleTestApplication();
 
     private final VAnimation testAnimation = new VAnimation.Builder("test")
-            .keyframe(1000, 5000, frame -> {
-                frame.style("background-color", VColor.MC_RED);
-            })
+            .keyframe(1000, 5000, frame -> frame.style("background-color", VColor.MC_RED))
             .build();
     private final VAnimation longTestAnimation = new VAnimation.Builder("long_test")
             .loopMode(VLoopMode.FORWARD_REPEAT)
             .unwindTime(1000)
 
-            .keyframe(1000, 2000, frame -> {
-                frame.style("background-color", VColor.MC_RED);
-            })
-            .keyframe(1000, 5000, frame -> {
-                frame.style("background-color", VColor.MC_GOLD);
-            })
-            .keyframe(1000, 1000, frame -> {
-                frame.style("background-color", VColor.MC_WHITE);
-            })
+            .keyframe(1000, 2000, frame -> frame.style("background-color", VColor.MC_RED))
+            .keyframe(1000, 5000, frame -> frame.style("background-color", VColor.MC_GOLD))
+            .keyframe(1000, 1000, frame -> frame.style("background-color", VColor.MC_WHITE))
             .build();
 
     @Override
@@ -45,13 +37,9 @@ public class StyleTestApplication extends VeraApp {
                 .alsoAdd();
 
         VRect testRect = new VRect(VColor.black(), this).alsoAdd();
-        testRect.onLeftClick(() -> {
-            testRect.animations.startOrRewind(longTestAnimation);
-        });
 
-        testRect.onRightClick(() -> {
-            testRect.animations.unwind(longTestAnimation);
-        });
+        testRect.onLeftClick(() -> testRect.animations.startOrRewind(longTestAnimation));
+        testRect.onRightClick(() -> testRect.animations.unwind(longTestAnimation));
 
         testRect.setStyle("transition", 100);
         testRect.setStyle("background-color", StyleState.HOVERED, VColor.white());
