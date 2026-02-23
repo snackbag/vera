@@ -171,8 +171,9 @@ public abstract class VeraApp {
     }
 
     public void setRequiresHierarchy(boolean requires) {
-        if (MCVeraData.appHierarchy.contains(this) && !requires) {
-            MCVeraData.appHierarchy.remove(this);
+        if (MCVeraData.appHierarchy.contains(this)) {
+            if (!requires) MCVeraData.appHierarchy.remove(this);
+            return;
         }
 
         MCVeraData.appHierarchy.add(this);
