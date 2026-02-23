@@ -35,8 +35,11 @@ public class VStyleSheet {
         // if class contains key
         HashMap<String, HashMap<StyleState, Object>> mixed = mixClasses(widget.classes);
 
-        if (mixed.containsKey(key)) {
-            if (!mixed.get(key).containsKey(state)) return getKey(widget, key, state.fallback);
+        Contains: if (mixed.containsKey(key)) {
+            if (!mixed.get(key).containsKey(state)) {
+                if (state.fallback == null) break Contains;
+                return getKey(widget, key, state.fallback);
+            }
             return (T) mixed.get(key).get(state);
         }
 
