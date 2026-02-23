@@ -1,7 +1,7 @@
 package net.snackbag.vera.style.animation.easing;
 
-public class VLinearEasing extends VEasing {
-    protected VLinearEasing() {
+public class LinearEasing extends VEasing {
+    protected LinearEasing() {
         super("linear");
     }
 

@@ -1,7 +1,7 @@
 package net.snackbag.vera.style.animation.easing;
 
-public class VImmediateEasing extends VEasing {
-    public VImmediateEasing() {
+public class ImmediateEasing extends VEasing {
+    public ImmediateEasing() {
         super("immediate");
     }
 
