@@ -6,7 +6,7 @@ import net.snackbag.mcvera.MinecraftVera;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VShortcut;
-import net.snackbag.vera.flag.VWindowFlag;
+import net.snackbag.vera.flag.VAppFlag;
 import net.snackbag.vera.flag.VWindowPositioningFlag;
 import net.snackbag.vera.style.VStyleSheet;
 import net.snackbag.vera.util.VGeometry;
@@ -44,7 +44,7 @@ public abstract class VeraApp {
         this.backgroundColor = VColor.transparent();
         this.cursorShape = VCursorShape.DEFAULT;
         this.cursorVisible = true;
-        if (mouseRequired) setFlag(VWindowFlag.REQUIRES_MOUSE, true);
+        if (mouseRequired) setFlag(VAppFlag.REQUIRES_MOUSE, true);
 
         Vera.provider.handleAppInitialization(this);
 
@@ -60,7 +60,7 @@ public abstract class VeraApp {
     public void setCursorVisible(boolean cursorVisible) {
         this.cursorVisible = cursorVisible;
 
-        if (!visible || !hasFlag(VWindowFlag.REQUIRES_MOUSE)) return;
+        if (!visible || !hasFlag(VAppFlag.REQUIRES_MOUSE)) return;
         GLFW.glfwSetInputMode(
                 MinecraftClient.getInstance().getWindow().getHandle(),
                 GLFW.GLFW_CURSOR,
@@ -104,7 +104,7 @@ public abstract class VeraApp {
         this.visible = visible;
 
         if (visible) setCursorShape(cursorShape);
-        if (!visible || !hasFlag(VWindowFlag.REQUIRES_MOUSE)) return;
+        if (!visible || !hasFlag(VAppFlag.REQUIRES_MOUSE)) return;
         GLFW.glfwSetInputMode(
                 MinecraftClient.getInstance().getWindow().getHandle(),
                 GLFW.GLFW_CURSOR,
@@ -154,13 +154,13 @@ public abstract class VeraApp {
     }
 
     public void moveToHierarchyTop() {
-        if (!hasFlag(VWindowFlag.HIERARCHIC)) {
+        if (!hasFlag(VAppFlag.HIERARCHIC)) {
             MinecraftVera.LOGGER.warn("Failed to move app to top, because hierarchy isn't enabled");
             return;
         }
 
-        MCVeraData.windowFlags.get(VWindowFlag.HIERARCHIC).remove(this);
-        MCVeraData.windowFlags.get(VWindowFlag.HIERARCHIC).add(0, this);
+        MCVeraData.appFlags.get(VAppFlag.HIERARCHIC).remove(this);
+        MCVeraData.appFlags.get(VAppFlag.HIERARCHIC).add(0, this);
     }
 
     public abstract void init();
@@ -329,22 +329,22 @@ public abstract class VeraApp {
         styleSheet.addSheet(target);
     }
 
-    public boolean hasFlag(VWindowFlag flag) {
-        if (!MCVeraData.windowFlags.containsKey(flag)) return false;
-        else return MCVeraData.windowFlags.get(flag).contains(this);
+    public boolean hasFlag(VAppFlag flag) {
+        if (!MCVeraData.appFlags.containsKey(flag)) return false;
+        else return MCVeraData.appFlags.get(flag).contains(this);
     }
 
-    public void setFlag(VWindowFlag flag, boolean enabled) {
+    public void setFlag(VAppFlag flag, boolean enabled) {
         if (enabled == hasFlag(flag)) return; // if nothing has to be changed, change nothing
 
-        if (!enabled) MCVeraData.windowFlags.get(flag).remove(this);
+        if (!enabled) MCVeraData.appFlags.get(flag).remove(this);
         else {
-            if (!MCVeraData.windowFlags.containsKey(flag)) MCVeraData.windowFlags.put(flag, new ArrayList<>());
-            MCVeraData.windowFlags.get(flag).add(this);
+            if (!MCVeraData.appFlags.containsKey(flag)) MCVeraData.appFlags.put(flag, new ArrayList<>());
+            MCVeraData.appFlags.get(flag).add(this);
         }
 
         // handle mouse requirements
-        if (flag == VWindowFlag.REQUIRES_MOUSE) {
+        if (flag == VAppFlag.REQUIRES_MOUSE) {
             Vera.provider.handleAppSetMouseRequired(this, enabled);
 
             if (!visible || !enabled) return;

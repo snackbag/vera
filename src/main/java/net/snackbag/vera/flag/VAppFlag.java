@@ -1,6 +1,6 @@
 package net.snackbag.vera.flag;
 
-public enum VWindowFlag {
+public enum VAppFlag {
     DEBUG,
     HIERARCHIC,
     REQUIRES_MOUSE

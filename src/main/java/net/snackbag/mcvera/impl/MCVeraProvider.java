@@ -8,7 +8,7 @@ import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VShortcut;
-import net.snackbag.vera.flag.VWindowFlag;
+import net.snackbag.vera.flag.VAppFlag;
 import net.snackbag.vera.widget.VWidget;
 
 import java.nio.file.Path;
@@ -27,7 +27,7 @@ public class MCVeraProvider {
         if (app.isVisible()) return;
 
         MCVeraData.visibleApplications.get(app.getPositioning()).add(app);
-        if (app.hasFlag(VWindowFlag.REQUIRES_MOUSE)) MCVeraData.appsWithMouseRequired += 1;
+        if (app.hasFlag(VAppFlag.REQUIRES_MOUSE)) MCVeraData.appsWithMouseRequired += 1;
         MinecraftClient client = MinecraftClient.getInstance();
         client.send(app::update);
 
@@ -41,7 +41,7 @@ public class MCVeraProvider {
     public void handleAppHide(VeraApp app) {
         if (!app.isVisible()) return;
 
-        if (app.hasFlag(VWindowFlag.REQUIRES_MOUSE)) MCVeraData.appsWithMouseRequired -= 1;
+        if (app.hasFlag(VAppFlag.REQUIRES_MOUSE)) MCVeraData.appsWithMouseRequired -= 1;
         MCVeraData.visibleApplications.get(app.getPositioning()).remove(app);
         MinecraftClient client = MinecraftClient.getInstance();
         client.send(app::update);
