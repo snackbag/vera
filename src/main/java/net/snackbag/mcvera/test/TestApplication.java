@@ -124,7 +124,7 @@ public class TestApplication extends VeraApp {
         tabs.setActiveTab(0);
 
         VRect rotationRect = new VRect(VColor.black(), this).alsoAdd();
-        rotationRect.onLeftClick(() -> rotationRect.animate(rotationAnimation));
+        rotationRect.onLeftClick(() -> input.animate(rotationAnimation));
         rotationRect.move(20, 200);
     }
 
