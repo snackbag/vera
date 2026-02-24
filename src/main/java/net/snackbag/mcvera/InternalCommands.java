@@ -38,6 +38,10 @@ public class InternalCommands {
                                     HierarchyTest.INSTANCE.start();
                                     return 1;
                                 }))
+                                .then(ClientCommandManager.literal("quads").executes(ctx -> {
+                                    QuadTestApplication.INSTANCE.show();
+                                    return 1;
+                                }))
                                 .then(ClientCommandManager.literal("demo").executes(ctx -> {
                                     DemoMod.init();
                                     return 1;
@@ -50,6 +54,7 @@ public class InternalCommands {
                                     LayoutTestApplication.INSTANCE = new LayoutTestApplication();
                                     LayoutCenteringTestApplication.INSTANCE = new LayoutCenteringTestApplication();
                                     HierarchyTest.INSTANCE = new HierarchyTest();
+                                    QuadTestApplication.INSTANCE = new QuadTestApplication();
                                     return 1;
                                 })
                         )
