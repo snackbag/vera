@@ -43,13 +43,15 @@ public class HierarchyTest {
             setBackgroundColor(VColor.MC_DARK_GRAY);
             setRequiresHierarchy(true);
 
-            styleSheet.setKey(VLabel.class, "font", VFont.create().withColor(VColor.white()));
-            styleSheet.setKey(VLabel.class, "font", VFont.create().withColor(VColor.MC_AQUA), StyleState.HOVERED);
+            styleSheet.setKey(VLabel.class, "font", VFont.create().withColor(VColor.white()).withSize(12));
+            styleSheet.setKey(VLabel.class, "font", VFont.create().withColor(VColor.MC_AQUA).withSize(12), StyleState.HOVERED);
             styleSheet.setKey(VLabel.class, "transition", 250);
 
             VRect mover = new VRect(VColor.black(), 0, 0, 100, 8, this).alsoAdd();
             mover.onMouseDragLeft((ctx) -> move(getX() + ctx.moveX(), getY() + ctx.moveY()));
-            new VLabel(name, this).alsoAdd();
+
+            VLabel label = new VLabel(name, this).alsoAdd();
+            label.move(1);
         }
 
         @Override
