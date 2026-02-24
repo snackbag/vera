@@ -7,7 +7,7 @@ import net.snackbag.mcvera.impl.MCVeraRegistrar;
 import net.snackbag.mcvera.impl.MCVeraRenderer;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.flag.VAppFlag;
-import net.snackbag.vera.flag.VWindowPositioningFlag;
+import net.snackbag.vera.flag.VAppPositioningFlag;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.system.MemoryStack;
@@ -39,7 +39,7 @@ public class Vera {
             handler.accept(topHierarchy);
         }
 
-        for (VWindowPositioningFlag flag : MCVeraData.visibleApplications.keySet()) {
+        for (VAppPositioningFlag flag : MCVeraData.visibleApplications.keySet()) {
             for (VeraApp app : MCVeraData.visibleApplications.get(flag)) {
                 if (handledApps.contains(app) || app.hasFlag(VAppFlag.HIERARCHIC)) continue;
 
@@ -50,7 +50,7 @@ public class Vera {
     }
 
     public static void forAllVisibleApps(Consumer<VeraApp> handler) {
-        for (VWindowPositioningFlag flag : MCVeraData.visibleApplications.keySet()) {
+        for (VAppPositioningFlag flag : MCVeraData.visibleApplications.keySet()) {
             for (VeraApp app : MCVeraData.visibleApplications.get(flag)) {
                 handler.accept(app);
             }

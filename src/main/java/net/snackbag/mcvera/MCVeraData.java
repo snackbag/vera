@@ -2,7 +2,7 @@ package net.snackbag.mcvera;
 
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.flag.VAppFlag;
-import net.snackbag.vera.flag.VWindowPositioningFlag;
+import net.snackbag.vera.flag.VAppPositioningFlag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 public class MCVeraData {
     public static LinkedHashSet<VeraApp> applications = new LinkedHashSet<>();
-    public static HashMap<VWindowPositioningFlag, LinkedHashSet<VeraApp>> visibleApplications = new HashMap<>();
+    public static HashMap<VAppPositioningFlag, LinkedHashSet<VeraApp>> visibleApplications = new HashMap<>();
     public static HashMap<VAppFlag, List<VeraApp>> appFlags = new HashMap<>();
 
     public static int appsWithMouseRequired = 0;

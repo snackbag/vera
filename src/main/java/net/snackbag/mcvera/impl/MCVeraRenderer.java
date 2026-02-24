@@ -14,7 +14,7 @@ import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.flag.VAppFlag;
-import net.snackbag.vera.flag.VWindowPositioningFlag;
+import net.snackbag.vera.flag.VAppPositioningFlag;
 import net.snackbag.vera.widget.VWidget;
 import org.lwjgl.opengl.GL11;
 
@@ -97,7 +97,7 @@ public class MCVeraRenderer {
         if (!blendEnabled) RenderSystem.disableBlend();
     }
 
-    public void renderApps(VWindowPositioningFlag flag) {
+    public void renderApps(VAppPositioningFlag flag) {
         if (!MinecraftClient.getInstance().isRunning()) return;
 
         LinkedHashSet<VeraApp> apps = MCVeraData.visibleApplications.getOrDefault(flag, new LinkedHashSet<>());

@@ -7,7 +7,7 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.flag.VAppFlag;
-import net.snackbag.vera.flag.VWindowPositioningFlag;
+import net.snackbag.vera.flag.VAppPositioningFlag;
 import net.snackbag.vera.style.VStyleSheet;
 import net.snackbag.vera.util.VGeometry;
 import net.snackbag.vera.widget.VWidget;
@@ -32,7 +32,7 @@ public abstract class VeraApp {
 
     private boolean visible;
     private @Nullable VWidget<?> focusedWidget;
-    private VWindowPositioningFlag positioning;
+    private VAppPositioningFlag positioning;
 
     public VeraApp() {
         this(true);
@@ -54,7 +54,7 @@ public abstract class VeraApp {
         this.y = 0;
 
         this.visible = false;
-        setPositioning(VWindowPositioningFlag.SCREEN);
+        setPositioning(VAppPositioningFlag.SCREEN);
     }
 
     public void setCursorVisible(boolean cursorVisible) {
@@ -296,11 +296,11 @@ public abstract class VeraApp {
         );
     }
 
-    public VWindowPositioningFlag getPositioning() {
+    public VAppPositioningFlag getPositioning() {
         return positioning;
     }
 
-    public void setPositioning(VWindowPositioningFlag positioning) {
+    public void setPositioning(VAppPositioningFlag positioning) {
         // make sure hashmaps exist
         if (!MCVeraData.visibleApplications.containsKey(this.positioning))
             MCVeraData.visibleApplications.put(this.positioning, new LinkedHashSet<>());

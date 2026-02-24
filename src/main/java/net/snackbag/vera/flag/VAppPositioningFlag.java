@@ -1,6 +1,6 @@
 package net.snackbag.vera.flag;
 
-public enum VWindowPositioningFlag {
+public enum VAppPositioningFlag {
     /**
      * Deepest render position, renders even under the vignette
      */
