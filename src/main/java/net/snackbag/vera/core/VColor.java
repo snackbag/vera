@@ -132,7 +132,7 @@ public class VColor {
         return same(color.red, color.green, color.blue, color.opacity);
     }
 
-    public int toInt() {
+    public int toIntArgb() {
         int alpha = (int) (opacity * 255);
         return (alpha << 24) | (red << 16) | (green << 8) | blue;
     }

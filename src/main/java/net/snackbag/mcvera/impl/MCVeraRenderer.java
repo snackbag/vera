@@ -38,7 +38,7 @@ public class MCVeraRenderer {
         stack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float) rotation));
         stack.translate(-width / 2f, -height / 2f, 0);
 
-        drawContext.fill(0, 0, width, height, color.toInt());
+        drawContext.fill(0, 0, width, height, color.toIntArgb());
 
         stack.pop();
     }
@@ -53,7 +53,7 @@ public class MCVeraRenderer {
                 MinecraftClient.getInstance().textRenderer,
                 Text.literal(text).setStyle(Style.EMPTY.withFont(new Identifier(font.getName()))),
                 0, 0, // x and y are handled by translate
-                font.getColor().toInt(),
+                font.getColor().toIntArgb(),
                 false
         );
 
