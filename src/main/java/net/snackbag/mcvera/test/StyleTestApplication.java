@@ -15,9 +15,6 @@ import net.snackbag.vera.widget.VRect;
 public class StyleTestApplication extends VeraApp {
     public static StyleTestApplication INSTANCE = new StyleTestApplication();
 
-    private final VAnimation testAnimation = new VAnimation.Builder("test")
-            .keyframe(1000, 5000, frame -> frame.style("background-color", VColor.MC_RED))
-            .build();
     private final VAnimation longTestAnimation = new VAnimation.Builder("long_test")
             .loopMode(VLoopMode.FORWARD_REPEAT)
             .unwindTime(1000)
@@ -48,6 +45,9 @@ public class StyleTestApplication extends VeraApp {
         VLabel testLabel = new VLabel("hello there", 40, 10, this)
                 .alsoAddClass("label")
                 .alsoAdd();
+        testLabel.setStyle("scale", StyleState.DEFAULT, 1.0f);
+        testLabel.setStyle("scale", StyleState.HOVERED, 2.0f);
+        testLabel.setStyle("transition", 100);
 
         testLabel.onMouseDragLeft((ctx) -> testLabel.move(
                 testLabel.getX() + ctx.moveX(),
