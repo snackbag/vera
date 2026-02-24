@@ -10,12 +10,17 @@ import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.flag.VAppFlag;
 import net.snackbag.vera.style.StyleState;
+import net.snackbag.vera.style.animation.VAnimation;
 import net.snackbag.vera.widget.*;
 
 import java.nio.file.Path;
 
 public class TestApplication extends VeraApp {
     public static TestApplication INSTANCE = new TestApplication();
+
+    private final VAnimation rotationAnimation = new VAnimation.Builder("rotation")
+            .keyframe(1000, 0, frame -> frame.style("rotation", 360f))
+            .build();
 
     public TestApplication() {
         super();
@@ -119,7 +124,7 @@ public class TestApplication extends VeraApp {
         tabs.setActiveTab(0);
 
         VRect rotationRect = new VRect(VColor.black(), this).alsoAdd();
-        rotationRect.rotate(45);
+        rotationRect.onLeftClick(() -> rotationRect.animate(rotationAnimation));
         rotationRect.move(20, 200);
     }
 
