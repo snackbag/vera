@@ -8,6 +8,7 @@ import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
+import net.snackbag.vera.flag.VWindowFlag;
 import net.snackbag.vera.style.StyleState;
 import net.snackbag.vera.widget.*;
 
@@ -31,9 +32,7 @@ public class TestApplication extends VeraApp {
             this.hide();
         });
 
-        new VShortcut(this, "leftalt+m", () -> {
-            setMouseRequired(!isMouseRequired());
-        });
+        new VShortcut(this, "leftalt+m", () -> toggleFlag(VWindowFlag.REQUIRES_MOUSE));
 
         VLineInput input = new VLineInput(this).alsoAdd();
         input.setMaxChars(15);
@@ -122,6 +121,10 @@ public class TestApplication extends VeraApp {
         VRect rotationRect = new VRect(VColor.black(), this).alsoAdd();
         rotationRect.rotate(45);
         rotationRect.move(20, 200);
+    }
+
+    private void toggleFlag(VWindowFlag flag) {
+        setFlag(flag, !hasFlag(flag));
     }
 
     @Override

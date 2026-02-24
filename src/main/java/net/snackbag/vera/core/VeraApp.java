@@ -24,7 +24,6 @@ public abstract class VeraApp {
     private VColor backgroundColor;
     private VCursorShape cursorShape;
     private boolean cursorVisible;
-    private boolean mouseRequired;
 
     private int x;
     private int y;
@@ -45,7 +44,7 @@ public abstract class VeraApp {
         this.backgroundColor = VColor.transparent();
         this.cursorShape = VCursorShape.DEFAULT;
         this.cursorVisible = true;
-        this.mouseRequired = mouseRequired;
+        if (mouseRequired) setFlag(VWindowFlag.REQUIRES_MOUSE, true);
 
         Vera.provider.handleAppInitialization(this);
 
@@ -61,7 +60,7 @@ public abstract class VeraApp {
     public void setCursorVisible(boolean cursorVisible) {
         this.cursorVisible = cursorVisible;
 
-        if (!visible || !mouseRequired) return;
+        if (!visible || !hasFlag(VWindowFlag.REQUIRES_MOUSE)) return;
         GLFW.glfwSetInputMode(
                 MinecraftClient.getInstance().getWindow().getHandle(),
                 GLFW.GLFW_CURSOR,
@@ -78,23 +77,6 @@ public abstract class VeraApp {
 
     public boolean isCursorVisible() {
         return cursorVisible;
-    }
-
-    public boolean isMouseRequired() {
-        return mouseRequired;
-    }
-
-    public void setMouseRequired(boolean mouseRequired) {
-        if (this.mouseRequired == mouseRequired) return;
-
-        Vera.provider.handleAppSetMouseRequired(this, mouseRequired);
-        this.mouseRequired = mouseRequired;
-
-        if (!visible || !mouseRequired) return;
-        GLFW.glfwSetInputMode(
-                MinecraftClient.getInstance().getWindow().getHandle(),
-                GLFW.GLFW_CURSOR,
-                cursorVisible ? GLFW.GLFW_CURSOR_NORMAL : GLFW.GLFW_CURSOR_HIDDEN);
     }
 
     public boolean isVisible() {
@@ -122,7 +104,7 @@ public abstract class VeraApp {
         this.visible = visible;
 
         if (visible) setCursorShape(cursorShape);
-        if (!visible || !mouseRequired) return;
+        if (!visible || !hasFlag(VWindowFlag.REQUIRES_MOUSE)) return;
         GLFW.glfwSetInputMode(
                 MinecraftClient.getInstance().getWindow().getHandle(),
                 GLFW.GLFW_CURSOR,
@@ -359,6 +341,17 @@ public abstract class VeraApp {
         else {
             if (!MCVeraData.windowFlags.containsKey(flag)) MCVeraData.windowFlags.put(flag, new ArrayList<>());
             MCVeraData.windowFlags.get(flag).add(this);
+        }
+
+        // handle mouse requirements
+        if (flag == VWindowFlag.REQUIRES_MOUSE) {
+            Vera.provider.handleAppSetMouseRequired(this, enabled);
+
+            if (!visible || !enabled) return;
+            GLFW.glfwSetInputMode(
+                    MinecraftClient.getInstance().getWindow().getHandle(),
+                    GLFW.GLFW_CURSOR,
+                    cursorVisible ? GLFW.GLFW_CURSOR_NORMAL : GLFW.GLFW_CURSOR_HIDDEN);
         }
     }
 }
