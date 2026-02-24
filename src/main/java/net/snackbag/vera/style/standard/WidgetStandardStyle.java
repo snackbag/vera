@@ -22,6 +22,9 @@ public class WidgetStandardStyle implements VStandardStyle {
         // Transition
         sheet.setKey(VWidget.class, "transition", 0);
         sheet.setKey(VWidget.class, "transition-easing", VEasings.getDefault());
+
+        // Rendering
+        sheet.setKey(VWidget.class, "scale", 1.0f);
     }
 
     @Override
@@ -32,6 +35,7 @@ public class WidgetStandardStyle implements VStandardStyle {
         sheet.reserveType("border-size", StyleValueType.V4INT);
         sheet.reserveType("transition", StyleValueType.INT);
         sheet.reserveType("transition-easing", StyleValueType.EASING);
+        sheet.reserveType("scale", StyleValueType.FLOAT);
 
         // TODO: add background-color
         // TODO: add padding
