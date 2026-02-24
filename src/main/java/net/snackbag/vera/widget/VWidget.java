@@ -43,7 +43,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         this.hasTransparency = false;
     }
 
-    public abstract void render();
+    public abstract void render(RenderContext ctx);
 
     public int getHitboxX() {
         return getEffectiveX();
@@ -163,7 +163,17 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         else return StyleState.DEFAULT;
     }
 
-    public void renderBorder() {
+    public RenderContext createRenderContext() {
+        StyleState state = createStyleState();
+        return new RenderContext(
+                app.getX() + getEffectiveX(), app.getY() + getEffectiveY(),
+                getEffectiveWidth(), getEffectiveHeight(),
+                (float) rotation, getStyle("scale", state),
+                hasTransparency
+        );
+    }
+
+    public void renderBorder(RenderContext ctx) {
         // TODO: [Render Rework] Better border rendering
 
         StyleState state = createStyleState();
@@ -196,7 +206,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         }
     }
 
-    public void renderOverlay() {
+    public void renderOverlay(RenderContext ctx) {
         StyleState state = createStyleState();
 
         Vera.renderer.drawRect(app, getEffectiveX(), getEffectiveY(), getEffectiveWidth(), getEffectiveHeight(), 0, getStyle("overlay", state));
