@@ -14,6 +14,7 @@ import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
+// TODO: [Render Rework] Rewrite rendering from scratch
 public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPlaceholderFont {
     private String text;
     private String placeholderText;
@@ -33,24 +34,21 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     }
 
     @Override
-    public void render() {
+    public void render(RenderContext ctx) {
         StyleState state = createStyleState();
 
         VFont font = getStyle("font", state);
         VFont placeholderFont = getStyle("placeholder-font", state);
         VColor backgroundColor = getStyle("background-color", state);
         VColor textSelectionColor = getStyle("select-color", state);
-
-        int x = getX();
-        int y = getY();
+        V4Int padding = getStyle("padding", createStyleState());
 
         Vera.renderer.drawRect(
-                app,
-                getEffectiveX() + app.getX(),
-                getEffectiveY() + app.getY(),
+                ctx,
+                app.getX(),
+                app.getY(),
                 getEffectiveWidth(),
                 getEffectiveHeight(),
-                rotation,
                 backgroundColor
         );
 
@@ -61,29 +59,27 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
             String beforeSelection = text.substring(0, selStart);
             String selectedText = text.substring(selStart, selEnd);
 
-            int selectionX = x + Vera.provider.getTextWidth(beforeSelection, font);
+            int selectionX = Vera.provider.getTextWidth(beforeSelection, font);
             Vera.renderer.drawRect(
-                    app,
+                    ctx,
                     selectionX,
-                    y,
+                    0,
                     Vera.provider.getTextWidth(selectedText, font),
                     Vera.provider.getTextHeight(text, font),
-                    0,
                     textSelectionColor
             );
         }
 
-        if (text.isEmpty()) Vera.renderer.drawText(app, x, y, 0, placeholderText, placeholderFont);
-        else Vera.renderer.drawText(app, x, y, 0, text, font);
+        if (text.isEmpty()) Vera.renderer.drawText(ctx, 0, 0, placeholderText, placeholderFont);
+        else Vera.renderer.drawText(ctx, padding.get3(), padding.get1(), text, font);
 
         if (isFocused() && textSelection.isClear() && (System.currentTimeMillis() / 500) % 2 == 0) {
             Vera.renderer.drawRect(
-                    app,
-                    x + Vera.provider.getTextWidth(text.substring(0, cursorPos), font),
-                    y,
+                    ctx,
+                    Vera.provider.getTextWidth(text.substring(0, cursorPos), font),
+                    0,
                     1,
                     Vera.provider.getTextHeight(text, font),
-                    0,
                     getCursorColorSafe()
             );
         }

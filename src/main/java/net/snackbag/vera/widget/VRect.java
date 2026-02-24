@@ -22,9 +22,9 @@ public class VRect extends VWidget<VRect> {
     }
 
     @Override
-    public void render() {
+    public void render(RenderContext ctx) {
         StyleState state = createStyleState();
 
-        Vera.renderer.drawRect(app, getX(), getY(), width, height, rotation, getStyle("background-color", state));
+        Vera.renderer.drawRect(ctx, 0, 0, width, height, getStyle("background-color", state));
     }
 }

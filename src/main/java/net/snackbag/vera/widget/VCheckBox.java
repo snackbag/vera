@@ -33,11 +33,11 @@ public class VCheckBox extends VWidget<VCheckBox> {
     }
 
     @Override
-    public void render() {
+    public void render(RenderContext ctx) {
         StyleState state = createStyleState();
         Identifier texture = checked ? getStyle("src-checked", state) : getStyle("src", state);
 
-        Vera.renderer.drawImage(app, getX(), getY(), width, height, 0, texture);
+        Vera.renderer.drawImage(ctx, 0, 0, width, height, texture);
     }
 
     @Override

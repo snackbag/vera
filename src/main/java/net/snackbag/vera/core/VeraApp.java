@@ -202,13 +202,13 @@ public abstract class VeraApp {
     }
 
     public void render() {
-        Vera.renderer.drawRect(this, 0, 0, width, height, 0, backgroundColor);
+        Vera.renderer.drawRect(x, y, width, height, backgroundColor);
     }
 
     public void renderAfterWidgets() {}
 
     public void renderHierarchyOverlay() {
-        Vera.renderer.drawRect(this, 0, 0, width, height, 0,
+        Vera.renderer.drawRect(x, y, width, height,
                 backgroundColor.isTransparent()
                         ? VColor.black().withOpacity(0.2f)
                         : backgroundColor.sub(40).withOpacity(0.2f)

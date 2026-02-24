@@ -22,7 +22,7 @@ public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
     }
 
     @Override
-    public void render() {
+    public void render(RenderContext ctx) {
         StyleState state = createStyleState();
 
         VFont font = getStyle("font", state);
@@ -34,23 +34,20 @@ public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
         int marginX = 0;
         int i = -1;
 
-        int x = getX();
-        int y = getY();
-
         for (String key : tabs.keySet()) {
             int textWidth = Vera.provider.getTextWidth(key, font);
 
             i++;
             marginX += itemSpacingLeft;
 
-            Vera.renderer.drawRect(app,
-                    x + marginX - itemSpacingLeft, y,
+            Vera.renderer.drawRect(ctx,
+                    marginX - itemSpacingLeft, 0,
                     itemSpacingLeft + itemSpacingRight + textWidth,
-                    getEffectiveHeight(), 0,
+                    getEffectiveHeight(),
                     activeTab != null && activeTab == i ? selectedBackgroundColor: defaultBackgroundColor
             );
 
-            Vera.renderer.drawText(app, x + marginX, y + 2, 0, key, font);
+            Vera.renderer.drawText(ctx, marginX, 2, key, font);
 
             marginX += textWidth + itemSpacingRight;
         }

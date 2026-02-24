@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: [Render Rework]
 // TODO: Rewrite VDropdown from scratch
 // 16/7/2025 jesus christ what a shitty thing. dont even bother making this work nice.
 //           rewrite scheduled for once we have VCompound
@@ -35,18 +36,16 @@ public class VDropdown extends VWidget<VDropdown> implements VHasFont {
     }
 
     @Override
-    public void render() {
+    public void render(RenderContext ctx) {
         StyleState state = createStyleState();
 
         VColor backgroundColor = getStyle("background-color", state);
         VFont font = getStyle("font", state);
-
-        int x = getX();
-        int y = getY();
+        V4Int padding = getStyle("padding", createStyleState());
 
         Vera.renderer.drawRect(
-                app, getEffectiveX(), getEffectiveY(), getEffectiveWidth(), getEffectiveHeight(),
-                0, backgroundColor
+                ctx, 0, 0, getEffectiveWidth(), getEffectiveHeight(),
+                backgroundColor
         );
 
         if (isFocused()) {
@@ -54,33 +53,33 @@ public class VDropdown extends VWidget<VDropdown> implements VHasFont {
                 boolean isHovered = hoveredItem != null && i == hoveredItem;
                 Item item = items.get(i);
 
-                int textY = y + (i * (itemSpacing + font.getSize() / 2) + itemSpacing / 2);
-                int textX = (int) (item.icon == null ? x : x + font.getSize() * 0.7);
+                int textY = i * (itemSpacing + font.getSize() / 2) + itemSpacing / 2;
+                int textX = (int) (item.icon == null ? 0 : font.getSize() * 0.7);
 
                 if (isHovered) {
                     Vera.renderer.drawRect(
-                            app,
-                            getEffectiveX(),
-                            y + (i * (itemSpacing + font.getSize() / 2)),
+                            ctx,
+                            0,
+                            i * (itemSpacing + font.getSize() / 2),
                             getEffectiveWidth(),
                             font.getSize() / 2 + itemSpacing,
-                            0, itemHoverColor
+                            itemHoverColor
                     );
                 }
 
                 if (item.icon != null) {
                     Vera.renderer.drawImage(
-                            app, x, textY,
+                            ctx, 0, textY,
                             font.getSize() / 2,
                             font.getSize() / 2,
-                            0, isHovered ? item.getHoverIcon() : item.getIcon()
+                            isHovered ? item.getHoverIcon() : item.getIcon()
                     );
                 }
 
-                Vera.renderer.drawText(app, textX, textY, 0, item.name, isHovered ? itemHoverFont : font);
+                Vera.renderer.drawText(ctx, textX, textY, item.name, isHovered ? itemHoverFont : font);
             }
         } else {
-            Vera.renderer.drawText(app, x, y, 0, getItems().get(selectedItem).name, font);
+            Vera.renderer.drawText(ctx, padding.get3(), padding.get1(), getItems().get(selectedItem).name, font);
         }
     }
 

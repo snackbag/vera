@@ -18,10 +18,10 @@ public class VImage extends VWidget<VImage> {
     }
 
     @Override
-    public void render() {
+    public void render(RenderContext ctx) {
         StyleState state = createStyleState();
         Identifier src = getStyle("src", state);
 
-        Vera.renderer.drawImage(app, getX(), getY(), width, height, rotation, src);
+        Vera.renderer.drawImage(ctx, 0, 0, width, height, src);
     }
 }

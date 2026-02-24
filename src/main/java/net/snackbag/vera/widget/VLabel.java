@@ -74,30 +74,30 @@ public class VLabel extends VWidget<VLabel> implements VHasFont {
     }
 
     @Override
-    public void render() {
+    public void render(RenderContext ctx) {
         StyleState state = createStyleState();
 
         VFont font = getStyle("font", state);
         VColor backgroundColor = getStyle("background-color", state);
         V4Int padding = getStyle("padding", state);
 
+        // TODO: render optimization; if background color is transparent, skip
         Vera.renderer.drawRect(
-                app,
-                getX(),
-                getY(),
+                ctx,
+                0,
+                0,
                 getEffectiveWidth(),
                 getEffectiveHeight(),
-                rotation,
                 backgroundColor
         );
 
-        int usualX = getX() + padding.get3();
-        int usualY = getY() + padding.get1();
+        int usualX = padding.get3();
+        int usualY = padding.get1();
 
         switch (alignment) {
-            case LEFT -> Vera.renderer.drawText(app, usualX, usualY, rotation, text, font);
-            case CENTER -> Vera.renderer.drawText(app, getX() + getWidth() / 2 - Vera.provider.getTextWidth(text, font) / 2, usualY, rotation, text, font);
-            case RIGHT -> Vera.renderer.drawText(app, getX() + getEffectiveWidth() - padding.get4() - Vera.provider.getTextWidth(text, font), usualY, rotation, text, font);
+            case LEFT -> Vera.renderer.drawText(ctx, usualX, usualY, text, font);
+            case CENTER -> Vera.renderer.drawText(ctx, getWidth() / 2 - Vera.provider.getTextWidth(text, font) / 2, usualY, text, font);
+            case RIGHT -> Vera.renderer.drawText(ctx, getEffectiveWidth() - padding.get4() - Vera.provider.getTextWidth(text, font), usualY, text, font);
         }
     }
 }

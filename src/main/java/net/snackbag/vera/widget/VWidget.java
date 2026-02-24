@@ -182,34 +182,34 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         V4Int borderSize = getStyle("border-size", state);
 
         // Top
-        Vera.renderer.drawRect(app, getEffectiveX(), getEffectiveY() - borderSize.get1(), getEffectiveWidth(), borderSize.get1(), 0, borderColor.get1());
+        Vera.renderer.drawRect(ctx, 0, -borderSize.get1(), getEffectiveWidth(), borderSize.get1(), borderColor.get1());
         if (borderSize.get3() > 0) {
-            Vera.renderer.drawRect(app, getEffectiveX() - borderSize.get3(), getEffectiveY() - borderSize.get1(), borderSize.get3(), borderSize.get1(), 0, borderColor.get1());
+            Vera.renderer.drawRect(ctx, -borderSize.get3(), -borderSize.get1(), borderSize.get3(), borderSize.get1(), borderColor.get1());
         }
 
         // Bottom
-        Vera.renderer.drawRect(app, getEffectiveX(), getEffectiveY() + getEffectiveHeight(), getEffectiveWidth(), borderSize.get2(), 0, borderColor.get2());
+        Vera.renderer.drawRect(ctx, 0, getEffectiveHeight(), getEffectiveWidth(), borderSize.get2(), borderColor.get2());
         if (borderSize.get4() > 0) {
-            Vera.renderer.drawRect(app, getEffectiveX() + getEffectiveWidth(), getEffectiveY() + getEffectiveHeight(), borderSize.get4(), borderSize.get2(), 0, borderColor.get2());
+            Vera.renderer.drawRect(ctx, getEffectiveWidth(), getEffectiveHeight(), borderSize.get4(), borderSize.get2(), borderColor.get2());
         }
 
         // Left
-        Vera.renderer.drawRect(app, getEffectiveX() - borderSize.get3(), getEffectiveY(), borderSize.get3(), getEffectiveHeight(), 0, borderColor.get3());
+        Vera.renderer.drawRect(ctx, -borderSize.get3(), 0, borderSize.get3(), getEffectiveHeight(), borderColor.get3());
         if (borderSize.get2() > 0) {
-            Vera.renderer.drawRect(app, getEffectiveX() - borderSize.get3(), getEffectiveY() + getEffectiveHeight(), borderSize.get3(), borderSize.get2(), 0, borderColor.get3());
+            Vera.renderer.drawRect(ctx, -borderSize.get3(), getEffectiveHeight(), borderSize.get3(), borderSize.get2(), borderColor.get3());
         }
 
         // Right
-        Vera.renderer.drawRect(app, getEffectiveX() + getEffectiveWidth(), getEffectiveY(), borderSize.get4(), getEffectiveHeight(), 0, borderColor.get4());
+        Vera.renderer.drawRect(ctx, getEffectiveWidth(), 0, borderSize.get4(), getEffectiveHeight(), borderColor.get4());
         if (borderSize.get1() > 0) {
-            Vera.renderer.drawRect(app, getEffectiveX() + getEffectiveWidth(), getEffectiveY() - borderSize.get1(), borderSize.get4(), borderSize.get1(), 0, borderColor.get4());
+            Vera.renderer.drawRect(ctx, getEffectiveWidth(), -borderSize.get1(), borderSize.get4(), borderSize.get1(), borderColor.get4());
         }
     }
 
     public void renderOverlay(RenderContext ctx) {
         StyleState state = createStyleState();
 
-        Vera.renderer.drawRect(app, getEffectiveX(), getEffectiveY(), getEffectiveWidth(), getEffectiveHeight(), 0, getStyle("overlay", state));
+        Vera.renderer.drawRect(ctx, 0, 0, getEffectiveWidth(), getEffectiveHeight(), getStyle("overlay", state));
     }
 
     public void beforeRender() {
@@ -482,4 +482,11 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
         return (T) this;
     }
+
+    public record RenderContext(
+            int x, int y,
+            int width, int height,
+            float rotation, float scale,
+            boolean hasTransparency
+    ) {}
 }
