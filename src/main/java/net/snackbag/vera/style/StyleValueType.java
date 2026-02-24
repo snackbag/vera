@@ -58,8 +58,11 @@ public enum StyleValueType {
         else if (val instanceof Identifier) return IDENTIFIER;
         else if (val instanceof VCursorShape) return CURSOR;
         else if (val instanceof VEasing) return EASING;
-        else if (val instanceof Integer) return INT;
-        else if (val instanceof Float || val instanceof Double) return FLOAT;
+        else if (val instanceof Integer || val instanceof Float || val instanceof Double) {
+            if (bias == FLOAT) return FLOAT;
+            if (val instanceof Integer) return INT;
+            return FLOAT;
+        }
         else if (val instanceof VColor) return COLOR;
         else if (val instanceof VFont) return FONT;
         else throw new RuntimeException("%s isn't a valid style type".formatted(val.getClass().getName()));
@@ -99,6 +102,7 @@ public enum StyleValueType {
         else if (value instanceof VColor v && to == V4COLOR) return new V4Color(v);
 
         else if (to == FLOAT && value instanceof Double v) return v.floatValue();
+        else if (to == FLOAT && value instanceof Integer v) return v.floatValue();
         return value;
     }
 
