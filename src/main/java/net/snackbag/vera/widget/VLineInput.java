@@ -45,8 +45,8 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
         Vera.renderer.drawRect(
                 ctx,
-                app.getX(),
-                app.getY(),
+                0,
+                0,
                 getEffectiveWidth(),
                 getEffectiveHeight(),
                 backgroundColor
@@ -63,21 +63,21 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
             Vera.renderer.drawRect(
                     ctx,
                     selectionX,
-                    0,
+                    padding.get1(),
                     Vera.provider.getTextWidth(selectedText, font),
                     Vera.provider.getTextHeight(text, font),
                     textSelectionColor
             );
         }
 
-        if (text.isEmpty()) Vera.renderer.drawText(ctx, 0, 0, placeholderText, placeholderFont);
+        if (text.isEmpty()) Vera.renderer.drawText(ctx, padding.get3(), padding.get1(), placeholderText, placeholderFont);
         else Vera.renderer.drawText(ctx, padding.get3(), padding.get1(), text, font);
 
         if (isFocused() && textSelection.isClear() && (System.currentTimeMillis() / 500) % 2 == 0) {
             Vera.renderer.drawRect(
                     ctx,
-                    Vera.provider.getTextWidth(text.substring(0, cursorPos), font),
-                    0,
+                    padding.get3() + Vera.provider.getTextWidth(text.substring(0, cursorPos), font),
+                    padding.get1(),
                     1,
                     Vera.provider.getTextHeight(text, font),
                     getCursorColorSafe()
