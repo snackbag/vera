@@ -20,6 +20,7 @@ import java.util.*;
 public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public AnimationEngine animations = new AnimationEngine(this);
     protected double rotation;
+    protected boolean hasTransparency;
 
     public boolean focusOnClick = true;
     private boolean hovered = false;
@@ -39,6 +40,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         super(app, x, y, width, height);
 
         this.rotation = 0;
+        this.hasTransparency = false;
     }
 
     public abstract void render();
@@ -265,6 +267,15 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         this.rotation = rotation;
     }
 
+    public boolean hasTransparency() {
+        return hasTransparency;
+    }
+
+    public void setHasTransparency(boolean hasTransparency) {
+        this.hasTransparency = hasTransparency;
+        events.fire(VEvents.Widget.TRANSPARENCY_STATE_CHANGED, hasTransparency);
+    }
+
     public void update() {
         StyleState state = createStyleState();
 
@@ -361,6 +372,10 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
     public void onAnimationFinish(VAnimationFinishEvent runnable) {
         events.register(VEvents.Animation.FINISH, args -> runnable.run((VAnimation) args[0], (long) args[1]));
+    }
+
+    public void onTransparencyStateChanged(VTransparencyStateChangedEvent runnable) {
+        events.register(VEvents.Widget.TRANSPARENCY_STATE_CHANGED, args -> runnable.run((boolean) args[0]));
     }
 
     @Override
