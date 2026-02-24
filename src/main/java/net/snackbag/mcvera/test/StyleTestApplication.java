@@ -46,7 +46,8 @@ public class StyleTestApplication extends VeraApp {
                 .alsoAddClass("label")
                 .alsoAdd();
         testLabel.setStyle("scale", StyleState.DEFAULT, 1.0f);
-        testLabel.setStyle("scale", StyleState.HOVERED, 2.0f);
+        testLabel.setStyle("scale", StyleState.HOVERED, 1.2f);
+        testLabel.setStyle("scale", StyleState.CLICKED, 2.0f);
         testLabel.setStyle("transition", 100);
 
         testLabel.onMouseDragLeft((ctx) -> testLabel.move(
@@ -60,7 +61,7 @@ public class StyleTestApplication extends VeraApp {
 
         sheet.setKey("label", "font", VFont.create().withColor(VColor.MC_GOLD.sub(80)));
         sheet.setKey("label", "font", VFont.create().withColor(VColor.MC_GOLD), StyleState.HOVERED);
-        sheet.setKey("label", "cursor", VCursorShape.POINTING_HAND, StyleState.HOVERED);
+        sheet.setKey("label", "cursor", VCursorShape.POINTING_HAND);
 
         return sheet;
     }
