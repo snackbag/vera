@@ -109,7 +109,9 @@ public class MCVeraRenderer {
         List<VeraApp> hierarchicApps = new ArrayList<>(MCVeraData.appHierarchy);
         Collections.reverse(hierarchicApps);
         for (VeraApp app : hierarchicApps) {
-            if (app.getPositioning() != flag) continue;
+            if (app.getPositioning() != flag || !MCVeraData.visibleApplications.get(app.getPositioning()).contains(app)) {
+                continue;
+            }
             Vera.renderer.renderApp(app);
         }
     }
