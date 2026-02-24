@@ -30,36 +30,70 @@ public class MCVeraRenderer {
     public static DrawContext drawContext = null;
 
     //
-    // Basic rendering
+    // Widget rendering
     //
 
-    public void drawRect(VeraApp app, int x, int y, int width, int height, double rotation, VColor color) {
+    public void pushContext(VWidget.RenderContext ctx) {
         MatrixStack stack = drawContext.getMatrices();
         stack.push();
 
-        float centerX = x + width / 2f;
-        float centerY = y + height / 2f;
+        float wMod = (ctx.width() / 2f) * (ctx.scale() - 1);
+        float hMod = (ctx.height() / 2f) * (ctx.scale() - 1);
 
-        stack.translate(app.getX(), app.getY(), 0);
-        stack.translate(centerX, centerY, 0);
-        stack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float) rotation));
-        stack.translate(-width / 2f, -height / 2f, 0);
+        stack.translate(ctx.x() - wMod, ctx.y() - hMod, 0f);
+        stack.scale(ctx.scale(), ctx.scale(), 1.0f);
+    }
 
-        drawContext.fill(0, 0, width, height, color.toIntArgb());
+    public void popContext() {
+        drawContext.getMatrices().pop();
+    }
 
+    public void drawRect(VWidget.RenderContext ctx, int x, int y, int width, int height, VColor color) {
+        drawRect(
+                x, y,
+                width, height,
+                color
+        );
+    }
+
+    public void drawText(VWidget.RenderContext ctx, int x, int y, String text, VFont font) {
+        MatrixStack stack = drawContext.getMatrices();
+        stack.push();
+
+        drawText(
+                x, y,
+                text, font
+        );
         stack.pop();
     }
 
-    public void drawText(VeraApp app, int x, int y, double rotation, String text, VFont font) {
+    public void drawImage(VWidget.RenderContext ctx, int x, int y, int width, int height, Identifier path) {
+        drawImage(
+                x,
+                y,
+                width, height,
+                path
+        );
+    }
+
+    //
+    // Basic rendering
+    //
+
+    public void drawRect(int x, int y, int width, int height, VColor color) {
+        drawContext.fill(x, y, x + width, y + height, color.toIntArgb());
+    }
+
+    public void drawText(int x, int y, String text, VFont font) {
         float scaleFactor = font.getSize() / 16.0f;
         drawContext.getMatrices().push();
-        drawContext.getMatrices().translate(x + app.getX(), y + app.getY(), 0);
+        drawContext.getMatrices().translate(x, y, 0);
         drawContext.getMatrices().scale(scaleFactor, scaleFactor, 1.0f);
 
         drawContext.drawText(
                 MinecraftClient.getInstance().textRenderer,
                 Text.literal(text).setStyle(Style.EMPTY.withFont(new Identifier(font.getName()))),
-                0, 0, // x and y are handled by translate
+                0, 0,
                 font.getColor().toIntArgb(),
                 false
         );
@@ -67,9 +101,13 @@ public class MCVeraRenderer {
         drawContext.getMatrices().pop();
     }
 
-    public void drawImage(VeraApp app, int x, int y, int width, int height, double rotation, Identifier path) {
-        drawContext.drawTexture(path, x + app.getX(), y + app.getY(), 0, 0, width, height, width, height);
+    public void drawImage(int x, int y, int width, int height, Identifier path) {
+        drawContext.drawTexture(path, x, y, 0, 0, width, height, width, height);
     }
+
+    //
+    // Low-level rendering
+    //
 
     /**
      * Renders a solid-colored quad to the GUI render layer.
@@ -98,14 +136,14 @@ public class MCVeraRenderer {
      * <p>This method renders using {@code RenderLayer.getGui()} and immediately
      * flushes the vertex buffer.</p>
      *
-     * @param v1x top-left x
-     * @param v1y top-left y
-     * @param v2x bottom-left x
-     * @param v2y bottom-left y
-     * @param v3x bottom-right x
-     * @param v3y bottom-right y
-     * @param v4x top-right x
-     * @param v4y top-right y
+     * @param v1x   top-left x
+     * @param v1y   top-left y
+     * @param v2x   bottom-left x
+     * @param v2y   bottom-left y
+     * @param v3x   bottom-right x
+     * @param v3y   bottom-right y
+     * @param v4x   top-right x
+     * @param v4y   top-right y
      * @param color color applied to all vertices
      */
     public void renderColQuad(
@@ -135,17 +173,17 @@ public class MCVeraRenderer {
      * <p>This method renders using {@code RenderLayer.getGui()} and immediately
      * flushes the vertex buffer.</p>
      *
-     * @param v1x top-left x
-     * @param v1y top-left y
+     * @param v1x   top-left x
+     * @param v1y   top-left y
      * @param v1col color at v1
-     * @param v2x bottom-left x
-     * @param v2y bottom-left y
+     * @param v2x   bottom-left x
+     * @param v2y   bottom-left y
      * @param v2col color at v2
-     * @param v3x bottom-right x
-     * @param v3y bottom-right y
+     * @param v3x   bottom-right x
+     * @param v3y   bottom-right y
      * @param v3col color at v3
-     * @param v4x top-right x
-     * @param v4y top-right y
+     * @param v4x   top-right x
+     * @param v4y   top-right y
      * @param v4col color at v4
      */
     public void renderColQuad(
@@ -189,15 +227,15 @@ public class MCVeraRenderer {
      * <p>The vertex buffer is flushed immediately.</p>
      *
      * @param hasTransparentParts whether the texture has transparent parts; handles blending
-     * @param texture texture identifier to bind
-     * @param v1x top-left x
-     * @param v1y top-left y
-     * @param v2x bottom-left x
-     * @param v2y bottom-left y
-     * @param v3x bottom-right x
-     * @param v3y bottom-right y
-     * @param v4x top-right x
-     * @param v4y top-right y
+     * @param texture             texture identifier to bind
+     * @param v1x                 top-left x
+     * @param v1y                 top-left y
+     * @param v2x                 bottom-left x
+     * @param v2y                 bottom-left y
+     * @param v3x                 bottom-right x
+     * @param v3y                 bottom-right y
+     * @param v4x                 top-right x
+     * @param v4y                 top-right y
      */
     public void renderTexQuad(
             boolean hasTransparentParts,
@@ -233,23 +271,23 @@ public class MCVeraRenderer {
      * <p>The vertex buffer is flushed immediately.</p>
      *
      * @param hasTransparentParts whether the texture has transparent parts; handles blending
-     * @param texture texture identifier to bind
-     * @param v1x top-left x
-     * @param v1y top-left y
-     * @param u1 texture u at v1
-     * @param v1t texture v at v1
-     * @param v2x bottom-left x
-     * @param v2y bottom-left y
-     * @param u2 texture u at v2
-     * @param v2t texture v at v2
-     * @param v3x bottom-right x
-     * @param v3y bottom-right y
-     * @param u3 texture u at v3
-     * @param v3t texture v at v3
-     * @param v4x top-right x
-     * @param v4y top-right y
-     * @param u4 texture u at v4
-     * @param v4t texture v at v4
+     * @param texture             texture identifier to bind
+     * @param v1x                 top-left x
+     * @param v1y                 top-left y
+     * @param u1                  texture u at v1
+     * @param v1t                 texture v at v1
+     * @param v2x                 bottom-left x
+     * @param v2y                 bottom-left y
+     * @param u2                  texture u at v2
+     * @param v2t                 texture v at v2
+     * @param v3x                 bottom-right x
+     * @param v3y                 bottom-right y
+     * @param u3                  texture u at v3
+     * @param v3t                 texture v at v3
+     * @param v4x                 top-right x
+     * @param v4y                 top-right y
+     * @param u4                  texture u at v4
+     * @param v4t                 texture v at v4
      */
     public void renderTexQuad(
             boolean hasTransparentParts,
@@ -299,9 +337,14 @@ public class MCVeraRenderer {
             widget.animations.updateLifetimes();
 
             if (widget.visibilityConditionsPassed()) {
-                widget.render();
-                widget.renderBorder();
-                widget.renderOverlay();
+                VWidget.RenderContext ctx = widget.createRenderContext();
+                pushContext(ctx);
+
+                widget.render(ctx);
+                widget.renderBorder(ctx);
+                widget.renderOverlay(ctx);
+
+                popContext();
             }
 
             widget.afterRender();
