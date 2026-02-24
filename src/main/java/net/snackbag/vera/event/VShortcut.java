@@ -49,11 +49,11 @@ public class VShortcut {
     }
 
     /**
-     * Deprecated since version 1.10, will be removed in 1.11. No longer needed since the app now already receives the
+     * Deprecated since version 2.0, will be removed in 2.1. No longer needed since the app now already receives the
      * shortcut on shortcut initialization.
      */
-    @Deprecated(forRemoval = true, since = "1.10")
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.11")
+    @Deprecated(forRemoval = true, since = "2.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "2.1")
     public VShortcut alsoAdd() {
         app.addShortcut(this);
         return this;

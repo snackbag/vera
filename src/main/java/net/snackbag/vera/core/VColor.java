@@ -92,14 +92,14 @@ public class VColor {
         return opacity == 0;
     }
 
-    @Deprecated(since = "1.10", forRemoval = true)
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.11")
+    @Deprecated(since = "2.0", forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "2.1")
     public boolean sameColors(int red, int green, int blue) {
         return hasSameColors(red, green, blue);
     }
 
-    @Deprecated(since = "1.10", forRemoval = true)
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.11")
+    @Deprecated(since = "2.0", forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "2.1")
     public boolean sameColors(VColor color) {
         return hasSameColors(color);
     }
@@ -112,14 +112,14 @@ public class VColor {
         return sameColors(color.red, color.green, color.blue);
     }
 
-    @Deprecated(since = "1.10", forRemoval = true)
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.11")
+    @Deprecated(since = "2.0", forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "2.1")
     public boolean same(int red, int green, int blue, float opacity) {
         return isSame(red, green, blue, opacity);
     }
 
-    @Deprecated(since = "1.10", forRemoval = true)
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.11")
+    @Deprecated(since = "2.0", forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "2.1")
     public boolean same(VColor color) {
         return isSame(color);
     }
