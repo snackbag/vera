@@ -6,6 +6,7 @@ import net.snackbag.mcvera.impl.MCVeraProvider;
 import net.snackbag.mcvera.impl.MCVeraRegistrar;
 import net.snackbag.mcvera.impl.MCVeraRenderer;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.flag.VWindowFlag;
 import net.snackbag.vera.flag.VWindowPositioningFlag;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.PointerBuffer;
@@ -31,16 +32,16 @@ public class Vera {
 
     public static void forVisibleAndAllowedApps(Consumer<VeraApp> handler) {
         final List<VeraApp> handledApps = new ArrayList<>();
-        if (!MCVeraData.appHierarchy.isEmpty()) {
-            VeraApp app = MCVeraData.appHierarchy.get(0);
 
-            handledApps.add(app);
-            handler.accept(app);
+        VeraApp topHierarchy = MCVeraData.getTopHierarchy();
+        if (topHierarchy != null) {
+            handledApps.add(topHierarchy);
+            handler.accept(topHierarchy);
         }
 
         for (VWindowPositioningFlag flag : MCVeraData.visibleApplications.keySet()) {
             for (VeraApp app : MCVeraData.visibleApplications.get(flag)) {
-                if (handledApps.contains(app) || app.isRequiresHierarchy()) continue;
+                if (handledApps.contains(app) || app.hasFlag(VWindowFlag.HIERARCHIC)) continue;
 
                 handler.accept(app);
                 handledApps.add(app);
@@ -84,14 +85,6 @@ public class Vera {
             );
             return path;
         }
-    }
-
-    public static @Nullable VeraApp getTopHierarchyApp() {
-        return MCVeraData.appHierarchy.isEmpty() ? null : MCVeraData.appHierarchy.get(0);
-    }
-
-    public static boolean isTopHierarchy(VeraApp app) {
-        return getTopHierarchyApp() == app;
     }
 
     @SafeVarargs

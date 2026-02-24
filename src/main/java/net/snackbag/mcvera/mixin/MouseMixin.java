@@ -2,10 +2,12 @@ package net.snackbag.mcvera.mixin;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
+import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VEvents;
+import net.snackbag.vera.flag.VWindowFlag;
 import net.snackbag.vera.util.DragHandler;
 import net.snackbag.vera.widget.VWidget;
 import org.spongepowered.asm.mixin.Final;
@@ -31,9 +33,9 @@ public abstract class MouseMixin {
         int mouseX = (int) (fx / scaleFactor);
         int mouseY = (int) (fy / scaleFactor);
 
-        VeraApp top = Vera.getTopHierarchyApp();
+        VeraApp top = MCVeraData.getTopHierarchy();
         Vera.forAllVisibleApps(app -> {
-            if (app.isRequiresHierarchy() && app != top) return;
+            if (app.hasFlag(VWindowFlag.HIERARCHIC) && app != top) return;
 
             VWidget<?> widget = app.getTopWidgetAt(mouseX, mouseY);
             if (widget != null) widget.events.fire(VEvents.Widget.MOUSE_MOVE, mouseX, mouseY);

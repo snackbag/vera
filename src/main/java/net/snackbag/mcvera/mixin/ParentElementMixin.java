@@ -6,6 +6,7 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VMouseButton;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VEvents;
+import net.snackbag.vera.flag.VWindowFlag;
 import net.snackbag.vera.util.DragHandler;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +29,7 @@ public interface ParentElementMixin {
 
         VMouseButton btn = VMouseButton.fromInt(button);
 
-        List<VeraApp> hierarchicApps = new ArrayList<>(MCVeraData.appHierarchy);
+        List<VeraApp> hierarchicApps = new ArrayList<>(MCVeraData.getAppsWithFlag(VWindowFlag.HIERARCHIC));
         for (VeraApp app : hierarchicApps) {
             if (app.isPointOverThis(mouseX, mouseY)) {
                 if (MCVeraData.isTopHierarchy(app)) break;
@@ -48,7 +49,7 @@ public interface ParentElementMixin {
         });
 
         Vera.forAllVisibleApps(app -> {
-            if (app.isRequiresHierarchy()) return;
+            if (app.hasFlag(VWindowFlag.HIERARCHIC)) return;
 
             VWidget<?> hoveredWidget = app.getTopWidgetAt(mouseX, mouseY);
             if (hoveredWidget != null) handleClickEvents(hoveredWidget, btn);
@@ -78,7 +79,7 @@ public interface ParentElementMixin {
 
         MCVeraData.asTopHierarchy(app -> handleReleaseEvents(app.getTopWidgetAt(mouseX, mouseY), btn));
         Vera.forAllVisibleApps(app -> {
-            if (app.isRequiresHierarchy()) return;
+            if (app.hasFlag(VWindowFlag.HIERARCHIC)) return;
             if (!app.isPointOverThis(mouseX, mouseY)) return;
 
             handleReleaseEvents(app.getTopWidgetAt(mouseX, mouseY), btn);
@@ -105,7 +106,7 @@ public interface ParentElementMixin {
 
         MCVeraData.asTopHierarchy(app -> handleScrollEvents(app.getTopWidgetAt(mouseX, mouseY), mouseX, mouseY, amount));
         Vera.forAllVisibleApps(app -> {
-            if (app.isRequiresHierarchy()) return;
+            if (app.hasFlag(VWindowFlag.HIERARCHIC)) return;
             if (!app.isPointOverThis(mouseX, mouseY)) return;
 
             handleScrollEvents(app.getTopWidgetAt(mouseX, mouseY), mouseX, mouseY, amount);

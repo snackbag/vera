@@ -13,6 +13,7 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.flag.VWindowFlag;
 import net.snackbag.vera.flag.VWindowPositioningFlag;
 import net.snackbag.vera.widget.VWidget;
 import org.lwjgl.opengl.GL11;
@@ -70,7 +71,7 @@ public class MCVeraRenderer {
         if (!blendEnabled) RenderSystem.enableBlend();
 
         app.render();
-        VWidget<?> hoveredWidget = !MCVeraData.appHierarchy.contains(app) || MCVeraData.isTopHierarchy(app)
+        VWidget<?> hoveredWidget = !app.hasFlag(VWindowFlag.HIERARCHIC) || MCVeraData.isTopHierarchy(app)
                 ? app.getTopWidgetAt(Vera.getMouseX(), Vera.getMouseY())
                 : null;
 
@@ -91,7 +92,7 @@ public class MCVeraRenderer {
         }
         app.renderAfterWidgets();
 
-        if (app.isRequiresHierarchy() && !MCVeraData.isTopHierarchy(app)) app.renderHierarchyOverlay();
+        if (app.hasFlag(VWindowFlag.HIERARCHIC) && !MCVeraData.isTopHierarchy(app)) app.renderHierarchyOverlay();
 
         if (!blendEnabled) RenderSystem.disableBlend();
     }
@@ -102,11 +103,11 @@ public class MCVeraRenderer {
         LinkedHashSet<VeraApp> apps = MCVeraData.visibleApplications.getOrDefault(flag, new LinkedHashSet<>());
 
         for (VeraApp app : apps) {
-            if (app.isRequiresHierarchy()) continue;
+            if (app.hasFlag(VWindowFlag.HIERARCHIC)) continue;
             Vera.renderer.renderApp(app);
         }
 
-        List<VeraApp> hierarchicApps = new ArrayList<>(MCVeraData.appHierarchy);
+        List<VeraApp> hierarchicApps = new ArrayList<>(MCVeraData.getAppsWithFlag(VWindowFlag.HIERARCHIC));
         Collections.reverse(hierarchicApps);
         for (VeraApp app : hierarchicApps) {
             if (app.getPositioning() != flag || !MCVeraData.visibleApplications.get(app.getPositioning()).contains(app)) {

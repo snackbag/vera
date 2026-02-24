@@ -6,6 +6,7 @@ import net.snackbag.mcvera.MinecraftVera;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VShortcut;
+import net.snackbag.vera.flag.VWindowFlag;
 import net.snackbag.vera.flag.VWindowPositioningFlag;
 import net.snackbag.vera.style.VStyleSheet;
 import net.snackbag.vera.util.VGeometry;
@@ -31,7 +32,6 @@ public abstract class VeraApp {
     private int height;
 
     private boolean visible;
-    private boolean requiresHierarchy;
     private @Nullable VWidget<?> focusedWidget;
     private VWindowPositioningFlag positioning;
 
@@ -171,28 +171,14 @@ public abstract class VeraApp {
         return y;
     }
 
-    public void setRequiresHierarchy(boolean requires) {
-        if (MCVeraData.appHierarchy.contains(this)) {
-            if (!requires) MCVeraData.appHierarchy.remove(this);
-            return;
-        }
-
-        MCVeraData.appHierarchy.add(this);
-        this.requiresHierarchy = requires;
-    }
-
     public void moveToHierarchyTop() {
-        if (!requiresHierarchy) {
+        if (!hasFlag(VWindowFlag.HIERARCHIC)) {
             MinecraftVera.LOGGER.warn("Failed to move app to top, because hierarchy isn't enabled");
             return;
         }
 
-        MCVeraData.appHierarchy.remove(this);
-        MCVeraData.appHierarchy.add(0, this);
-    }
-
-    public boolean isRequiresHierarchy() {
-        return requiresHierarchy;
+        MCVeraData.windowFlags.get(VWindowFlag.HIERARCHIC).remove(this);
+        MCVeraData.windowFlags.get(VWindowFlag.HIERARCHIC).add(0, this);
     }
 
     public abstract void init();
@@ -359,5 +345,20 @@ public abstract class VeraApp {
 
     public void mergeStyleSheet(VStyleSheet target) {
         styleSheet.addSheet(target);
+    }
+
+    public boolean hasFlag(VWindowFlag flag) {
+        if (!MCVeraData.windowFlags.containsKey(flag)) return false;
+        else return MCVeraData.windowFlags.get(flag).contains(this);
+    }
+
+    public void setFlag(VWindowFlag flag, boolean enabled) {
+        if (enabled == hasFlag(flag)) return; // if nothing has to be changed, change nothing
+
+        if (!enabled) MCVeraData.windowFlags.get(flag).remove(this);
+        else {
+            if (!MCVeraData.windowFlags.containsKey(flag)) MCVeraData.windowFlags.put(flag, new ArrayList<>());
+            MCVeraData.windowFlags.get(flag).add(this);
+        }
     }
 }

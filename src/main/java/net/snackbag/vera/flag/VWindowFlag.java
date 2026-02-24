@@ -1,5 +1,7 @@
 package net.snackbag.vera.flag;
 
 public enum VWindowFlag {
-    DEBUG
+    DEBUG,
+    HIERARCHIC,
+    REQUIRES_MOUSE
 }
