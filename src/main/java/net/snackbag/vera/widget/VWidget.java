@@ -19,7 +19,6 @@ import java.util.*;
 
 public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public AnimationEngine animations = new AnimationEngine(this);
-    protected double rotation;
     protected boolean hasTransparency;
 
     public boolean focusOnClick = true;
@@ -39,7 +38,6 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public VWidget(int x, int y, int width, int height, VeraApp app) {
         super(app, x, y, width, height);
 
-        this.rotation = 0;
         this.hasTransparency = false;
     }
 
@@ -168,7 +166,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         return new RenderContext(
                 app.getX() + getEffectiveX(), app.getY() + getEffectiveY(),
                 getEffectiveWidth(), getEffectiveHeight(),
-                (float) rotation, getStyle("scale", state),
+                getStyle("rotation", state), getStyle("scale", state),
                 hasTransparency
         );
     }
@@ -267,14 +265,6 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
     public boolean isAnyMouseButtonDown() {
         return leftClickDown || middleClickDown || rightClickDown;
-    }
-
-    public double getRotation() {
-        return rotation;
-    }
-
-    public void rotate(double rotation) {
-        this.rotation = rotation;
     }
 
     public boolean hasTransparency() {
