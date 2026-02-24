@@ -40,6 +40,15 @@ public class MCVeraRenderer {
         float wMod = (ctx.width() / 2f) * (ctx.scale() - 1);
         float hMod = (ctx.height() / 2f) * (ctx.scale() - 1);
 
+        float xRot = ctx.x() + ctx.width() / 2f;
+        float yRot = ctx.y() + ctx.height() / 2f;
+
+        // Rotation
+        stack.translate(xRot, yRot, 0f);
+        stack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(ctx.rotation()));
+        stack.translate(-xRot, -yRot, 0f);
+
+        // Scale & final positioning)
         stack.translate(ctx.x() - wMod, ctx.y() - hMod, 0f);
         stack.scale(ctx.scale(), ctx.scale(), 1.0f);
     }
