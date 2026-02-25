@@ -1,11 +1,12 @@
 package net.snackbag.vera.core;
 
+import net.snackbag.vera.Vera;
 import net.snackbag.vera.style.animation.easing.VEasing;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Consumer;
 
-public class VColor {
+public class VColor implements VFill {
     public static final VColor MC_BLACK = VColor.black();
     public static final VColor MC_DARK_BLUE = VColor.of(0, 0, 170);
     public static final VColor MC_DARK_GREEN = VColor.of(0, 170, 0);
@@ -183,7 +184,12 @@ public class VColor {
         return new VColor(Math.max(this.red - red, 0), Math.max(this.green - green, 0), Math.max(this.blue - blue, 0));
     }
 
-    public VColor ease(VEasing easing, VColor target, float delta) {
+    @Override
+    public VFill ease(VEasing easing, VFill targetRaw, float delta) {
+        if (!(targetRaw instanceof VColor target)) {
+            throw new ClassCastException("Cannot ease two different types of VFill to color.");
+        }
+
         return new VColor(
                 easing.apply(red, target.red, delta),
                 easing.apply(green, target.green, delta),
@@ -202,6 +208,11 @@ public class VColor {
 
     public static VColor black() {
         return new VColor(0, 0, 0, 1);
+    }
+
+    @Override
+    public void renderQuad(VRenderContext ctx, int x, int y, int width, int height) {
+        Vera.renderer.drawRect(ctx, x, y, width, height, this);
     }
 
     public static class ColorModifier {

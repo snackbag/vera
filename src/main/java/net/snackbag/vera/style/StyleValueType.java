@@ -16,9 +16,11 @@ public enum StyleValueType {
     INT(0, (from, to, easing, delta) -> easing.apply(from, to, delta)),
     FLOAT(0.0F, (from, to, easing, delta) -> easing.apply(from, to, delta)),
 
-    COLOR(VColor.black(), (from, to, easing, delta) -> from.ease(easing, to, delta)),
+    FILL(VFill.empty(), (from, to, easing, delta) ->
+            from.ease(easing, to, delta)),
+    COLOR(VColor.black(), (from, to, easing, delta) -> (VColor) from.ease(easing, to, delta)),
     FONT(VFont.create(), (from, to, easing, delta) ->
-            VFont.create().withColor(from.getColor().ease(easing, to.getColor(), delta))
+            VFont.create().withColor((VColor) from.getColor().ease(easing, to.getColor(), delta))
                     .withSize(easing.apply(from.getSize(), to.getSize(), delta))
                     .withName(delta > 0.5 ? to.getName() : from.getName())),
     CURSOR(VCursorShape.DEFAULT, (f, t, e, d) -> d > 0.5 ? t : f),
@@ -31,11 +33,13 @@ public enum StyleValueType {
             easing.apply(from.get4(), to.get4(), delta)
     )),
     V4COLOR(new V4Color(VColor.black()), (from, to, easing, delta) -> new V4Color(
-            from.get1().ease(easing, to.get1(), delta),
-            from.get2().ease(easing, to.get2(), delta),
-            from.get3().ease(easing, to.get3(), delta),
-            from.get4().ease(easing, to.get4(), delta)
+            (VColor) from.get1().ease(easing, to.get1(), delta),
+            (VColor) from.get2().ease(easing, to.get2(), delta),
+            (VColor) from.get3().ease(easing, to.get3(), delta),
+            (VColor) from.get4().ease(easing, to.get4(), delta)
     ));
+
+    private static final String ID_REGEX = "^[\\w-./]*:[\\w-./]*$";
 
     public final Object standard;
     public final EaseContext<Object> animationTransition;
@@ -47,20 +51,28 @@ public enum StyleValueType {
 
     public static StyleValueType get(Object val, @Nullable StyleValueType bias) {
         if (val instanceof String s) {
-            if (bias == IDENTIFIER && s.matches("^[\\w-./]*:[\\w-./]*$")) return IDENTIFIER;
+            if (bias == IDENTIFIER && s.matches(ID_REGEX)) return IDENTIFIER;
             else if (bias == CURSOR && EnumUtils.getEnumIgnoreCase(VCursorShape.class, s) != null) return CURSOR;
             else if (bias == EASING && VEasings.getIgnoreCase(s) != null) return EASING;
+            else if (bias == FILL && s.matches(ID_REGEX)) return FILL;
             return STRING;
         } else if (val instanceof V4Color || (bias == V4COLOR && (val instanceof VColor[] || val instanceof VColor)))
             return V4COLOR;
         else if (val instanceof V4Int || (bias == V4INT && (val instanceof int[] || val instanceof Integer[] || val instanceof Integer)))
             return V4INT;
-        else if (val instanceof Identifier) return IDENTIFIER;
+        else if (val instanceof Identifier) {
+            if (bias == FILL) return FILL;
+            return IDENTIFIER;
+        }
         else if (val instanceof VCursorShape) return CURSOR;
         else if (val instanceof VEasing) return EASING;
         else if (val instanceof Integer) return INT;
         else if (val instanceof Float || val instanceof Double) return FLOAT;
-        else if (val instanceof VColor) return COLOR;
+        else if (val instanceof VColor) {
+            if (bias == FILL) return FILL;
+            return COLOR;
+        }
+        else if (val instanceof VImage) return FILL;
         else if (val instanceof VFont) return FONT;
         else throw new RuntimeException("%s isn't a valid style type".formatted(val.getClass().getName()));
     }
@@ -70,7 +82,10 @@ public enum StyleValueType {
             if (to == IDENTIFIER) return new Identifier(v);
             else if (to == CURSOR) return EnumUtils.getEnumIgnoreCase(VCursorShape.class, v);
             else if (to == EASING) return VEasings.getIgnoreCase(v);
+            else if (to == FILL) return new VImage(new Identifier(v));
         }
+
+        else if (value instanceof Identifier i && to == FILL) return new VImage(i);
 
         else if (value instanceof int[] || value instanceof Integer[]) {
             Integer[] v = (Integer[]) value;
@@ -97,6 +112,7 @@ public enum StyleValueType {
         }
 
         else if (value instanceof VColor v && to == V4COLOR) return new V4Color(v);
+        else if (value instanceof VFill && to == FILL) return value;
 
         else if (to == FLOAT && value instanceof Double v) return v.floatValue();
         return value;
