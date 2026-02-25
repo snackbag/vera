@@ -6,7 +6,7 @@ import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.modifier.VHasFont;
-import net.snackbag.vera.style.StyleState;
+import net.snackbag.vera.style.VStyleState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -23,7 +23,7 @@ public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
 
     @Override
     public void render(RenderContext ctx) {
-        StyleState state = createStyleState();
+        VStyleState state = createStyleState();
 
         VFont font = getStyle("font", state);
         VColor defaultBackgroundColor = getStyle("background-color", state);
@@ -103,7 +103,7 @@ public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
     }
 
     public int getHoveredTabIndex(int mouseX) {
-        StyleState state = createStyleState();
+        VStyleState state = createStyleState();
 
         VFont font = getStyle("font", state);
         int itemSpacingLeft = getStyle("item-spacing-left", state);
@@ -201,7 +201,7 @@ public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
 
     @Override
     public int getEffectiveWidth() {
-        StyleState state = createStyleState();
+        VStyleState state = createStyleState();
 
         VFont font = getStyle("font", state);
         int itemSpacingLeft = getStyle("item-spacing-left", state);

@@ -4,7 +4,7 @@ import net.snackbag.vera.core.v4.V4Int;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VFont;
-import net.snackbag.vera.style.StyleState;
+import net.snackbag.vera.style.VStyleState;
 import net.snackbag.vera.style.StyleValueType;
 import net.snackbag.vera.style.VStyleSheet;
 import net.snackbag.vera.widget.VLineInput;
@@ -14,7 +14,7 @@ public class LineInputStandardStyle implements VStandardStyle {
     public void apply(VStyleSheet sheet) {
         sheet.setKey(VLineInput.class, "select-color", VColor.of(0, 120, 215, 0.2f));
         sheet.setKey(VLineInput.class, "background-color", VColor.transparent());
-        sheet.setKey(VLineInput.class, "cursor", VCursorShape.TEXT, StyleState.HOVERED);
+        sheet.setKey(VLineInput.class, "cursor", VCursorShape.TEXT, VStyleState.HOVERED);
         sheet.setKey(VLineInput.class, "font", VFont.create());
         sheet.setKey(VLineInput.class, "placeholder-font", VFont.create().withColor(VColor.black().withOpacity(0.5f)));
         sheet.setKey(VLineInput.class, "padding", new V4Int(4));

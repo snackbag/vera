@@ -12,10 +12,10 @@ import java.util.Set;
  * Consists of:<br/>
  * | Part<br/>
  * |--- Key<br/>
- * |------ StyleState:Object
+ * |------ VStyleState:Object
  */
 public class StyleContainer<T> {
-    private final HashMap<T, HashMap<String, HashMap<StyleState, Object>>> values = new HashMap<>();
+    private final HashMap<T, HashMap<String, HashMap<VStyleState, Object>>> values = new HashMap<>();
 
     public StyleContainer() {}
 
@@ -23,7 +23,7 @@ public class StyleContainer<T> {
         return values.containsKey(part);
     }
 
-    public HashMap<String, HashMap<StyleState, Object>> getPart(T part) {
+    public HashMap<String, HashMap<VStyleState, Object>> getPart(T part) {
         return values.getOrDefault(part, new HashMap<>());
     }
 
@@ -31,22 +31,22 @@ public class StyleContainer<T> {
         return getPart(part).containsKey(key);
     }
 
-    public HashMap<StyleState, Object> getKey(T part, String key) {
+    public HashMap<VStyleState, Object> getKey(T part, String key) {
         return getPart(part).getOrDefault(key, new HashMap<>());
     }
 
-    public boolean hasState(T part, String key, StyleState state) {
+    public boolean hasState(T part, String key, VStyleState state) {
         return getKey(part, key).containsKey(state);
     }
 
-    public <V> V getState(T part, String key, StyleState state) {
+    public <V> V getState(T part, String key, VStyleState state) {
         return (V) getKey(part, key).get(state);
     }
 
 
     /**
      * In this case, exact means that it does not resolve lower states and only
-     * gives the keys of exactly the given style state. Use {@link #getKeysStacked(Object, StyleState)}
+     * gives the keys of exactly the given style state. Use {@link #getKeysStacked(Object, VStyleState)}
      * for deeper state resolve.
      * <br/><br/>
      * For example when requesting state <code>HOVERED</code>:
@@ -73,16 +73,16 @@ public class StyleContainer<T> {
      *     </tr>
      * </table>
      *
-     * @see #getKeysStacked(Object, StyleState)
+     * @see #getKeysStacked(Object, VStyleState)
      */
-    public Set<String> getKeysExact(T part, @Nullable StyleState state) {
-        if (state == null) state = StyleState.DEFAULT;
+    public Set<String> getKeysExact(T part, @Nullable VStyleState state) {
+        if (state == null) state = VStyleState.DEFAULT;
 
         Set<String> buffer = new HashSet<>();
 
         var resolvedPart = getPart(part); // i'm sorry for using var but holy fuck
         for (String key : resolvedPart.keySet()) {
-            for (StyleState keyState : resolvedPart.get(key).keySet()) {
+            for (VStyleState keyState : resolvedPart.get(key).keySet()) {
                 if (keyState != state) continue;
                 buffer.add(key);
             }
@@ -93,7 +93,7 @@ public class StyleContainer<T> {
 
     /**
      * In this case, stacked means that also all keys from states below the
-     * given state are returned. Use {@link #getKeysExact(Object, StyleState)} for
+     * given state are returned. Use {@link #getKeysExact(Object, VStyleState)} for
      * only the exact keys of a style state.
      * <br/><br/>
      * For example when requesting state <code>HOVERED</code>:
@@ -120,14 +120,14 @@ public class StyleContainer<T> {
      *     </tr>
      * </table>
      *
-     * @see #getKeysExact(Object, StyleState)
+     * @see #getKeysExact(Object, VStyleState)
      */
-    public Set<String> getKeysStacked(T part, @Nullable StyleState state) {
-        if (state == null) state = StyleState.DEFAULT;
+    public Set<String> getKeysStacked(T part, @Nullable VStyleState state) {
+        if (state == null) state = VStyleState.DEFAULT;
 
         Set<String> buffer = new HashSet<>();
 
-        StyleState next = state;
+        VStyleState next = state;
         while (next != null) {
             buffer.addAll(getKeysExact(part, next));
             next = next.fallback;
@@ -136,7 +136,7 @@ public class StyleContainer<T> {
         return buffer;
     }
 
-    public void put(T part, String key, StyleState state, Object value) {
+    public void put(T part, String key, VStyleState state, Object value) {
         if (!hasPart(part)) values.put(part, new HashMap<>());
         if (!hasKey(part, key)) values.get(part).put(key, new HashMap<>());
         if (!hasState(part, key, state)) values.get(part).get(key).put(state, new HashMap<>());
@@ -157,7 +157,7 @@ public class StyleContainer<T> {
                     continue;
                 }
 
-                for (StyleState targetState : target.getKey(targetPart, targetKey).keySet()) {
+                for (VStyleState targetState : target.getKey(targetPart, targetKey).keySet()) {
                     if (!hasState(targetPart, targetKey, targetState)) {
                         values.get(targetPart).get(targetKey).put(targetState, target.getState(targetPart, targetKey, targetState));
                         continue;

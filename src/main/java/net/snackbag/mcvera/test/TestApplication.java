@@ -9,7 +9,7 @@ import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.flag.VAppFlag;
-import net.snackbag.vera.style.StyleState;
+import net.snackbag.vera.style.VStyleState;
 import net.snackbag.vera.style.animation.VAnimation;
 import net.snackbag.vera.widget.*;
 
@@ -94,7 +94,7 @@ public class TestApplication extends VeraApp {
         image.move(0, 30);
         image.onMiddleClick(this::hideCursor);
         image.onMiddleClickRelease(this::showCursor);
-        image.setStyle("src", StyleState.HOVERED, "minecraft:textures/block/diamond_block.png");
+        image.setStyle("src", VStyleState.HOVERED, "minecraft:textures/block/diamond_block.png");
 
         VDropdown dropdown = new VDropdown(this).alsoAdd();
         dropdown.addItem("coolio");
@@ -111,7 +111,7 @@ public class TestApplication extends VeraApp {
 
         VCheckBox checkbox = new VCheckBox(this).alsoAdd();
         checkbox.move(20, 140);
-        checkbox.setStyle("overlay", StyleState.HOVERED, VColor.white().withOpacity(0.4f));
+        checkbox.setStyle("overlay", VStyleState.HOVERED, VColor.white().withOpacity(0.4f));
 
         checkbox.onCheckStateChange((state) -> {
             if (!state) removeWidget(checkbox);

@@ -8,7 +8,7 @@ import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.flag.VLayoutAlignmentFlag;
 import net.snackbag.vera.layout.VHLayout;
 import net.snackbag.vera.layout.VVLayout;
-import net.snackbag.vera.style.StyleState;
+import net.snackbag.vera.style.VStyleState;
 import net.snackbag.vera.widget.VLabel;
 
 public class DemoApplication extends VeraApp {
@@ -35,7 +35,7 @@ public class DemoApplication extends VeraApp {
         button.modifyFontColor().rgb(VColor.of(95, 180, 0));
         button.setStyle("background-color", VColor.white());
         button.setStyle("padding", 4);
-        button.setStyle("overlay", StyleState.HOVERED, VColor.white().withOpacity(0.5f));
+        button.setStyle("overlay", VStyleState.HOVERED, VColor.white().withOpacity(0.5f));
         button.setStyle("border-size", 1);
         button.setStyle("border-color", VColor.of(95, 180, 0));
         button.setStyle("cursor", VCursorShape.POINTING_HAND);

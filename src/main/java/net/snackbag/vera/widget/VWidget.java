@@ -7,7 +7,7 @@ import net.snackbag.vera.core.v4.V4Color;
 import net.snackbag.vera.core.v4.V4Int;
 import net.snackbag.vera.event.*;
 import net.snackbag.vera.layout.VLayout;
-import net.snackbag.vera.style.StyleState;
+import net.snackbag.vera.style.VStyleState;
 import net.snackbag.vera.style.animation.AnimationEngine;
 import net.snackbag.vera.style.animation.CompiledAnimation;
 import net.snackbag.vera.style.animation.VAnimation;
@@ -27,10 +27,10 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     private boolean leftClickDown = false;
     private boolean middleClickDown = false;
     private boolean rightClickDown = false;
-    private StyleState handledPrevStyleState = StyleState.DEFAULT; // constantly updates
-    private StyleState prevStyleState = StyleState.DEFAULT; // updates max once per frame, can be seen as the definite result
+    private VStyleState handledPrevStyleState = VStyleState.DEFAULT; // constantly updates
+    private VStyleState prevStyleState = VStyleState.DEFAULT; // updates max once per frame, can be seen as the definite result
 
-    private StyleState transitionOrigin = null;
+    private VStyleState transitionOrigin = null;
     private boolean isTransitionUnwinding = false;
 
     public final LinkedHashSet<String> classes = new LinkedHashSet<>();
@@ -65,7 +65,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     }
 
     @SuppressWarnings("unchecked")
-    public <V> void setStyle(String key, StyleState state, V... value) {
+    public <V> void setStyle(String key, VStyleState state, V... value) {
         app.styleSheet.setKey(this, key, value, state);
     }
 
@@ -73,7 +73,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         return animations.animateStyle(key, app.styleSheet.getKey(this, key));
     }
 
-    public <V> V getStyle(String key, StyleState state) {
+    public <V> V getStyle(String key, VStyleState state) {
         return animations.animateStyle(key, app.styleSheet.getKey(this, key, state));
     }
 
@@ -82,7 +82,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         return style != null ? style : dflt;
     }
 
-    public <V> V getStyleOrDefault(String key, V dflt, StyleState state) {
+    public <V> V getStyleOrDefault(String key, V dflt, VStyleState state) {
         V style = getStyle(key, state);
         return style != null ? style : dflt;
     }
@@ -138,31 +138,31 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         return animations.isActive(animation);
     }
 
-    public StyleState createStyleState() {
+    public VStyleState createStyleState() {
         return createStyleState(true);
     }
 
-    public StyleState createStyleState(boolean respectAnimationLocks) {
+    public VStyleState createStyleState(boolean respectAnimationLocks) {
         // Clicks first
-        if (leftClickDown) return StyleState.LEFT_CLICKED;
-        else if (middleClickDown) return StyleState.MIDDLE_CLICKED;
-        else if (rightClickDown) return StyleState.RIGHT_CLICKED;
+        if (leftClickDown) return VStyleState.LEFT_CLICKED;
+        else if (middleClickDown) return VStyleState.MIDDLE_CLICKED;
+        else if (rightClickDown) return VStyleState.RIGHT_CLICKED;
 
         else if (DragHandler.isDragging() && DragHandler.target == this) {
             return switch (DragHandler.button) {
-                case LEFT -> StyleState.LC_DRAGGING;
-                case MIDDLE -> StyleState.MC_DRAGGING;
-                case RIGHT -> StyleState.RC_DRAGGING;
+                case LEFT -> VStyleState.LC_DRAGGING;
+                case MIDDLE -> VStyleState.MC_DRAGGING;
+                case RIGHT -> VStyleState.RC_DRAGGING;
             };
         }
 
         // Hover as last, since everything else is hover too
-        else if (isHovered()) return StyleState.HOVERED;
-        else return StyleState.DEFAULT;
+        else if (isHovered()) return VStyleState.HOVERED;
+        else return VStyleState.DEFAULT;
     }
 
     public RenderContext createRenderContext() {
-        StyleState state = createStyleState();
+        VStyleState state = createStyleState();
         return new RenderContext(
                 app.getX() + getEffectiveX(), app.getY() + getEffectiveY(),
                 getEffectiveWidth(), getEffectiveHeight(),
@@ -174,7 +174,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public void renderBorder(RenderContext ctx) {
         // TODO: [Render Rework] Better border rendering
 
-        StyleState state = createStyleState();
+        VStyleState state = createStyleState();
 
         V4Color borderColor = getStyle("border-color", state);
         V4Int borderSize = getStyle("border-size", state);
@@ -205,13 +205,13 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     }
 
     public void renderOverlay(RenderContext ctx) {
-        StyleState state = createStyleState();
+        VStyleState state = createStyleState();
 
         Vera.renderer.drawRect(ctx, 0, 0, getEffectiveWidth(), getEffectiveHeight(), getStyle("overlay", state));
     }
 
     public void beforeRender() {
-        StyleState state = createStyleState();
+        VStyleState state = createStyleState();
 
         if (state != prevStyleState) {
             Integer transitionTime = app.styleSheet.getKey(this, "transition", state);
@@ -277,7 +277,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     }
 
     public void update() {
-        StyleState state = createStyleState();
+        VStyleState state = createStyleState();
 
         app.setCursorShape(getStyle("cursor", state));
     }
@@ -419,7 +419,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     }
 
     private void updateIfNeeded() {
-        StyleState state = createStyleState();
+        VStyleState state = createStyleState();
         if (state != handledPrevStyleState) {
             update();
             handledPrevStyleState = state;

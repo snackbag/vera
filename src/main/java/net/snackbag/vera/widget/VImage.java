@@ -3,7 +3,7 @@ package net.snackbag.vera.widget;
 import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VeraApp;
-import net.snackbag.vera.style.StyleState;
+import net.snackbag.vera.style.VStyleState;
 
 public class VImage extends VWidget<VImage> {
     public VImage(Identifier src, int width, int height, VeraApp app) {
@@ -19,7 +19,7 @@ public class VImage extends VWidget<VImage> {
 
     @Override
     public void render(RenderContext ctx) {
-        StyleState state = createStyleState();
+        VStyleState state = createStyleState();
         Identifier src = getStyle("src", state);
 
         Vera.renderer.drawImage(ctx, 0, 0, width, height, src);

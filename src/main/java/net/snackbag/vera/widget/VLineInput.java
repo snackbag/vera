@@ -9,7 +9,7 @@ import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VCharLimitedEvent;
 import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.modifier.VHasPlaceholderFont;
-import net.snackbag.vera.style.StyleState;
+import net.snackbag.vera.style.VStyleState;
 import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
@@ -35,7 +35,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
     @Override
     public void render(RenderContext ctx) {
-        StyleState state = createStyleState();
+        VStyleState state = createStyleState();
 
         VFont font = getStyle("font", state);
         VFont placeholderFont = getStyle("placeholder-font", state);
@@ -89,7 +89,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     public void handleBuiltinEvent(String event, Object... args) {
         super.handleBuiltinEvent(event, args);
 
-        StyleState state = createStyleState();
+        VStyleState state = createStyleState();
         VFont font = getStyle("font", state);
 
         int x = getX();
@@ -382,7 +382,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     }
 
     public VColor getCursorColorSafe() {
-        StyleState state = createStyleState();
+        VStyleState state = createStyleState();
 
         VColor style = getStyleOrDefault("cursor-color", null, state);
         VFont font = getStyle("font", state);
@@ -392,7 +392,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
     @Override
     public int getEffectiveWidth() {
-        StyleState state = createStyleState();
+        VStyleState state = createStyleState();
 
         VFont font = getStyle("font", state);
         V4Int padding = getStyle("padding", state);
@@ -402,7 +402,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
     @Override
     public int getEffectiveHeight() {
-        StyleState state = createStyleState();
+        VStyleState state = createStyleState();
 
         VFont font = getStyle("font", state);
         V4Int padding = getStyle("padding", state);

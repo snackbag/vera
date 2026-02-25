@@ -5,7 +5,7 @@ import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
-import net.snackbag.vera.style.StyleState;
+import net.snackbag.vera.style.VStyleState;
 import net.snackbag.vera.style.VStyleSheet;
 import net.snackbag.vera.style.animation.VAnimation;
 import net.snackbag.vera.style.animation.VLoopMode;
@@ -38,16 +38,16 @@ public class StyleTestApplication extends VeraApp {
         testRect.onRightClick(() -> testRect.animations.unwind(longTestAnimation));
 
         testRect.setStyle("transition", 100);
-        testRect.setStyle("background-color", StyleState.HOVERED, VColor.white());
-        testRect.setStyle("background-color", StyleState.CLICKED, VColor.MC_RED);
+        testRect.setStyle("background-color", VStyleState.HOVERED, VColor.white());
+        testRect.setStyle("background-color", VStyleState.CLICKED, VColor.MC_RED);
 
         // Moving & classes
         VLabel testLabel = new VLabel("hello there", 40, 10, this)
                 .alsoAddClass("label")
                 .alsoAdd();
-        testLabel.setStyle("scale", StyleState.DEFAULT, 1.0f);
-        testLabel.setStyle("scale", StyleState.HOVERED, 1.2f);
-        testLabel.setStyle("scale", StyleState.CLICKED, 2.0f);
+        testLabel.setStyle("scale", VStyleState.DEFAULT, 1.0f);
+        testLabel.setStyle("scale", VStyleState.HOVERED, 1.2f);
+        testLabel.setStyle("scale", VStyleState.CLICKED, 2.0f);
         testLabel.setStyle("transition", 100);
 
         testLabel.onMouseDragLeft((ctx) -> testLabel.move(
@@ -60,7 +60,7 @@ public class StyleTestApplication extends VeraApp {
         VStyleSheet sheet = new VStyleSheet();
 
         sheet.setKey("label", "font", VFont.create().withColor(VColor.MC_GOLD.sub(80)));
-        sheet.setKey("label", "font", VFont.create().withColor(VColor.MC_GOLD), StyleState.HOVERED);
+        sheet.setKey("label", "font", VFont.create().withColor(VColor.MC_GOLD), VStyleState.HOVERED);
         sheet.setKey("label", "cursor", VCursorShape.POINTING_HAND);
 
         return sheet;

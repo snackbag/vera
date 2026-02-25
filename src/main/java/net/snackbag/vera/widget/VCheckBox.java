@@ -6,7 +6,7 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VCheckedStateChange;
-import net.snackbag.vera.style.StyleState;
+import net.snackbag.vera.style.VStyleState;
 
 public class VCheckBox extends VWidget<VCheckBox> {
     private boolean checked;
@@ -34,7 +34,7 @@ public class VCheckBox extends VWidget<VCheckBox> {
 
     @Override
     public void render(RenderContext ctx) {
-        StyleState state = createStyleState();
+        VStyleState state = createStyleState();
         Identifier texture = checked ? getStyle("src-checked", state) : getStyle("src", state);
 
         Vera.renderer.drawImage(ctx, 0, 0, width, height, texture);

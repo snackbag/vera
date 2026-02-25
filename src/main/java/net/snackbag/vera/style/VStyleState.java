@@ -2,7 +2,7 @@ package net.snackbag.vera.style;
 
 import org.jetbrains.annotations.Nullable;
 
-public enum StyleState {
+public enum VStyleState {
     DEFAULT("default"),
     HOVERED("hover", DEFAULT),
 
@@ -30,19 +30,19 @@ public enum StyleState {
     RC_DRAG_RIGHT("rc-drag-right", RC_DRAGGING);
 
     public final String identifier;
-    public final @Nullable StyleState fallback;
+    public final @Nullable VStyleState fallback;
 
-    StyleState(String identifier) {
+    VStyleState(String identifier) {
         this(identifier, null);
     }
 
-    StyleState(String identifier, @Nullable StyleState fallback) {
+    VStyleState(String identifier, @Nullable VStyleState fallback) {
         this.identifier = identifier;
         this.fallback = fallback;
     }
 
-    public boolean inherits(StyleState state) {
-        StyleState next = this;
+    public boolean inherits(VStyleState state) {
+        VStyleState next = this;
 
         while (next != null) {
             if (next == state) return true;
