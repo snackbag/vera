@@ -51,7 +51,8 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
         // text selection
         int textHeight = Vera.provider.getTextHeight(text, font);
-        int textX = padding.get3();
+        int textWidth = Vera.provider.getTextWidth(text, font);
+        int textX = textWidth < width ? padding.get3() : padding.get3() - textWidth + width;
         int textY = padding.get1() + height / 2 - textHeight / 2;
 
         if (!textSelection.isClear()) {
@@ -59,10 +60,10 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
             String selectedText = getSelectedText();
 
             int startX = textX + Vera.provider.getTextWidth(text.substring(0, selStart), font);
-            int textWidth = Vera.provider.getTextWidth(selectedText, font);
+            int selTextWidth = Vera.provider.getTextWidth(selectedText, font);
             int selTextHeight = Vera.provider.getTextHeight(selectedText, font);
 
-            Vera.renderer.drawRect(ctx, startX, textY, textWidth, selTextHeight, textSelectionColor);
+            Vera.renderer.drawRect(ctx, startX, textY, selTextWidth, selTextHeight, textSelectionColor);
         }
 
         // text
