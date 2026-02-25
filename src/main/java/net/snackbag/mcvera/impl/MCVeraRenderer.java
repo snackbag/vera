@@ -261,11 +261,8 @@ public class MCVeraRenderer {
         VColor color = VColor.white();
 
         renderTexQuad(
-                hasTransparentParts, texture,
-                v1x, v1y, 0.0f, 0.0f, color,
-                v2x, v2y, 0.0f, 1.0f, color,
-                v3x, v3y, 1.0f, 1.0f, color,
-                v4x, v4y, 1.0f, 0.0f, color
+                hasTransparentParts, texture, color,
+                v1x, v1y, v2x, v2y, v3x, v3y, v4x, v4y
         );
     }
 
