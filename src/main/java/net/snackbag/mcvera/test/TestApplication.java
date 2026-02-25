@@ -95,7 +95,7 @@ public class TestApplication extends VeraApp {
         image.move(0, 30);
         image.onMiddleClick(this::hideCursor);
         image.onMiddleClickRelease(this::showCursor);
-        image.setStyle("src", VStyleState.HOVERED, "minecraft:textures/block/diamond_block.png");
+        image.setStyle("background", VStyleState.HOVERED, "minecraft:textures/block/diamond_block.png");
 
         VDropdown dropdown = new VDropdown(this).alsoAdd();
         dropdown.addItem("coolio");
