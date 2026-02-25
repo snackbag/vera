@@ -348,7 +348,6 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         setText(front + back);
         setCursorPos(start);
         clearTextSelection();
-        events.fire(VEvents.LineInput.CHANGE);
     }
 
     private void replaceSelectedText(String replacement) {
@@ -367,7 +366,6 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         setText(front + replacement + back);
         setCursorPos(start + replacement.length());
         clearTextSelection();
-        events.fire(VEvents.LineInput.CHANGE);
     }
 
 
@@ -431,7 +429,6 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
                 setText(front + chr + back);
                 setCursorPos(start + 1);
                 clearTextSelection();
-                events.fire(VEvents.LineInput.CHANGE);
             } else {
                 // Normal character insertion
                 if (maxChars > -1 && text.length() >= maxChars) {
