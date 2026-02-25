@@ -109,6 +109,14 @@ public abstract class VElement {
         return getY();
     }
 
+    public int getRelativeMouseX() {
+        return Vera.getMouseX() - getX() - app.getX();
+    }
+
+    public int getRelativeMouseY() {
+        return Vera.getMouseY() - getY() - app.getY();
+    }
+
     public void move(int both) {
         move(both, both);
     }
