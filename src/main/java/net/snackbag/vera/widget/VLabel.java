@@ -82,7 +82,7 @@ public class VLabel extends VWidget<VLabel> implements VHasFont {
         VFill background = getStyle("background", state);
         V4Int padding = getStyle("padding", state);
 
-        if (!background.isVisible()) {
+        if (background.isVisible()) {
             Vera.renderer.drawFill(
                     ctx,
                     0,
