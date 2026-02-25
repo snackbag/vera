@@ -356,6 +356,7 @@ public class MCVeraRenderer {
                 widget.renderBorder(ctx);
                 widget.renderOverlay(ctx);
 
+                ensureClearContext(ctx);
                 popContext();
             }
 
@@ -385,6 +386,12 @@ public class MCVeraRenderer {
                 continue;
             }
             Vera.renderer.renderApp(app);
+        }
+    }
+
+    private void ensureClearContext(VRenderContext ctx) {
+        if (ctx.peekClip() != null) {
+            throw new RuntimeException("Unclosed clip stack");
         }
     }
 }
