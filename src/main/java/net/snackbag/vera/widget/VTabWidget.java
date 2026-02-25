@@ -110,7 +110,7 @@ public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
         int itemSpacingLeft = getStyle("item-spacing-left", state);
         int itemSpacingRight = getStyle("item-spacing-right", state);
 
-        int relativeX = mouseX - getEffectiveX();
+        int relativeX = mouseX - getX();
         int currentX = 0;
         int index = 0;
 
