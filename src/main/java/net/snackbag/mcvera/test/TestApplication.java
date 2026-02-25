@@ -3,6 +3,7 @@ package net.snackbag.mcvera.test;
 import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VFont;
+import net.snackbag.vera.core.VImage;
 import net.snackbag.vera.flag.VHAlignmentFlag;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
@@ -88,8 +89,8 @@ public class TestApplication extends VeraApp {
         rightLabel.setStyle("border-size", 1);
         rightLabel.onRightClick(() -> System.out.println(Vera.openFileSelector("test", Path.of("/Volumes/Media"), null)));
 
-        VImage image = new VImage(
-                "minecraft:textures/block/dirt.png",
+        VRect image = new VRect(
+                new VImage("minecraft:textures/block/dirt.png"),
                 32, 32, this).alsoAdd();
         image.move(0, 30);
         image.onMiddleClick(this::hideCursor);

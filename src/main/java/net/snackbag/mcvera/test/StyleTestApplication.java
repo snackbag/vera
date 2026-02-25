@@ -19,9 +19,9 @@ public class StyleTestApplication extends VeraApp {
             .loopMode(VLoopMode.FORWARD_REPEAT)
             .unwindTime(1000)
 
-            .keyframe(1000, 2000, frame -> frame.style("background-color", VColor.MC_RED))
-            .keyframe(1000, 5000, frame -> frame.style("background-color", VColor.MC_GOLD))
-            .keyframe(1000, 1000, frame -> frame.style("background-color", VColor.MC_WHITE))
+            .keyframe(1000, 2000, frame -> frame.style("background", VColor.MC_RED))
+            .keyframe(1000, 5000, frame -> frame.style("background", VColor.MC_GOLD))
+            .keyframe(1000, 1000, frame -> frame.style("background", VColor.MC_WHITE))
             .build();
 
     @Override
@@ -38,8 +38,8 @@ public class StyleTestApplication extends VeraApp {
         testRect.onRightClick(() -> testRect.animations.unwind(longTestAnimation));
 
         testRect.setStyle("transition", 100);
-        testRect.setStyle("background-color", VStyleState.HOVERED, VColor.white());
-        testRect.setStyle("background-color", VStyleState.CLICKED, VColor.MC_RED);
+        testRect.setStyle("background", VStyleState.HOVERED, VColor.white());
+        testRect.setStyle("background", VStyleState.CLICKED, VColor.MC_RED);
 
         // Moving & classes
         VLabel testLabel = new VLabel("hello there", 40, 10, this)
