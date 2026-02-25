@@ -46,11 +46,11 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public abstract void render(VRenderContext ctx);
 
     public int getHitboxX() {
-        return getEffectiveX();
+        return getX();
     }
 
     public int getHitboxY() {
-        return getEffectiveY();
+        return getY();
     }
 
     public int getHitboxWidth() {
@@ -162,7 +162,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public VRenderContext createRenderContext() {
         VStyleState state = createStyleState();
         return new VRenderContext(
-                app.getX() + getEffectiveX(), app.getY() + getEffectiveY(),
+                app.getX() + getX(), app.getY() + getY(),
                 getEffectiveWidth(), getEffectiveHeight(),
                 getStyle("rotation", state), getStyle("scale", state),
                 hasTransparency
