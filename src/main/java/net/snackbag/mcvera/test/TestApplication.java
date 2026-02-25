@@ -47,7 +47,7 @@ public class TestApplication extends VeraApp {
         input.onMouseMove((x, y) -> System.out.println("x=" + x + ", y=" + y));
 
         input.move(50);
-        input.setStyle("background-color", VColor.white());
+        input.setStyle("background", VColor.white());
         setFocusedWidget(input);
 
         VLabel label = new VLabel("Hello world!", this).alsoAdd();
@@ -62,7 +62,7 @@ public class TestApplication extends VeraApp {
 
         label.setStyle("padding", 5);
         label.move(10);
-        label.setStyle("background-color", VColor.black());
+        label.setStyle("background", VColor.black());
         label.modifyFont().color(VColor.white());
         label.adjustSize();
         label.onHover(() -> {
@@ -75,7 +75,7 @@ public class TestApplication extends VeraApp {
 
         VLabel centerLabel = new VLabel("CENTER", 220, 10, 100, 16, this).alsoAdd();
         centerLabel.setAlignment(VHAlignmentFlag.CENTER);
-        centerLabel.setStyle("background-color", VColor.black());
+        centerLabel.setStyle("background", VColor.black());
         centerLabel.modifyFontColor().rgb(255, 255, 255);
         centerLabel.setStyle("border-color", VColor.MC_BLUE, VColor.MC_GOLD, VColor.MC_RED, VColor.MC_GREEN);
         centerLabel.setStyle("border-size", 5, 10, 8, 16);
@@ -83,7 +83,7 @@ public class TestApplication extends VeraApp {
 
         VLabel rightLabel = new VLabel("RIGHT", 100, 10, 100, 16, this).alsoAdd();
         rightLabel.setAlignment(VHAlignmentFlag.RIGHT);
-        rightLabel.setStyle("background-color", VColor.black());
+        rightLabel.setStyle("background", VColor.black());
         rightLabel.modifyFontColor().rgb(255, 255, 255);
         rightLabel.setStyle("border-color", VColor.white());
         rightLabel.setStyle("border-size", 1);
