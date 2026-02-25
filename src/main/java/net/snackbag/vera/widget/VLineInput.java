@@ -43,7 +43,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
         VFont font = getStyle("font", state);
         VFont placeholderFont = getStyle("placeholder-font", state);
-        VFill background = getStyle("background-color", state);
+        VFill background = getStyle("background", state);
         VFill textSelectionFill = getStyle("select", state);
         V4Int padding = getStyle("padding", state);
         String rText = getTextInViewport();
