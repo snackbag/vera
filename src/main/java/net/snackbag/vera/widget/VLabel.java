@@ -97,7 +97,7 @@ public class VLabel extends VWidget<VLabel> implements VHasFont {
 
         switch (alignment) {
             case LEFT -> Vera.renderer.drawText(ctx, usualX, usualY, text, font);
-            case CENTER -> Vera.renderer.drawText(ctx, getWidth() / 2 - Vera.provider.getTextWidth(text, font) / 2, usualY, text, font);
+            case CENTER -> Vera.renderer.drawText(ctx, getEffectiveWidth() / 2 - Vera.provider.getTextWidth(text, font) / 2, usualY, text, font);
             case RIGHT -> Vera.renderer.drawText(ctx, getEffectiveWidth() - padding.get4() - Vera.provider.getTextWidth(text, font), usualY, text, font);
         }
     }
