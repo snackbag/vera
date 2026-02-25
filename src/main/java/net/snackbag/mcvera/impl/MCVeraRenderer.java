@@ -370,7 +370,7 @@ public class MCVeraRenderer {
             int v4x, int v4y, float u4, float v4t, VColor v4c
     ) {
         RenderSystem.setShaderTexture(0, texture);
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        RenderSystem.setShader(GameRenderer::getPositionColorTexProgram);
         if (hasTransparentParts) RenderSystem.enableBlend();
 
         Matrix4f matrix = drawContext.getMatrices().peek().getPositionMatrix();
