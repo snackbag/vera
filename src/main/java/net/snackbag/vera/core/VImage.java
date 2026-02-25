@@ -28,7 +28,13 @@ public class VImage implements VFill {
 
     @Override
     public void renderQuad(VRenderContext ctx, int x, int y, int width, int height) {
-        Vera.renderer.drawImage(ctx, x, y, width, height, src);
+        Vera.renderer.renderTexQuad(
+                ctx.hasTransparency, src, tint,
+                x, y,
+                x, y + height,
+                x + width, y + height,
+                x + width, y
+        );
     }
 
     @Override
