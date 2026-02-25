@@ -141,10 +141,6 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     }
 
     public VStyleState createStyleState() {
-        return createStyleState(true);
-    }
-
-    public VStyleState createStyleState(boolean respectAnimationLocks) {
         // Clicks first
         if (leftClickDown) return VStyleState.LEFT_CLICKED;
         else if (middleClickDown) return VStyleState.MIDDLE_CLICKED;
