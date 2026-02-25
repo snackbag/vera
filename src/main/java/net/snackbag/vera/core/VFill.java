@@ -12,9 +12,15 @@ public interface VFill {
             public VFill ease(VEasing easing, VFill target, float delta) {
                 return target;
             }
+
+            @Override
+            public boolean isVisible() {
+                return true;
+            }
         };
     }
 
     void renderQuad(VRenderContext ctx, int x, int y, int width, int height);
     VFill ease(VEasing easing, VFill target, float delta);
+    boolean isVisible();
 }

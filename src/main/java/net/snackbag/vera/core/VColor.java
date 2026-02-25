@@ -198,6 +198,16 @@ public class VColor implements VFill {
         );
     }
 
+    @Override
+    public void renderQuad(VRenderContext ctx, int x, int y, int width, int height) {
+        Vera.renderer.drawRect(ctx, x, y, width, height, this);
+    }
+
+    @Override
+    public boolean isVisible() {
+        return opacity == 0f;
+    }
+
     public static VColor transparent() {
         return new VColor(0, 0, 0, 0);
     }

@@ -42,4 +42,9 @@ public class VImage implements VFill {
                 (VColor) tint.ease(easing, target.tint, delta)
         );
     }
+
+    @Override
+    public boolean isVisible() {
+        return tint.isVisible();
+    }
 }
