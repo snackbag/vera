@@ -78,11 +78,12 @@ public class MCVeraRenderer {
     }
 
     public void drawImage(VWidget.RenderContext ctx, int x, int y, int width, int height, Identifier path) {
-        drawImage(
-                x,
-                y,
-                width, height,
-                path
+        renderTexQuad(
+                ctx.hasTransparency(), path,
+                x, y,
+                x, y + height,
+                x + width, y + height,
+                x + width, y
         );
     }
 
