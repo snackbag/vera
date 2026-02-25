@@ -23,6 +23,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     private int cursorPos;
     private TextSelection textSelection;
     private int maxChars;
+    private long timeSinceLastInput;
 
     public VLineInput(VeraApp app) {
         super(0, 0, 100, 20, app);
@@ -32,9 +33,52 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         this.cursorPos = 0;
         this.textSelection = new TextSelection();
         this.maxChars = -1;
+        this.timeSinceLastInput = System.currentTimeMillis();
     }
 
     @Override
+    public void render(VRenderContext ctx) {
+        VStyleState state = createStyleState();
+
+        VFont font = getStyle("font", state);
+        VFont placeholderFont = getStyle("placeholder-font", state);
+        VColor bgColor = getStyle("background-color", state);
+        VColor textSelectionColor = getStyle("select-color", state);
+        V4Int padding = getStyle("padding", state);
+
+        // background
+        Vera.renderer.drawRect(ctx, 0, 0, getEffectiveWidth(), getEffectiveHeight(), bgColor);
+
+        // text selection
+        int textHeight = Vera.provider.getTextHeight(text, font);
+        int textX = padding.get3();
+        int textY = padding.get1() + height / 2 - textHeight / 2;
+
+        if (!textSelection.isClear()) {
+            int selStart = Math.min(textSelection.startPos, textSelection.endPos);
+            String selectedText = getSelectedText();
+
+            int startX = textX + Vera.provider.getTextWidth(text.substring(0, selStart), font);
+            int textWidth = Vera.provider.getTextWidth(selectedText, font);
+            int selTextHeight = Vera.provider.getTextHeight(selectedText, font);
+
+            Vera.renderer.drawRect(ctx, startX, textY, textWidth, selTextHeight, textSelectionColor);
+        }
+
+        // text
+        if (text.isEmpty()) Vera.renderer.drawText(ctx, textX, textY, placeholderText, placeholderFont);
+        else {
+            Vera.renderer.drawText(ctx, textX, textY, text, font);
+        }
+
+        // cursor
+        if (isFocused() && textSelection.isClear() && ((System.currentTimeMillis() - timeSinceLastInput) / 500) % 2 == 0) {
+            int cursorX = textX + Vera.provider.getTextWidth(text.substring(0, cursorPos), font);
+            Vera.renderer.drawRect(ctx, cursorX, textY, 1, textHeight, getCursorColorSafe());
+        }
+    }
+
+    /* @Override
     public void render(VRenderContext ctx) {
         VStyleState state = createStyleState();
 
@@ -84,7 +128,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
                     getCursorColorSafe()
             );
         }
-    }
+    } */
 
     @Override
     public void handleBuiltinEvent(String event, Object... args) {
@@ -114,7 +158,12 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
     public void setText(String text) {
         this.text = text;
+        this.timeSinceLastInput = System.currentTimeMillis();
         events.fire(VEvents.LineInput.CHANGE);
+    }
+
+    public long getTimeSinceLastInput() {
+        return timeSinceLastInput;
     }
 
     public boolean isSelectingText() {
@@ -328,7 +377,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
         String front = text.substring(0, cursorPos);
         String back = text.substring(cursorPos);
-        text = front + insertion + back;
+        setText(front + insertion + back);
         cursorPos += insertion.length();
         events.fire(VEvents.LineInput.CHANGE);
     }
@@ -341,7 +390,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
         String front = text.substring(0, start);
         String back = text.substring(end);
-        text = front + back;
+        setText(front + back);
         cursorPos = start;
         clearTextSelection();
         events.fire(VEvents.LineInput.CHANGE);
@@ -360,7 +409,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
         String front = text.substring(0, start);
         String back = text.substring(end);
-        text = front + replacement + back;
+        setText(front + replacement + back);
         cursorPos = start + replacement.length();
         clearTextSelection();
         events.fire(VEvents.LineInput.CHANGE);
@@ -394,34 +443,17 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     @Override
     public int getEffectiveWidth() {
         VStyleState state = createStyleState();
-
-        VFont font = getStyle("font", state);
         V4Int padding = getStyle("padding", state);
 
-        return Math.max(width, Vera.provider.getTextWidth(text, font)) + padding.get3() + padding.get4();
+        return width + padding.get3() + padding.get4();
     }
 
     @Override
     public int getEffectiveHeight() {
         VStyleState state = createStyleState();
-
-        VFont font = getStyle("font", state);
         V4Int padding = getStyle("padding", state);
 
-        return Vera.provider.getTextHeight(text, font) + padding.get1() + padding.get2();
-    }
-
-
-    @Override
-    public int getEffectiveX() {
-        V4Int padding = getStyle("padding", createStyleState());
-        return getX() - padding.get4();
-    }
-
-    @Override
-    public int getEffectiveY() {
-        V4Int padding = getStyle("padding", createStyleState());
-        return getY() - padding.get1();
+        return height + padding.get1() + padding.get2();
     }
 
     @Override
@@ -440,7 +472,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
                 String front = text.substring(0, start);
                 String back = text.substring(end);
 
-                text = front + chr + back;
+                setText(front + chr + back);
                 cursorPos = start + 1;
                 clearTextSelection();
                 events.fire(VEvents.LineInput.CHANGE);
@@ -454,7 +486,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
                 String front = text.substring(0, cursorPos);
                 String back = text.substring(cursorPos);
 
-                text = front + chr + back;
+                setText(front + chr + back);
                 cursorPos += 1;
                 events.fire(VEvents.LineInput.CHANGE);
             }
@@ -533,7 +565,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
         StringBuilder builder = new StringBuilder(text);
         builder.delete(start, end);
-        text = builder.toString();
+        setText(builder.toString());
         cursorPos = Math.min(start, text.length());
         events.fire(VEvents.LineInput.CHANGE);
     }
