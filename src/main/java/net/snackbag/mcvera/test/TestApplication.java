@@ -91,8 +91,7 @@ public class TestApplication extends VeraApp {
 
         VRect image = new VRect(
                 new VImage("minecraft:textures/block/dirt.png"),
-                32, 32, this).alsoAdd();
-        image.move(0, 30);
+                0, 30, 32, 32, this).alsoAdd();
         image.onMiddleClick(this::hideCursor);
         image.onMiddleClickRelease(this::showCursor);
         image.setStyle("background", VStyleState.HOVERED, "minecraft:textures/block/diamond_block.png");
