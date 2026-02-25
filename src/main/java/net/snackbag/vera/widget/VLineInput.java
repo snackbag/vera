@@ -88,8 +88,25 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         if (event.equals(VEvents.Widget.LEFT_CLICK)) {
             textSelection.clear();
 
-            if (Vera.getMouseX() < x) cursorPos = 0;
-            else if (Vera.getMouseX() > x + Vera.provider.getTextWidth(text, font)) cursorPos = text.length();
+            V4Int padding = getStyle("padding", state);
+            int textX = x + padding.get3();
+            int mouseX = Vera.getMouseX();
+
+            if (mouseX <= textX) {
+                setCursorPos(0);
+            } else {
+                int bestPos = text.length();
+                for (int i = 0; i < text.length(); i++) {
+                    int charMidX = textX
+                            + Vera.provider.getTextWidth(text.substring(0, i), font)
+                            + Vera.provider.getTextWidth(text.substring(i, i + 1), font) / 2;
+                    if (mouseX <= charMidX) {
+                        bestPos = i;
+                        break;
+                    }
+                }
+                setCursorPos(bestPos);
+            }
         }
     }
 
