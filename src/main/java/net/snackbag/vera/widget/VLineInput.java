@@ -80,33 +80,9 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     public void handleBuiltinEvent(String event, Object... args) {
         super.handleBuiltinEvent(event, args);
 
-        VStyleState state = createStyleState();
-        VFont font = getStyle("font", state);
-
-        int x = getX();
-
         if (event.equals(VEvents.Widget.LEFT_CLICK)) {
             textSelection.clear();
-
-            V4Int padding = getStyle("padding", state);
-            int textX = x + padding.get3();
-            int mouseX = Vera.getMouseX();
-
-            if (mouseX <= textX) {
-                setCursorPos(0);
-            } else {
-                int bestPos = text.length();
-                for (int i = 0; i < text.length(); i++) {
-                    int charMidX = textX
-                            + Vera.provider.getTextWidth(text.substring(0, i), font)
-                            + Vera.provider.getTextWidth(text.substring(i, i + 1), font) / 2;
-                    if (mouseX <= charMidX) {
-                        bestPos = i;
-                        break;
-                    }
-                }
-                setCursorPos(bestPos);
-            }
+            setCursorPos(getCursorPosAtX(getRelativeMouseX()));
         }
     }
 
@@ -383,6 +359,30 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     public void setCursorPos(int cursorPos) {
         this.cursorPos = cursorPos;
         events.fire(VEvents.LineInput.CURSOR_MOVE);
+    }
+
+    public int getCursorPosAtX(int x) {
+        VStyleState state = createStyleState();
+        VFont font = getStyle("font", state);
+        V4Int padding = getStyle("padding", state);
+
+        int textX = padding.get3();
+
+        if (x <= textX) {
+            return 0;
+        } else {
+            int bestPos = text.length();
+            for (int i = 0; i < text.length(); i++) {
+                int charMidX = textX
+                        + Vera.provider.getTextWidth(text.substring(0, i), font)
+                        + Vera.provider.getTextWidth(text.substring(i, i + 1), font) / 2;
+                if (x <= charMidX) {
+                    bestPos = i;
+                    break;
+                }
+            }
+            return bestPos;
+        }
     }
 
     public VColor getCursorColorSafe() {
