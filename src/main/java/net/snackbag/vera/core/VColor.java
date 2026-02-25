@@ -89,6 +89,12 @@ public class VColor implements VFill {
         return (int) (opacity * 255);
     }
 
+    /**
+     * Use {@link #isVisible()} instead.
+     *
+     * @return whether the color is transparent
+     */
+    @Deprecated(since = "2.0")
     public boolean isTransparent() {
         return opacity == 0;
     }
@@ -218,11 +224,6 @@ public class VColor implements VFill {
 
     public static VColor black() {
         return new VColor(0, 0, 0, 1);
-    }
-
-    @Override
-    public void renderQuad(VRenderContext ctx, int x, int y, int width, int height) {
-        Vera.renderer.drawRect(ctx, x, y, width, height, this);
     }
 
     public static class ColorModifier {

@@ -209,7 +209,7 @@ public abstract class VeraApp {
 
     public void renderHierarchyOverlay() {
         Vera.renderer.drawRect(x, y, width, height,
-                backgroundColor.isTransparent()
+                backgroundColor.isVisible()
                         ? VColor.black().withOpacity(0.2f)
                         : backgroundColor.sub(40).withOpacity(0.2f)
         );
