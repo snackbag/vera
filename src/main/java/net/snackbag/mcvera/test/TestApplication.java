@@ -40,7 +40,7 @@ public class TestApplication extends VeraApp {
         new VShortcut(this, "leftalt+m", () -> toggleFlag(VAppFlag.REQUIRES_MOUSE));
 
         VLineInput input = new VLineInput(this).alsoAdd();
-        input.setMaxChars(15);
+        input.setMaxChars(30);
         input.setPlaceholderText("Enter text...");
         input.onAddCharLimited(System.out::println);
         input.onMouseMove((x, y) -> System.out.println("x=" + x + ", y=" + y));
