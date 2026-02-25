@@ -82,15 +82,16 @@ public class VLabel extends VWidget<VLabel> implements VHasFont {
         VColor backgroundColor = getStyle("background-color", state);
         V4Int padding = getStyle("padding", state);
 
-        // TODO: render optimization; if background color is transparent, skip
-        Vera.renderer.drawRect(
-                ctx,
-                0,
-                0,
-                getEffectiveWidth(),
-                getEffectiveHeight(),
-                backgroundColor
-        );
+        if (!backgroundColor.isTransparent()) {
+            Vera.renderer.drawRect(
+                    ctx,
+                    0,
+                    0,
+                    getEffectiveWidth(),
+                    getEffectiveHeight(),
+                    backgroundColor
+            );
+        }
 
         int usualX = padding.get3();
         int usualY = padding.get1();
