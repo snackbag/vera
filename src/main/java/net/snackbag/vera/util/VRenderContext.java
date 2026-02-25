@@ -40,7 +40,10 @@ public class VRenderContext {
 
     public void pushClip(int x, int y, int width, int height) {
         clipStack.add(new ClipInstance(x, y, width, height));
-        _dcxUpdateScissors();
+        MCVeraRenderer.drawContext.enableScissor(
+                this.x + x, this.y + y,
+                this.x + x + width, this.y + y + height
+        );
     }
 
     public @Nullable ClipInstance peekClip() {
@@ -54,25 +57,12 @@ public class VRenderContext {
         }
 
         clipStack.remove(clipStack.size() - 1);
-        _dcxUpdateScissors();
+        MCVeraRenderer.drawContext.disableScissor();
     }
 
     public void resetClips() {
+        for (ClipInstance ignored : clipStack) MCVeraRenderer.drawContext.disableScissor();
         clipStack.clear();
-        _dcxUpdateScissors();
-    }
-
-    private void _dcxUpdateScissors() {
-        ClipInstance instance = peekClip();
-        if (instance == null) {
-            MCVeraRenderer.drawContext.disableScissor();
-            return;
-        }
-
-        MCVeraRenderer.drawContext.enableScissor(
-                instance.x, instance.y,
-                instance.x + instance.width, instance.y + instance.height
-        );
     }
 
     @Override
