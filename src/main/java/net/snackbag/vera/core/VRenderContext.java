@@ -1,4 +1,4 @@
-package net.snackbag.vera.util;
+package net.snackbag.vera.core;
 
 import net.snackbag.mcvera.impl.MCVeraRenderer;
 import org.jetbrains.annotations.Nullable;

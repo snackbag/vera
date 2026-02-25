@@ -17,7 +17,7 @@ import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.flag.VAppFlag;
 import net.snackbag.vera.flag.VAppPositioningFlag;
-import net.snackbag.vera.util.VRenderContext;
+import net.snackbag.vera.core.VRenderContext;
 import net.snackbag.vera.widget.VWidget;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;

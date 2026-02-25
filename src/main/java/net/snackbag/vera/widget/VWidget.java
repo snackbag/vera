@@ -1,6 +1,5 @@
 package net.snackbag.vera.widget;
 
-import net.snackbag.mcvera.impl.MCVeraRenderer;
 import net.snackbag.vera.VElement;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
@@ -14,7 +13,7 @@ import net.snackbag.vera.style.animation.CompiledAnimation;
 import net.snackbag.vera.style.animation.VAnimation;
 import net.snackbag.vera.style.animation.easing.VEasing;
 import net.snackbag.vera.util.DragHandler;
-import net.snackbag.vera.util.VRenderContext;
+import net.snackbag.vera.core.VRenderContext;
 
 import java.nio.file.Path;
 import java.util.*;
