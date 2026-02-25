@@ -271,32 +271,26 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         }
         // Handle word navigation
         else if (isDown(GLFW.GLFW_KEY_LEFT) && isAltDown() && cursorPos > 0) {
-            cursorPos = Math.max(0, jumpToWordStart(cursorPos));
-            events.fire(VEvents.LineInput.CURSOR_MOVE);
+            setCursorPos(Math.max(0, jumpToWordStart(cursorPos)));
             events.fire(VEvents.LineInput.CURSOR_MOVE_LEFT);
         } else if (isDown(GLFW.GLFW_KEY_RIGHT) && isAltDown() && cursorPos < text.length()) {
-            cursorPos = Math.min(text.length(), jumpToWordEnd(cursorPos));
-            events.fire(VEvents.LineInput.CURSOR_MOVE);
+            setCursorPos(Math.min(text.length(), jumpToWordEnd(cursorPos)));
             events.fire(VEvents.LineInput.CURSOR_MOVE_LEFT);
         }
         // Handle line navigation
         else if (isDown(GLFW.GLFW_KEY_LEFT) && isCtrlDown()) {
-            cursorPos = 0;
-            events.fire(VEvents.LineInput.CURSOR_MOVE);
+            setCursorPos(0);
             events.fire(VEvents.LineInput.CURSOR_MOVE_LEFT);
         } else if (isDown(GLFW.GLFW_KEY_RIGHT) && isCtrlDown()) {
-            cursorPos = text.length();
-            events.fire(VEvents.LineInput.CURSOR_MOVE);
+            setCursorPos(text.length());
             events.fire(VEvents.LineInput.CURSOR_MOVE_RIGHT);
         }
         // Handle character navigation
         else if (keyCode == GLFW.GLFW_KEY_LEFT && cursorPos > 0) {
-            cursorPos = Math.max(0, cursorPos - 1);
-            events.fire(VEvents.LineInput.CURSOR_MOVE);
+            setCursorPos(Math.max(0, cursorPos - 1));
             events.fire(VEvents.LineInput.CURSOR_MOVE_LEFT);
         } else if (keyCode == GLFW.GLFW_KEY_RIGHT && cursorPos < text.length()) {
-            cursorPos = Math.min(text.length(), cursorPos + 1);
-            events.fire(VEvents.LineInput.CURSOR_MOVE);
+            setCursorPos(Math.min(text.length(), cursorPos + 1));
             events.fire(VEvents.LineInput.CURSOR_MOVE_RIGHT);
         }
 
@@ -327,9 +321,8 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
             }
         }
 
-        cursorPos = newPos;
+        setCursorPos(newPos);
         textSelection.endPos = newPos;
-        events.fire(VEvents.LineInput.CURSOR_MOVE);
     }
 
     private void insertText(String insertion) {
@@ -341,8 +334,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         String front = text.substring(0, cursorPos);
         String back = text.substring(cursorPos);
         setText(front + insertion + back);
-        cursorPos += insertion.length();
-        events.fire(VEvents.LineInput.CHANGE);
+        setCursorPos(cursorPos + insertion.length());
     }
 
     private void deleteSelectedText() {
@@ -354,7 +346,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         String front = text.substring(0, start);
         String back = text.substring(end);
         setText(front + back);
-        cursorPos = start;
+        setCursorPos(start);
         clearTextSelection();
         events.fire(VEvents.LineInput.CHANGE);
     }
@@ -373,7 +365,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         String front = text.substring(0, start);
         String back = text.substring(end);
         setText(front + replacement + back);
-        cursorPos = start + replacement.length();
+        setCursorPos(start + replacement.length());
         clearTextSelection();
         events.fire(VEvents.LineInput.CHANGE);
     }
@@ -392,6 +384,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
     public void setCursorPos(int cursorPos) {
         this.cursorPos = cursorPos;
+        events.fire(VEvents.LineInput.CURSOR_MOVE);
     }
 
     public VColor getCursorColorSafe() {
@@ -436,7 +429,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
                 String back = text.substring(end);
 
                 setText(front + chr + back);
-                cursorPos = start + 1;
+                setCursorPos(start + 1);
                 clearTextSelection();
                 events.fire(VEvents.LineInput.CHANGE);
             } else {
@@ -450,8 +443,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
                 String back = text.substring(cursorPos);
 
                 setText(front + chr + back);
-                cursorPos += 1;
-                events.fire(VEvents.LineInput.CHANGE);
+                setCursorPos(cursorPos + 1);
             }
         }
         super.charTyped(chr, modifiers);
@@ -518,7 +510,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     public void selectAll() {
         textSelection.startPos = 0;
         textSelection.endPos = text.length();
-        cursorPos = text.length();
+        setCursorPos(text.length());
     }
 
     private void deleteText(int start, int end) {
@@ -529,8 +521,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         StringBuilder builder = new StringBuilder(text);
         builder.delete(start, end);
         setText(builder.toString());
-        cursorPos = Math.min(start, text.length());
-        events.fire(VEvents.LineInput.CHANGE);
+        setCursorPos(Math.min(start, text.length()));
     }
 
     public static class TextSelection {
