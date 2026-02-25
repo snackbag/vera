@@ -358,6 +358,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
     public void setCursorPos(int cursorPos) {
         this.cursorPos = cursorPos;
+        this.timeSinceLastInput = System.currentTimeMillis();
         events.fire(VEvents.LineInput.CURSOR_MOVE);
     }
 
