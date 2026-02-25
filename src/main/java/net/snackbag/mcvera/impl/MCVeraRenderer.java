@@ -12,12 +12,9 @@ import net.minecraft.util.math.RotationAxis;
 import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.mcvera.mixin.DrawContextAccessor;
 import net.snackbag.vera.Vera;
-import net.snackbag.vera.core.VColor;
-import net.snackbag.vera.core.VFont;
-import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.core.*;
 import net.snackbag.vera.flag.VAppFlag;
 import net.snackbag.vera.flag.VAppPositioningFlag;
-import net.snackbag.vera.core.VRenderContext;
 import net.snackbag.vera.widget.VWidget;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
@@ -86,6 +83,10 @@ public class MCVeraRenderer {
                 x + width, y + height,
                 x + width, y
         );
+    }
+
+    public void drawFill(VRenderContext ctx, int x, int y, int width, int height, VFill fill) {
+        fill.renderQuad(ctx, x, y, width, height);
     }
 
     //
@@ -257,12 +258,67 @@ public class MCVeraRenderer {
             int v3x, int v3y,
             int v4x, int v4y
     ) {
+        VColor color = VColor.white();
+
         renderTexQuad(
                 hasTransparentParts, texture,
-                v1x, v1y, 0.0f, 0.0f,
-                v2x, v2y, 0.0f, 1.0f,
-                v3x, v3y, 1.0f, 1.0f,
-                v4x, v4y, 1.0f, 0.0f
+                v1x, v1y, 0.0f, 0.0f, color,
+                v2x, v2y, 0.0f, 1.0f, color,
+                v3x, v3y, 1.0f, 1.0f, color,
+                v4x, v4y, 1.0f, 0.0f, color
+        );
+    }
+
+    /**
+     * Renders a textured quad to the GUI render layer using the full texture.
+     *
+     * <p>The texture is automatically bound via the provided
+     * {@link net.minecraft.util.Identifier}.</p>
+     *
+     * <p>Blending is automatically enabled and disabled based on
+     * {@code hasTransparentParts}.</p>
+     *
+     * <p>Vertices must be provided in counter-clockwise order in screen space
+     * (Minecraft GUI coordinates, where Y increases downward):</p>
+     *
+     * <pre>
+     * v1 ── v4
+     * │     │
+     * v2 ── v3
+     * </pre>
+     *
+     * <p>Texture coordinates are automatically mapped to the full texture
+     * (u,v in the range 0.0–1.0).</p>
+     *
+     * <p>The vertex buffer is flushed immediately.</p>
+     *
+     * @param hasTransparentParts whether the texture has transparent parts; handles blending
+     * @param texture             texture identifier to bind
+     * @param color               tint to render with
+     * @param v1x                 top-left x
+     * @param v1y                 top-left y
+     * @param v2x                 bottom-left x
+     * @param v2y                 bottom-left y
+     * @param v3x                 bottom-right x
+     * @param v3y                 bottom-right y
+     * @param v4x                 top-right x
+     * @param v4y                 top-right y
+     */
+    public void renderTexQuad(
+            boolean hasTransparentParts,
+            Identifier texture,
+            VColor color,
+            int v1x, int v1y,
+            int v2x, int v2y,
+            int v3x, int v3y,
+            int v4x, int v4y
+    ) {
+        renderTexQuad(
+                hasTransparentParts, texture,
+                v1x, v1y, 0.0f, 0.0f, color,
+                v2x, v2y, 0.0f, 1.0f, color,
+                v3x, v3y, 1.0f, 1.0f, color,
+                v4x, v4y, 1.0f, 0.0f, color
         );
     }
 
@@ -288,26 +344,30 @@ public class MCVeraRenderer {
      * @param v1y                 top-left y
      * @param u1                  texture u at v1
      * @param v1t                 texture v at v1
+     * @param v1c                 tint at v1
      * @param v2x                 bottom-left x
      * @param v2y                 bottom-left y
      * @param u2                  texture u at v2
      * @param v2t                 texture v at v2
+     * @param v2c                 tint at v2
      * @param v3x                 bottom-right x
      * @param v3y                 bottom-right y
      * @param u3                  texture u at v3
      * @param v3t                 texture v at v3
+     * @param v3c                 tint at v3
      * @param v4x                 top-right x
      * @param v4y                 top-right y
      * @param u4                  texture u at v4
      * @param v4t                 texture v at v4
+     * @param v4c                 tint at v4
      */
     public void renderTexQuad(
             boolean hasTransparentParts,
             Identifier texture,
-            int v1x, int v1y, float u1, float v1t,
-            int v2x, int v2y, float u2, float v2t,
-            int v3x, int v3y, float u3, float v3t,
-            int v4x, int v4y, float u4, float v4t
+            int v1x, int v1y, float u1, float v1t, VColor v1c,
+            int v2x, int v2y, float u2, float v2t, VColor v2c,
+            int v3x, int v3y, float u3, float v3t, VColor v3c,
+            int v4x, int v4y, float u4, float v4t, VColor v4c
     ) {
         RenderSystem.setShaderTexture(0, texture);
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
@@ -316,11 +376,11 @@ public class MCVeraRenderer {
         Matrix4f matrix = drawContext.getMatrices().peek().getPositionMatrix();
 
         BufferBuilder buf = Tessellator.getInstance().getBuffer();
-        buf.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-        buf.vertex(matrix, v1x, v1y, 0f).texture(u1, v1t).next();
-        buf.vertex(matrix, v2x, v2y, 0f).texture(u2, v2t).next();
-        buf.vertex(matrix, v3x, v3y, 0f).texture(u3, v3t).next();
-        buf.vertex(matrix, v4x, v4y, 0f).texture(u4, v4t).next();
+        buf.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR_TEXTURE);
+        buf.vertex(matrix, v1x, v1y, 0f).color(v1c.toIntArgb()).texture(u1, v1t).next();
+        buf.vertex(matrix, v2x, v2y, 0f).color(v2c.toIntArgb()).texture(u2, v2t).next();
+        buf.vertex(matrix, v3x, v3y, 0f).color(v3c.toIntArgb()).texture(u3, v3t).next();
+        buf.vertex(matrix, v4x, v4y, 0f).color(v4c.toIntArgb()).texture(u4, v4t).next();
 
         BufferRenderer.drawWithGlobalProgram(buf.end());
         if (hasTransparentParts) RenderSystem.disableBlend();
