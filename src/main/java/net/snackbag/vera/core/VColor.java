@@ -205,7 +205,7 @@ public class VColor implements VFill {
 
     @Override
     public boolean isVisible() {
-        return opacity == 0f;
+        return opacity != 0f;
     }
 
     public static VColor transparent() {
