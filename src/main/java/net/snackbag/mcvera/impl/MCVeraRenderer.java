@@ -58,10 +58,11 @@ public class MCVeraRenderer {
     }
 
     public void drawRect(VWidget.RenderContext ctx, int x, int y, int width, int height, VColor color) {
-        drawRect(
+        renderColQuad(
                 x, y,
-                width, height,
-                color
+                x, y + height,
+                x + width, y + height,
+                x + width, y, color
         );
     }
 
