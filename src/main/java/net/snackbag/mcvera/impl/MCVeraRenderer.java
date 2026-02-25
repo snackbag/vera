@@ -17,6 +17,7 @@ import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.flag.VAppFlag;
 import net.snackbag.vera.flag.VAppPositioningFlag;
+import net.snackbag.vera.util.VRenderContext;
 import net.snackbag.vera.widget.VWidget;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
@@ -33,31 +34,31 @@ public class MCVeraRenderer {
     // Widget rendering
     //
 
-    public void pushContext(VWidget.RenderContext ctx) {
+    public void pushContext(VRenderContext ctx) {
         MatrixStack stack = drawContext.getMatrices();
         stack.push();
 
-        float wMod = (ctx.width() / 2f) * (ctx.scale() - 1);
-        float hMod = (ctx.height() / 2f) * (ctx.scale() - 1);
+        float wMod = (ctx.width / 2f) * (ctx.scale - 1);
+        float hMod = (ctx.height / 2f) * (ctx.scale - 1);
 
-        float xRot = ctx.x() + ctx.width() / 2f;
-        float yRot = ctx.y() + ctx.height() / 2f;
+        float xRot = ctx.x + ctx.width / 2f;
+        float yRot = ctx.y + ctx.height / 2f;
 
         // Rotation
         stack.translate(xRot, yRot, 0f);
-        stack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(ctx.rotation()));
+        stack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(ctx.rotation));
         stack.translate(-xRot, -yRot, 0f);
 
         // Scale & final positioning)
-        stack.translate(ctx.x() - wMod, ctx.y() - hMod, 0f);
-        stack.scale(ctx.scale(), ctx.scale(), 1.0f);
+        stack.translate(ctx.x - wMod, ctx.y - hMod, 0f);
+        stack.scale(ctx.scale, ctx.scale, 1.0f);
     }
 
     public void popContext() {
         drawContext.getMatrices().pop();
     }
 
-    public void drawRect(VWidget.RenderContext ctx, int x, int y, int width, int height, VColor color) {
+    public void drawRect(VRenderContext ctx, int x, int y, int width, int height, VColor color) {
         renderColQuad(
                 x, y,
                 x, y + height,
@@ -66,7 +67,7 @@ public class MCVeraRenderer {
         );
     }
 
-    public void drawText(VWidget.RenderContext ctx, int x, int y, String text, VFont font) {
+    public void drawText(VRenderContext ctx, int x, int y, String text, VFont font) {
         MatrixStack stack = drawContext.getMatrices();
         stack.push();
 
@@ -77,9 +78,9 @@ public class MCVeraRenderer {
         stack.pop();
     }
 
-    public void drawImage(VWidget.RenderContext ctx, int x, int y, int width, int height, Identifier path) {
+    public void drawImage(VRenderContext ctx, int x, int y, int width, int height, Identifier path) {
         renderTexQuad(
-                ctx.hasTransparency(), path,
+                ctx.hasTransparency, path,
                 x, y,
                 x, y + height,
                 x + width, y + height,
@@ -348,7 +349,7 @@ public class MCVeraRenderer {
             widget.animations.updateLifetimes();
 
             if (widget.visibilityConditionsPassed()) {
-                VWidget.RenderContext ctx = widget.createRenderContext();
+                VRenderContext ctx = widget.createRenderContext();
                 pushContext(ctx);
 
                 widget.render(ctx);

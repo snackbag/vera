@@ -10,6 +10,7 @@ import net.snackbag.vera.event.VCharLimitedEvent;
 import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.modifier.VHasPlaceholderFont;
 import net.snackbag.vera.style.VStyleState;
+import net.snackbag.vera.util.VRenderContext;
 import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
@@ -34,7 +35,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     }
 
     @Override
-    public void render(RenderContext ctx) {
+    public void render(VRenderContext ctx) {
         VStyleState state = createStyleState();
 
         VFont font = getStyle("font", state);

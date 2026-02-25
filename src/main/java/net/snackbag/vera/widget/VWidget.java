@@ -1,5 +1,6 @@
 package net.snackbag.vera.widget;
 
+import net.snackbag.mcvera.impl.MCVeraRenderer;
 import net.snackbag.vera.VElement;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
@@ -13,6 +14,7 @@ import net.snackbag.vera.style.animation.CompiledAnimation;
 import net.snackbag.vera.style.animation.VAnimation;
 import net.snackbag.vera.style.animation.easing.VEasing;
 import net.snackbag.vera.util.DragHandler;
+import net.snackbag.vera.util.VRenderContext;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -41,7 +43,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         this.hasTransparency = false;
     }
 
-    public abstract void render(RenderContext ctx);
+    public abstract void render(VRenderContext ctx);
 
     public int getHitboxX() {
         return getEffectiveX();
@@ -161,9 +163,9 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         else return VStyleState.DEFAULT;
     }
 
-    public RenderContext createRenderContext() {
+    public VRenderContext createRenderContext() {
         VStyleState state = createStyleState();
-        return new RenderContext(
+        return new VRenderContext(
                 app.getX() + getEffectiveX(), app.getY() + getEffectiveY(),
                 getEffectiveWidth(), getEffectiveHeight(),
                 getStyle("rotation", state), getStyle("scale", state),
@@ -171,7 +173,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         );
     }
 
-    public void renderBorder(RenderContext ctx) {
+    public void renderBorder(VRenderContext ctx) {
         // TODO: [Render Rework] Better border rendering
 
         VStyleState state = createStyleState();
@@ -204,7 +206,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         }
     }
 
-    public void renderOverlay(RenderContext ctx) {
+    public void renderOverlay(VRenderContext ctx) {
         VStyleState state = createStyleState();
 
         Vera.renderer.drawRect(ctx, 0, 0, getEffectiveWidth(), getEffectiveHeight(), getStyle("overlay", state));
@@ -472,11 +474,4 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
         return (T) this;
     }
-
-    public record RenderContext(
-            int x, int y,
-            int width, int height,
-            float rotation, float scale,
-            boolean hasTransparency
-    ) {}
 }

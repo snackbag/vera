@@ -4,6 +4,7 @@ import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.style.VStyleState;
+import net.snackbag.vera.util.VRenderContext;
 
 public class VImage extends VWidget<VImage> {
     public VImage(Identifier src, int width, int height, VeraApp app) {
@@ -18,7 +19,7 @@ public class VImage extends VWidget<VImage> {
     }
 
     @Override
-    public void render(RenderContext ctx) {
+    public void render(VRenderContext ctx) {
         VStyleState state = createStyleState();
         Identifier src = getStyle("src", state);
 

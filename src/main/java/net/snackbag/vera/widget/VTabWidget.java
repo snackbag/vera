@@ -7,6 +7,7 @@ import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.style.VStyleState;
+import net.snackbag.vera.util.VRenderContext;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -22,7 +23,7 @@ public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
     }
 
     @Override
-    public void render(RenderContext ctx) {
+    public void render(VRenderContext ctx) {
         VStyleState state = createStyleState();
 
         VFont font = getStyle("font", state);

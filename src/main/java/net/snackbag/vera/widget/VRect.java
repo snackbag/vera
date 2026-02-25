@@ -4,6 +4,7 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.style.VStyleState;
+import net.snackbag.vera.util.VRenderContext;
 
 public class VRect extends VWidget<VRect> {
     public VRect(VColor color, VeraApp app) {
@@ -22,7 +23,7 @@ public class VRect extends VWidget<VRect> {
     }
 
     @Override
-    public void render(RenderContext ctx) {
+    public void render(VRenderContext ctx) {
         VStyleState state = createStyleState();
 
         Vera.renderer.drawRect(ctx, 0, 0, width, height, getStyle("background-color", state));
