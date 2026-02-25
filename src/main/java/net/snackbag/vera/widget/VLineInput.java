@@ -67,9 +67,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
         // text
         if (text.isEmpty()) Vera.renderer.drawText(ctx, textX, textY, placeholderText, placeholderFont);
-        else {
-            Vera.renderer.drawText(ctx, textX, textY, text, font);
-        }
+        else Vera.renderer.drawText(ctx, textX, textY, text, font);
 
         // cursor
         if (isFocused() && textSelection.isClear() && ((System.currentTimeMillis() - timeSinceLastInput) / 500) % 2 == 0) {
