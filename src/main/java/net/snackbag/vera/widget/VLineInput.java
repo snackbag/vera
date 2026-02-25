@@ -76,58 +76,6 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         }
     }
 
-    /* @Override
-    public void render(VRenderContext ctx) {
-        VStyleState state = createStyleState();
-
-        VFont font = getStyle("font", state);
-        VFont placeholderFont = getStyle("placeholder-font", state);
-        VColor backgroundColor = getStyle("background-color", state);
-        VColor textSelectionColor = getStyle("select-color", state);
-        V4Int padding = getStyle("padding", createStyleState());
-
-        Vera.renderer.drawRect(
-                ctx,
-                0,
-                0,
-                getEffectiveWidth(),
-                getEffectiveHeight(),
-                backgroundColor
-        );
-
-        // Render text selection background
-        if (!textSelection.isClear()) {
-            int selStart = Math.min(textSelection.startPos, textSelection.endPos);
-            int selEnd = Math.max(textSelection.startPos, textSelection.endPos);
-            String beforeSelection = text.substring(0, selStart);
-            String selectedText = text.substring(selStart, selEnd);
-
-            int selectionX = Vera.provider.getTextWidth(beforeSelection, font);
-            Vera.renderer.drawRect(
-                    ctx,
-                    selectionX,
-                    padding.get1(),
-                    Vera.provider.getTextWidth(selectedText, font),
-                    Vera.provider.getTextHeight(text, font),
-                    textSelectionColor
-            );
-        }
-
-        if (text.isEmpty()) Vera.renderer.drawText(ctx, padding.get3(), padding.get1(), placeholderText, placeholderFont);
-        else Vera.renderer.drawText(ctx, padding.get3(), padding.get1(), text, font);
-
-        if (isFocused() && textSelection.isClear() && (System.currentTimeMillis() / 500) % 2 == 0) {
-            Vera.renderer.drawRect(
-                    ctx,
-                    padding.get3() + Vera.provider.getTextWidth(text.substring(0, cursorPos), font),
-                    padding.get1(),
-                    1,
-                    Vera.provider.getTextHeight(text, font),
-                    getCursorColorSafe()
-            );
-        }
-    } */
-
     @Override
     public void handleBuiltinEvent(String event, Object... args) {
         super.handleBuiltinEvent(event, args);
