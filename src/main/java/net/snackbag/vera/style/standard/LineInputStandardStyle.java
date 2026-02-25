@@ -12,8 +12,8 @@ import net.snackbag.vera.widget.VLineInput;
 public class LineInputStandardStyle implements VStandardStyle {
     @Override
     public void apply(VStyleSheet sheet) {
-        sheet.setKey(VLineInput.class, "select-color", VColor.of(0, 120, 215, 0.2f));
-        sheet.setKey(VLineInput.class, "background-color", VColor.transparent());
+        sheet.setKey(VLineInput.class, "select", VColor.of(0, 120, 215, 0.2f));
+        sheet.setKey(VLineInput.class, "background", VColor.white());
         sheet.setKey(VLineInput.class, "cursor", VCursorShape.TEXT, VStyleState.HOVERED);
         sheet.setKey(VLineInput.class, "font", VFont.create());
         sheet.setKey(VLineInput.class, "placeholder-font", VFont.create().withColor(VColor.black().withOpacity(0.5f)));
@@ -22,8 +22,8 @@ public class LineInputStandardStyle implements VStandardStyle {
 
     @Override
     public void reserve(VStyleSheet sheet) {
-        sheet.reserveType("select-color", StyleValueType.COLOR);
-        sheet.reserveType("background-color", StyleValueType.COLOR);
+        sheet.reserveType("select", StyleValueType.FILL);
+        sheet.reserveType("background", StyleValueType.FILL);
         sheet.reserveType("font", StyleValueType.FONT);
         sheet.reserveType("placeholder-font", StyleValueType.FONT);
         sheet.reserveType("padding", StyleValueType.V4INT);

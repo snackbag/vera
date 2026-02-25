@@ -43,13 +43,13 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
         VFont font = getStyle("font", state);
         VFont placeholderFont = getStyle("placeholder-font", state);
-        VColor bgColor = getStyle("background-color", state);
-        VColor textSelectionColor = getStyle("select-color", state);
+        VFill background = getStyle("background-color", state);
+        VFill textSelectionFill = getStyle("select", state);
         V4Int padding = getStyle("padding", state);
         String rText = getTextInViewport();
 
         // background
-        Vera.renderer.drawRect(ctx, 0, 0, getEffectiveWidth(), getEffectiveHeight(), bgColor);
+        Vera.renderer.drawFill(ctx, 0, 0, getEffectiveWidth(), getEffectiveHeight(), background);
 
         // text selection
         int textHeight = Vera.provider.getTextHeight(text, font);
@@ -75,7 +75,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
                 int selTextWidth  = Vera.provider.getTextWidth(selInView, font);
                 int selTextHeight = Vera.provider.getTextHeight(selInView, font);
 
-                Vera.renderer.drawRect(ctx, startX, textY, selTextWidth, selTextHeight, textSelectionColor);
+                Vera.renderer.drawFill(ctx, startX, textY, selTextWidth, selTextHeight, textSelectionFill);
             }
         }
 
