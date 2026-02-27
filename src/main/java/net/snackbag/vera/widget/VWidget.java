@@ -472,7 +472,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public void charTyped(char chr, int modifiers) {}
 
     public void remove() {
-        getApp().removeWidget(this);
+        appAccess.removeWidget(this);
     }
 
     public T alsoAddClass(String clazz) {
@@ -481,7 +481,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     }
 
     public T alsoAdd() {
-        getApp().addWidget(this);
+        appAccess.addWidget(this);
         return (T) this;
     }
 
