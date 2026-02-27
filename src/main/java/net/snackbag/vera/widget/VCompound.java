@@ -10,10 +10,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> implements VAppAccess {
     protected final VLayout layout;
     private final List<VWidget<?>> widgets = new ArrayList<>();
+    public final UUID identifier = UUID.randomUUID();
 
     public VCompound(int x, int y, int width, int height, VLayout layout, VAppAccess app) {
         super(x, y, width, height, app);
@@ -49,6 +51,7 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
             return;
         }
 
+        widget.classes.add(identifier.toString());
         widgets.add(widget);
         layout.addElement(widget);
     }
@@ -61,6 +64,7 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
             return;
         }
 
+        widget.classes.add(identifier.toString());
         layout.removeElement(widget);
         widgets.remove(widget);
     }
