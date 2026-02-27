@@ -387,7 +387,7 @@ public class MCVeraRenderer {
     // Apps
     //
 
-    private void ensureClearContext(VRenderContext ctx) {
+    public void ensureClearContext(VRenderContext ctx) {
         if (ctx.peekClip() != null) {
             throw new RuntimeException("Unclosed clip stack");
         }
