@@ -23,7 +23,7 @@ public class AnimationEngine {
             return;
         }
 
-        CompiledAnimation compiled = animation.compile(widget.app, widget);
+        CompiledAnimation compiled = animation.compile(widget.getApp(), widget);
         active.put(compiled.name, new PlaybackContext(compiled, System.currentTimeMillis()));
         widget.events.fire(VEvents.Animation.BEGIN, animation);
     }
@@ -109,7 +109,7 @@ public class AnimationEngine {
 
             float delta = animation.getKeyframeDelta(time, fromKfWhen, from, to);
 
-            StyleValueType reservation = widget.app.styleSheet.getReservation(key);
+            StyleValueType reservation = widget.getApp().styleSheet.getReservation(key);
             T kfEase = (T) reservation.animationTransition.apply( // ease keyframe transition
                     from.styles.get(key), to.styles.get(key),
                     to.easing, delta);

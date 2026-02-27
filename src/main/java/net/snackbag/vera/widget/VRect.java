@@ -1,22 +1,19 @@
 package net.snackbag.vera.widget;
 
 import net.snackbag.vera.Vera;
-import net.snackbag.vera.core.VFill;
-import net.snackbag.vera.core.VImage;
-import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.core.*;
 import net.snackbag.vera.style.VStyleState;
-import net.snackbag.vera.core.VRenderContext;
 
 public class VRect extends VWidget<VRect> {
-    public VRect(VFill background, VeraApp app) {
+    public VRect(VFill background, VAppAccess app) {
         this(background, 0, 0, 20, 20, app);
     }
 
-    public VRect(VFill background, int x, int y, VeraApp app) {
+    public VRect(VFill background, int x, int y, VAppAccess app) {
         this(background, x, y, 20, 20, app);
     }
 
-    public VRect(VFill background, int x, int y, int width, int height, VeraApp app) {
+    public VRect(VFill background, int x, int y, int width, int height, VAppAccess app) {
         super(x, y, width, height, app);
 
         this.focusOnClick = false;

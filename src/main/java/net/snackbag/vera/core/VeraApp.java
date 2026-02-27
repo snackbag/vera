@@ -11,12 +11,13 @@ import net.snackbag.vera.flag.VAppPositioningFlag;
 import net.snackbag.vera.style.VStyleSheet;
 import net.snackbag.vera.util.VGeometry;
 import net.snackbag.vera.widget.VWidget;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
 
-public abstract class VeraApp {
+public abstract class VeraApp implements VAppAccess {
     public final VStyleSheet styleSheet = new VStyleSheet();
 
     private final List<VWidget<?>> widgets;
@@ -55,6 +56,11 @@ public abstract class VeraApp {
 
         this.visible = false;
         setPositioning(VAppPositioningFlag.SCREEN);
+    }
+
+    @Override
+    public @NotNull VeraApp get() {
+        return this;
     }
 
     public void setCursorVisible(boolean cursorVisible) {

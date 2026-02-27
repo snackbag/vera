@@ -28,7 +28,7 @@ public class VDropdown extends VWidget<VDropdown> implements VHasFont {
     private int itemSpacing = 0;
     private @Nullable Integer hoveredItem = null;
 
-    public VDropdown(VeraApp app) {
+    public VDropdown(VAppAccess app) {
         super(0, 0, 100, 16, app);
 
         items = new ArrayList<>();
@@ -279,11 +279,6 @@ public class VDropdown extends VWidget<VDropdown> implements VHasFont {
 
     public List<Item> getItems() {
         return items;
-    }
-
-    @Override
-    public VeraApp getApp() {
-        return app;
     }
 
     public static class Item {

@@ -26,7 +26,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     private long timeSinceLastInput;
     private int textViewport = 0;
 
-    public VLineInput(VeraApp app) {
+    public VLineInput(VAppAccess app) {
         super(0, 0, 100, 20, app);
 
         this.text = "";
@@ -103,11 +103,6 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
             textSelection.clear();
             setCursorPos(getCharPosAtX(getRelativeMouseX()));
         }
-    }
-
-    @Override
-    public VeraApp getApp() {
-        return app;
     }
 
     public String getText() {

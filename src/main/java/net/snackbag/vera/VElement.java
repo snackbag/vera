@@ -1,5 +1,6 @@
 package net.snackbag.vera;
 
+import net.snackbag.vera.core.VAppAccess;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.EventHandler;
 import net.snackbag.vera.event.VEvents;
@@ -21,13 +22,13 @@ public abstract class VElement {
     public boolean visible = true;
 
     public final EventHandler events;
-    public final VeraApp app;
+    public final VAppAccess appAccess;
     private final List<Supplier<Boolean>> visibilityConditions = new ArrayList<>();
 
     protected @Nullable VLayout layout;
 
-    public VElement(VeraApp app, int x, int y, int width, int height) {
-        this.app = app;
+    public VElement(VAppAccess app, int x, int y, int width, int height) {
+        this.appAccess = app;
 
         this.events = new EventHandler(this);
         this.events.preprocessor = this::handleBuiltinEvent;
@@ -42,6 +43,10 @@ public abstract class VElement {
 
         onLayoutSwap(layout -> this.layout = layout); // event gets called. we use the event itself to change the layout
         onLayoutRemove(() -> this.layout = null);
+    }
+
+    public VeraApp getApp() {
+        return appAccess.get();
     }
 
     public void handleBuiltinEvent(String name, Object... args) {}
@@ -118,11 +123,11 @@ public abstract class VElement {
     }
 
     public int getRelativeMouseX() {
-        return Vera.getMouseX() - getX() - app.getX();
+        return Vera.getMouseX() - getX() - getApp().getX();
     }
 
     public int getRelativeMouseY() {
-        return Vera.getMouseY() - getY() - app.getY();
+        return Vera.getMouseY() - getY() - getApp().getY();
     }
 
     public void move(int both) {

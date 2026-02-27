@@ -12,7 +12,7 @@ public class VLabel extends VWidget<VLabel> implements VHasFont {
     private String text;
     private VHAlignmentFlag alignment;
 
-    public VLabel(String text, int x, int y, int width, int height, VeraApp app) {
+    public VLabel(String text, int x, int y, int width, int height, VAppAccess app) {
         super(x, y, width, height, app);
 
         this.text = text;
@@ -20,12 +20,12 @@ public class VLabel extends VWidget<VLabel> implements VHasFont {
         alignment = VHAlignmentFlag.LEFT;
     }
 
-    public VLabel(String text, int x, int y, VeraApp app) {
+    public VLabel(String text, int x, int y, VAppAccess app) {
         this(text, x, y, 100, 16, app);
         adjustSize();
     }
 
-    public VLabel(String text, VeraApp app) {
+    public VLabel(String text, VAppAccess app) {
         this(text, 0, 0, 100, 16, app);
         adjustSize();
     }
@@ -65,13 +65,8 @@ public class VLabel extends VWidget<VLabel> implements VHasFont {
         this.height = Vera.provider.getTextHeight(text, font);
     }
 
-    @Override
-    public VeraApp getApp() {
-        return app;
-    }
-
     public VColor.ColorModifier modifyColor(String key) {
-        return app.styleSheet.modifyKeyAsColor(this, key);
+        return getApp().styleSheet.modifyKeyAsColor(this, key);
     }
 
     @Override

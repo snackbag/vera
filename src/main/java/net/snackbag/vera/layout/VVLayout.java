@@ -14,7 +14,7 @@ public class VVLayout extends VLayout {
     }
 
     public VVLayout(VLayout parent, int width, int height) {
-        this(parent.app, 0, 0, width, height);
+        this(parent.getApp(), 0, 0, width, height);
         this.alsoAddTo(parent);
     }
 

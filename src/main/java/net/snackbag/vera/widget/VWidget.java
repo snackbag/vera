@@ -36,7 +36,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
     public final LinkedHashSet<String> classes = new LinkedHashSet<>();
 
-    public VWidget(int x, int y, int width, int height, VeraApp app) {
+    public VWidget(int x, int y, int width, int height, VAppAccess app) {
         super(app, x, y, width, height);
 
         this.hasTransparency = false;
@@ -62,20 +62,20 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
     @SuppressWarnings("unchecked")
     public <V> void setStyle(String key, V... value) {
-        app.styleSheet.setKey(this, key, value);
+        getApp().styleSheet.setKey(this, key, value);
     }
 
     @SuppressWarnings("unchecked")
     public <V> void setStyle(String key, VStyleState state, V... value) {
-        app.styleSheet.setKey(this, key, value, state);
+        getApp().styleSheet.setKey(this, key, value, state);
     }
 
     public <V> V getStyle(String key) {
-        return animations.animateStyle(key, app.styleSheet.getKey(this, key));
+        return animations.animateStyle(key, getApp().styleSheet.getKey(this, key));
     }
 
     public <V> V getStyle(String key, VStyleState state) {
-        return animations.animateStyle(key, app.styleSheet.getKey(this, key, state));
+        return animations.animateStyle(key, getApp().styleSheet.getKey(this, key, state));
     }
 
     public <V> V getStyleOrDefault(String key, V dflt) {
@@ -160,6 +160,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
     public VRenderContext createRenderContext() {
         VStyleState state = createStyleState();
+        VeraApp app = getApp();
         return new VRenderContext(
                 app.getX() + getX(), app.getY() + getY(),
                 getEffectiveWidth(), getEffectiveHeight(),
@@ -227,6 +228,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     }
 
     public void beforeRender() {
+        VeraApp app = getApp();
         VStyleState state = createStyleState();
 
         if (state != prevStyleState) {
@@ -295,7 +297,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public void update() {
         VStyleState state = createStyleState();
 
-        app.setCursorShape(getStyle("cursor", state));
+        getApp().setCursorShape(getStyle("cursor", state));
     }
 
     public boolean isHovered() {
@@ -455,10 +457,12 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     }
 
     public boolean isFocused() {
-        return app.isFocusedWidget(this);
+        return getApp().isFocusedWidget(this);
     }
 
     public void setFocused(boolean focused) {
+        VeraApp app = getApp();
+
         if (focused) app.setFocusedWidget(this);
         else app.setFocusedWidget(null);
     }
@@ -468,7 +472,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public void charTyped(char chr, int modifiers) {}
 
     public void remove() {
-        app.removeWidget(this);
+        getApp().removeWidget(this);
     }
 
     public T alsoAddClass(String clazz) {
@@ -477,7 +481,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     }
 
     public T alsoAdd() {
-        app.addWidget(this);
+        getApp().addWidget(this);
         return (T) this;
     }
 

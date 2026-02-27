@@ -1,24 +1,19 @@
 package net.snackbag.vera.widget;
 
-import net.minecraft.util.Identifier;
-import net.snackbag.mcvera.MinecraftVera;
 import net.snackbag.vera.Vera;
-import net.snackbag.vera.core.VFill;
-import net.snackbag.vera.core.VImage;
-import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.core.*;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VCheckedStateChange;
 import net.snackbag.vera.style.VStyleState;
-import net.snackbag.vera.core.VRenderContext;
 
 public class VCheckBox extends VWidget<VCheckBox> {
     private boolean checked;
 
-    public VCheckBox(VeraApp app) {
+    public VCheckBox(VAppAccess app) {
         this(app, 15, 15);
     }
 
-    public VCheckBox(VeraApp app, int width, int height) {
+    public VCheckBox(VAppAccess app, int width, int height) {
         super(0, 0, width, height, app);
 
         this.checked = false;

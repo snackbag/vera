@@ -1,13 +1,10 @@
 package net.snackbag.vera.widget;
 
 import net.snackbag.vera.Vera;
-import net.snackbag.vera.core.VColor;
-import net.snackbag.vera.core.VFont;
-import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.core.*;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.style.VStyleState;
-import net.snackbag.vera.core.VRenderContext;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -18,7 +15,7 @@ public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
     private @Nullable Integer activeTab = null;
     private @Nullable Integer hoveredTab = null;
 
-    public VTabWidget(VeraApp app) {
+    public VTabWidget(VAppAccess app) {
         super(0, 0, 100, 16, app);
     }
 
@@ -184,7 +181,7 @@ public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
 
     public void addWidget(String tab, List<VWidget<?>> widgets) {
         if (tab == null || !tabs.containsKey(tab)) {
-            throw new IllegalArgumentException("Failed to add " + widgets.size() + " widget(s) to tab '" + tab + "', because it doesn't exist. (App: " + app.getClass().getSimpleName() + ")");
+            throw new IllegalArgumentException("Failed to add " + widgets.size() + " widget(s) to tab '" + tab + "', because it doesn't exist. (App: " + getApp().getClass().getSimpleName() + ")");
         }
 
         Integer tabIndex = getTabIndex(tab);
@@ -233,15 +230,10 @@ public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
     }
 
     public VColor.ColorModifier modifyBackgroundColorSelected() {
-        return app.styleSheet.modifyKeyAsColor(this, "background-color-selected");
+        return getApp().styleSheet.modifyKeyAsColor(this, "background-color-selected");
     }
 
     public VColor.ColorModifier modifyBackgroundColor() {
-        return app.styleSheet.modifyKeyAsColor(this, "background-color");
-    }
-
-    @Override
-    public VeraApp getApp() {
-        return app;
+        return getApp().styleSheet.modifyKeyAsColor(this, "background-color");
     }
 }
