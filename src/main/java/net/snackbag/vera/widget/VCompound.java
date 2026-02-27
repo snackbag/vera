@@ -20,6 +20,7 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
 
         this.layout = layout;
         this.layout.move(x, y);
+        this.layout.setSize(width, height);
 
         init();
     }
