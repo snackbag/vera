@@ -408,22 +408,7 @@ public class MCVeraRenderer {
             if (widget != hoveredWidget && widget.isHovered()) widget.setHovered(false);
             else if (widget == hoveredWidget && !widget.isHovered()) widget.setHovered(true);
 
-            widget.beforeRender();
-            widget.animations.updateLifetimes();
-
-            if (widget.visibilityConditionsPassed()) {
-                VRenderContext ctx = widget.createRenderContext();
-                pushContext(ctx);
-
-                widget.renderContent(ctx);
-                widget.renderBorder(ctx);
-                widget.renderOverlay(ctx);
-
-                ensureClearContext(ctx);
-                popContext();
-            }
-
-            widget.afterRender();
+            widget.renderSelf();
         }
         app.renderAfterWidgets();
 

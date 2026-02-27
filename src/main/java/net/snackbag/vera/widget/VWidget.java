@@ -168,6 +168,25 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         );
     }
 
+    public void renderSelf() {
+        beforeRender();
+        animations.updateLifetimes();
+
+        if (visibilityConditionsPassed()) {
+            VRenderContext ctx = createRenderContext();
+            Vera.renderer.pushContext(ctx);
+
+            renderContent(ctx);
+            renderBorder(ctx);
+            renderOverlay(ctx);
+
+            Vera.renderer.ensureClearContext(ctx);
+            Vera.renderer.popContext();
+        }
+
+        afterRender();
+    }
+
     public void renderBorder(VRenderContext ctx) {
         // TODO: [Render Rework] Better border rendering
 
