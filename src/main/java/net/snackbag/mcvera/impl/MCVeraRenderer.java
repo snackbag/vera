@@ -387,6 +387,12 @@ public class MCVeraRenderer {
     // Apps
     //
 
+    private void ensureClearContext(VRenderContext ctx) {
+        if (ctx.peekClip() != null) {
+            throw new RuntimeException("Unclosed clip stack");
+        }
+    }
+
     public void renderApp(VeraApp app) {
         boolean blendEnabled = GL11.glIsEnabled(GL11.GL_BLEND);
 
@@ -443,12 +449,6 @@ public class MCVeraRenderer {
                 continue;
             }
             Vera.renderer.renderApp(app);
-        }
-    }
-
-    private void ensureClearContext(VRenderContext ctx) {
-        if (ctx.peekClip() != null) {
-            throw new RuntimeException("Unclosed clip stack");
         }
     }
 }
