@@ -99,6 +99,14 @@ public abstract class VElement {
         return layout != null ? layout.posOf(this).y : _y;
     }
 
+    public int getRawX() {
+        return _x;
+    }
+
+    public int getRawY() {
+        return _y;
+    }
+
     @Deprecated(forRemoval = true)
     public int getEffectiveX() {
         return getX();
