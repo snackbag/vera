@@ -171,16 +171,12 @@ public abstract class VeraApp implements VAppAccess {
 
     public abstract void init();
 
+    @Override
     public List<VWidget<?>> getWidgets() {
         return new ArrayList<>(widgets);
     }
 
-    public List<VWidget<?>> getWidgetsReversed() {
-        List<VWidget<?>> widgets = getWidgets();
-        Collections.reverse(widgets);
-        return widgets;
-    }
-
+    @Override
     public void addWidget(VWidget<?> widget) {
         if (widgets.contains(widget)) {
             MinecraftVera.LOGGER.error("Can't add widget %s to app %s, because it is already added"
@@ -191,6 +187,7 @@ public abstract class VeraApp implements VAppAccess {
         this.widgets.add(widget);
     }
 
+    @Override
     public void removeWidget(VWidget<?> widget) {
         if (!widgets.contains(widget)) return;
 
