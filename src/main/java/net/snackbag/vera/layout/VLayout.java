@@ -2,7 +2,7 @@ package net.snackbag.vera.layout;
 
 import net.snackbag.vera.VElement;
 import net.snackbag.vera.Vera;
-import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.core.VAppAccess;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.flag.VLayoutAlignmentFlag;
 import org.joml.Vector2i;
@@ -23,7 +23,7 @@ public abstract class VLayout extends VElement {
     private long cacheId = 0;
     protected final HashMap<VElement, Vector2i> cache = new HashMap<>();
 
-    public VLayout(VeraApp app, int x, int y, int width, int height) {
+    public VLayout(VAppAccess app, int x, int y, int width, int height) {
         super(app, x, y, width, height);
     }
 

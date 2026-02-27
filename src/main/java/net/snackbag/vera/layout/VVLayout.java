@@ -1,20 +1,20 @@
 package net.snackbag.vera.layout;
 
 import net.snackbag.vera.VElement;
-import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.core.VAppAccess;
 import org.joml.Vector2i;
 
 public class VVLayout extends VLayout {
-    public VVLayout(VeraApp app, int x, int y, int width, int height) {
+    public VVLayout(VAppAccess app, int x, int y, int width, int height) {
         super(app, x, y, width, height);
     }
 
-    public VVLayout(VeraApp app, int x, int y) {
+    public VVLayout(VAppAccess app, int x, int y) {
         this(app, x, y, -1, -1);
     }
 
     public VVLayout(VLayout parent, int width, int height) {
-        this(parent.getApp(), 0, 0, width, height);
+        this(parent.appAccess, 0, 0, width, height);
         this.alsoAddTo(parent);
     }
 
