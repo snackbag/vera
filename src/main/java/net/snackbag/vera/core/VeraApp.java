@@ -189,7 +189,11 @@ public abstract class VeraApp implements VAppAccess {
 
     @Override
     public void removeWidget(VWidget<?> widget) {
-        if (!widgets.contains(widget)) return;
+        if (!widgets.contains(widget)) {
+            MinecraftVera.LOGGER.error("Can't remove widget %s from app %s, because it wasn't added"
+                    .formatted(widget.toString(), getClass().getSimpleName()));
+            return;
+        }
 
         if (isFocusedWidget(widget)) setFocusedWidget(null);
         if (widget.isLeftClickDown()) widget.events.fire(VEvents.Widget.LEFT_CLICK_RELEASE);
