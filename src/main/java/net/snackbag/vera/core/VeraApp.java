@@ -16,7 +16,7 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
 
-public abstract class VeraApp implements VWidgetContainer {
+public abstract class VeraApp {
     public final VStyleSheet styleSheet = new VStyleSheet();
 
     private final List<VWidget<?>> widgets;
@@ -165,12 +165,16 @@ public abstract class VeraApp implements VWidgetContainer {
 
     public abstract void init();
 
-    @Override
     public List<VWidget<?>> getWidgets() {
         return new ArrayList<>(widgets);
     }
 
-    @Override
+    public List<VWidget<?>> getWidgetsReversed() {
+        List<VWidget<?>> widgets = getWidgets();
+        Collections.reverse(widgets);
+        return widgets;
+    }
+
     public void addWidget(VWidget<?> widget) {
         if (widgets.contains(widget)) {
             MinecraftVera.LOGGER.error("Can't add widget %s to app %s, because it is already added"
@@ -181,7 +185,6 @@ public abstract class VeraApp implements VWidgetContainer {
         this.widgets.add(widget);
     }
 
-    @Override
     public void removeWidget(VWidget<?> widget) {
         if (!widgets.contains(widget)) return;
 
