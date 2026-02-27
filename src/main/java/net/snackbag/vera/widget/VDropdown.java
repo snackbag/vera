@@ -37,7 +37,7 @@ public class VDropdown extends VWidget<VDropdown> implements VHasFont {
     }
 
     @Override
-    public void render(VRenderContext ctx) {
+    public void renderContent(VRenderContext ctx) {
         VStyleState state = createStyleState();
 
         VColor backgroundColor = getStyle("background-color", state);

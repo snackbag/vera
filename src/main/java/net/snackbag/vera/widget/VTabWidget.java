@@ -23,7 +23,7 @@ public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
     }
 
     @Override
-    public void render(VRenderContext ctx) {
+    public void renderContent(VRenderContext ctx) {
         VStyleState state = createStyleState();
 
         VFont font = getStyle("font", state);

@@ -38,7 +38,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     }
 
     @Override
-    public void render(VRenderContext ctx) {
+    public void renderContent(VRenderContext ctx) {
         VStyleState state = createStyleState();
 
         VFont font = getStyle("font", state);

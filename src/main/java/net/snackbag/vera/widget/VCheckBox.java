@@ -25,7 +25,7 @@ public class VCheckBox extends VWidget<VCheckBox> {
     }
 
     @Override
-    public void render(VRenderContext ctx) {
+    public void renderContent(VRenderContext ctx) {
         VStyleState state = createStyleState();
         VFill fill = checked ? getStyle("fill-checked", state) : getStyle("fill", state);
 

@@ -415,7 +415,7 @@ public class MCVeraRenderer {
                 VRenderContext ctx = widget.createRenderContext();
                 pushContext(ctx);
 
-                widget.render(ctx);
+                widget.renderContent(ctx);
                 widget.renderBorder(ctx);
                 widget.renderOverlay(ctx);
 

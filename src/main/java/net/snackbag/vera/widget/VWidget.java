@@ -42,7 +42,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         this.hasTransparency = false;
     }
 
-    public abstract void render(VRenderContext ctx);
+    public abstract void renderContent(VRenderContext ctx);
 
     public int getHitboxX() {
         return getX();

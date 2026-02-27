@@ -24,7 +24,7 @@ public class VRect extends VWidget<VRect> {
     }
 
     @Override
-    public void render(VRenderContext ctx) {
+    public void renderContent(VRenderContext ctx) {
         VStyleState state = createStyleState();
 
         Vera.renderer.drawFill(ctx, 0, 0, width, height, getStyle("background", state));
