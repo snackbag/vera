@@ -81,18 +81,18 @@ public enum StyleValueType {
         if (value instanceof String v) {
             if (to == IDENTIFIER) return
                     //? if (1.20.1) {
-                    /*Identifier.tryParse(v);
-                    *///? } else if (>=1.21.1) {
-                    Identifier.of(v);
-                    //?}
+                    Identifier.tryParse(v);
+                    //? } else if (>=1.21.1) {
+                    /*Identifier.of(v);
+                    *///?}
             else if (to == CURSOR) return EnumUtils.getEnumIgnoreCase(VCursorShape.class, v);
             else if (to == EASING) return VEasings.getIgnoreCase(v);
             else if (to == FILL) return new VImage(
                     //? if (1.20.1) {
-                    /*Identifier.tryParse(v)
-                    *///? } else if (>=1.21.1) {
-                    Identifier.of(v)
-                    //?}
+                    Identifier.tryParse(v)
+                    //? } else if (>=1.21.1) {
+                    /*Identifier.of(v)
+                    *///?}
             );
         }
 

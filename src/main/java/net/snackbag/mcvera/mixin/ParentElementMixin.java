@@ -101,16 +101,16 @@ public interface ParentElementMixin {
 
     @Inject(method = "mouseScrolled", at = @At("HEAD"))
     //? if (1.20.1) {
-    //private void mcvera$handleMouseScroll(double mouseXRaw, double mouseYRaw, double amount, CallbackInfoReturnable<Boolean> cir) {
+    private void mcvera$handleMouseScroll(double mouseXRaw, double mouseYRaw, double amount, CallbackInfoReturnable<Boolean> cir) {
     //?} else if (>=1.21.1) {
-    private void mcvera$handleMouseScroll(double mouseXRaw, double mouseYRaw, double horizontalAmount, double verticalAmount, CallbackInfoReturnable<Boolean> cir) {
-    //?}
+    /*private void mcvera$handleMouseScroll(double mouseXRaw, double mouseYRaw, double horizontalAmount, double verticalAmount, CallbackInfoReturnable<Boolean> cir) {
+    *///?}
         int mouseX = (int) mouseXRaw;
         int mouseY = (int) mouseYRaw;
 
         // I'm not sure what to do with this. Horizontal scrolling support was added in 1.21.1, and we should probably support it in Vera too, but for now it's just vertical -Lemonnik
         //? if (>=1.21.1)
-        double amount = verticalAmount;
+        //double amount = verticalAmount;
 
         MCVeraData.asTopHierarchy(app -> handleScrollEvents(app.getTopWidgetAt(mouseX, mouseY), mouseX, mouseY, amount));
         Vera.forAllVisibleApps(app -> {
