@@ -26,7 +26,7 @@ public abstract class GameRendererMixin {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderWithTooltip(Lnet/minecraft/client/gui/DrawContext;IIF)V"))
     //? if (1.20.1) {
-    //private void mcvera$renderAboveHud(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+    //private void mcvera$renderOnGUI(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
     //? } else if (>=1.21.1) {
     private void mcvera$renderOnGUI(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
     //?}
@@ -35,7 +35,7 @@ public abstract class GameRendererMixin {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderWithTooltip(Lnet/minecraft/client/gui/DrawContext;IIF)V", shift = At.Shift.AFTER))
     //? if (1.20.1) {
-    //private void mcvera$renderAboveHud(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+    //private void mcvera$renderAboveGUI(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
     //? } else if (>=1.21.1) {
     private void mcvera$renderAboveGUI(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
     //?}
@@ -44,7 +44,7 @@ public abstract class GameRendererMixin {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/toast/ToastManager;draw(Lnet/minecraft/client/gui/DrawContext;)V", shift = At.Shift.AFTER))
     //? if (1.20.1) {
-    //private void mcvera$renderAboveHud(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+    //private void mcvera$renderScreenAndTop(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
     //? } else if (>=1.21.1) {
     private void mcvera$renderScreenAndTop(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
     //?}
