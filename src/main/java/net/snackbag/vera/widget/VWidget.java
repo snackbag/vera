@@ -13,7 +13,6 @@ import net.snackbag.vera.style.animation.CompiledAnimation;
 import net.snackbag.vera.style.animation.VAnimation;
 import net.snackbag.vera.style.animation.easing.VEasing;
 import net.snackbag.vera.util.DragHandler;
-import net.snackbag.vera.core.VRenderContext;
 
 import java.nio.file.Path;
 import java.util.*;

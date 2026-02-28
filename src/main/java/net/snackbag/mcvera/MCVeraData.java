@@ -10,9 +10,9 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class MCVeraData {
-    public static LinkedHashSet<VeraApp> applications = new LinkedHashSet<>();
-    public static HashMap<VAppPositioningFlag, LinkedHashSet<VeraApp>> visibleApplications = new HashMap<>();
-    public static HashMap<VAppFlag, List<VeraApp>> appFlags = new HashMap<>();
+    public static final LinkedHashSet<VeraApp> applications = new LinkedHashSet<>();
+    public static final HashMap<VAppPositioningFlag, LinkedHashSet<VeraApp>> visibleApplications = new HashMap<>();
+    public static final HashMap<VAppFlag, List<VeraApp>> appFlags = new HashMap<>();
 
     public static int appsWithMouseRequired = 0;
 

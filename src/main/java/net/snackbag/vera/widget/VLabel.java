@@ -6,7 +6,6 @@ import net.snackbag.vera.core.v4.V4Int;
 import net.snackbag.vera.flag.VHAlignmentFlag;
 import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.style.VStyleState;
-import net.snackbag.vera.core.VRenderContext;
 
 public class VLabel extends VWidget<VLabel> implements VHasFont {
     private String text;

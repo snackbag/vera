@@ -160,7 +160,6 @@ public class StyleContainer<T> {
                 for (VStyleState targetState : target.getKey(targetPart, targetKey).keySet()) {
                     if (!hasState(targetPart, targetKey, targetState)) {
                         values.get(targetPart).get(targetKey).put(targetState, target.getState(targetPart, targetKey, targetState));
-                        continue;
                     }
                 }
             }

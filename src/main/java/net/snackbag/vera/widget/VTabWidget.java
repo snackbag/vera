@@ -222,7 +222,7 @@ public class VTabWidget extends VWidget<VTabWidget> implements VHasFont {
     }
 
     public void setActiveTab(@Nullable Integer activeTab) {
-        if (activeTab == null || activeTab >= tabs.keySet().size()) {
+        if (activeTab == null || activeTab >= tabs.size()) {
             activeTab = null;
         }
 

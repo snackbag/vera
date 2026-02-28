@@ -11,7 +11,6 @@ import net.snackbag.vera.event.VCharLimitedEvent;
 import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.modifier.VHasPlaceholderFont;
 import net.snackbag.vera.style.VStyleState;
-import net.snackbag.vera.core.VRenderContext;
 import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;

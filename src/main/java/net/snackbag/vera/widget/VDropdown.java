@@ -8,7 +8,6 @@ import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VItemSwitchEvent;
 import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.style.VStyleState;
-import net.snackbag.vera.core.VRenderContext;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
