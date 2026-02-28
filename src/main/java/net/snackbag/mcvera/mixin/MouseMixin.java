@@ -46,7 +46,11 @@ public abstract class MouseMixin {
     }
 
     @Inject(method = "onFilesDropped", at = @At("HEAD"))
-    private void mcvera$onFilesWindowHoverDropped(long window, List<Path> paths, CallbackInfo ci) {
+    //? if (1.20.1) {
+    //private void mcvera$onFilesWindowHoverDropped(long window, List<Path> paths, CallbackInfo ci) {
+    //? } else if (>=1.21.1) {
+    private void mcvera$onFilesWindowHoverDropped(long window, List<Path> paths, int invalidFilesCount, CallbackInfo ci) {
+    //?}
         Vera.provider.handleFilesDropped(paths);
     }
 }
