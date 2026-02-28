@@ -20,7 +20,7 @@ import java.util.*;
 
 public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public AnimationEngine animations = new AnimationEngine(this);
-    protected boolean hasTransparency;
+    protected boolean hasTransparency = false;
 
     public boolean focusOnClick = true;
     private boolean hovered = false;
@@ -38,8 +38,6 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
     public VWidget(int x, int y, int width, int height, VAppAccess app) {
         super(app, x, y, width, height);
-
-        this.hasTransparency = false;
     }
 
     public abstract void renderContent(VRenderContext ctx);
