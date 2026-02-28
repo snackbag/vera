@@ -396,11 +396,11 @@ public class MCVeraRenderer {
 
         //? if (1.20.1) {
         //BufferBuilder buf = Tessellator.getInstance().getBuffer();
+        //buf.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR_TEXTURE);
         //? } else if (>=1.21.1) {
-        // TODO: fix this, theres no buffer
-        BufferBuilder buf = Tessellator.getInstance()
+        BufferBuilder buf = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
         //? }
-        buf.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR_TEXTURE);
+
         buf.vertex(matrix, v1x, v1y, 0f).color(v1c.toIntArgb()).texture(u1, v1t)
                 //? if (1.20.1)
                 //.next()
