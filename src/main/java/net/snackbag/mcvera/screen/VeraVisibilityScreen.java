@@ -20,4 +20,9 @@ public class VeraVisibilityScreen extends Screen {
     public boolean shouldPause() {
         return false;
     }
+
+    //? if (>=1.21.1) {
+    /*@Override
+    protected void applyBlur(float delta) {}
+    *///?}
 }
