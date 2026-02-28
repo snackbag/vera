@@ -104,11 +104,11 @@ public abstract class VElement {
         return layout != null ? layout.posOf(this).y : _y;
     }
 
-    public int getRawX() {
+    public final int getRawX() {
         return _x;
     }
 
-    public int getRawY() {
+    public final int getRawY() {
         return _y;
     }
 
