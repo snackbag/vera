@@ -214,10 +214,22 @@ public class MCVeraRenderer {
         Matrix4f matrix = drawContext.getMatrices().peek().getPositionMatrix();
 
         VertexConsumer consumer = drawContext.getVertexConsumers().getBuffer(RenderLayer.getGui());
-        consumer.vertex(matrix, (float) v1x, (float) v1y, 0f).color(v1col.toIntArgb()).next();
-        consumer.vertex(matrix, (float) v2x, (float) v2y, 0f).color(v2col.toIntArgb()).next();
-        consumer.vertex(matrix, (float) v3x, (float) v3y, 0f).color(v3col.toIntArgb()).next();
-        consumer.vertex(matrix, (float) v4x, (float) v4y, 0f).color(v4col.toIntArgb()).next();
+        consumer.vertex(matrix, (float) v1x, (float) v1y, 0f).color(v1col.toIntArgb())
+                //? if (1.20.1)
+                //.next()
+                ;
+        consumer.vertex(matrix, (float) v2x, (float) v2y, 0f).color(v2col.toIntArgb())
+                //? if (1.20.1)
+                //.next()
+                ;
+        consumer.vertex(matrix, (float) v3x, (float) v3y, 0f).color(v3col.toIntArgb())
+                //? if (1.20.1)
+                // .next()
+                ;
+        consumer.vertex(matrix, (float) v4x, (float) v4y, 0f).color(v4col.toIntArgb())
+                //? if (1.20.1)
+                //.next()
+                ;
 
         ((DrawContextAccessor) drawContext).vera$invokeTryDraw();
     }
@@ -373,17 +385,38 @@ public class MCVeraRenderer {
             int v4x, int v4y, float u4, float v4t, VColor v4c
     ) {
         RenderSystem.setShaderTexture(0, texture);
-        RenderSystem.setShader(GameRenderer::getPositionColorTexProgram);
+        //? if (1.20.1) {
+        //RenderSystem.setShader(GameRenderer::getPositionColorTexProgram);
+        //? } else if (>=1.21.1) {
+        RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
+        //? }
         if (hasTransparentParts) RenderSystem.enableBlend();
 
         Matrix4f matrix = drawContext.getMatrices().peek().getPositionMatrix();
 
-        BufferBuilder buf = Tessellator.getInstance().getBuffer();
+        //? if (1.20.1) {
+        //BufferBuilder buf = Tessellator.getInstance().getBuffer();
+        //? } else if (>=1.21.1) {
+        // TODO: fix this, theres no buffer
+        BufferBuilder buf = Tessellator.getInstance()
+        //? }
         buf.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR_TEXTURE);
-        buf.vertex(matrix, v1x, v1y, 0f).color(v1c.toIntArgb()).texture(u1, v1t).next();
-        buf.vertex(matrix, v2x, v2y, 0f).color(v2c.toIntArgb()).texture(u2, v2t).next();
-        buf.vertex(matrix, v3x, v3y, 0f).color(v3c.toIntArgb()).texture(u3, v3t).next();
-        buf.vertex(matrix, v4x, v4y, 0f).color(v4c.toIntArgb()).texture(u4, v4t).next();
+        buf.vertex(matrix, v1x, v1y, 0f).color(v1c.toIntArgb()).texture(u1, v1t)
+                //? if (1.20.1)
+                //.next()
+                ;
+        buf.vertex(matrix, v2x, v2y, 0f).color(v2c.toIntArgb()).texture(u2, v2t)
+                //? if (1.20.1)
+                //.next()
+                ;
+        buf.vertex(matrix, v3x, v3y, 0f).color(v3c.toIntArgb()).texture(u3, v3t)
+                //? if (1.20.1)
+                //.next()
+                ;
+        buf.vertex(matrix, v4x, v4y, 0f).color(v4c.toIntArgb()).texture(u4, v4t)
+                //? if (1.20.1)
+                //.next()
+                ;
 
         BufferRenderer.drawWithGlobalProgram(buf.end());
         if (hasTransparentParts) RenderSystem.disableBlend();
