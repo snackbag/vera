@@ -289,7 +289,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
     public void setHasTransparency(boolean hasTransparency) {
         this.hasTransparency = hasTransparency;
-        events.fire(VEvents.Widget.TRANSPARENCY_STATE_CHANGED, hasTransparency);
+        events.fire(VEvents.Widget.TRANSPARENCY_STATE_CHANGE, hasTransparency);
     }
 
     public void update() {
@@ -390,8 +390,8 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         events.register(VEvents.Animation.FINISH, args -> runnable.run((VAnimation) args[0], (long) args[1]));
     }
 
-    public void onTransparencyStateChanged(VTransparencyStateChangedEvent runnable) {
-        events.register(VEvents.Widget.TRANSPARENCY_STATE_CHANGED, args -> runnable.run((boolean) args[0]));
+    public void onTransparencyStateChange(VTransparencyStateChangeEvent runnable) {
+        events.register(VEvents.Widget.TRANSPARENCY_STATE_CHANGE, args -> runnable.run((boolean) args[0]));
     }
 
     @Override
