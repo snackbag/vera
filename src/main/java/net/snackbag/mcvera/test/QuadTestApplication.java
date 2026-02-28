@@ -1,6 +1,7 @@
 package net.snackbag.mcvera.test;
 
 import net.minecraft.util.Identifier;
+import net.snackbag.mcvera.MinecraftVera;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VeraApp;
@@ -26,7 +27,7 @@ public class QuadTestApplication extends VeraApp {
 
         Vera.renderer.renderTexQuad(
                 true,
-                new Identifier("mcvera", "icon.png"),
+                Identifier.of(MinecraftVera.MOD_ID, "icon.png"),
                 100, 0,
                 120, 100,
                 220, 100,

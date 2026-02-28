@@ -13,8 +13,8 @@ public class CheckBoxStandardStyle implements VStandardStyle {
     @Override
     public void apply(VStyleSheet sheet) {
         sheet.setKey(VCheckBox.class, "cursor", VCursorShape.POINTING_HAND, VStyleState.HOVERED);
-        sheet.setKey(VCheckBox.class, "fill", new VImage(new Identifier(MinecraftVera.MOD_ID, "widgets/checkmark/default.png")));
-        sheet.setKey(VCheckBox.class, "fill-checked", new VImage(new Identifier(MinecraftVera.MOD_ID, "widgets/checkmark/checked.png")));
+        sheet.setKey(VCheckBox.class, "fill", new VImage(Identifier.of(MinecraftVera.MOD_ID, "widgets/checkmark/default.png")));
+        sheet.setKey(VCheckBox.class, "fill-checked", new VImage(Identifier.of(MinecraftVera.MOD_ID, "widgets/checkmark/checked.png")));
     }
 
     @Override

@@ -105,7 +105,13 @@ public class MCVeraRenderer {
 
         drawContext.drawText(
                 MinecraftClient.getInstance().textRenderer,
-                Text.literal(text).setStyle(Style.EMPTY.withFont(new Identifier(font.getName()))),
+                Text.literal(text).setStyle(Style.EMPTY.withFont(
+                        //? if (1.20.1) {
+                        /*Identifier.tryParse(font.getName())
+                        *///? } else if (>=1.21.1) {
+                        Identifier.of(font.getName())
+                        //?}
+                )),
                 0, 0,
                 font.getColor().toIntArgb(),
                 false

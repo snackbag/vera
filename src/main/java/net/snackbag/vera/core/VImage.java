@@ -10,11 +10,23 @@ public class VImage implements VFill {
     public final VColor tint;
 
     public VImage(String src, VColor tint) {
-        this(new Identifier(src), tint);
+        this(
+                //? if (1.20.1) {
+                /*Identifier.tryParse(src),
+                *///?} else if (>=1.21.1) {
+                Identifier.of(src),
+                //?}
+                tint);
     }
 
     public VImage(String src) {
-        this(new Identifier(src));
+        this(
+                //? if (1.20.1) {
+                /*Identifier.tryParse(src)
+                *///?} else if (>=1.21.1) {
+                Identifier.of(src)
+                //?}
+        );
     }
 
     public VImage(Identifier src, VColor tint) {

@@ -33,7 +33,7 @@ public class MinecraftVeraClient implements ClientModInitializer {
 
     private String makeCombination(MinecraftClient client) {
         StringBuilder builder = new StringBuilder();
-        Resource resource = client.getResourceManager().getResource(new Identifier(MinecraftVera.MOD_ID, "key_mappings.json")).orElseThrow();
+        Resource resource = client.getResourceManager().getResource(Identifier.of(MinecraftVera.MOD_ID, "key_mappings.json")).orElseThrow();
         JsonObject json;
 
         try {
