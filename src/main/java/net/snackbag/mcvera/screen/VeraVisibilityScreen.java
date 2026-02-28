@@ -1,5 +1,6 @@
 package net.snackbag.mcvera.screen;
 
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
@@ -21,7 +22,10 @@ public class VeraVisibilityScreen extends Screen {
         return false;
     }
 
-    //? if (>=1.21.1) {
+    //? if (>=1.21.11) {
+    /*@Override
+    protected void applyBlur(DrawContext context) {}
+    *///?} else if (>=1.21.1) {
     /*@Override
     protected void applyBlur(float delta) {}
     *///?}
