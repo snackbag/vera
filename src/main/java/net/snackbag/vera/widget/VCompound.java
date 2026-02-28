@@ -1,6 +1,7 @@
 package net.snackbag.vera.widget;
 
 import net.snackbag.mcvera.MinecraftVera;
+import net.snackbag.mcvera.impl.MCVeraRenderer;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VAppAccess;
 import net.snackbag.vera.core.VRenderContext;
@@ -100,6 +101,7 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
 
             renderContent(ctx);
 
+            MCVeraRenderer.drawContext.getMatrices().translate(-getX(), -getY(), 0);
             for (VWidget<?> widget : widgets) widget.renderSelf();
 
             renderBorder(ctx);
