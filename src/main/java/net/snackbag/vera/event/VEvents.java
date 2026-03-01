@@ -46,6 +46,14 @@ public class VEvents {
         public static final String CHECK_STATE_CHANGED = "vcheckbox-check-state-changed";
     }
 
+    // ComboBox
+    public static class ComboBox {
+        public static final String ITEM_TEXT_CHANGED = "vcombobox-item-text-changed";
+        public static final String SELECTION_CHANGED = "vcombobox-item-selection-changed";
+        public static final String ITEM_ADDED = "vcombobox-item-added";
+        public static final String ITEM_REMOVED = "vcombobox-item-removed";
+    }
+
     // Dropdown
     public static class Dropdown {
         public static final String ITEM_SWITCH = "vdropdown-item-switch";
