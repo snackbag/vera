@@ -4,16 +4,23 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 //? if (>=1.21.11) {
-/*import net.minecraft.client.gui.ScreenRect;
-import net.minecraft.client.gui.render.state.ColoredQuadGuiElementRenderState;
+/*import com.mojang.blaze3d.textures.FilterMode;
+import com.mojang.blaze3d.textures.GpuTextureView;
+import net.minecraft.client.gl.GpuSampler;
+import net.minecraft.client.gui.ScreenRect;
 import net.minecraft.client.gui.render.state.SimpleGuiElementRenderState;
+import net.minecraft.client.gui.render.state.TextGuiElementRenderState;
+import net.minecraft.client.texture.AbstractTexture;
+import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.texture.TextureSetup;
+import net.minecraft.client.util.Window;
+import net.minecraft.text.OrderedText;
 import net.minecraft.text.StyleSpriteSource;
 import net.minecraft.client.gl.RenderPipelines;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
-import org.jspecify.annotations.Nullable;
 import org.joml.Matrix3x2f;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.joml.Matrix3x2fStack;
 *///?}
 import net.minecraft.client.render.*;
@@ -75,8 +82,9 @@ public class MCVeraRenderer {
 
         // Scale & final positioning)
         //? if (>=1.21.11) {
-
-        //?} else if (>=1.20.1) {
+        /*stack.translate(ctx.x - wMod, ctx.y - hMod);
+        stack.scale(ctx.scale, ctx.scale);
+        *///?} else if (>=1.20.1) {
         stack.translate(ctx.x - wMod, ctx.y - hMod, 0f);
         stack.scale(ctx.scale, ctx.scale, 1.0f);
         //?}
@@ -154,18 +162,17 @@ public class MCVeraRenderer {
         drawContext.getMatrices().scale(scaleFactor, scaleFactor, 1.0f);
         //?}
 
-
         drawContext.drawText(
                 MinecraftClient.getInstance().textRenderer,
                 Text.literal(text).setStyle(
                         Style.EMPTY.withFont(
-                        //? if (>=1.21.11) {
-                        /*new StyleSpriteSource.Font(Identifier.of(font.getName()))
-                        *///?} else if (>=1.21.1) {
-                        /*Identifier.of(font.getName())
-                        *///? } else if (>=1.20.1) {
-                        Identifier.tryParse(font.getName())
-                         //?}
+                                //? if (>=1.21.11) {
+                                /*new StyleSpriteSource.Font(Identifier.of(font.getName()))
+                                *///?} else if (>=1.21.1) {
+                                /*Identifier.of(font.getName())
+                                 *///? } else if (>=1.20.1) {
+                                Identifier.tryParse(font.getName())
+                                 //?}
                         )
                 ),
                 0, 0,
@@ -182,7 +189,7 @@ public class MCVeraRenderer {
 
     public void drawImage(int x, int y, int width, int height, Identifier path) {
         //? if (>=1.21.11) {
-        /*drawContext.drawTexture(RenderPipelines.POSITION_TEX_COLOR_CELESTIAL, path, x, y, 0, 0, width, height, width, height);
+        /*drawContext.drawTexture(RenderPipelines.GUI_TEXTURED, path, x, y, 0, 0, width, height, width, height);
         *///?} else if (>=1.20.1) {
         drawContext.drawTexture(path, x, y, 0, 0, width, height, width, height);
         //?}
@@ -276,18 +283,30 @@ public class MCVeraRenderer {
             int v4x, int v4y, VColor v4col
     ) {
         //? if (>=1.21.11) {
-        /*((DrawContextAccessor) drawContext).vera$getState().addSimpleElement(new SimpleGuiElementRenderState() {
+        /*Window window = MinecraftClient.getInstance().getWindow();
+        int w = window.getScaledWidth();
+        int h = window.getScaledHeight();
+
+        Matrix3x2f matrix = new Matrix3x2f(drawContext.getMatrices());
+
+        ((DrawContextAccessor) drawContext).vera$getState().addSimpleElement(new SimpleGuiElementRenderState() {
             @Override
             public void setupVertices(VertexConsumer vertices) {
-                vertices.vertex((float)v1x, (float)v1y, 0f).color(v1col.toIntArgb());
-                vertices.vertex((float)v2x, (float)v2y, 0f).color(v2col.toIntArgb());
-                vertices.vertex((float)v3x, (float)v3y, 0f).color(v3col.toIntArgb());
-                vertices.vertex((float)v4x, (float)v4y, 0f).color(v4col.toIntArgb());
+                org.joml.Vector2f v = new org.joml.Vector2f();
+
+                matrix.transformPosition(v1x, v1y, v);
+                vertices.vertex(v.x, v.y, 0f).color(v1col.toIntArgb());
+                matrix.transformPosition(v2x, v2y, v);
+                vertices.vertex(v.x, v.y, 0f).color(v2col.toIntArgb());
+                matrix.transformPosition(v3x, v3y, v);
+                vertices.vertex(v.x, v.y, 0f).color(v3col.toIntArgb());
+                matrix.transformPosition(v4x, v4y, v);
+                vertices.vertex(v.x, v.y, 0f).color(v4col.toIntArgb());
             }
 
             @Override
             public RenderPipeline pipeline() {
-                return RenderPipelines.GUI_TEXTURED;
+                return RenderPipelines.GUI;
             }
 
             @Override
@@ -301,8 +320,8 @@ public class MCVeraRenderer {
             }
 
             @Override
-            public @Nullable ScreenRect bounds() {
-                return null;
+            public ScreenRect bounds() {
+                return new ScreenRect(0, 0, w, h);
             }
         });
         *///?} else if (>=1.20.1) {
@@ -481,13 +500,25 @@ public class MCVeraRenderer {
             int v4x, int v4y, float u4, float v4t, VColor v4c
     ) {
         //? if (>=1.21.11) {
-        /*((DrawContextAccessor) drawContext).vera$getState().addSimpleElement(new SimpleGuiElementRenderState() {
+        /*Window window = MinecraftClient.getInstance().getWindow();
+        int w = window.getScaledWidth();
+        int h = window.getScaledHeight();
+
+        Matrix3x2f matrix = new Matrix3x2f(drawContext.getMatrices());
+
+        ((DrawContextAccessor) drawContext).vera$getState().addSimpleElement(new SimpleGuiElementRenderState() {
             @Override
             public void setupVertices(VertexConsumer vertices) {
-                vertices.vertex((float)v1x, (float)v1y, 0f).texture(u1, v1t).color(v1c.toIntArgb());
-                vertices.vertex((float)v2x, (float)v2y, 0f).texture(u2, v2t).color(v2c.toIntArgb());
-                vertices.vertex((float)v3x, (float)v3y, 0f).texture(u3, v3t).color(v3c.toIntArgb());
-                vertices.vertex((float)v4x, (float)v4y, 0f).texture(u4, v4t).color(v4c.toIntArgb());
+                org.joml.Vector2f v = new org.joml.Vector2f();
+
+                matrix.transformPosition(v1x, v1y, v);
+                vertices.vertex(v.x, v.y, 0f).texture(u1, v1t).color(v1c.toIntArgb());
+                matrix.transformPosition(v2x, v2y, v);
+                vertices.vertex(v.x, v.y, 0f).texture(u2, v2t).color(v2c.toIntArgb());
+                matrix.transformPosition(v3x, v3y, v);
+                vertices.vertex(v.x, v.y, 0f).texture(u3, v3t).color(v3c.toIntArgb());
+                matrix.transformPosition(v4x, v4y, v);
+                vertices.vertex(v.x, v.y, 0f).texture(u4, v4t).color(v4c.toIntArgb());
             }
 
             @Override
@@ -497,7 +528,11 @@ public class MCVeraRenderer {
 
             @Override
             public TextureSetup textureSetup() {
-                return TextureSetup.empty();
+                TextureManager tm = MinecraftClient.getInstance().getTextureManager();
+                AbstractTexture tex = tm.getTexture(texture);
+                GpuTextureView view = tex.getGlTextureView();
+                GpuSampler sampler = RenderSystem.getSamplerCache().get(FilterMode.NEAREST);
+                return TextureSetup.of(view, sampler);
             }
 
             @Override
@@ -506,8 +541,8 @@ public class MCVeraRenderer {
             }
 
             @Override
-            public @Nullable ScreenRect bounds() {
-                return null;
+            public ScreenRect bounds() {
+                return new ScreenRect(0, 0, w, h);
             }
         });
         *///?}
