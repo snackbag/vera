@@ -92,6 +92,16 @@ public class VComboBox extends VCompound<VComboBox> {
         }
     }
 
+    @Override
+    public void handleBuiltinEvent(String event, Object... args) {
+        if (event.equals(VEvents.Widget.LEFT_CLICK) && isFocused()) {
+            setFocused(false);
+            return;
+        }
+
+        super.handleBuiltinEvent(event, args);
+    }
+
     public int getIndexOfItem(Item item) {
         return getWidgets().indexOf(item);
     }
