@@ -33,11 +33,7 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
 
         move(x, y);
         setSize(width, height);
-
-        init();
     }
-
-    public abstract void init();
 
     //
     // App Access
