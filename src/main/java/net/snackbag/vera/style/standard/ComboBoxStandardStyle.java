@@ -17,7 +17,8 @@ public class ComboBoxStandardStyle implements VStandardStyle {
         // Normal
         sheet.setKey(VComboBox.class, "padding", new V4Int(4));
         sheet.setKey(VComboBox.class, "background", VColor.white());
-        sheet.setKey(VComboBox.class, "arrow", new VImage(new Identifier(MinecraftVera.MOD_ID, "widgets/combobox_arrow.png")));
+        sheet.setKey(VComboBox.class, "background", VColor.white().sub(20), VStyleState.HOVERED);
+
         sheet.setKey(VComboBox.class, "arrow", new VImage(
                 new Identifier(MinecraftVera.MOD_ID, "widgets/combobox/arrow_closed.png"),
                 VColor.MC_GRAY
