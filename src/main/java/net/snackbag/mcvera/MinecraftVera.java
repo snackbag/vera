@@ -24,7 +24,6 @@ public class MinecraftVera implements ModInitializer {
 		Vera.registrar.registerStandardStyle(new LabelStandardStyle());
 		Vera.registrar.registerStandardStyle(new LineInputStandardStyle());
 		Vera.registrar.registerStandardStyle(new RectStandardStyle());
-		Vera.registrar.registerStandardStyle(new DropdownStandardStyle());
 		Vera.registrar.registerStandardStyle(new TabWidgetStandardStyle());
 	}
 }
