@@ -97,7 +97,7 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
         return delegatedEvents;
     }
 
-    private void handleDelegatedEvent(String event, Object[] args) {
+    protected void handleDelegatedEvent(String event, Object[] args) {
         switch (event) {
             case VEvents.Widget.HOVER -> setHovered(true);
             case VEvents.Widget.HOVER_LEAVE -> setHovered(false);
