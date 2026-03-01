@@ -77,6 +77,12 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
         widgets.remove(widget);
     }
 
+    protected @Nullable VWidget<?> getHoveredWidget() {
+        return widgets.stream()
+                .filter(VWidget::isHovered)
+                .findFirst().orElse(null);
+    }
+
     //
     // Delegation
     //
