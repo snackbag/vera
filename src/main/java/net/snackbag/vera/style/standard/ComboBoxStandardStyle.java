@@ -18,6 +18,15 @@ public class ComboBoxStandardStyle implements VStandardStyle {
         sheet.setKey(VComboBox.class, "padding", new V4Int(4));
         sheet.setKey(VComboBox.class, "background", VColor.white());
         sheet.setKey(VComboBox.class, "arrow", new VImage(new Identifier(MinecraftVera.MOD_ID, "widgets/combobox_arrow.png")));
+        sheet.setKey(VComboBox.class, "arrow", new VImage(
+                new Identifier(MinecraftVera.MOD_ID, "widgets/combobox/arrow_closed.png"),
+                VColor.MC_GRAY
+        ).withTransparency(true));
+        sheet.setKey(VComboBox.class, "arrow-focused", new VImage(
+                new Identifier(MinecraftVera.MOD_ID, "widgets/combobox/arrow_open.png"),
+                VColor.MC_GRAY
+        ).withTransparency(true));
+
         sheet.setKey(VComboBox.class, "font", VFont.create());
 
         // Items

@@ -36,7 +36,7 @@ public class VComboBox extends VCompound<VComboBox> {
         V4Int padding = getStyle("padding", state);
         VFill background = getStyle("background", state);
         VFont font = getStyle("font", state);
-        VFill arrow = getStyle("arrow", state);
+        VFill arrow = isFocused() ? getStyle("arrow-focused") : getStyle("arrow", state);
 
         int width = getEffectiveWidth();
         int height = getEffectiveHeight();
