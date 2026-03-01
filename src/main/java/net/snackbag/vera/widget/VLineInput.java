@@ -522,7 +522,12 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         if (client == null || client.getWindow() == null) {
             return false;
         }
-        return InputUtil.isKeyPressed(client.getWindow().getHandle(), key);
+        return
+                //? if (>=1.21.11) {
+                /*InputUtil.isKeyPressed(client.getWindow(), key);
+                *///?} else if (>=1.20.1) {
+                InputUtil.isKeyPressed(client.getWindow().getHandle(), key);
+                //?}
     }
 
     private boolean isAltDown() {

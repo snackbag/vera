@@ -47,13 +47,16 @@ public abstract class InGameHudMixin {
         Vera.renderer.renderApps(VAppPositioningFlag.BELOW_VIGNETTE);
     }
 
-    //? if (1.20.1) {
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getLastFrameDuration()F"), method = "render")
-    private void mcvera$renderBelowOverlays(DrawContext context, float tickDelta, CallbackInfo ci) {
-    //? } else if (>=1.21.1) {
+    //? if (>=1.21.11) {
+    /*@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderTickCounter;getDynamicDeltaTicks()F"), method = "renderMiscOverlays")
+    private void mcvera$renderBelowOverlays(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
+    *///?} else if (>=1.21.1) {
     /*@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderTickCounter;getLastFrameDuration()F"), method = "renderMiscOverlays")
     private void mcvera$renderBelowOverlays(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
-    *///?}
+    *///?} else if (1.20.1) {
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getLastFrameDuration()F"), method = "render")
+    private void mcvera$renderBelowOverlays(DrawContext context, float tickDelta, CallbackInfo ci) {
+    //?}
         Vera.renderer.renderApps(VAppPositioningFlag.BELOW_OVERLAYS);
     }
 

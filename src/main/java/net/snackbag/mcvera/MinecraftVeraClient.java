@@ -5,6 +5,9 @@ import com.google.gson.JsonObject;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
+//? if (>=1.21.11) {
+/*import net.minecraft.client.input.KeyInput;
+*///?}
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
@@ -45,7 +48,11 @@ public class MinecraftVeraClient implements ClientModInitializer {
         }
 
         for (int key : MCVeraData.pressedKeys) {
+            //? if (>=1.21.11) {
+            /*String translationKey = InputUtil.fromKeyCode(new KeyInput(key, 0, 0)).getTranslationKey().toLowerCase().replace(" ", "");
+            *///?} else if (>=1.20.1) {
             String translationKey = InputUtil.fromKeyCode(key, 0).getTranslationKey().toLowerCase().replace(" ", "");
+            //?}
             String mapped = json.has(translationKey) ?
                     json.get(translationKey).getAsString().toLowerCase().replace(" ", "") :
                     translationKey.replace("key.keyboard.", "");

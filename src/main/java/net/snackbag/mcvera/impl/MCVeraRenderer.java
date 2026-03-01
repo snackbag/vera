@@ -3,6 +3,19 @@ package net.snackbag.mcvera.impl;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+//? if (>=1.21.11) {
+/*import net.minecraft.client.gui.ScreenRect;
+import net.minecraft.client.gui.render.state.ColoredQuadGuiElementRenderState;
+import net.minecraft.client.gui.render.state.SimpleGuiElementRenderState;
+import net.minecraft.client.texture.TextureSetup;
+import net.minecraft.text.StyleSpriteSource;
+import net.minecraft.client.gl.RenderPipelines;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
+import org.jspecify.annotations.Nullable;
+import org.joml.Matrix3x2f;
+import org.joml.Matrix3x2fStack;
+*///?}
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Style;
@@ -24,6 +37,8 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import static org.lwjgl.opengl.GL11.GL_BLEND;
+
 public class MCVeraRenderer {
     public static DrawContext drawContext = null;
 
@@ -32,8 +47,13 @@ public class MCVeraRenderer {
     //
 
     public void pushContext(VRenderContext ctx) {
+        //? if (>=1.21.11) {
+        /*Matrix3x2fStack stack = drawContext.getMatrices();
+        stack.pushMatrix();
+        *///?} else if (>=1.20.1) {
         MatrixStack stack = drawContext.getMatrices();
         stack.push();
+        //?}
 
         float wMod = (ctx.width / 2f) * (ctx.scale - 1);
         float hMod = (ctx.height / 2f) * (ctx.scale - 1);
@@ -42,17 +62,32 @@ public class MCVeraRenderer {
         float yRot = ctx.y + ctx.height / 2f;
 
         // Rotation
+
+        //? if (>=1.21.11) {
+        /*stack.translate(xRot, yRot);
+        stack.rotate((float) Math.toRadians(ctx.rotation));
+        stack.translate(-xRot, -yRot);
+        *///?} else if (>=1.20.1) {
         stack.translate(xRot, yRot, 0f);
         stack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(ctx.rotation));
         stack.translate(-xRot, -yRot, 0f);
+        //?}
 
         // Scale & final positioning)
+        //? if (>=1.21.11) {
+
+        //?} else if (>=1.20.1) {
         stack.translate(ctx.x - wMod, ctx.y - hMod, 0f);
         stack.scale(ctx.scale, ctx.scale, 1.0f);
+        //?}
     }
 
     public void popContext() {
+        //? if (>=1.21.11) {
+        /*drawContext.getMatrices().popMatrix();
+        *///?} else if (>=1.20.1) {
         drawContext.getMatrices().pop();
+        //?}
     }
 
     public void drawRect(VRenderContext ctx, int x, int y, int width, int height, VColor color) {
@@ -65,14 +100,24 @@ public class MCVeraRenderer {
     }
 
     public void drawText(VRenderContext ctx, int x, int y, String text, VFont font) {
+        //? if (>=1.21.11) {
+        /*Matrix3x2fStack stack = drawContext.getMatrices();
+        stack.pushMatrix();
+        *///?} else if (>=1.20.1) {
         MatrixStack stack = drawContext.getMatrices();
         stack.push();
+        //?}
 
         drawText(
                 x, y,
                 text, font
         );
+
+        //? if (>=1.21.11) {
+        /*stack.popMatrix();
+        *///?} else if (>=1.20.1) {
         stack.pop();
+        //?}
     }
 
     public void drawImage(VRenderContext ctx, int x, int y, int width, int height, Identifier path) {
@@ -99,29 +144,48 @@ public class MCVeraRenderer {
 
     public void drawText(int x, int y, String text, VFont font) {
         float scaleFactor = font.getSize() / 16.0f;
+        //? if (>=1.21.11) {
+        /*drawContext.getMatrices().pushMatrix();
+        drawContext.getMatrices().translate(x, y);
+        drawContext.getMatrices().scale(scaleFactor, scaleFactor);
+        *///?} else if (>=1.20.1) {
         drawContext.getMatrices().push();
         drawContext.getMatrices().translate(x, y, 0);
         drawContext.getMatrices().scale(scaleFactor, scaleFactor, 1.0f);
+        //?}
+
 
         drawContext.drawText(
                 MinecraftClient.getInstance().textRenderer,
-                Text.literal(text).setStyle(Style.EMPTY.withFont(
-                        //? if (1.20.1) {
-                        Identifier.tryParse(font.getName())
-                        //? } else if (>=1.21.1) {
+                Text.literal(text).setStyle(
+                        Style.EMPTY.withFont(
+                        //? if (>=1.21.11) {
+                        /*new StyleSpriteSource.Font(Identifier.of(font.getName()))
+                        *///?} else if (>=1.21.1) {
                         /*Identifier.of(font.getName())
-                        *///?}
-                )),
+                        *///? } else if (>=1.20.1) {
+                        Identifier.tryParse(font.getName())
+                         //?}
+                        )
+                ),
                 0, 0,
                 font.getColor().toIntArgb(),
                 false
         );
 
+        //? if (>=1.21.11) {
+        /*drawContext.getMatrices().popMatrix();
+        *///?} else if (>=1.20.1) {
         drawContext.getMatrices().pop();
+        //?}
     }
 
     public void drawImage(int x, int y, int width, int height, Identifier path) {
+        //? if (>=1.21.11) {
+        /*drawContext.drawTexture(RenderPipelines.POSITION_TEX_COLOR_CELESTIAL, path, x, y, 0, 0, width, height, width, height);
+        *///?} else if (>=1.20.1) {
         drawContext.drawTexture(path, x, y, 0, 0, width, height, width, height);
+        //?}
     }
 
     //
@@ -211,9 +275,40 @@ public class MCVeraRenderer {
             int v3x, int v3y, VColor v3col,
             int v4x, int v4y, VColor v4col
     ) {
-        Matrix4f matrix = drawContext.getMatrices().peek().getPositionMatrix();
+        //? if (>=1.21.11) {
+        /*((DrawContextAccessor) drawContext).vera$getState().addSimpleElement(new SimpleGuiElementRenderState() {
+            @Override
+            public void setupVertices(VertexConsumer vertices) {
+                vertices.vertex((float)v1x, (float)v1y, 0f).color(v1col.toIntArgb());
+                vertices.vertex((float)v2x, (float)v2y, 0f).color(v2col.toIntArgb());
+                vertices.vertex((float)v3x, (float)v3y, 0f).color(v3col.toIntArgb());
+                vertices.vertex((float)v4x, (float)v4y, 0f).color(v4col.toIntArgb());
+            }
 
+            @Override
+            public RenderPipeline pipeline() {
+                return RenderPipelines.GUI_TEXTURED;
+            }
+
+            @Override
+            public TextureSetup textureSetup() {
+                return TextureSetup.empty();
+            }
+
+            @Override
+            public @Nullable ScreenRect scissorArea() {
+                return null;
+            }
+
+            @Override
+            public @Nullable ScreenRect bounds() {
+                return null;
+            }
+        });
+        *///?} else if (>=1.20.1) {
+        Matrix4f matrix = drawContext.getMatrices().peek().getPositionMatrix();
         VertexConsumer consumer = drawContext.getVertexConsumers().getBuffer(RenderLayer.getGui());
+
         consumer.vertex(matrix, (float) v1x, (float) v1y, 0f).color(v1col.toIntArgb())
                 //? if (1.20.1)
                 .next()
@@ -231,7 +326,8 @@ public class MCVeraRenderer {
                 .next()
                 ;
 
-        ((DrawContextAccessor) drawContext).vera$invokeTryDraw();
+        ((DrawContextAccessor) drawContext).mcvera$invokeTryDraw();
+        //?}
     }
 
     /**
@@ -384,42 +480,79 @@ public class MCVeraRenderer {
             int v3x, int v3y, float u3, float v3t, VColor v3c,
             int v4x, int v4y, float u4, float v4t, VColor v4c
     ) {
+        //? if (>=1.21.11) {
+        /*((DrawContextAccessor) drawContext).vera$getState().addSimpleElement(new SimpleGuiElementRenderState() {
+            @Override
+            public void setupVertices(VertexConsumer vertices) {
+                vertices.vertex((float)v1x, (float)v1y, 0f).texture(u1, v1t).color(v1c.toIntArgb());
+                vertices.vertex((float)v2x, (float)v2y, 0f).texture(u2, v2t).color(v2c.toIntArgb());
+                vertices.vertex((float)v3x, (float)v3y, 0f).texture(u3, v3t).color(v3c.toIntArgb());
+                vertices.vertex((float)v4x, (float)v4y, 0f).texture(u4, v4t).color(v4c.toIntArgb());
+            }
+
+            @Override
+            public RenderPipeline pipeline() {
+                return RenderPipelines.GUI_TEXTURED;
+            }
+
+            @Override
+            public TextureSetup textureSetup() {
+                return TextureSetup.empty();
+            }
+
+            @Override
+            public @Nullable ScreenRect scissorArea() {
+                return null;
+            }
+
+            @Override
+            public @Nullable ScreenRect bounds() {
+                return null;
+            }
+        });
+        *///?}
+
+        //? if (>=1.21.1 && <1.21.11) {
+        /*RenderSystem.setShaderTexture(0, texture);
+        RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
+        *///? } else if (>=1.20.1 && <1.21.11) {
         RenderSystem.setShaderTexture(0, texture);
-        //? if (1.20.1) {
         RenderSystem.setShader(GameRenderer::getPositionColorTexProgram);
-        //? } else if (>=1.21.1) {
-        /*RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
-        *///? }
+        //? }
+
+        //? if (>=1.20.1 && <1.21.11) {
         if (hasTransparentParts) RenderSystem.enableBlend();
-
         Matrix4f matrix = drawContext.getMatrices().peek().getPositionMatrix();
+        //?}
 
-        //? if (1.20.1) {
+        //? if (>=1.21.1 && <1.21.11) {
+        /*BufferBuilder buf = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
+        *///? } else if (>=1.20.1 && <1.21.11) {
         BufferBuilder buf = Tessellator.getInstance().getBuffer();
         buf.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR_TEXTURE);
-        //? } else if (>=1.21.1) {
-        /*BufferBuilder buf = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-        *///? }
+        //? }
 
+        //? if (>=1.20.1 && <1.21.11) {
         buf.vertex(matrix, v1x, v1y, 0f).color(v1c.toIntArgb()).texture(u1, v1t)
-                //? if (1.20.1)
+                //? if (>=1.20.1 && <1.21.1)
                 .next()
                 ;
         buf.vertex(matrix, v2x, v2y, 0f).color(v2c.toIntArgb()).texture(u2, v2t)
-                //? if (1.20.1)
+                //? if (>=1.20.1 && <1.21.1)
                 .next()
                 ;
         buf.vertex(matrix, v3x, v3y, 0f).color(v3c.toIntArgb()).texture(u3, v3t)
-                //? if (1.20.1)
+                //? if (>=1.20.1 && <1.21.1)
                 .next()
                 ;
         buf.vertex(matrix, v4x, v4y, 0f).color(v4c.toIntArgb()).texture(u4, v4t)
-                //? if (1.20.1)
+                //? if (>=1.20.1 && <1.21.1)
                 .next()
                 ;
 
         BufferRenderer.drawWithGlobalProgram(buf.end());
         if (hasTransparentParts) RenderSystem.disableBlend();
+        //?}
     }
 
     //
@@ -433,10 +566,14 @@ public class MCVeraRenderer {
     }
 
     public void renderApp(VeraApp app) {
-        boolean blendEnabled = GL11.glIsEnabled(GL11.GL_BLEND);
+        boolean blendEnabled = GL11.glIsEnabled(GL_BLEND);
 
         List<VWidget<?>> widgets = app.getWidgets();
+        //? if (>=1.21.11) {
+        /*if (!blendEnabled) GL11.glEnable(GL_BLEND);
+        *///?} else if (>=1.20.1) {
         if (!blendEnabled) RenderSystem.enableBlend();
+        //?}
 
         app.render();
         VWidget<?> hoveredWidget = !app.hasFlag(VAppFlag.HIERARCHIC) || MCVeraData.isTopHierarchy(app)
@@ -453,7 +590,11 @@ public class MCVeraRenderer {
 
         if (app.hasFlag(VAppFlag.HIERARCHIC) && !MCVeraData.isTopHierarchy(app)) app.renderHierarchyOverlay();
 
+        //? if (>=1.21.11) {
+        /*if (!blendEnabled) GL11.glDisable(GL_BLEND);
+        *///?} else if (>=1.20.1) {
         if (!blendEnabled) RenderSystem.disableBlend();
+         //?}
     }
 
     public void renderApps(VAppPositioningFlag flag) {

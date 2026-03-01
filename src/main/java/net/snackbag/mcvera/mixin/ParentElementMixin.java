@@ -1,5 +1,8 @@
 package net.snackbag.mcvera.mixin;
 
+//? if (>=1.21.11) {
+/*import net.minecraft.client.gui.Click;
+*///?}
 import net.minecraft.client.gui.ParentElement;
 import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.vera.Vera;
@@ -22,12 +25,22 @@ import java.util.List;
 @Mixin(ParentElement.class)
 public interface ParentElementMixin {
     @Inject(method = "mouseClicked", at = @At("HEAD"))
+    //? if (>=1.21.11) {
+    /*private void mcvera$handleMouseClick(Click click, boolean doubled, CallbackInfoReturnable<Boolean> cir) {
+        int mouseX = (int) click.x();
+        int mouseY = (int) click.y();
+
+        VMouseButton btn = VMouseButton.fromInt(click.getKeycode());
+    *///?} else if (>=1.20.1) {
     private void mcvera$handleMouseClick(double mouseXRaw, double mouseYRaw, int button, CallbackInfoReturnable<Boolean> cir) {
         int mouseX = (int) mouseXRaw;
         int mouseY = (int) mouseYRaw;
-        boolean justChanged = false;
 
         VMouseButton btn = VMouseButton.fromInt(button);
+    //?}
+        boolean justChanged = false;
+
+
 
         List<VeraApp> hierarchicApps = new ArrayList<>(MCVeraData.getAppsWithFlag(VAppFlag.HIERARCHIC));
         for (VeraApp app : hierarchicApps) {
@@ -71,11 +84,19 @@ public interface ParentElementMixin {
     }
 
     @Inject(method = "mouseReleased", at = @At("HEAD"))
+    //? if (>=1.21.11) {
+    /*private void mcvera$handleMouseRelease(Click click, CallbackInfoReturnable<Boolean> cir) {
+        int mouseX = (int) click.x();
+        int mouseY = (int) click.y();
+
+        VMouseButton btn = VMouseButton.fromInt(click.getKeycode());
+    *///?} else if (>=1.20.1) {
     private void mcvera$handleMouseRelease(double mouseXRaw, double mouseYRaw, int button, CallbackInfoReturnable<Boolean> cir) {
         int mouseX = (int) mouseXRaw;
         int mouseY = (int) mouseYRaw;
 
         VMouseButton btn = VMouseButton.fromInt(button);
+    //?}
 
         MCVeraData.asTopHierarchy(app -> handleReleaseEvents(app.getTopWidgetAt(mouseX, mouseY), btn));
         Vera.forAllVisibleApps(app -> {

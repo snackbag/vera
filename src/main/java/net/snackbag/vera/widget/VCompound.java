@@ -8,6 +8,7 @@ import net.snackbag.vera.core.VRenderContext;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.layout.VLayout;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix3x2f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +102,11 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
 
             renderContent(ctx);
 
+            //? if (>=1.21.11) {
+            /*MCVeraRenderer.drawContext.getMatrices().translate(-getX(), -getY());
+            *///?} else if (>=1.20.1) {
             MCVeraRenderer.drawContext.getMatrices().translate(-getX(), -getY(), 0);
+            //?}
             for (VWidget<?> widget : widgets) widget.renderSelf();
 
             renderBorder(ctx);
