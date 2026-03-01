@@ -6,14 +6,17 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VAppAccess;
 import net.snackbag.vera.core.VRenderContext;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.event.EventHandler;
+import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.layout.VLayout;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> implements VAppAccess {
+public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> implements VAppAccess, VDelegator {
     protected final VLayout layout;
     private final List<VWidget<?>> widgets = new ArrayList<>();
     public final UUID identifier = UUID.randomUUID();
@@ -69,6 +72,17 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
         widget.classes.add(identifier.toString());
         layout.removeElement(widget);
         widgets.remove(widget);
+    }
+
+    //
+    // Delegation
+    //
+
+    @Override
+    public @Nullable VDelegator getDelegator() {
+        return this;
+    }
+
     }
 
     //

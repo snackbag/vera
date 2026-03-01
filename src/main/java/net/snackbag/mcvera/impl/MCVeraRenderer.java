@@ -408,7 +408,7 @@ public class MCVeraRenderer {
             if (widget != hoveredWidget && widget.isHovered()) widget.setHovered(false);
             else if (widget == hoveredWidget && !widget.isHovered()) widget.setHovered(true);
 
-            widget.renderSelf();
+            if (!widget.appAccess.isDelegated()) widget.renderSelf();
         }
         app.renderAfterWidgets();
 
