@@ -21,8 +21,13 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
     private final List<VWidget<?>> widgets = new ArrayList<>();
     public final UUID identifier = UUID.randomUUID();
 
+    private final EventHandler delegatedEvents;
+
     public VCompound(int x, int y, int width, int height, VLayout layout, VAppAccess app) {
         super(x, y, width, height, app);
+
+        this.delegatedEvents = new EventHandler(this);
+        this.delegatedEvents.preprocessor = this::handleDelegatedEvent;
 
         this.layout = layout;
 
@@ -83,6 +88,25 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
         return this;
     }
 
+    @Override
+    public EventHandler getDelegatedEventHandler() {
+        return delegatedEvents;
+    }
+
+    private void handleDelegatedEvent(String event, Object[] args) {
+        switch (event) {
+            case VEvents.Widget.HOVER -> setHovered(true);
+            case VEvents.Widget.HOVER_LEAVE -> setHovered(false);
+        }
+    }
+
+    @Override
+    public void setHovered(boolean hovered) {
+        for (VWidget<?> widget : getWidgets()) {
+            if (widget.isHovered()) return;
+        }
+
+        super.setHovered(hovered);
     }
 
     //
