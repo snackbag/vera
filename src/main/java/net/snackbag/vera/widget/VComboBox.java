@@ -19,6 +19,10 @@ import java.util.function.Consumer;
 public class VComboBox extends VCompound<VComboBox> {
     private int selectedItemIndex = 0;
 
+    public VComboBox(VAppAccess app) {
+        this(0, 0, 100, 16, app);
+    }
+
     public VComboBox(int x, int y, int width, int height, VAppAccess app) {
         super(x, y, width, height, new VVLayout(app.get(), x, y, width, height), app);
 
