@@ -43,19 +43,26 @@ public class VComboBox extends VCompound<VComboBox> {
 
         Item item = getSelectedItem();
         int textHeight = 8;
-        String text = "";
+
+        Vera.renderer.drawFill(ctx, 0, 0, width, height, background);
 
         if (item != null) {
             textHeight = Vera.provider.getTextHeight(
                     item.getText(),
                     item.getStyle("ci-font", item.createStyleState())
             );
-            text = item.getText();
+
+            @Nullable VFill icon = item.getStyle("ci-icon", state);
+            int iconWidth = icon != null ? textHeight : -2;
+
+            if (icon != null) {
+                Vera.renderer.drawFill(ctx, padding.get3(), height / 2 - textHeight / 2, iconWidth, iconWidth, icon);
+            }
+
+            Vera.renderer.drawText(ctx, padding.get3() + iconWidth + 2, height / 2 - textHeight / 2, item.getText(), font);
         }
 
-        Vera.renderer.drawFill(ctx, 0, 0, width, height, background);
         Vera.renderer.drawFill(ctx, this.width - textHeight, height / 2 - textHeight / 2, textHeight, textHeight, arrow);
-        Vera.renderer.drawText(ctx, padding.get3(), height / 2 - textHeight / 2, text, font);
     }
 
     @Override
