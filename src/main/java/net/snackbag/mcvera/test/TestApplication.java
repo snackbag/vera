@@ -1,8 +1,6 @@
 package net.snackbag.mcvera.test;
 
-import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
-import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VImage;
 import net.snackbag.vera.flag.VHAlignmentFlag;
 import net.snackbag.vera.core.VColor;
