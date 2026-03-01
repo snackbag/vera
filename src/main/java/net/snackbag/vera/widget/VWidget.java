@@ -14,6 +14,7 @@ import net.snackbag.vera.style.animation.VAnimation;
 import net.snackbag.vera.style.animation.easing.VEasing;
 import net.snackbag.vera.util.DragHandler;
 import net.snackbag.vera.core.VRenderContext;
+import net.snackbag.vera.util.VGeometry;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -392,6 +393,16 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
     public void onTransparencyStateChange(VTransparencyStateChangeEvent runnable) {
         events.register(VEvents.Widget.TRANSPARENCY_STATE_CHANGE, args -> runnable.run((boolean) args[0]));
+    }
+
+    public boolean isPointOverThis(int px, int py) {
+        if (!visibilityConditionsPassed()) return false;
+
+        int widgetX = getHitboxX();
+        int widgetY = getHitboxY();
+        int widgetWidth = getHitboxWidth();
+        int widgetHeight = getHitboxHeight();
+        return VGeometry.isInBox(px, py, widgetX, widgetY, widgetWidth, widgetHeight);
     }
 
     @Override

@@ -261,19 +261,9 @@ public abstract class VeraApp implements VAppAccess {
         int my = py - y;
 
         return getWidgetsReversed().stream()
-                .filter(widget -> isPointOverWidget(widget, mx, my))
+                .filter(widget -> widget.isPointOverThis(mx, my))
                 .filter(VWidget::visibilityConditionsPassed)
                 .findFirst().orElse(null);
-    }
-
-    private boolean isPointOverWidget(VWidget<?> widget, int px, int py) {
-        if (!widget.visibilityConditionsPassed()) return false;
-
-        int widgetX = widget.getHitboxX();
-        int widgetY = widget.getHitboxY();
-        int widgetWidth = widget.getHitboxWidth();
-        int widgetHeight = widget.getHitboxHeight();
-        return VGeometry.isInBox(px, py, widgetX, widgetY, widgetWidth, widgetHeight);
     }
 
     public boolean isPointOverThis(int px, int py) {
