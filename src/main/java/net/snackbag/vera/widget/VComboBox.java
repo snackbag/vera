@@ -24,7 +24,7 @@ public class VComboBox extends VCompound<VComboBox> {
     }
 
     public VComboBox(int x, int y, int width, int height, VAppAccess app) {
-        super(x, y, width, height, new VVLayout(app.get(), x, y, width, height), app);
+        super(x, y, width, height, new VVLayout(app, x, y, width, height), app);
 
         layout.addVisibilityCondition(this::isFocused);
     }
