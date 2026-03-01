@@ -96,18 +96,16 @@ public class TestApplication extends VeraApp {
         image.onMiddleClickRelease(this::showCursor);
         image.setStyle("background", VStyleState.HOVERED, "minecraft:textures/block/diamond_block.png");
 
-        VDropdown dropdown = new VDropdown(this).alsoAdd();
-        dropdown.addItem("coolio");
-        dropdown.addItem("shmoolio");
-        dropdown.addItem("roolio", Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/dirt.png"));
-        dropdown.addItem("buger", () -> System.out.println("pressed"));
-        dropdown.move(90);
-        dropdown.setItemSpacing(16);
-        dropdown.itemHoverFont = VFont.create().withColor(VColor.white());
-        dropdown.setItemHoverColor(VColor.black());
-        dropdown.onFocusStateChange(() -> System.out.println("focus state change: " + dropdown.isFocused()));
-
-        dropdown.getItem(2).setHoverIcon(Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/diamond_ore.png"));
+        VComboBox box = new VComboBox(this).alsoAdd();
+        box.addItem("coolio");
+        box.addItem("shmoolio");
+        box.addItem("roolio", item -> {
+            item.setStyle("ci-icon", "minecraft:textures/block/dirt.png");
+            item.setStyle("ci-icon", VStyleState.HOVERED, "minecraft:textures/block/diamond_ore.png");
+        });
+        box.addItem("buger");
+        box.move(90);
+        box.onFocusStateChange(() -> System.out.println("focus state change: " + box.isFocused()));
 
         VCheckBox checkbox = new VCheckBox(this).alsoAdd();
         checkbox.move(20, 140);
@@ -120,7 +118,7 @@ public class TestApplication extends VeraApp {
         VTabWidget tabs = new VTabWidget(this).alsoAdd();
         tabs.move(20, 170);
         tabs.addTab("test", checkbox);
-        tabs.addTab("other test", dropdown);
+        tabs.addTab("other test", box);
         tabs.setActiveTab(0);
 
         VRect rotationRect = new VRect(VColor.black(), this).alsoAdd();
