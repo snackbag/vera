@@ -53,7 +53,12 @@ public class VImage implements VFill {
     }
 
     public VImage withSrc(String src) {
-        return withSrc(new Identifier(src));
+        return
+                //? if (>=1.21.1) {
+                /*withSrc(Identifier.of(src));
+                *///?} else if (>=1.20.1) {
+                withSrc(Identifier.tryParse(src));
+                //?}
     }
 
     public VImage withTint(VColor tint) {
