@@ -71,6 +71,7 @@ public abstract class VLayout extends VElement {
     public void addElement(VElement elem) {
         if (elements.contains(elem)) return;
         elements.add(elem);
+        elem.addVisibilityCondition(() -> elements.contains(elem) && this.visibilityConditionsPassed());
         elem.events.fire(VEvents.Element.LAYOUT_SWAP, this);
     }
 

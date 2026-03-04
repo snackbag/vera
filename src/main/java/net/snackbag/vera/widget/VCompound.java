@@ -6,31 +6,35 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VAppAccess;
 import net.snackbag.vera.core.VRenderContext;
 import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.event.EventHandler;
+import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.layout.VLayout;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3x2f;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> implements VAppAccess {
+public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> implements VAppAccess, VDelegator {
     protected final VLayout layout;
     private final List<VWidget<?>> widgets = new ArrayList<>();
     public final UUID identifier = UUID.randomUUID();
 
+    private final EventHandler delegatedEvents;
+
     public VCompound(int x, int y, int width, int height, VLayout layout, VAppAccess app) {
         super(x, y, width, height, app);
+
+        this.delegatedEvents = new EventHandler(this);
+        this.delegatedEvents.preprocessor = this::handleDelegatedEvent;
 
         this.layout = layout;
 
         move(x, y);
         setSize(width, height);
-
-        init();
     }
-
-    public abstract void init();
 
     //
     // App Access
@@ -57,6 +61,8 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
         widget.classes.add(identifier.toString());
         widgets.add(widget);
         layout.addElement(widget);
+
+        appAccess.get().addWidget(widget);
     }
 
     @Override
@@ -70,6 +76,42 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
         widget.classes.add(identifier.toString());
         layout.removeElement(widget);
         widgets.remove(widget);
+    }
+
+    protected @Nullable VWidget<?> getHoveredWidget() {
+        return widgets.stream()
+                .filter(VWidget::isHovered)
+                .findFirst().orElse(null);
+    }
+
+    //
+    // Delegation
+    //
+
+    @Override
+    public @Nullable VDelegator getDelegator() {
+        return this;
+    }
+
+    @Override
+    public EventHandler getDelegatedEventHandler() {
+        return delegatedEvents;
+    }
+
+    protected void handleDelegatedEvent(String event, Object[] args) {
+        switch (event) {
+            case VEvents.Widget.HOVER -> setHovered(true);
+            case VEvents.Widget.HOVER_LEAVE -> setHovered(false);
+        }
+    }
+
+    @Override
+    public void setHovered(boolean hovered) {
+        for (VWidget<?> widget : getWidgets()) {
+            if (widget.isHovered()) return;
+        }
+
+        super.setHovered(hovered);
     }
 
     //

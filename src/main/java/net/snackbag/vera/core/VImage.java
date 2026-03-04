@@ -8,6 +8,7 @@ import net.snackbag.vera.style.animation.easing.VEasing;
 public class VImage implements VFill {
     public final Identifier src;
     public final VColor tint;
+    public final boolean hasTransparency;
 
     public VImage(String src, VColor tint) {
         this(
@@ -29,19 +30,40 @@ public class VImage implements VFill {
         );
     }
 
-    public VImage(Identifier src, VColor tint) {
+    public VImage(Identifier src, VColor tint, boolean hasTransparency) {
         this.src = src;
         this.tint = tint;
+        this.hasTransparency = hasTransparency;
+    }
+
+    public VImage(Identifier src, VColor tint) {
+        this(src, tint, false);
     }
 
     public VImage(Identifier src) {
         this(src, VColor.white());
     }
 
+    public VImage withTransparency(boolean hasTransparency) {
+        return new VImage(src, tint, hasTransparency);
+    }
+
+    public VImage withSrc(Identifier src) {
+        return new VImage(src, tint, hasTransparency);
+    }
+
+    public VImage withSrc(String src) {
+        return withSrc(new Identifier(src));
+    }
+
+    public VImage withTint(VColor tint) {
+        return new VImage(src, tint, hasTransparency);
+    }
+
     @Override
     public void renderQuad(VRenderContext ctx, int x, int y, int width, int height) {
         Vera.renderer.renderTexQuad(
-                ctx.hasTransparency, src, tint,
+                ctx.hasTransparency || hasTransparency, src, tint,
                 x, y,
                 x, y + height,
                 x + width, y + height,

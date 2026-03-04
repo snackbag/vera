@@ -20,6 +20,10 @@ public class EventHandler {
     }
 
     public void fire(String name, Object... args) {
+        if (element.appAccess.isDelegated()) {
+            element.appAccess.getDelegator().getDelegatedEventHandler().fire(name, args);
+        }
+
         if (preprocessor != null) preprocessor.call(name, args);
 
         if (!executors.containsKey(name)) {

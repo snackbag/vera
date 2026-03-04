@@ -15,6 +15,7 @@ public enum StyleValueType {
     IDENTIFIER(Identifier.of(MinecraftVera.MOD_ID, "empty"), (f, t, e, d) -> d > 0.5 ? t : f),
     INT(0, (from, to, easing, delta) -> easing.apply(from, to, delta)),
     FLOAT(0.0F, (from, to, easing, delta) -> easing.apply(from, to, delta)),
+    BOOLEAN(false, (f, t, e, d) -> d > 0.5 ? t : f),
 
     FILL(VFill.empty(), (from, to, easing, delta) ->
             from.ease(easing, to, delta)),
@@ -68,6 +69,7 @@ public enum StyleValueType {
         else if (val instanceof VEasing) return EASING;
         else if (val instanceof Integer) return INT;
         else if (val instanceof Float || val instanceof Double) return FLOAT;
+        else if (val instanceof Boolean) return BOOLEAN;
         else if (val instanceof VColor) {
             if (bias == FILL) return FILL;
             return COLOR;

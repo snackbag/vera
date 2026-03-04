@@ -10,6 +10,7 @@ import net.snackbag.vera.flag.VAppFlag;
 import net.snackbag.vera.flag.VAppPositioningFlag;
 import net.snackbag.vera.style.VStyleSheet;
 import net.snackbag.vera.util.VGeometry;
+import net.snackbag.vera.widget.VDelegator;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -61,6 +62,11 @@ public abstract class VeraApp implements VAppAccess {
     @Override
     public @NotNull VeraApp get() {
         return this;
+    }
+
+    @Override
+    public @Nullable VDelegator getDelegator() {
+        return null;
     }
 
     public void setCursorVisible(boolean cursorVisible) {
@@ -178,10 +184,12 @@ public abstract class VeraApp implements VAppAccess {
 
     @Override
     public void addWidget(VWidget<?> widget) {
-        if (widgets.contains(widget)) {
-            MinecraftVera.LOGGER.error("Can't add widget %s to app %s, because it is already added"
-                    .formatted(widget.toString(), getClass().getSimpleName()));
-            return;
+        if (!widget.appAccess.isDelegated()) {
+            if (widgets.contains(widget)) {
+                MinecraftVera.LOGGER.error("Can't add widget %s to app %s, because it is already added"
+                        .formatted(widget.toString(), getClass().getSimpleName()));
+                return;
+            }
         }
 
         this.widgets.add(widget);
@@ -189,13 +197,16 @@ public abstract class VeraApp implements VAppAccess {
 
     @Override
     public void removeWidget(VWidget<?> widget) {
-        if (!widgets.contains(widget)) {
-            MinecraftVera.LOGGER.error("Can't remove widget %s from app %s, because it wasn't added"
-                    .formatted(widget.toString(), getClass().getSimpleName()));
-            return;
+        if (!widget.appAccess.isDelegated()) {
+            if (!widgets.contains(widget)) {
+                MinecraftVera.LOGGER.error("Can't remove widget %s from app %s, because it wasn't added"
+                        .formatted(widget.toString(), getClass().getSimpleName()));
+                return;
+            }
+
+            if (isFocusedWidget(widget)) setFocusedWidget(null);
         }
 
-        if (isFocusedWidget(widget)) setFocusedWidget(null);
         if (widget.isLeftClickDown()) widget.events.fire(VEvents.Widget.LEFT_CLICK_RELEASE);
         if (widget.isMiddleClickDown()) widget.events.fire(VEvents.Widget.MIDDLE_CLICK_RELEASE);
         if (widget.isRightClickDown()) widget.events.fire(VEvents.Widget.RIGHT_CLICK_RELEASE);
@@ -250,19 +261,9 @@ public abstract class VeraApp implements VAppAccess {
         int my = py - y;
 
         return getWidgetsReversed().stream()
-                .filter(widget -> isPointOverWidget(widget, mx, my))
+                .filter(widget -> widget.isPointOverThis(mx, my))
                 .filter(VWidget::visibilityConditionsPassed)
                 .findFirst().orElse(null);
-    }
-
-    private boolean isPointOverWidget(VWidget<?> widget, int px, int py) {
-        if (!widget.visibilityConditionsPassed()) return false;
-
-        int widgetX = widget.getHitboxX();
-        int widgetY = widget.getHitboxY();
-        int widgetWidth = widget.getHitboxWidth();
-        int widgetHeight = widget.getHitboxHeight();
-        return VGeometry.isInBox(px, py, widgetX, widgetY, widgetWidth, widgetHeight);
     }
 
     public boolean isPointOverThis(int px, int py) {
