@@ -54,13 +54,6 @@ public class VEvents {
         public static final String ITEM_REMOVED = "vcombobox-item-removed";
     }
 
-    // Dropdown
-    public static class Dropdown {
-        public static final String ITEM_SWITCH = "vdropdown-item-switch";
-        public static final String SELECTOR_OPEN = "vdropdown-selector-open";
-        public static final String SELECTOR_CLOSE = "vdropdown-selector-close";
-    }
-
     // Line input
     public static class LineInput {
         public static final String CHANGE = "vline-change";
