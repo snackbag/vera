@@ -65,12 +65,8 @@ public class VEvents {
 
     // Tabs
     public static class TabWidget {
-        public static final String TAB_HOVER_CHANGE = "vtabwidget-tab-hover-change";
-        public static final String TAB_LEFT_CLICK = "vtabwidget-tab-left-click";
-        public static final String TAB_LEFT_CLICK_RELEASE = "vtabwidget-tab-left-click-release";
-        public static final String TAB_MIDDLE_CLICK = "vtabwidget-tab-middle-click";
-        public static final String TAB_MIDDLE_CLICK_RELEASE = "vtabwidget-tab-middle-click-release";
-        public static final String TAB_RIGHT_CLICK = "vtabwidget-tab-right-click";
-        public static final String TAB_RIGHT_CLICK_RELEASE = "vtabwidget-tab-right-click-release";
+        public static final String TAB_NAME_CHANGED = "vtabwidget-tab-name-change";
+        public static final String TAB_ADDED = "vtabwidget-tab-added";
+        public static final String WIDGET_ADDED = "vtabwidget-tab-widget-added";
     }
 }
