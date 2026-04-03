@@ -1,6 +1,7 @@
 package net.snackbag.vera.style.animation;
 
 import net.snackbag.mcvera.MinecraftVera;
+import net.snackbag.vera.event.VAnimationEvent;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.style.StyleValueType;
 import net.snackbag.vera.widget.VWidget;
@@ -25,7 +26,7 @@ public class AnimationEngine {
 
         CompiledAnimation compiled = animation.compile(widget.getApp(), widget);
         active.put(compiled.name, new PlaybackContext(compiled, System.currentTimeMillis()));
-        widget.events.fire(VEvents.Animation.BEGIN, animation);
+        widget.events.fire(new VAnimationEvent.Begin(animation));
     }
 
     public void startOrRewind(VAnimation animation) {
@@ -44,7 +45,7 @@ public class AnimationEngine {
         }
 
         PlaybackContext ctx = active.get(name);
-        widget.events.fire(VEvents.Animation.FINISH, ctx.animation, ctx.startTime);
+        widget.events.fire(new VAnimationEvent.Finish(ctx.animation, ctx.startTime));
         active.remove(name);
     }
 
@@ -55,7 +56,7 @@ public class AnimationEngine {
     public void unwind(String name) {
         if (active.containsKey(name)) {
             active.get(name).unwind();
-            widget.events.fire(VEvents.Animation.UNWIND_BEGIN, active.get(name).animation);
+            widget.events.fire(new VAnimationEvent.Unwind(active.get(name).animation));
         }
         else MinecraftVera.LOGGER.warn("Couldn't unwind %s, because it's not active".formatted(name));
     }
@@ -77,7 +78,7 @@ public class AnimationEngine {
         }
 
         ctx.rewind();
-        widget.events.fire(VEvents.Animation.REWIND_BEGIN, ctx.animation);
+        widget.events.fire(new VAnimationEvent.Rewind(ctx.animation));
     }
 
     public <T> T animateStyle(String key, T value) {

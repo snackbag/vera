@@ -49,7 +49,7 @@ public class HierarchyTest {
             styleSheet.setKey(VLabel.class, "transition", 250);
 
             VRect mover = new VRect(VColor.black(), 0, 0, 100, 8, this).alsoAdd();
-            mover.onMouseDragLeft((ctx) -> move(getX() + ctx.moveX(), getY() + ctx.moveY()));
+            mover.onMouseDrag((ctx) -> move(getX() + ctx.moveX(), getY() + ctx.moveY()));
 
             VLabel label = new VLabel(name, this).alsoAdd();
             label.move(1);

@@ -42,7 +42,7 @@ public class TestApplication extends VeraApp {
         input.setMaxChars(30);
         input.setPlaceholderText("Enter text...");
         input.onAddCharLimited(System.out::println);
-        input.onMouseMove((x, y) -> System.out.println("x=" + x + ", y=" + y));
+        input.onMouseMove((ctx) -> System.out.println("x=" + ctx.x() + ", y=" + ctx.y()));
 
         input.move(50);
         input.setStyle("background", VColor.white());
@@ -50,11 +50,14 @@ public class TestApplication extends VeraApp {
 
         VLabel label = new VLabel("Hello world!", this).alsoAdd();
 
-        label.onMouseDragLeft((ctx) -> setCursorShape(VCursorShape.VERTICAL_RESIZE));
+        label.onMouseDrag((ctx) -> setCursorShape(switch (ctx.button()) {
+            case LEFT -> VCursorShape.VERTICAL_RESIZE;
+            case MIDDLE -> VCursorShape.ALL_RESIZE;
+            case RIGHT -> VCursorShape.HORIZONTAL_RESIZE;
+        }));
+
         label.onLeftClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
-        label.onMouseDragMiddle((ctx) -> setCursorShape(VCursorShape.ALL_RESIZE));
         label.onMiddleClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
-        label.onMouseDragRight((ctx) -> setCursorShape(VCursorShape.HORIZONTAL_RESIZE));
         label.onRightClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
         label.onFilesDropped(System.out::println);
 
@@ -109,8 +112,8 @@ public class TestApplication extends VeraApp {
         checkbox.move(20, 140);
         checkbox.setStyle("overlay", VStyleState.HOVERED, VColor.white().withOpacity(0.4f));
 
-        checkbox.onCheckStateChange((state) -> {
-            if (!state) removeWidget(checkbox);
+        checkbox.onCheckStateChanged((ctx) -> {
+            if (!ctx.checked()) removeWidget(checkbox);
         });
 
         VTabWidget tabs = new VTabWidget(this).alsoAdd();

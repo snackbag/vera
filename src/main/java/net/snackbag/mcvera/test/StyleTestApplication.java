@@ -50,7 +50,7 @@ public class StyleTestApplication extends VeraApp {
         testLabel.setStyle("scale", VStyleState.CLICKED, 2.0f);
         testLabel.setStyle("transition", 100);
 
-        testLabel.onMouseDragLeft((ctx) -> testLabel.move(
+        testLabel.onMouseDrag((ctx) -> testLabel.move(
                 testLabel.getX() + ctx.moveX(),
                 testLabel.getY() + ctx.moveY()
         ));

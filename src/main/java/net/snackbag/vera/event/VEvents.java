@@ -31,11 +31,9 @@ public class VEvents {
 
         public static final String SCROLL = "mouse-scroll";
         public static final String MOUSE_MOVE = "mouse-move";
-        public static final String DRAG_LEFT_CLICK = "mouse-drag-left";
-        public static final String DRAG_RIGHT_CLICK = "mouse-drag-right";
-        public static final String DRAG_MIDDLE_CLICK = "mouse-drag-middle";
+        public static final String MOUSE_DRAG = "mouse-drag";
 
-        public static final String TRANSPARENCY_STATE_CHANGE = "transparency-state-change";
+        public static final String TRANSPARENCY_STATE_CHANGED = "transparency-state-change";
 
         public static final String FOCUS_STATE_CHANGE = "focus-state-change";
         public static final String FILES_DROPPED = "files-dropped";

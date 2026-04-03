@@ -3,6 +3,7 @@ package net.snackbag.vera.layout;
 import net.snackbag.vera.VElement;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VAppAccess;
+import net.snackbag.vera.event.VElementEvent;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.flag.VLayoutAlignmentFlag;
 import org.joml.Vector2i;
@@ -72,7 +73,7 @@ public abstract class VLayout extends VElement {
         if (elements.contains(elem)) return;
         elements.add(elem);
         elem.addVisibilityCondition(() -> elements.contains(elem) && this.visibilityConditionsPassed());
-        elem.events.fire(VEvents.Element.LAYOUT_SWAP, this);
+        elem.events.fire(new VElementEvent.LayoutSwap(this));
     }
 
     public boolean removeElement(VElement elem) {

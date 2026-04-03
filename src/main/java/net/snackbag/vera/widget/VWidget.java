@@ -18,6 +18,7 @@ import net.snackbag.vera.util.VGeometry;
 
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Consumer;
 
 public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public AnimationEngine animations = new AnimationEngine(this);
@@ -290,7 +291,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
     public void setHasTransparency(boolean hasTransparency) {
         this.hasTransparency = hasTransparency;
-        events.fire(VEvents.Widget.TRANSPARENCY_STATE_CHANGE, hasTransparency);
+        events.fire(new VWidgetEvent.TransparencyStateChanged(hasTransparency));
     }
 
     public void update() {
@@ -345,54 +346,44 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         events.register(VEvents.Widget.MIDDLE_CLICK_RELEASE, runnable);
     }
 
-    public void onMouseScroll(VMouseScrollEvent runnable) {
-        events.register(VEvents.Widget.SCROLL, args -> runnable.run(
-                (int) args[0], (int) args[1], (double) args[2])
-        );
+    public void onMouseScroll(Consumer<VWidgetEvent.MouseScroll> ctx) {
+        events.register(VEvents.Widget.SCROLL, ctx);
     }
 
-    public void onMouseMove(VMouseMoveEvent runnable) {
-        events.register(VEvents.Widget.MOUSE_MOVE, args -> runnable.run((int) args[0], (int) args[1]));
+    public void onMouseMove(Consumer<VWidgetEvent.MouseMove> ctx) {
+        events.register(VEvents.Widget.MOUSE_MOVE, ctx);
     }
 
-    public void onMouseDragLeft(VMouseDragEvent runnable) {
-        events.register(VEvents.Widget.DRAG_LEFT_CLICK, args -> runnable.run((VMouseDragEvent.Context) args[0]));
-    }
-
-    public void onMouseDragRight(VMouseDragEvent runnable) {
-        events.register(VEvents.Widget.DRAG_RIGHT_CLICK, args -> runnable.run((VMouseDragEvent.Context) args[0]));
-    }
-
-    public void onMouseDragMiddle(VMouseDragEvent runnable) {
-        events.register(VEvents.Widget.DRAG_MIDDLE_CLICK, args -> runnable.run((VMouseDragEvent.Context) args[0]));
+    public void onMouseDrag(Consumer<VWidgetEvent.MouseDrag> ctx) {
+        events.register(VEvents.Widget.MOUSE_DRAG, ctx);
     }
 
     public void onFocusStateChange(Runnable runnable) {
         events.register(VEvents.Widget.FOCUS_STATE_CHANGE, runnable);
     }
 
-    public void onFilesDropped(VFilesDroppedEvent runnable) {
-        events.register(VEvents.Widget.FILES_DROPPED, args -> runnable.run((List<Path>) args[0]));
+    public void onFilesDropped(Consumer<VWidgetEvent.FilesDropped> ctx) {
+        events.register(VEvents.Widget.FILES_DROPPED, ctx);
     }
 
-    public void onAnimationBegin(VAnimationBeginEvent runnable) {
-        events.register(VEvents.Animation.BEGIN, args -> runnable.run((VAnimation) args[0]));
+    public void onAnimationBegin(Consumer<VAnimationEvent.Begin> ctx) {
+        events.register(VEvents.Animation.BEGIN, ctx);
     }
 
-    public void onAnimationUnwindBegin(VAnimationUnwindEvent runnable) {
-        events.register(VEvents.Animation.UNWIND_BEGIN, args -> runnable.run((VAnimation) args[0]));
+    public void onAnimationUnwindBegin(Consumer<VAnimationEvent.Unwind> ctx) {
+        events.register(VEvents.Animation.UNWIND_BEGIN, ctx);
     }
 
-    public void onAnimationRewindBegin(VAnimationRewindEvent runnable) {
-        events.register(VEvents.Animation.REWIND_BEGIN, args -> runnable.run((VAnimation) args[0]));
+    public void onAnimationRewindBegin(Consumer<VAnimationEvent.Rewind> ctx) {
+        events.register(VEvents.Animation.REWIND_BEGIN, ctx);
     }
 
-    public void onAnimationFinish(VAnimationFinishEvent runnable) {
-        events.register(VEvents.Animation.FINISH, args -> runnable.run((VAnimation) args[0], (long) args[1]));
+    public void onAnimationFinish(Consumer<VAnimationEvent.Finish> ctx) {
+        events.register(VEvents.Animation.FINISH, ctx);
     }
 
-    public void onTransparencyStateChange(VTransparencyStateChangeEvent runnable) {
-        events.register(VEvents.Widget.TRANSPARENCY_STATE_CHANGE, args -> runnable.run((boolean) args[0]));
+    public void onTransparencyStateChanged(Consumer<VWidgetEvent.TransparencyStateChanged> ctx) {
+        events.register(VEvents.Widget.TRANSPARENCY_STATE_CHANGED, ctx);
     }
 
     public boolean isPointOverThis(int px, int py) {
@@ -406,7 +397,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     }
 
     @Override
-    public void handleBuiltinEvent(String event, Object... args) {
+    public void handleBuiltinEvent(String event, VEventContext ctx) {
         switch (event) {
             case VEvents.Widget.LEFT_CLICK -> {
                 if (focusOnClick) {
@@ -429,7 +420,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
             }
 
             case VEvents.Animation.FINISH -> {
-                CompiledAnimation animation = (CompiledAnimation) args[0];
+                CompiledAnimation animation = ((VAnimationEvent.Finish) ctx).animation();
                 if (animation.name.equals(VAnimation.INTERNAL_TRANSITION_NAME)) {
                     transitionOrigin = null;
                     isTransitionUnwinding = false;
@@ -441,7 +432,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     }
 
     @Override
-    public void afterBuiltinEvent(String name, Object... args) {
+    public void afterBuiltinEvent(String name, VEventContext ctx) {
         updateIfNeeded();
     }
 

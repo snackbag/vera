@@ -6,8 +6,9 @@ import net.minecraft.util.math.MathHelper;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.core.v4.V4Int;
+import net.snackbag.vera.event.VEventContext;
 import net.snackbag.vera.event.VEvents;
-import net.snackbag.vera.event.VCharLimitedEvent;
+import net.snackbag.vera.event.VLineInputEvent;
 import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.modifier.VHasPlaceholderFont;
 import net.snackbag.vera.style.VStyleState;
@@ -15,6 +16,8 @@ import net.snackbag.vera.core.VRenderContext;
 import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
+
+import java.util.function.Consumer;
 
 public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPlaceholderFont {
     private String text;
@@ -96,8 +99,8 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     }
 
     @Override
-    public void handleBuiltinEvent(String event, Object... args) {
-        super.handleBuiltinEvent(event, args);
+    public void handleBuiltinEvent(String event, VEventContext ctx) {
+        super.handleBuiltinEvent(event, ctx);
 
         if (event.equals(VEvents.Widget.LEFT_CLICK)) {
             textSelection.clear();
@@ -180,8 +183,8 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         events.register(VEvents.LineInput.CURSOR_MOVE_RIGHT, runnable);
     }
 
-    public void onAddCharLimited(VCharLimitedEvent runnable) {
-        events.register(VEvents.LineInput.ADD_CHAR_LIMITED, args -> runnable.run((char) args[0]));
+    public void onAddCharLimited(Consumer<VLineInputEvent.CharLimited> ctx) {
+        events.register(VEvents.LineInput.ADD_CHAR_LIMITED, ctx);
     }
 
     @Override
@@ -321,7 +324,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
     private void insertText(String insertion) {
         if (maxChars > -1 && text.length() + insertion.length() > maxChars) {
-            events.fire(VEvents.LineInput.ADD_CHAR_LIMITED, insertion.charAt(0));
+            events.fire(new VLineInputEvent.CharLimited(insertion.charAt(0)));
             return;
         }
 
@@ -352,7 +355,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         int end = Math.max(textSelection.startPos, textSelection.endPos);
 
         if (maxChars > -1 && text.length() - (end - start) + replacement.length() > maxChars) {
-            events.fire(VEvents.LineInput.ADD_CHAR_LIMITED, replacement.charAt(0));
+            events.fire(new VLineInputEvent.CharLimited(replacement.charAt(0)));
             return;
         }
 
@@ -491,7 +494,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
                 int end = Math.max(textSelection.startPos, textSelection.endPos);
 
                 if (maxChars > -1 && text.length() - (end - start) + 1 > maxChars) {
-                    events.fire(VEvents.LineInput.ADD_CHAR_LIMITED, chr);
+                    events.fire(new VLineInputEvent.CharLimited(chr));
                     return;
                 }
 
@@ -504,7 +507,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
             } else {
                 // Normal character insertion
                 if (maxChars > -1 && text.length() >= maxChars) {
-                    events.fire(VEvents.LineInput.ADD_CHAR_LIMITED, chr);
+                    events.fire(new VLineInputEvent.CharLimited(chr));
                     return;
                 }
 

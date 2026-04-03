@@ -2,8 +2,9 @@ package net.snackbag.vera.util;
 
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VMouseButton;
+import net.snackbag.vera.event.VEventContext;
 import net.snackbag.vera.event.VEvents;
-import net.snackbag.vera.event.VMouseDragEvent;
+import net.snackbag.vera.event.VWidgetEvent;
 import net.snackbag.vera.widget.VWidget;
 import org.joml.Vector2i;
 
@@ -12,7 +13,7 @@ public class DragHandler {
     public static VWidget<?> target = null;
     public static Vector2i beginPos = null;
 
-    public static VMouseDragEvent.Context prevContext = null;
+    public static VWidgetEvent.MouseDrag prevContext = null;
 
     public static boolean isDragging() {
         return button != null && target != null;
@@ -48,18 +49,19 @@ public class DragHandler {
         DragHandler.prevContext = null;
     }
 
-    public static VMouseDragEvent.Context createContext() {
+    public static VWidgetEvent.MouseDrag createContext(VMouseButton button) {
         if (!isDragging()) throw new UnsupportedOperationException("Cannot create mouse drag context when not dragging");
 
         int x = Vera.getMouseX();
         int y = Vera.getMouseY();
 
         Vector2i move = createMove();
-        VMouseDragEvent.Context ctx = new VMouseDragEvent.Context(
+        VWidgetEvent.MouseDrag ctx = new VWidgetEvent.MouseDrag(
                 beginPos.x, beginPos.y,
                 x, y,
                 move.x, move.y,
-                VMouseDragEvent.Direction.UP
+                VWidgetEvent.MouseDrag.Direction.UP,
+                button
         );
 
         prevContext = ctx;
@@ -75,10 +77,6 @@ public class DragHandler {
     }
 
     private static void fireEvents() {
-        switch (button) {
-            case LEFT -> target.events.fire(VEvents.Widget.DRAG_LEFT_CLICK, createContext());
-            case MIDDLE -> target.events.fire(VEvents.Widget.DRAG_MIDDLE_CLICK, createContext());
-            case RIGHT -> target.events.fire(VEvents.Widget.DRAG_RIGHT_CLICK, createContext());
-        }
+        target.events.fire(createContext(button));
     }
 }

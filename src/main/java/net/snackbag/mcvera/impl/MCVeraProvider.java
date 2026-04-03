@@ -8,6 +8,7 @@ import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VShortcut;
+import net.snackbag.vera.event.VWidgetEvent;
 import net.snackbag.vera.flag.VAppFlag;
 import net.snackbag.vera.widget.VWidget;
 
@@ -131,7 +132,7 @@ public class MCVeraProvider {
         if (top != null && top.isPointOverThis(x, y)) {
             VWidget<?> widget = top.getTopWidgetAt(x, y);
             if (widget != null) {
-                widget.events.fire(VEvents.Widget.FILES_DROPPED, paths);
+                widget.events.fire(new VWidgetEvent.FilesDropped(paths));
                 return;
             }
         }
@@ -143,7 +144,7 @@ public class MCVeraProvider {
 
             VWidget<?> widget = app.getTopWidgetAt(x, y);
             if (widget != null) {
-                widget.events.fire(VEvents.Widget.FILES_DROPPED, paths);
+                widget.events.fire(new VWidgetEvent.FilesDropped(paths));
                 didSomething.set(true);
             }
         });

@@ -3,8 +3,9 @@ package net.snackbag.vera;
 import net.snackbag.vera.core.VAppAccess;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.EventHandler;
+import net.snackbag.vera.event.VElementEvent;
+import net.snackbag.vera.event.VEventContext;
 import net.snackbag.vera.event.VEvents;
-import net.snackbag.vera.event.VWidgetMessageEvent;
 import net.snackbag.vera.layout.VLayout;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,7 +42,7 @@ public abstract class VElement {
         this.width = width;
         this.height = height;
 
-        onLayoutSwap(layout -> this.layout = layout); // event gets called. we use the event itself to change the layout
+        onLayoutSwap(ctx -> this.layout = ctx.layout()); // event gets called. we use the event itself to change the layout
         onLayoutRemove(() -> this.layout = null);
     }
 
@@ -49,8 +50,8 @@ public abstract class VElement {
         return appAccess.get();
     }
 
-    public void handleBuiltinEvent(String name, Object... args) {}
-    public void afterBuiltinEvent(String name, Object... args) {}
+    public void handleBuiltinEvent(String name, VEventContext ctx) {}
+    public void afterBuiltinEvent(String name, VEventContext ctx) {}
 
     //
     // Visibility
@@ -76,20 +77,20 @@ public abstract class VElement {
     // Events
     //
 
-    public void onMessage(VWidgetMessageEvent executor) {
-        events.register(VEvents.Element.MESSAGE, args -> executor.run((VWidgetMessageEvent.Context) args[0]));
+    public void onMessage(Consumer<VElementEvent.Message> ctx) {
+        events.register(VEvents.Element.MESSAGE, ctx);
     }
 
     public void sendMessage(VElement element, String type, @Nullable Object content) {
-        element.events.fire(VEvents.Element.MESSAGE, new VWidgetMessageEvent.Context(this, type, content));
+        element.events.fire(new VElementEvent.Message(this, type, content));
     }
 
-    public void onLayoutSwap(Consumer<VLayout> executor) {
-        events.register(VEvents.Element.LAYOUT_SWAP, args -> executor.accept((VLayout) args[0]));
+    public void onLayoutSwap(Consumer<VElementEvent.LayoutSwap> ctx) {
+        events.register(VEvents.Element.LAYOUT_SWAP, ctx);
     }
 
     public void onLayoutRemove(Runnable executor) {
-        events.register(VEvents.Element.LAYOUT_REMOVE, args -> executor.run());
+        events.register(VEvents.Element.LAYOUT_REMOVE, executor);
     }
 
     //

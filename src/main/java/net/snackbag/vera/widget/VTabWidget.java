@@ -7,8 +7,9 @@ import net.snackbag.vera.core.VFill;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VRenderContext;
 import net.snackbag.vera.core.v4.V4Int;
+import net.snackbag.vera.event.VEventContext;
 import net.snackbag.vera.event.VEvents;
-import net.snackbag.vera.event.VTabNameChangeEvent;
+import net.snackbag.vera.event.VTabWidgetEvent;
 import net.snackbag.vera.layout.VHLayout;
 import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.style.VStyleState;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class VTabWidget extends VCompound<VTabWidget> {
     private int cachedTotalTabWidthSum;
@@ -73,7 +75,7 @@ public class VTabWidget extends VCompound<VTabWidget> {
 
     public void addTab(String name) {
         addWidget(new Tab(name, this));
-        events.fire(VEvents.TabWidget.TAB_ADDED, name);
+        events.fire(new VTabWidgetEvent.TabAdded(name));
     }
 
     public void addTab(String name, VWidget<?>... widgets) {
@@ -163,22 +165,22 @@ public class VTabWidget extends VCompound<VTabWidget> {
         public void addWidgets(VWidget<?>... widgets) {
             for (VWidget<?> widget : widgets) {
                 widget.addVisibilityCondition(() -> parent.getActiveTab() == this);
-                events.fire(VEvents.TabWidget.WIDGET_ADDED, widget);
+                events.fire(new VTabWidgetEvent.WidgetAdded(widget));
             }
         }
 
         public void setName(String name) {
             this.name = name;
             adjustSize();
-            events.fire(VEvents.TabWidget.TAB_NAME_CHANGED, name);
+            events.fire(new VTabWidgetEvent.TabNameChanged(name));
         }
 
         public String getName() {
             return name;
         }
 
-        public void onTabNameChange(VTabNameChangeEvent runnable) {
-            events.register(VEvents.TabWidget.TAB_NAME_CHANGED, (args) -> runnable.run((String) args[0]));
+        public void onTabNameChange(Consumer<VTabWidgetEvent.TabNameChanged> ctx) {
+            events.register(VEvents.TabWidget.TAB_NAME_CHANGED, ctx);
         }
 
         @Override
@@ -194,8 +196,8 @@ public class VTabWidget extends VCompound<VTabWidget> {
         }
 
         @Override
-        public void handleBuiltinEvent(String event, Object... args) {
-            super.handleBuiltinEvent(event, args);
+        public void handleBuiltinEvent(String event, VEventContext ctx) {
+            super.handleBuiltinEvent(event, ctx);
 
             if (event.equals(VEvents.Widget.LEFT_CLICK)) {
                 parent.setActiveTab(this);

@@ -2,9 +2,12 @@ package net.snackbag.vera.widget;
 
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
+import net.snackbag.vera.event.VCheckBoxEvent;
+import net.snackbag.vera.event.VEventContext;
 import net.snackbag.vera.event.VEvents;
-import net.snackbag.vera.event.VCheckedStateChange;
 import net.snackbag.vera.style.VStyleState;
+
+import java.util.function.Consumer;
 
 public class VCheckBox extends VWidget<VCheckBox> {
     private boolean checked;
@@ -28,8 +31,8 @@ public class VCheckBox extends VWidget<VCheckBox> {
     }
 
     @Override
-    public void handleBuiltinEvent(String event, Object... args) {
-        super.handleBuiltinEvent(event, args);
+    public void handleBuiltinEvent(String event, VEventContext ctx) {
+        super.handleBuiltinEvent(event, ctx);
 
         if (event.equals(VEvents.Widget.LEFT_CLICK)) setChecked(!checked);
     }
@@ -41,10 +44,10 @@ public class VCheckBox extends VWidget<VCheckBox> {
     public void setChecked(boolean checked) {
         this.checked = checked;
 
-        events.fire(VEvents.CheckBox.CHECK_STATE_CHANGED, checked);
+        events.fire(new VCheckBoxEvent.StateChanged(checked));
     }
 
-    public void onCheckStateChange(VCheckedStateChange runnable) {
-        events.register(VEvents.CheckBox.CHECK_STATE_CHANGED, args -> runnable.run((boolean) args[0]));
+    public void onCheckStateChanged(Consumer<VCheckBoxEvent.StateChanged> ctx) {
+        events.register(VEvents.CheckBox.CHECK_STATE_CHANGED, ctx);
     }
 }

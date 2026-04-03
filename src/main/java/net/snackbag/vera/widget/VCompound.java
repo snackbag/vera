@@ -7,6 +7,7 @@ import net.snackbag.vera.core.VAppAccess;
 import net.snackbag.vera.core.VRenderContext;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.EventHandler;
+import net.snackbag.vera.event.VEventContext;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.layout.VLayout;
 import org.jetbrains.annotations.NotNull;
@@ -97,7 +98,7 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
         return delegatedEvents;
     }
 
-    protected void handleDelegatedEvent(String event, Object[] args) {
+    protected void handleDelegatedEvent(String event, VEventContext ctx) {
         switch (event) {
             case VEvents.Widget.HOVER -> setHovered(true);
             case VEvents.Widget.HOVER_LEAVE -> setHovered(false);

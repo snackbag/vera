@@ -7,9 +7,9 @@ import net.snackbag.vera.core.VFill;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VRenderContext;
 import net.snackbag.vera.core.v4.V4Int;
+import net.snackbag.vera.event.VComboBoxEvent;
+import net.snackbag.vera.event.VEventContext;
 import net.snackbag.vera.event.VEvents;
-import net.snackbag.vera.event.VItemAddedEvent;
-import net.snackbag.vera.event.VItemRemovedEvent;
 import net.snackbag.vera.layout.VVLayout;
 import net.snackbag.vera.style.VStyleState;
 import org.jetbrains.annotations.Nullable;
@@ -84,8 +84,8 @@ public class VComboBox extends VCompound<VComboBox> {
     }
 
     @Override
-    protected void handleDelegatedEvent(String event, Object[] args) {
-        super.handleDelegatedEvent(event, args);
+    protected void handleDelegatedEvent(String event, VEventContext ctx) {
+        super.handleDelegatedEvent(event, ctx);
         if (event.equals(VEvents.Widget.LEFT_CLICK)) {
             VWidget<?> potentialItem = getHoveredWidget();
             if (potentialItem instanceof Item item) setSelectedItemIndex(getIndexOfItem(item));
@@ -93,13 +93,13 @@ public class VComboBox extends VCompound<VComboBox> {
     }
 
     @Override
-    public void handleBuiltinEvent(String event, Object... args) {
+    public void handleBuiltinEvent(String event, VEventContext ctx) {
         if (event.equals(VEvents.Widget.LEFT_CLICK) && isFocused()) {
             setFocused(false);
             return;
         }
 
-        super.handleBuiltinEvent(event, args);
+        super.handleBuiltinEvent(event, ctx);
     }
 
     public int getIndexOfItem(Item item) {
@@ -130,7 +130,7 @@ public class VComboBox extends VCompound<VComboBox> {
         item.accept(i);
 
         addWidget(i);
-        events.fire(VEvents.ComboBox.ITEM_ADDED, item);
+        events.fire(new VComboBoxEvent.ItemAdded(i));
 
         return i;
     }
@@ -153,7 +153,7 @@ public class VComboBox extends VCompound<VComboBox> {
             return;
         }
 
-        events.fire(VEvents.ComboBox.ITEM_REMOVED, index);
+        events.fire(new VComboBoxEvent.ItemRemoved(index));
         removeWidget(getWidgets().get(index));
     }
 
@@ -167,12 +167,12 @@ public class VComboBox extends VCompound<VComboBox> {
         events.register(VEvents.ComboBox.SELECTION_CHANGED, runnable);
     }
 
-    public void onItemAdded(VItemAddedEvent runnable) {
-        events.register(VEvents.ComboBox.ITEM_ADDED, args -> runnable.run((Item) args[0]));
+    public void onItemAdded(Consumer<VComboBoxEvent.ItemAdded> ctx) {
+        events.register(VEvents.ComboBox.ITEM_ADDED, ctx);
     }
 
-    public void onItemRemoved(VItemRemovedEvent runnable) {
-        events.register(VEvents.ComboBox.ITEM_REMOVED, args -> runnable.run((int) args[0]));
+    public void onItemRemoved(Consumer<VComboBoxEvent.ItemRemoved> ctx) {
+        events.register(VEvents.ComboBox.ITEM_REMOVED, ctx);
     }
 
     public static class Item extends VWidget<Item> {

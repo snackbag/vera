@@ -6,6 +6,7 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VMouseButton;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VEvents;
+import net.snackbag.vera.event.VWidgetEvent;
 import net.snackbag.vera.flag.VAppFlag;
 import net.snackbag.vera.util.DragHandler;
 import net.snackbag.vera.widget.VWidget;
@@ -116,6 +117,6 @@ public interface ParentElementMixin {
     @Unique
     private void handleScrollEvents(@Nullable VWidget<?> widget, int x, int y, double amount) {
         if (widget == null) return;
-        widget.events.fire(VEvents.Widget.SCROLL, x, y, amount);
+        widget.events.fire(new VWidgetEvent.MouseScroll(x, y, amount));
     }
 }
