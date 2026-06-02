@@ -244,7 +244,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         VeraApp app = getApp();
         var state = createStyleState();
 
-        if (state != prevStyleState) {
+        if (!state.equals(prevStyleState)) {
             Integer transitionTime = app.styleSheet.getKey(this, "transition", state);
             VEasing transitionEasing = app.styleSheet.getKey(this, "transition-easing", state);
 
@@ -451,7 +451,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
     private void updateIfNeeded() {
         var state = createStyleState();
-        if (state != handledPrevStyleState) {
+        if (!state.equals(handledPrevStyleState)) {
             update();
             handledPrevStyleState = state;
         }
