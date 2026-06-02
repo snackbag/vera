@@ -83,7 +83,7 @@ public class StyleContainer<T> {
         var resolvedPart = getPart(part); // i'm sorry for using var but holy fuck
         for (String key : resolvedPart.keySet()) {
             for (VStyleState keyState : resolvedPart.get(key).keySet()) {
-                if (keyState != state) continue;
+                if (!keyState.equals(state)) continue;
                 buffer.add(key);
             }
         }
