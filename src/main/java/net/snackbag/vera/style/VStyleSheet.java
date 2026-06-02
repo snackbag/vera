@@ -22,23 +22,26 @@ public class VStyleSheet {
 
     public @Nullable <T> T getKey(VWidget<?> widget, String key, @Nullable VEffectState state) {
         if (state == null) state = VEffectState.DEFAULT;
+        return getKey(widget, key, state.asStyleState());
+    }
 
+    public @Nullable <T> T getKey(VWidget<?> widget, String key, @NotNull VStyleState state) {
         // if widget contains key
         if (widgetSpecificStyles.hasKey(widget, key)) {
             // if widget has state, return
             if (widgetSpecificStyles.hasState(widget, key, state)) return widgetSpecificStyles.getState(widget, key, state);
 
             // if widget state has fallback, attempt
-            if (state.fallback != null) return getKey(widget, key, state.fallback);
+            if (state.hasFallback()) return getKey(widget, key, state.fallback());
         }
 
         // if class contains key
-        HashMap<String, HashMap<VEffectState, Object>> mixed = mixClasses(widget.classes);
+        HashMap<String, HashMap<VStyleState, Object>> mixed = mixClasses(widget.classes);
 
         Contains: if (mixed.containsKey(key)) {
             if (!mixed.get(key).containsKey(state)) {
-                if (state.fallback == null) break Contains;
-                return getKey(widget, key, state.fallback);
+                if (!state.hasFallback()) break Contains;
+                return getKey(widget, key, state.fallback());
             }
             return (T) mixed.get(key).get(state);
         }
@@ -53,7 +56,14 @@ public class VStyleSheet {
      */
     public Set<String> getKeysStacked(VWidget<?> widget, @Nullable VEffectState state) {
         if (state == null) state = VEffectState.DEFAULT;
+        return getKeysStacked(widget, state.asStyleState());
+    }
 
+    /**
+     * In this case, stacked means that also all keys from states below the
+     * given state are returned.
+     */
+    public Set<String> getKeysStacked(VWidget<?> widget, @NotNull VStyleState state) {
         Set<String> keys = new HashSet<>();
 
         // standard styles
@@ -71,11 +81,17 @@ public class VStyleSheet {
     }
 
     /**
-     * Note: the resolved keys will return keys from states below the given state
+     * Note: will return keys from states below the given state
      */
-    public HashMap<String, Object> getResolvedKeys(VWidget<?> widget, @Nullable VEffectState state) {
+    public HashMap<String, Object> getKeyValuesStacked(VWidget<?> widget, @Nullable VEffectState state) {
         if (state == null) state = VEffectState.DEFAULT;
+        return getKeyValuesStacked(widget, state.asStyleState());
+    }
 
+    /**
+     * Note: will return keys from states below the given state
+     */
+    public HashMap<String, Object> getKeyValuesStacked(VWidget<?> widget, @NotNull VStyleState state) {
         Set<String> keys = getKeysStacked(widget, state);
         HashMap<String, Object> buffer = new HashMap<>();
 
@@ -97,7 +113,7 @@ public class VStyleSheet {
      * &nbsp;&nbsp;&nbsp;&nbsp;- If not, and {@link VEffectState#fallback} exists, retry with the fallback state on the same class<br/>
      * &nbsp;&nbsp;&nbsp;&nbsp;- If fallback also fails or is <code>null</code>, recurse into the superclass with the original state
      */
-    public <T> @Nullable T getStandardKey(@Nullable Class<?> clazz, String key, @NotNull VEffectState state) {
+    public <T> @Nullable T getStandardKey(@Nullable Class<?> clazz, String key, @NotNull VStyleState state) {
         if (clazz == null) return null;
 
         // if class isn't registered, attempt super
@@ -109,10 +125,10 @@ public class VStyleSheet {
         // if no state found, return same class but fallback state
         if (!standardStyles.hasState(clazz, key, state)) {
             // if fallback state is null, attempt superclass
-            if (state.fallback == null) return getStandardKey(clazz.getSuperclass(), key, state);
+            if (!state.hasFallback()) return getStandardKey(clazz.getSuperclass(), key, state);
 
             // try fallback state
-            return getStandardKey(clazz, key, state.fallback);
+            return getStandardKey(clazz, key, state.fallback());
         }
 
         return standardStyles.getState(clazz, key, state);
@@ -132,38 +148,32 @@ public class VStyleSheet {
 
     public void setKey(VWidget<?> widget, String key, Object value, @Nullable VEffectState state) {
         if (state == null) state = VEffectState.DEFAULT;
-        value = potentiallyUnpackArray(value);
+        setKey(widget, key, value, state.asStyleState());
+    }
 
-        StyleValueType res = getReservation(key);
-        StyleValueType valRes = StyleValueType.get(value, res);
-
-        if (res != null) {
-            if (valRes != res)
-                throw new RuntimeException("Cannot set key %s, because it is reserved for type %s. Received: %s".formatted(key, res, valRes));
-        } else reserveType(key, valRes);
-
-        value = StyleValueType.convert(value, valRes);
-        widgetSpecificStyles.put(widget, key, state, value);
+    public void setKey(VWidget<?> widget, String key, Object value, @NotNull VStyleState state) {
+        setContainerKey(widgetSpecificStyles, widget, key, value, state);
     }
 
     public void setKey(String clazz, String key, Object value, @Nullable VEffectState state) {
         if (state == null) state = VEffectState.DEFAULT;
-        value = potentiallyUnpackArray(value);
+        setKey(clazz, key, value, state.asStyleState());
+    }
 
-        StyleValueType res = getReservation(key);
-        StyleValueType valRes = StyleValueType.get(value, res);
-
-        if (res != null) {
-            if (valRes != res)
-                throw new RuntimeException("Cannot set key %s (for class %s), because it is reserved for type %s. Received: %s".formatted(key, clazz, res, valRes));
-        } else reserveType(key, valRes);
-
-        value = StyleValueType.convert(value, valRes);
-        classStyles.put(clazz, key, state, value);
+    public void setKey(String clazz, String key, Object value, @NotNull VStyleState state) {
+        setContainerKey(classStyles, clazz, key, value, state);
     }
 
     public void setKey(Class<?> clazz, String key, Object value, @Nullable VEffectState state) {
         if (state == null) state = VEffectState.DEFAULT;
+        setKey(clazz, key, value, state.asStyleState());
+    }
+
+    public void setKey(Class<?> clazz, String key, Object value, @NotNull VStyleState state) {
+        setContainerKey(standardStyles, clazz, key, value, state);
+    }
+
+    private <T> void setContainerKey(StyleContainer<T> container, T part, String key, Object value, @NotNull VStyleState state) {
         value = potentiallyUnpackArray(value);
 
         StyleValueType res = getReservation(key);
@@ -171,11 +181,11 @@ public class VStyleSheet {
 
         if (res != null) {
             if (valRes != res)
-                throw new RuntimeException("Cannot set standard key %s (for class %s), because it is reserved for type %s. Received: %s".formatted(key, clazz, res, valRes));
+                throw new RuntimeException("Cannot set key %s (for %s), because it is reserved for type %s. Received: %s".formatted(key, part, res, valRes));
         } else reserveType(key, valRes);
 
         value = StyleValueType.convert(value, valRes);
-        standardStyles.put(clazz, key, state, value);
+        container.put(part, key, state, value);
     }
 
     public VColor.ColorModifier modifyKeyAsColor(VWidget<?> widget, String key) {
@@ -184,8 +194,11 @@ public class VStyleSheet {
 
     public VColor.ColorModifier modifyKeyAsColor(VWidget<?> widget, String key, @Nullable VEffectState state) {
         if (state == null) state = VEffectState.DEFAULT;
+        return modifyKeyAsColor(widget, key, state.asStyleState());
+    }
 
-        @Nullable VEffectState finalState = state;
+    public VColor.ColorModifier modifyKeyAsColor(VWidget<?> widget, String key, @NotNull VStyleState state) {
+        @Nullable VStyleState finalState = state;
         return new VColor.ColorModifier(getKey(widget, key, state), color -> setKey(widget, key, color, finalState));
     }
 
@@ -195,8 +208,11 @@ public class VStyleSheet {
 
     public VFont.FontModifier modifyKeyAsFont(VWidget<?> widget, String key, @Nullable VEffectState state) {
         if (state == null) state = VEffectState.DEFAULT;
+        return modifyKeyAsFont(widget, key, state.asStyleState());
+    }
 
-        @Nullable VEffectState finalState = state;
+    public VFont.FontModifier modifyKeyAsFont(VWidget<?> widget, String key, @NotNull VStyleState state) {
+        @Nullable VStyleState finalState = state;
         return new VFont.FontModifier(getKey(widget, key, state), font -> setKey(widget, key, font, finalState));
     }
 
@@ -206,9 +222,12 @@ public class VStyleSheet {
 
     public VColor.ColorModifier modifyKeyAsFontColor(VWidget<?> widget, String key, @Nullable VEffectState state) {
         if (state == null) state = VEffectState.DEFAULT;
+        return modifyKeyAsFontColor(widget, key, state.asStyleState());
+    }
 
+    public VColor.ColorModifier modifyKeyAsFontColor(VWidget<?> widget, String key, @NotNull VStyleState state) {
         // this is cursed
-        @Nullable VEffectState finalState = state;
+        @Nullable VStyleState finalState = state;
         return new VColor.ColorModifier(
                 ((VFont) getKey(widget, key, state)).getColor(),
                 color -> modifyKeyAsFont(widget, key, finalState).color(color)
@@ -251,11 +270,11 @@ public class VStyleSheet {
         widgetSpecificStyles.moldWith(target.widgetSpecificStyles);
     }
 
-    public HashMap<String, HashMap<VEffectState, Object>> mixClasses(LinkedHashSet<String> classes) {
-        final HashMap<String, HashMap<VEffectState, Object>> values = new HashMap<>();
+    public HashMap<String, HashMap<VStyleState, Object>> mixClasses(LinkedHashSet<String> classes) {
+        final HashMap<String, HashMap<VStyleState, Object>> values = new HashMap<>();
 
         for (String clazz : classes) {
-            HashMap<String, HashMap<VEffectState, Object>> styles = classStyles.getPart(clazz);
+            HashMap<String, HashMap<VStyleState, Object>> styles = classStyles.getPart(clazz);
             for (String key : styles.keySet()) values.put(key, styles.get(key));
         }
 

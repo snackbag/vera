@@ -31,11 +31,15 @@ public class VStyleState {
         this.origin = origin;
     }
 
-    public VStyleState fallback() {
+    public @NotNull VStyleState fallback() {
         VEffectState effectFallback = effectState.fallback == null ? VEffectState.DEFAULT : effectState.fallback;
 
         if (userState == null) return new VStyleState(effectFallback, origin.userState, this);
         else return new VStyleState(effectState, null, this);
+    }
+
+    public boolean hasFallback() {
+        return !(effectState.fallback == null && userState == null);
     }
 
     @Override
