@@ -51,4 +51,8 @@ public enum VEffectState {
 
         return false;
     }
+
+    public VStyleState asStyleState() {
+        return new VStyleState(this, null);
+    }
 }
