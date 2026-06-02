@@ -24,7 +24,7 @@ public class VCheckBox extends VWidget<VCheckBox> {
 
     @Override
     public void renderContent(VRenderContext ctx) {
-        VEffectState state = createStyleState();
+        var state = createStyleState();
         VFill fill = checked ? getStyle("fill-checked", state) : getStyle("fill", state);
 
         Vera.renderer.drawFill(ctx, 0, 0, width, height, fill);

@@ -71,7 +71,7 @@ public class VLabel extends VWidget<VLabel> implements VHasFont {
 
     @Override
     public void renderContent(VRenderContext ctx) {
-        VEffectState state = createStyleState();
+        var state = createStyleState();
 
         VFont font = getStyle("font", state);
         VFill background = getStyle("background", state);
