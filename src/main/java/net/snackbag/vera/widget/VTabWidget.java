@@ -12,7 +12,8 @@ import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VTabWidgetEvent;
 import net.snackbag.vera.layout.VHLayout;
 import net.snackbag.vera.modifier.VHasFont;
-import net.snackbag.vera.style.VEffectState;
+import net.snackbag.vera.style.VStyleState;
+import net.snackbag.vera.style.VUserState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -184,6 +185,12 @@ public class VTabWidget extends VCompound<VTabWidget> {
         }
 
         @Override
+        public VStyleState createStyleState() {
+            if (parent.getActiveTab() == this) return super.createStyleState().withUserState(VUserState.ACTIVE);
+            else return super.createStyleState();
+        }
+
+        @Override
         public int getEffectiveHeight() {
             V4Int padding = getStyle("padding", createStyleState());
             return super.getEffectiveHeight() + padding.get1() + padding.get2();
@@ -206,12 +213,11 @@ public class VTabWidget extends VCompound<VTabWidget> {
 
         @Override
         public void renderContent(VRenderContext ctx) {
-            String suffix = parent.getActiveTab() == this ? "-selected" : "";
-
             var state = createStyleState();
-            VFont font = getStyle("font" + suffix, state);
-            VFill background = getStyle("background" + suffix, state);
-            V4Int padding = getStyle("padding" + suffix, state);
+
+            VFont font = getStyle("font", state);
+            VFill background = getStyle("background", state);
+            V4Int padding = getStyle("padding", state);
 
             Vera.renderer.drawFill(ctx, 0, 0, getEffectiveWidth(), getEffectiveHeight(), background);
             Vera.renderer.drawText(ctx, padding.get3(), padding.get1(), getName(), font);
