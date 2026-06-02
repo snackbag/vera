@@ -11,7 +11,8 @@ import net.snackbag.vera.event.VComboBoxEvent;
 import net.snackbag.vera.event.VEventContext;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.layout.VVLayout;
-import net.snackbag.vera.style.VEffectState;
+import net.snackbag.vera.style.VStyleState;
+import net.snackbag.vera.style.VUserState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -36,7 +37,7 @@ public class VComboBox extends VCompound<VComboBox> {
         V4Int padding = getStyle("padding", state);
         VFill background = getStyle("background", state);
         VFont font = getStyle("font", state);
-        VFill arrow = isFocused() ? getStyle("arrow-focused") : getStyle("arrow", state);
+        VFill arrow = getStyle("arrow", state);
 
         int width = getEffectiveWidth();
         int height = getEffectiveHeight();
@@ -63,6 +64,12 @@ public class VComboBox extends VCompound<VComboBox> {
         }
 
         Vera.renderer.drawFill(ctx, this.width - textHeight, height / 2 - textHeight / 2, textHeight, textHeight, arrow);
+    }
+
+    @Override
+    public VStyleState createStyleState() {
+        if (isFocused()) return super.createStyleState().withUserState(VUserState.ACTIVE);
+        else return super.createStyleState();
     }
 
     @Override

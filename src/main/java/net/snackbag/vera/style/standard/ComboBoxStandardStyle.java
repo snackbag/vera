@@ -6,9 +6,7 @@ import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VImage;
 import net.snackbag.vera.core.v4.V4Int;
-import net.snackbag.vera.style.StyleValueType;
-import net.snackbag.vera.style.VEffectState;
-import net.snackbag.vera.style.VStyleSheet;
+import net.snackbag.vera.style.*;
 import net.snackbag.vera.widget.VComboBox;
 
 public class ComboBoxStandardStyle implements VStandardStyle {
@@ -23,10 +21,10 @@ public class ComboBoxStandardStyle implements VStandardStyle {
                 new Identifier(MinecraftVera.MOD_ID, "widgets/combobox/arrow_closed.png"),
                 VColor.MC_GRAY
         ).withTransparency(true));
-        sheet.setKey(VComboBox.class, "arrow-focused", new VImage(
+        sheet.setKey(VComboBox.class, "arrow", new VImage(
                 new Identifier(MinecraftVera.MOD_ID, "widgets/combobox/arrow_open.png"),
                 VColor.MC_GRAY
-        ).withTransparency(true));
+        ).withTransparency(true), new VStyleState(VUserState.ACTIVE));
 
         sheet.setKey(VComboBox.class, "font", VFont.create());
 
