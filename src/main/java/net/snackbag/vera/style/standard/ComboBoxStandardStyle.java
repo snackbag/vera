@@ -7,7 +7,7 @@ import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VImage;
 import net.snackbag.vera.core.v4.V4Int;
 import net.snackbag.vera.style.StyleValueType;
-import net.snackbag.vera.style.VInteractionState;
+import net.snackbag.vera.style.VEffectState;
 import net.snackbag.vera.style.VStyleSheet;
 import net.snackbag.vera.widget.VComboBox;
 
@@ -17,7 +17,7 @@ public class ComboBoxStandardStyle implements VStandardStyle {
         // Normal
         sheet.setKey(VComboBox.class, "padding", new V4Int(4));
         sheet.setKey(VComboBox.class, "background", VColor.white());
-        sheet.setKey(VComboBox.class, "background", VColor.white().sub(20), VInteractionState.HOVERED);
+        sheet.setKey(VComboBox.class, "background", VColor.white().sub(20), VEffectState.HOVERED);
 
         sheet.setKey(VComboBox.class, "arrow", new VImage(
                 new Identifier(MinecraftVera.MOD_ID, "widgets/combobox/arrow_closed.png"),
@@ -32,10 +32,10 @@ public class ComboBoxStandardStyle implements VStandardStyle {
 
         // Items
         sheet.setKey(VComboBox.Item.class, "ci-height", 16);
-        sheet.setKey(VComboBox.Item.class, "ci-background", VColor.white(), VInteractionState.DEFAULT);
-        sheet.setKey(VComboBox.Item.class, "ci-background", VColor.black(), VInteractionState.HOVERED);
-        sheet.setKey(VComboBox.Item.class, "ci-font", VFont.create(), VInteractionState.DEFAULT);
-        sheet.setKey(VComboBox.Item.class, "ci-font", VFont.create().withColor(VColor.white()), VInteractionState.HOVERED);
+        sheet.setKey(VComboBox.Item.class, "ci-background", VColor.white(), VEffectState.DEFAULT);
+        sheet.setKey(VComboBox.Item.class, "ci-background", VColor.black(), VEffectState.HOVERED);
+        sheet.setKey(VComboBox.Item.class, "ci-font", VFont.create(), VEffectState.DEFAULT);
+        sheet.setKey(VComboBox.Item.class, "ci-font", VFont.create().withColor(VColor.white()), VEffectState.HOVERED);
         sheet.setKey(VComboBox.Item.class, "ci-reserve-icon-space", true);
     }
 

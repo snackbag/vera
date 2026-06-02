@@ -8,7 +8,7 @@ import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.flag.VAppFlag;
-import net.snackbag.vera.style.VInteractionState;
+import net.snackbag.vera.style.VEffectState;
 import net.snackbag.vera.style.animation.VAnimation;
 import net.snackbag.vera.widget.*;
 
@@ -95,14 +95,14 @@ public class TestApplication extends VeraApp {
                 0, 30, 32, 32, this).alsoAdd();
         image.onMiddleClick(this::hideCursor);
         image.onMiddleClickRelease(this::showCursor);
-        image.setStyle("background", VInteractionState.HOVERED, "minecraft:textures/block/diamond_block.png");
+        image.setStyle("background", VEffectState.HOVERED, "minecraft:textures/block/diamond_block.png");
 
         VComboBox box = new VComboBox(this).alsoAdd();
         box.addItem("coolio");
         box.addItem("shmoolio");
         box.addItem("roolio", item -> {
             item.setStyle("ci-icon", "minecraft:textures/block/dirt.png");
-            item.setStyle("ci-icon", VInteractionState.HOVERED, "minecraft:textures/block/diamond_ore.png");
+            item.setStyle("ci-icon", VEffectState.HOVERED, "minecraft:textures/block/diamond_ore.png");
         });
         box.addItem("buger");
         box.move(90);
@@ -110,7 +110,7 @@ public class TestApplication extends VeraApp {
 
         VCheckBox checkbox = new VCheckBox(this).alsoAdd();
         checkbox.move(20, 140);
-        checkbox.setStyle("overlay", VInteractionState.HOVERED, VColor.white().withOpacity(0.4f));
+        checkbox.setStyle("overlay", VEffectState.HOVERED, VColor.white().withOpacity(0.4f));
 
         checkbox.onCheckStateChanged((ctx) -> {
             if (!ctx.checked()) removeWidget(checkbox);

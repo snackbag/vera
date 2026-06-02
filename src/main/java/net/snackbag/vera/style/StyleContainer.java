@@ -12,10 +12,10 @@ import java.util.Set;
  * Consists of:<br/>
  * | Part<br/>
  * |--- Key<br/>
- * |------ VInteractionState:Object
+ * |------ VEffectState:Object
  */
 public class StyleContainer<T> {
-    private final HashMap<T, HashMap<String, HashMap<VInteractionState, Object>>> values = new HashMap<>();
+    private final HashMap<T, HashMap<String, HashMap<VEffectState, Object>>> values = new HashMap<>();
 
     public StyleContainer() {}
 
@@ -23,7 +23,7 @@ public class StyleContainer<T> {
         return values.containsKey(part);
     }
 
-    public HashMap<String, HashMap<VInteractionState, Object>> getPart(T part) {
+    public HashMap<String, HashMap<VEffectState, Object>> getPart(T part) {
         return values.getOrDefault(part, new HashMap<>());
     }
 
@@ -31,22 +31,22 @@ public class StyleContainer<T> {
         return getPart(part).containsKey(key);
     }
 
-    public HashMap<VInteractionState, Object> getKey(T part, String key) {
+    public HashMap<VEffectState, Object> getKey(T part, String key) {
         return getPart(part).getOrDefault(key, new HashMap<>());
     }
 
-    public boolean hasState(T part, String key, VInteractionState state) {
+    public boolean hasState(T part, String key, VEffectState state) {
         return getKey(part, key).containsKey(state);
     }
 
-    public <V> V getState(T part, String key, VInteractionState state) {
+    public <V> V getState(T part, String key, VEffectState state) {
         return (V) getKey(part, key).get(state);
     }
 
 
     /**
      * In this case, exact means that it does not resolve lower states and only
-     * gives the keys of exactly the given style state. Use {@link #getKeysStacked(Object, VInteractionState)}
+     * gives the keys of exactly the given style state. Use {@link #getKeysStacked(Object, VEffectState)}
      * for deeper state resolve.
      * <br/><br/>
      * For example when requesting state <code>HOVERED</code>:
@@ -73,16 +73,16 @@ public class StyleContainer<T> {
      *     </tr>
      * </table>
      *
-     * @see #getKeysStacked(Object, VInteractionState)
+     * @see #getKeysStacked(Object, VEffectState)
      */
-    public Set<String> getKeysExact(T part, @Nullable VInteractionState state) {
-        if (state == null) state = VInteractionState.DEFAULT;
+    public Set<String> getKeysExact(T part, @Nullable VEffectState state) {
+        if (state == null) state = VEffectState.DEFAULT;
 
         Set<String> buffer = new HashSet<>();
 
         var resolvedPart = getPart(part); // i'm sorry for using var but holy fuck
         for (String key : resolvedPart.keySet()) {
-            for (VInteractionState keyState : resolvedPart.get(key).keySet()) {
+            for (VEffectState keyState : resolvedPart.get(key).keySet()) {
                 if (keyState != state) continue;
                 buffer.add(key);
             }
@@ -93,7 +93,7 @@ public class StyleContainer<T> {
 
     /**
      * In this case, stacked means that also all keys from states below the
-     * given state are returned. Use {@link #getKeysExact(Object, VInteractionState)} for
+     * given state are returned. Use {@link #getKeysExact(Object, VEffectState)} for
      * only the exact keys of a style state.
      * <br/><br/>
      * For example when requesting state <code>HOVERED</code>:
@@ -120,14 +120,14 @@ public class StyleContainer<T> {
      *     </tr>
      * </table>
      *
-     * @see #getKeysExact(Object, VInteractionState)
+     * @see #getKeysExact(Object, VEffectState)
      */
-    public Set<String> getKeysStacked(T part, @Nullable VInteractionState state) {
-        if (state == null) state = VInteractionState.DEFAULT;
+    public Set<String> getKeysStacked(T part, @Nullable VEffectState state) {
+        if (state == null) state = VEffectState.DEFAULT;
 
         Set<String> buffer = new HashSet<>();
 
-        VInteractionState next = state;
+        VEffectState next = state;
         while (next != null) {
             buffer.addAll(getKeysExact(part, next));
             next = next.fallback;
@@ -136,7 +136,7 @@ public class StyleContainer<T> {
         return buffer;
     }
 
-    public void put(T part, String key, VInteractionState state, Object value) {
+    public void put(T part, String key, VEffectState state, Object value) {
         if (!hasPart(part)) values.put(part, new HashMap<>());
         if (!hasKey(part, key)) values.get(part).put(key, new HashMap<>());
         if (!hasState(part, key, state)) values.get(part).get(key).put(state, new HashMap<>());
@@ -157,7 +157,7 @@ public class StyleContainer<T> {
                     continue;
                 }
 
-                for (VInteractionState targetState : target.getKey(targetPart, targetKey).keySet()) {
+                for (VEffectState targetState : target.getKey(targetPart, targetKey).keySet()) {
                     if (!hasState(targetPart, targetKey, targetState)) {
                         values.get(targetPart).get(targetKey).put(targetState, target.getState(targetPart, targetKey, targetState));
                         continue;

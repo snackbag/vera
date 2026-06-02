@@ -11,7 +11,7 @@ import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VLineInputEvent;
 import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.modifier.VHasPlaceholderFont;
-import net.snackbag.vera.style.VInteractionState;
+import net.snackbag.vera.style.VEffectState;
 import net.snackbag.vera.core.VRenderContext;
 import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.Nullable;
@@ -42,7 +42,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
     @Override
     public void renderContent(VRenderContext ctx) {
-        VInteractionState state = createStyleState();
+        VEffectState state = createStyleState();
 
         VFont font = getStyle("font", state);
         VFont placeholderFont = getStyle("placeholder-font", state);
@@ -384,7 +384,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     }
 
     private int getTextViewportEnd() {
-        VInteractionState state = createStyleState();
+        VEffectState state = createStyleState();
         VFont font = getStyle("font", state);
 
         StringBuilder buf = new StringBuilder();
@@ -433,7 +433,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     }
 
     public int getCharPosAtX(int x) {
-        VInteractionState state = createStyleState();
+        VEffectState state = createStyleState();
         VFont font = getStyle("font", state);
         V4Int padding = getStyle("padding", state);
 
@@ -461,7 +461,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     }
 
     public VColor getCursorColorSafe() {
-        VInteractionState state = createStyleState();
+        VEffectState state = createStyleState();
 
         VColor style = getStyleOrDefault("cursor-color", null, state);
         VFont font = getStyle("font", state);
@@ -471,7 +471,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
     @Override
     public int getEffectiveWidth() {
-        VInteractionState state = createStyleState();
+        VEffectState state = createStyleState();
         V4Int padding = getStyle("padding", state);
 
         return width + padding.get3() + padding.get4();
@@ -479,7 +479,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
 
     @Override
     public int getEffectiveHeight() {
-        VInteractionState state = createStyleState();
+        VEffectState state = createStyleState();
         V4Int padding = getStyle("padding", state);
 
         return height + padding.get1() + padding.get2();
