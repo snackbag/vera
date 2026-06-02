@@ -20,6 +20,10 @@ public class VStyleState {
         this(effectState, null);
     }
 
+    public VStyleState(@NotNull VUserState userState) {
+        this(VEffectState.DEFAULT, userState);
+    }
+
     public VStyleState(@NotNull VEffectState effectState, @Nullable VUserState userState) {
         this.effectState = effectState;
         this.userState = userState;
@@ -40,6 +44,14 @@ public class VStyleState {
 
     public boolean hasFallback() {
         return !(effectState.fallback == null && userState == null);
+    }
+
+    public VStyleState withEffectState(VEffectState effectState) {
+        return new VStyleState(effectState, userState);
+    }
+
+    public VStyleState withUserState(VUserState userState) {
+        return new VStyleState(effectState, userState);
     }
 
     @Override
