@@ -31,7 +31,7 @@ public class InternalCommands {
                                     return 1;
                                 }))
                                 .then(ClientCommandManager.literal("layoutalignments").executes((ctx) -> {
-                                    LayoutCenteringTestApplication.INSTANCE.show();
+                                    LayoutAlignmentTestApplication.INSTANCE.show();
                                     return 1;
                                 }))
                                 .then(ClientCommandManager.literal("hierarchy").executes(ctx -> {
@@ -52,7 +52,7 @@ public class InternalCommands {
                                     TestApplication.INSTANCE = new TestApplication();
                                     StyleTestApplication.INSTANCE = new StyleTestApplication();
                                     LayoutTestApplication.INSTANCE = new LayoutTestApplication();
-                                    LayoutCenteringTestApplication.INSTANCE = new LayoutCenteringTestApplication();
+                                    LayoutAlignmentTestApplication.INSTANCE = new LayoutAlignmentTestApplication();
                                     HierarchyTest.INSTANCE = new HierarchyTest();
                                     QuadTestApplication.INSTANCE = new QuadTestApplication();
                                     return 1;

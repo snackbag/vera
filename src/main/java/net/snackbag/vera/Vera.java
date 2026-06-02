@@ -65,6 +65,14 @@ public class Vera {
         return (int) (MinecraftClient.getInstance().mouse.getY() / MinecraftClient.getInstance().getWindow().getScaleFactor());
     }
 
+    public static int getScreenHeight() {
+        return provider.getScreenHeight();
+    }
+
+    public static int getScreenWidth() {
+        return provider.getScreenWidth();
+    }
+
     public static @Nullable String openFileSelector(@Nullable String title, Path defaultPath, @Nullable String filter) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             PointerBuffer filters;
