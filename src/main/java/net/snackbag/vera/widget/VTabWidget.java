@@ -12,7 +12,7 @@ import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VTabWidgetEvent;
 import net.snackbag.vera.layout.VHLayout;
 import net.snackbag.vera.modifier.VHasFont;
-import net.snackbag.vera.style.VStyleState;
+import net.snackbag.vera.style.VInteractionState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -208,7 +208,7 @@ public class VTabWidget extends VCompound<VTabWidget> {
         public void renderContent(VRenderContext ctx) {
             String suffix = parent.getActiveTab() == this ? "-selected" : "";
 
-            VStyleState state = createStyleState();
+            VInteractionState state = createStyleState();
             VFont font = getStyle("font" + suffix, state);
             VFill background = getStyle("background" + suffix, state);
             V4Int padding = getStyle("padding" + suffix, state);

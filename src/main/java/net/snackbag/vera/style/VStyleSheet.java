@@ -17,11 +17,11 @@ public class VStyleSheet {
     private HashMap<String, StyleValueType> typeRegistry = new HashMap<>();
 
     public @Nullable <T> T getKey(VWidget<?> widget, String key) {
-        return getKey(widget, key, VStyleState.DEFAULT);
+        return getKey(widget, key, VInteractionState.DEFAULT);
     }
 
-    public @Nullable <T> T getKey(VWidget<?> widget, String key, @Nullable VStyleState state) {
-        if (state == null) state = VStyleState.DEFAULT;
+    public @Nullable <T> T getKey(VWidget<?> widget, String key, @Nullable VInteractionState state) {
+        if (state == null) state = VInteractionState.DEFAULT;
 
         // if widget contains key
         if (widgetSpecificStyles.hasKey(widget, key)) {
@@ -33,7 +33,7 @@ public class VStyleSheet {
         }
 
         // if class contains key
-        HashMap<String, HashMap<VStyleState, Object>> mixed = mixClasses(widget.classes);
+        HashMap<String, HashMap<VInteractionState, Object>> mixed = mixClasses(widget.classes);
 
         Contains: if (mixed.containsKey(key)) {
             if (!mixed.get(key).containsKey(state)) {
@@ -51,8 +51,8 @@ public class VStyleSheet {
      * In this case, stacked means that also all keys from states below the
      * given state are returned.
      */
-    public Set<String> getKeysStacked(VWidget<?> widget, @Nullable VStyleState state) {
-        if (state == null) state = VStyleState.DEFAULT;
+    public Set<String> getKeysStacked(VWidget<?> widget, @Nullable VInteractionState state) {
+        if (state == null) state = VInteractionState.DEFAULT;
 
         Set<String> keys = new HashSet<>();
 
@@ -73,8 +73,8 @@ public class VStyleSheet {
     /**
      * Note: the resolved keys will return keys from states below the given state
      */
-    public HashMap<String, Object> getResolvedKeys(VWidget<?> widget, @Nullable VStyleState state) {
-        if (state == null) state = VStyleState.DEFAULT;
+    public HashMap<String, Object> getResolvedKeys(VWidget<?> widget, @Nullable VInteractionState state) {
+        if (state == null) state = VInteractionState.DEFAULT;
 
         Set<String> keys = getKeysStacked(widget, state);
         HashMap<String, Object> buffer = new HashMap<>();
@@ -94,10 +94,10 @@ public class VStyleSheet {
      * 2. If <code>clazz</code> is not registered in {@link VStyleSheet#standardStyles}, recurse into its superclass<br/>
      * 3. If the specified <code>key</code> is not defined for this class, recurse into its superclass<br/>
      * 4. Check if the given <code>state</code> is defined:<br/>
-     * &nbsp;&nbsp;&nbsp;&nbsp;- If not, and {@link VStyleState#fallback} exists, retry with the fallback state on the same class<br/>
+     * &nbsp;&nbsp;&nbsp;&nbsp;- If not, and {@link VInteractionState#fallback} exists, retry with the fallback state on the same class<br/>
      * &nbsp;&nbsp;&nbsp;&nbsp;- If fallback also fails or is <code>null</code>, recurse into the superclass with the original state
      */
-    public <T> @Nullable T getStandardKey(@Nullable Class<?> clazz, String key, @NotNull VStyleState state) {
+    public <T> @Nullable T getStandardKey(@Nullable Class<?> clazz, String key, @NotNull VInteractionState state) {
         if (clazz == null) return null;
 
         // if class isn't registered, attempt super
@@ -119,19 +119,19 @@ public class VStyleSheet {
     }
 
     public void setKey(VWidget<?> widget, String key, Object object) {
-        setKey(widget, key, object, VStyleState.DEFAULT);
+        setKey(widget, key, object, VInteractionState.DEFAULT);
     }
 
     public void setKey(String clazz, String key, Object object) {
-        setKey(clazz, key, object, VStyleState.DEFAULT);
+        setKey(clazz, key, object, VInteractionState.DEFAULT);
     }
 
     public void setKey(Class<?> clazz, String key, Object object) {
-        setKey(clazz, key, object, VStyleState.DEFAULT);
+        setKey(clazz, key, object, VInteractionState.DEFAULT);
     }
 
-    public void setKey(VWidget<?> widget, String key, Object value, @Nullable VStyleState state) {
-        if (state == null) state = VStyleState.DEFAULT;
+    public void setKey(VWidget<?> widget, String key, Object value, @Nullable VInteractionState state) {
+        if (state == null) state = VInteractionState.DEFAULT;
         value = potentiallyUnpackArray(value);
 
         StyleValueType res = getReservation(key);
@@ -146,8 +146,8 @@ public class VStyleSheet {
         widgetSpecificStyles.put(widget, key, state, value);
     }
 
-    public void setKey(String clazz, String key, Object value, @Nullable VStyleState state) {
-        if (state == null) state = VStyleState.DEFAULT;
+    public void setKey(String clazz, String key, Object value, @Nullable VInteractionState state) {
+        if (state == null) state = VInteractionState.DEFAULT;
         value = potentiallyUnpackArray(value);
 
         StyleValueType res = getReservation(key);
@@ -162,8 +162,8 @@ public class VStyleSheet {
         classStyles.put(clazz, key, state, value);
     }
 
-    public void setKey(Class<?> clazz, String key, Object value, @Nullable VStyleState state) {
-        if (state == null) state = VStyleState.DEFAULT;
+    public void setKey(Class<?> clazz, String key, Object value, @Nullable VInteractionState state) {
+        if (state == null) state = VInteractionState.DEFAULT;
         value = potentiallyUnpackArray(value);
 
         StyleValueType res = getReservation(key);
@@ -179,36 +179,36 @@ public class VStyleSheet {
     }
 
     public VColor.ColorModifier modifyKeyAsColor(VWidget<?> widget, String key) {
-        return modifyKeyAsColor(widget, key, VStyleState.DEFAULT);
+        return modifyKeyAsColor(widget, key, VInteractionState.DEFAULT);
     }
 
-    public VColor.ColorModifier modifyKeyAsColor(VWidget<?> widget, String key, @Nullable VStyleState state) {
-        if (state == null) state = VStyleState.DEFAULT;
+    public VColor.ColorModifier modifyKeyAsColor(VWidget<?> widget, String key, @Nullable VInteractionState state) {
+        if (state == null) state = VInteractionState.DEFAULT;
 
-        @Nullable VStyleState finalState = state;
+        @Nullable VInteractionState finalState = state;
         return new VColor.ColorModifier(getKey(widget, key, state), color -> setKey(widget, key, color, finalState));
     }
 
     public VFont.FontModifier modifyKeyAsFont(VWidget<?> widget, String key) {
-        return modifyKeyAsFont(widget, key, VStyleState.DEFAULT);
+        return modifyKeyAsFont(widget, key, VInteractionState.DEFAULT);
     }
 
-    public VFont.FontModifier modifyKeyAsFont(VWidget<?> widget, String key, @Nullable VStyleState state) {
-        if (state == null) state = VStyleState.DEFAULT;
+    public VFont.FontModifier modifyKeyAsFont(VWidget<?> widget, String key, @Nullable VInteractionState state) {
+        if (state == null) state = VInteractionState.DEFAULT;
 
-        @Nullable VStyleState finalState = state;
+        @Nullable VInteractionState finalState = state;
         return new VFont.FontModifier(getKey(widget, key, state), font -> setKey(widget, key, font, finalState));
     }
 
     public VColor.ColorModifier modifyKeyAsFontColor(VWidget<?> widget, String key) {
-        return modifyKeyAsFontColor(widget, key, VStyleState.DEFAULT);
+        return modifyKeyAsFontColor(widget, key, VInteractionState.DEFAULT);
     }
 
-    public VColor.ColorModifier modifyKeyAsFontColor(VWidget<?> widget, String key, @Nullable VStyleState state) {
-        if (state == null) state = VStyleState.DEFAULT;
+    public VColor.ColorModifier modifyKeyAsFontColor(VWidget<?> widget, String key, @Nullable VInteractionState state) {
+        if (state == null) state = VInteractionState.DEFAULT;
 
         // this is cursed
-        @Nullable VStyleState finalState = state;
+        @Nullable VInteractionState finalState = state;
         return new VColor.ColorModifier(
                 ((VFont) getKey(widget, key, state)).getColor(),
                 color -> modifyKeyAsFont(widget, key, finalState).color(color)
@@ -251,11 +251,11 @@ public class VStyleSheet {
         widgetSpecificStyles.moldWith(target.widgetSpecificStyles);
     }
 
-    public HashMap<String, HashMap<VStyleState, Object>> mixClasses(LinkedHashSet<String> classes) {
-        final HashMap<String, HashMap<VStyleState, Object>> values = new HashMap<>();
+    public HashMap<String, HashMap<VInteractionState, Object>> mixClasses(LinkedHashSet<String> classes) {
+        final HashMap<String, HashMap<VInteractionState, Object>> values = new HashMap<>();
 
         for (String clazz : classes) {
-            HashMap<String, HashMap<VStyleState, Object>> styles = classStyles.getPart(clazz);
+            HashMap<String, HashMap<VInteractionState, Object>> styles = classStyles.getPart(clazz);
             for (String key : styles.keySet()) values.put(key, styles.get(key));
         }
 

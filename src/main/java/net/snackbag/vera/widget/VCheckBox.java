@@ -5,7 +5,7 @@ import net.snackbag.vera.core.*;
 import net.snackbag.vera.event.VCheckBoxEvent;
 import net.snackbag.vera.event.VEventContext;
 import net.snackbag.vera.event.VEvents;
-import net.snackbag.vera.style.VStyleState;
+import net.snackbag.vera.style.VInteractionState;
 
 import java.util.function.Consumer;
 
@@ -24,7 +24,7 @@ public class VCheckBox extends VWidget<VCheckBox> {
 
     @Override
     public void renderContent(VRenderContext ctx) {
-        VStyleState state = createStyleState();
+        VInteractionState state = createStyleState();
         VFill fill = checked ? getStyle("fill-checked", state) : getStyle("fill", state);
 
         Vera.renderer.drawFill(ctx, 0, 0, width, height, fill);

@@ -2,7 +2,7 @@ package net.snackbag.vera.modifier;
 
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
-import net.snackbag.vera.style.VStyleState;
+import net.snackbag.vera.style.VInteractionState;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,7 +11,7 @@ public interface VHasFont extends VModifier {
         return modifyFont(null);
     }
 
-    default VFont.FontModifier modifyFont(@Nullable VStyleState state) {
+    default VFont.FontModifier modifyFont(@Nullable VInteractionState state) {
         return getApp().styleSheet.modifyKeyAsFont((VWidget<?>) this, "font", state);
     }
 
@@ -19,7 +19,7 @@ public interface VHasFont extends VModifier {
         return modifyFontColor(null);
     }
 
-    default VColor.ColorModifier modifyFontColor(@Nullable VStyleState state) {
+    default VColor.ColorModifier modifyFontColor(@Nullable VInteractionState state) {
         return getApp().styleSheet.modifyKeyAsFontColor((VWidget<?>) this, "font", state);
     }
 }

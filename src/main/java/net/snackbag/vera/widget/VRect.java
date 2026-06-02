@@ -2,7 +2,7 @@ package net.snackbag.vera.widget;
 
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
-import net.snackbag.vera.style.VStyleState;
+import net.snackbag.vera.style.VInteractionState;
 
 public class VRect extends VWidget<VRect> {
     public VRect(VFill background, VAppAccess app) {
@@ -22,7 +22,7 @@ public class VRect extends VWidget<VRect> {
 
     @Override
     public void renderContent(VRenderContext ctx) {
-        VStyleState state = createStyleState();
+        VInteractionState state = createStyleState();
 
         Vera.renderer.drawFill(ctx, 0, 0, width, height, getStyle("background", state));
     }

@@ -11,7 +11,7 @@ import net.snackbag.vera.event.VComboBoxEvent;
 import net.snackbag.vera.event.VEventContext;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.layout.VVLayout;
-import net.snackbag.vera.style.VStyleState;
+import net.snackbag.vera.style.VInteractionState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -31,7 +31,7 @@ public class VComboBox extends VCompound<VComboBox> {
 
     @Override
     public void renderContent(VRenderContext ctx) {
-        VStyleState state = createStyleState();
+        VInteractionState state = createStyleState();
 
         V4Int padding = getStyle("padding", state);
         VFill background = getStyle("background", state);
@@ -206,7 +206,7 @@ public class VComboBox extends VCompound<VComboBox> {
 
         @Override
         public void renderContent(VRenderContext ctx) {
-            VStyleState state = createStyleState();
+            VInteractionState state = createStyleState();
 
             V4Int padding = parent.getStyle("padding", parent.createStyleState());
             VFill background = getStyle("ci-background", state);

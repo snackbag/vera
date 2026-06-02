@@ -5,7 +5,7 @@ import net.snackbag.vera.core.*;
 import net.snackbag.vera.core.v4.V4Int;
 import net.snackbag.vera.flag.VHAlignmentFlag;
 import net.snackbag.vera.modifier.VHasFont;
-import net.snackbag.vera.style.VStyleState;
+import net.snackbag.vera.style.VInteractionState;
 import net.snackbag.vera.core.VRenderContext;
 
 public class VLabel extends VWidget<VLabel> implements VHasFont {
@@ -71,7 +71,7 @@ public class VLabel extends VWidget<VLabel> implements VHasFont {
 
     @Override
     public void renderContent(VRenderContext ctx) {
-        VStyleState state = createStyleState();
+        VInteractionState state = createStyleState();
 
         VFont font = getStyle("font", state);
         VFill background = getStyle("background", state);
