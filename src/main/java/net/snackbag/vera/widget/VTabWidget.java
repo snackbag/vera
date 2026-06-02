@@ -208,7 +208,7 @@ public class VTabWidget extends VCompound<VTabWidget> {
         public void renderContent(VRenderContext ctx) {
             String suffix = parent.getActiveTab() == this ? "-selected" : "";
 
-            VEffectState state = createStyleState();
+            var state = createStyleState();
             VFont font = getStyle("font" + suffix, state);
             VFill background = getStyle("background" + suffix, state);
             V4Int padding = getStyle("padding" + suffix, state);

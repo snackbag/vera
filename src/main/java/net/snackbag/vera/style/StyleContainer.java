@@ -130,7 +130,7 @@ public class StyleContainer<T> {
         VStyleState next = state;
         while (next != null) {
             buffer.addAll(getKeysExact(part, next));
-            next = next.fallback();
+            next = next.hasFallback() ? next.fallback() : null;
         }
 
         return buffer;

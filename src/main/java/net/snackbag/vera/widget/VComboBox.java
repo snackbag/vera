@@ -31,7 +31,7 @@ public class VComboBox extends VCompound<VComboBox> {
 
     @Override
     public void renderContent(VRenderContext ctx) {
-        VEffectState state = createStyleState();
+        var state = createStyleState();
 
         V4Int padding = getStyle("padding", state);
         VFill background = getStyle("background", state);
@@ -206,7 +206,7 @@ public class VComboBox extends VCompound<VComboBox> {
 
         @Override
         public void renderContent(VRenderContext ctx) {
-            VEffectState state = createStyleState();
+            var state = createStyleState();
 
             V4Int padding = parent.getStyle("padding", parent.createStyleState());
             VFill background = getStyle("ci-background", state);
