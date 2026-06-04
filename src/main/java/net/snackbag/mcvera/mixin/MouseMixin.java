@@ -55,15 +55,18 @@ public abstract class MouseMixin {
 
     @Inject(method = "onMouseScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getOverlay()Lnet/minecraft/client/gui/screen/Overlay;"))
     private void mcvera$onMouseScroll(long window, double horizontal, double vertical, CallbackInfo ci, @Local(ordinal = 2) double d) {
+        // Note for good measure: vanilla doesn't apply sensitivity to horizontal, but only vertical. Therefore, we
+        // use d for vertical and horizontal for horizontal
+
         int mouseX = Vera.getMouseX();
         int mouseY = Vera.getMouseY();
 
-        MCVeraData.asTopHierarchy(app -> handleScrollEvents(app.getTopWidgetAt(mouseX, mouseY), horizontal, vertical));
+        MCVeraData.asTopHierarchy(app -> handleScrollEvents(app.getTopWidgetAt(mouseX, mouseY), horizontal, d));
         Vera.forAllVisibleApps(app -> {
             if (app.hasFlag(VAppFlag.HIERARCHIC)) return;
             if (!app.isPointOverThis(mouseX, mouseY)) return;
 
-            handleScrollEvents(app.getTopWidgetAt(mouseX, mouseY), horizontal, vertical);
+            handleScrollEvents(app.getTopWidgetAt(mouseX, mouseY), horizontal, d);
         });
     }
 

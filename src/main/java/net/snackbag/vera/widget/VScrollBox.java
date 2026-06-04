@@ -38,7 +38,7 @@ public class VScrollBox extends VCompound<VScrollBox> {
         double diff = this.scrollY - old;
 
         for (VWidget<?> widget : getWidgets()) {
-            widget.offsetY += (int) diff;
+            widget.offsetY -= (int) diff;
         }
     }
 
@@ -55,7 +55,7 @@ public class VScrollBox extends VCompound<VScrollBox> {
         super.addWidget(widget);
 
         widget.offsetX += this.offsetX;
-        widget.offsetY += this.offsetY;
+        widget.offsetY -= this.offsetY;
     }
 
     @Override
@@ -70,10 +70,19 @@ public class VScrollBox extends VCompound<VScrollBox> {
     protected void handleDelegatedEvent(String event, VEventContext ctx) {
         super.handleDelegatedEvent(event, ctx);
 
-        if (ctx instanceof VWidgetEvent.MouseScroll e) {
-            setScrollX(getScrollX() + e.horizontal());
-            setScrollY(getScrollY() + e.vertical());
-        }
+        if (ctx instanceof VWidgetEvent.MouseScroll e) handleScrollEvent(e);
+    }
+
+    @Override
+    public void handleBuiltinEvent(String event, VEventContext ctx) {
+        super.handleBuiltinEvent(event, ctx);
+
+        if (ctx instanceof VWidgetEvent.MouseScroll e) handleScrollEvent(e);
+    }
+
+    private void handleScrollEvent(VWidgetEvent.MouseScroll e) {
+        setScrollX(getScrollX() + e.horizontal());
+        setScrollY(getScrollY() + e.vertical());
     }
 
     //
