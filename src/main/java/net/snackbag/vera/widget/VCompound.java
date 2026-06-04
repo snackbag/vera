@@ -144,8 +144,7 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
 
             renderContent(ctx);
 
-            MCVeraRenderer.drawContext.getMatrices().translate(-getX(), -getY(), 0);
-            for (VWidget<?> widget : widgets) widget.renderSelf();
+            Vera.renderer.renderCompoundChildren(this);
 
             renderBorder(ctx);
             renderOverlay(ctx);

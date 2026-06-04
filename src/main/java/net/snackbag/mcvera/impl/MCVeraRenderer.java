@@ -15,6 +15,7 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.flag.VAppFlag;
 import net.snackbag.vera.flag.VAppPositioningFlag;
+import net.snackbag.vera.widget.VCompound;
 import net.snackbag.vera.widget.VWidget;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
@@ -435,5 +436,12 @@ public class MCVeraRenderer {
             }
             Vera.renderer.renderApp(app);
         }
+    }
+
+    public void renderCompoundChildren(VCompound<?> compound) {
+        drawContext.getMatrices().push();
+        drawContext.getMatrices().translate(-compound.getX(), -compound.getY(), 0);
+        for (VWidget<?> widget : compound.getWidgets()) widget.renderSelf();
+        drawContext.getMatrices().pop();
     }
 }
