@@ -404,8 +404,8 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public boolean isPointOverThis(int px, int py) {
         if (!visibilityConditionsPassed()) return false;
 
-        int widgetX = getHitboxX();
-        int widgetY = getHitboxY();
+        int widgetX = getHitboxX() + offsetX;
+        int widgetY = getHitboxY() + offsetY;
         int widgetWidth = getHitboxWidth();
         int widgetHeight = getHitboxHeight();
         return VGeometry.isInBox(px, py, widgetX, widgetY, widgetWidth, widgetHeight);
