@@ -1,7 +1,6 @@
 package net.snackbag.vera.widget;
 
 import net.snackbag.mcvera.MinecraftVera;
-import net.snackbag.mcvera.impl.MCVeraRenderer;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VAppAccess;
 import net.snackbag.vera.core.VRenderContext;
@@ -133,6 +132,12 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
     //
     // Rendering
     //
+    public void renderChildren(VRenderContext ctx) {
+        Vera.renderer.renderCompoundChildren(this);
+    }
+
+    public void renderAfterChildren(VRenderContext ctx) {}
+
     @Override
     public void renderSelf() {
         beforeRender();
@@ -143,8 +148,8 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
             Vera.renderer.pushContext(ctx);
 
             renderContent(ctx);
-
-            Vera.renderer.renderCompoundChildren(this);
+            renderChildren(ctx);
+            renderAfterChildren(ctx);
 
             renderBorder(ctx);
             renderOverlay(ctx);
