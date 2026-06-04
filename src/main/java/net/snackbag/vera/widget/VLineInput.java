@@ -1,8 +1,5 @@
 package net.snackbag.vera.widget;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.util.math.MathHelper;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.core.v4.V4Int;
@@ -11,7 +8,6 @@ import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VLineInputEvent;
 import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.modifier.VHasPlaceholderFont;
-import net.snackbag.vera.style.VEffectState;
 import net.snackbag.vera.core.VRenderContext;
 import net.snackbag.vera.util.VMath;
 import org.apache.commons.lang3.SystemUtils;
@@ -204,13 +200,13 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         // Handle copy
         if (isCtrlDown() && keyCode == GLFW.GLFW_KEY_C && !textSelection.isClear()) {
             String selectedText = getSelectedText();
-            MinecraftClient.getInstance().keyboard.setClipboard(selectedText);
+            Vera.setClipboard(selectedText);
             return;
         }
 
         // Handle paste
         if (isCtrlDown() && keyCode == GLFW.GLFW_KEY_V) {
-            String clipboard = MinecraftClient.getInstance().keyboard.getClipboard();
+            String clipboard = Vera.getClipboard();
             if (!clipboard.isEmpty()) {
                 if (!textSelection.isClear()) {
                     replaceSelectedText(clipboard);
@@ -224,7 +220,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
         // Handle cut
         if (isCtrlDown() && keyCode == GLFW.GLFW_KEY_X && !textSelection.isClear()) {
             String selectedText = getSelectedText();
-            MinecraftClient.getInstance().keyboard.setClipboard(selectedText);
+            Vera.setClipboard(selectedText);
             deleteSelectedText();
             return;
         }
@@ -523,11 +519,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     }
 
     private boolean isDown(int key) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client == null || client.getWindow() == null) {
-            return false;
-        }
-        return InputUtil.isKeyPressed(client.getWindow().getHandle(), key);
+        return Vera.isKeyDown(key);
     }
 
     private boolean isAltDown() {
