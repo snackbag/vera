@@ -71,7 +71,8 @@ public class VScrollBox extends VCompound<VScrollBox> {
         super.handleDelegatedEvent(event, ctx);
 
         if (ctx instanceof VWidgetEvent.MouseScroll e) {
-            setScrollY(getScrollY() + e.amount());
+            setScrollX(getScrollX() + e.horizontal());
+            setScrollY(getScrollY() + e.vertical());
         }
     }
 
