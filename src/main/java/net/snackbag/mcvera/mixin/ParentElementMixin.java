@@ -115,8 +115,8 @@ public interface ParentElementMixin {
     }
 
     @Unique
-    private void handleScrollEvents(@Nullable VWidget<?> widget, int x, int y, double amount) {
+    private void handleScrollEvents(@Nullable VWidget<?> widget, int mouseX, int mouseY, double amount) {
         if (widget == null) return;
-        widget.events.fire(new VWidgetEvent.MouseScroll(x, y, amount));
+        widget.events.fire(new VWidgetEvent.MouseScroll(mouseX, mouseY, amount));
     }
 }

@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class VWidgetEvent {
-    public record MouseScroll(int x, int y, double amount) implements VEventContext {
+    public record MouseScroll(int mouseX, int mouseY, double amount) implements VEventContext {
         @Override
         public String eventName() {
             return VEvents.Widget.SCROLL;
