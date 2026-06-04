@@ -140,18 +140,40 @@ public abstract class VElement {
         this._y = y;
     }
 
+    /**
+     * Width of the inner content of an element. Styles like padding or border size should be added
+     * through {@link #getEffectiveWidth()}.
+     *
+     * @return the inner width
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Height of the inner content of an element. Styles like padding or border size should be added
+     * through {@link #getEffectiveHeight()}.
+     *
+     * @return the inner height
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * The element's content width plus styles like padding or border size.
+     *
+     * @return the full width
+     */
     public int getEffectiveWidth() {
         return getWidth();
     }
 
+    /**
+     * The element's content height plus styles like padding or border size.
+     *
+     * @return the full size
+     */
     public int getEffectiveHeight() {
         return getHeight();
     }
