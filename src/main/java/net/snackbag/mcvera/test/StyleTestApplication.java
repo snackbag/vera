@@ -45,7 +45,6 @@ public class StyleTestApplication extends VeraApp {
         VLabel testLabel = new VLabel("hello there", 40, 10, this)
                 .alsoAddClass("label")
                 .alsoAdd();
-        testLabel.setStyle("scale", VEffectState.DEFAULT, 1.0f);
         testLabel.setStyle("scale", VEffectState.HOVERED, 1.2f);
         testLabel.setStyle("scale", VEffectState.CLICKED, 2.0f);
         testLabel.setStyle("transition", 100);

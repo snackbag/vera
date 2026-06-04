@@ -8,6 +8,7 @@ import net.snackbag.vera.widget.VWidget;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -36,6 +37,8 @@ public class VAnimation {
         List<VKeyframe> extendedFrames = new ArrayList<>();
         List<VKeyframe> loopingFrames = new ArrayList<>(keyframes);
         HashMap<String, StyleValue> styleMemory = new HashMap<>();
+        HashMap<String, StyleValue> styleDefaults = new HashMap<>();
+        HashSet<String> explicitlySet = new HashSet<>();
 
         loopingFrames.add(0, new VKeyframe(0, 0, VEasings.IMMEDIATE));
 
@@ -53,17 +56,24 @@ public class VAnimation {
                     }
 
                     styleMemory.put(style, frameStyles.get(style));
+                    explicitlySet.add(style);
                     continue;
                 }
 
                 // set default style
-                if (!styleMemory.containsKey(style)) {
-                    styleMemory.put(style, new StyleValue(
-                                    app.styleSheet.getReservation(style),
-                                    app.styleSheet.getKey(widget, style))
-                    );
+                if (!styleDefaults.containsKey(style)) {
+                    StyleValue sv = new StyleValue(
+                            app.styleSheet.getReservation(style),
+                            app.styleSheet.getKey(widget, style));
+                    styleMemory.put(style, sv);
+                    styleDefaults.put(style, sv);
                 }
-                frame.style(style, styleMemory.get(style).value()); // actual populating
+
+                // actual populating
+                StyleValue fallback = explicitlySet.contains(style)
+                        ? styleMemory.get(style)
+                        : styleDefaults.get(style);
+                frame.style(style, fallback.value());
             }
 
             extendedFrames.add(frame);
