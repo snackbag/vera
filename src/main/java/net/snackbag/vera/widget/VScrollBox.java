@@ -86,8 +86,14 @@ public class VScrollBox extends VCompound<VScrollBox> {
     }
 
     //
-    // Render bars
+    // Rendering
     //
+    @Override
+    public void renderChildren(VRenderContext ctx) {
+        ctx.withClip(0, 0, getWidth(), getHeight(), () -> {
+            super.renderChildren(ctx);
+        });
+    }
 
     @Override
     public void renderContent(VRenderContext ctx) {
