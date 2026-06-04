@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 
 public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public AnimationEngine animations = new AnimationEngine(this);
-    protected boolean hasTransparency = false;
+    public final LinkedHashSet<String> classes = new LinkedHashSet<>();
 
     public boolean focusOnClick = true;
     private boolean hovered = false;
@@ -36,7 +36,9 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     private VStyleState transitionOrigin = null;
     private boolean isTransitionUnwinding = false;
 
-    public final LinkedHashSet<String> classes = new LinkedHashSet<>();
+    protected int offsetX = 0;
+    protected int offsetY = 0;
+    protected boolean hasTransparency = false;
 
     public VWidget(int x, int y, int width, int height, VAppAccess app) {
         super(app, x, y, width, height);
@@ -175,7 +177,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         VStyleState state = createStyleState();
         VeraApp app = getApp();
         return new VRenderContext(
-                app.getX() + getX(), app.getY() + getY(),
+                app.getX() + offsetX + getX(), app.getY() + offsetY + getY(),
                 getEffectiveWidth(), getEffectiveHeight(),
                 getStyle("rotation", state), getStyle("scale", state),
                 hasTransparency
