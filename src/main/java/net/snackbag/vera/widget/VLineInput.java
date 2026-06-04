@@ -13,6 +13,7 @@ import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.modifier.VHasPlaceholderFont;
 import net.snackbag.vera.style.VEffectState;
 import net.snackbag.vera.core.VRenderContext;
+import net.snackbag.vera.util.VMath;
 import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
@@ -376,7 +377,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     }
 
     public void setTextViewport(int textViewport) {
-        this.textViewport = MathHelper.clamp(textViewport, 0, text.length());
+        this.textViewport = VMath.clamp(textViewport, 0, text.length());
     }
 
     public int getTextViewportBegin() {
@@ -398,7 +399,7 @@ public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPla
     }
 
     private void updateTextViewport() {
-        textViewport = MathHelper.clamp(textViewport, 0, text.length());
+        textViewport = VMath.clamp(textViewport, 0, text.length());
 
         // Cursor is before the viewport: snap left
         if (cursorPos < textViewport) {
