@@ -1,6 +1,5 @@
 package net.snackbag.vera;
 
-import net.minecraft.client.MinecraftClient;
 import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.mcvera.impl.MCVeraProvider;
 import net.snackbag.mcvera.impl.MCVeraRegistrar;
@@ -58,11 +57,11 @@ public class Vera {
     }
 
     public static int getMouseX() {
-        return (int) (MinecraftClient.getInstance().mouse.getX() / MinecraftClient.getInstance().getWindow().getScaleFactor());
+        return Vera.provider.getMouseX();
     }
 
     public static int getMouseY() {
-        return (int) (MinecraftClient.getInstance().mouse.getY() / MinecraftClient.getInstance().getWindow().getScaleFactor());
+        return Vera.provider.getMouseY();
     }
 
     public static int getScreenHeight() {
