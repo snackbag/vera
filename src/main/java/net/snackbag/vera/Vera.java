@@ -111,4 +111,16 @@ public class Vera {
     public static void scheduleToNextFrame(Runnable runnable) {
         nextFrameTasks.add(runnable);
     }
+
+    public static boolean isKeyDown(int glfwKeyCode) {
+        return Vera.provider.isKeyDown(glfwKeyCode);
+    }
+
+    public static String getClipboard() {
+        return Vera.provider.getClipboard();
+    }
+
+    public static void setClipboard(String content) {
+        Vera.provider.setClipboard(content);
+    }
 }

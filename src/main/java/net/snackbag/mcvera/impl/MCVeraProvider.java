@@ -1,12 +1,12 @@
 package net.snackbag.mcvera.impl;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.InputUtil;
 import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.mcvera.screen.VeraVisibilityScreen;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
-import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.event.VWidgetEvent;
 import net.snackbag.vera.flag.VAppFlag;
@@ -148,5 +148,21 @@ public class MCVeraProvider {
                 didSomething.set(true);
             }
         });
+    }
+
+    public boolean isKeyDown(int glfwKeyCode) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null || client.getWindow() == null) {
+            return false;
+        }
+        return InputUtil.isKeyPressed(client.getWindow().getHandle(), glfwKeyCode);
+    }
+
+    public void setClipboard(String content) {
+        MinecraftClient.getInstance().keyboard.setClipboard(content);
+    }
+
+    public String getClipboard() {
+        return MinecraftClient.getInstance().keyboard.getClipboard();
     }
 }
