@@ -64,4 +64,12 @@ public class VStyleState {
     public int hashCode() {
         return Objects.hash(userState, effectState);
     }
+
+    @Override
+    public String toString() {
+        return "VStyleState{" +
+                "userState=" + userState +
+                ", effectState=" + effectState +
+                '}';
+    }
 }
