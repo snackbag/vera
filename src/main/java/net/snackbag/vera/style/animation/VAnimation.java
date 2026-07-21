@@ -18,17 +18,10 @@ public class VAnimation {
     public VLoopMode loopMode;
     public List<VKeyframe> keyframes;
 
-    public VEasing unwindEasing;
-    public int unwindTime;
-    public boolean unwindAtEnd;
-
-    public VAnimation(String name, VLoopMode loopMode, VEasing unwindEasing, int unwindTime, boolean unwindAtEnd, List<VKeyframe> keyframes) {
+    public VAnimation(String name, VLoopMode loopMode, List<VKeyframe> keyframes) {
         this.name = name.toLowerCase();
         this.loopMode = loopMode;
         this.keyframes = keyframes;
-        this.unwindEasing = unwindEasing;
-        this.unwindTime = unwindTime;
-        this.unwindAtEnd = unwindAtEnd;
     }
 
     public CompiledAnimation compile(VeraApp app, VWidget<?> widget) {
@@ -93,7 +86,6 @@ public class VAnimation {
                 app,
                 name, index.totalDuration,
                 loopMode,
-                unwindEasing, unwindTime, unwindAtEnd,
                 extendedFrames, index.styles
         );
     }
@@ -108,9 +100,6 @@ public class VAnimation {
         private final List<VKeyframe> keyframes = new ArrayList<>();
 
         private VLoopMode loopMode = VLoopMode.NONE;
-        private VEasing unwindEasing = VEasings.getDefault();
-        private int unwindTime = 0;
-        private boolean unwindAtEnd = false;
 
         public Builder(String name) {
             this.name = name;
@@ -137,28 +126,8 @@ public class VAnimation {
             return this;
         }
 
-        public Builder unwindEasing(VEasing easing) {
-            this.unwindEasing = easing;
-            return this;
-        }
-
-        public Builder unwindTime(int ms) {
-            this.unwindTime = ms;
-            return this;
-        }
-
-        public Builder relativeUnwindTime() {
-            this.unwindTime = -1;
-            return this;
-        }
-
-        public Builder unwindAtEnd() {
-            this.unwindAtEnd = true;
-            return this;
-        }
-
         public VAnimation build() {
-            return new VAnimation(name, loopMode, unwindEasing, unwindTime, unwindAtEnd, keyframes);
+            return new VAnimation(name, loopMode, keyframes);
         }
     }
 }

@@ -18,9 +18,6 @@ public class CompiledAnimation {
 
     public final String name;
     public final VLoopMode loopMode;
-    public final VEasing unwindEasing;
-    public final int unwindTime;
-    public final boolean unwindAtEnd;
 
     /**
      * Sum of all keyframes's transition time + stay time
@@ -44,7 +41,6 @@ public class CompiledAnimation {
             VeraApp app,
             String name, int duration,
             VLoopMode loopMode,
-            VEasing unwindEasing, int unwindTime, boolean unwindAtEnd,
             List<VKeyframe> keyframes, List<String> keys
     ) {
         this.app = app;
@@ -52,17 +48,14 @@ public class CompiledAnimation {
         this.name = name;
         this.duration = duration;
         this.loopMode = loopMode;
-        this.unwindEasing = unwindEasing;
-        this.unwindTime = unwindTime;
-        this.unwindAtEnd = unwindAtEnd;
         this.keyframes = keyframes;
         this.keys = keys;
     }
 
     @Override
     public String toString() {
-        return "CompiledAnimation{name='%s', duration='%s', loopMode='%s' unwindEasing='%s', unwindTime=%s, unwindAtEnd=%s, keyframeCount=%s}"
-                .formatted(name, duration, loopMode, unwindEasing, unwindTime, unwindAtEnd, keyframes.size());
+        return "CompiledAnimation{name='%s', duration='%s', loopMode='%s', keyframeCount=%s}"
+                .formatted(name, duration, loopMode, keyframes.size());
     }
 
     public int getKeyframeIndexAtTime(int time) {

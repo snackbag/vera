@@ -2,9 +2,9 @@ package net.snackbag.vera.style.animation;
 
 import net.snackbag.mcvera.MinecraftVera;
 import net.snackbag.vera.event.VAnimationEvent;
-import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.style.StyleValueType;
 import net.snackbag.vera.widget.VWidget;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,11 +29,6 @@ public class AnimationEngine {
         widget.events.fire(new VAnimationEvent.Begin(animation));
     }
 
-    public void startOrRewind(VAnimation animation) {
-        if (active.containsKey(animation.name)) rewind(animation);
-        else start(animation);
-    }
-
     public void stop(VAnimation animation) {
         stop(animation.name);
     }
@@ -47,38 +42,6 @@ public class AnimationEngine {
         PlaybackContext ctx = active.get(name);
         widget.events.fire(new VAnimationEvent.Finish(ctx.animation, ctx.startTime));
         active.remove(name);
-    }
-
-    public void unwind(VAnimation animation) {
-        unwind(animation.name);
-    }
-
-    public void unwind(String name) {
-        if (active.containsKey(name)) {
-            active.get(name).unwind();
-            widget.events.fire(new VAnimationEvent.Unwind(active.get(name).animation));
-        }
-        else MinecraftVera.LOGGER.warn("Couldn't unwind %s, because it's not active".formatted(name));
-    }
-
-    public void rewind(VAnimation animation) {
-        rewind(animation.name);
-    }
-
-    public void rewind(String name) {
-        if (!active.containsKey(name)) {
-            MinecraftVera.LOGGER.warn("Couldn't rewind %s, because it's not active".formatted(name));
-            return;
-        }
-
-        PlaybackContext ctx = active.get(name);
-        if (ctx.getWindingProgress() <= 0.0f) {
-            MinecraftVera.LOGGER.warn("Couldn't rewind %s, because it's not unwinding".formatted(name));
-            return;
-        }
-
-        ctx.rewind();
-        widget.events.fire(new VAnimationEvent.Rewind(ctx.animation));
     }
 
     public <T> T animateStyle(String key, T value) {
@@ -114,11 +77,7 @@ public class AnimationEngine {
             T kfEase = (T) reservation.animationTransition.apply( // ease keyframe transition
                     from.styles.get(key), to.styles.get(key),
                     to.easing, delta);
-            T windingEase = (T) reservation.animationTransition.apply( // ease winding
-                    kfEase, value,
-                    animation.unwindEasing, ctx.getWindingProgress()
-            );
-            return windingEase;
+            return kfEase;
         }
 
         return value;
@@ -130,17 +89,8 @@ public class AnimationEngine {
         for (Map.Entry<String, PlaybackContext> entry : copies.entrySet()) {
             PlaybackContext ctx = entry.getValue();
             String name = entry.getKey();
-            CompiledAnimation animation = ctx.animation;
 
-            ctx.potentiallyResetWinding();
-
-            if (animation.unwindAtEnd && animation.loopMode == VLoopMode.NONE && ctx.getProgress() >= 1.0f) {
-                unwind(name);
-            }
-
-            if (ctx.getWindingProgress() >= 1.0f || (!animation.unwindAtEnd && ctx.getProgress() >= 1.0f && (ctx.getWindingProgress() == 0.0f || ctx.getWindingProgress() == 1.0f))) {
-                stop(name);
-            }
+            if (ctx.getProgress() >= 1.0f) stop(name);
         }
     }
 
@@ -150,5 +100,9 @@ public class AnimationEngine {
 
     public Set<String> getActive() {
         return active.keySet();
+    }
+
+    public @Nullable PlaybackContext getActive(String name) {
+        return active.getOrDefault(name, null);
     }
 }

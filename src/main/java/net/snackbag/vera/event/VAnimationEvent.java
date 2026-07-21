@@ -17,19 +17,4 @@ public class VAnimationEvent {
             return VEvents.Animation.FINISH;
         }
     }
-
-    public record Rewind(CompiledAnimation animation) implements VEventContext {
-        @Override
-        public String eventName() {
-            return VEvents.Animation.REWIND_BEGIN;
-        }
-    }
-
-
-    public record Unwind(CompiledAnimation animation) implements VEventContext {
-        @Override
-        public String eventName() {
-            return VEvents.Animation.UNWIND_BEGIN;
-        }
-    }
 }
