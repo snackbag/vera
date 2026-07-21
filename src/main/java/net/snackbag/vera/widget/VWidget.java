@@ -1,5 +1,6 @@
 package net.snackbag.vera.widget;
 
+import net.snackbag.mcvera.MinecraftVera;
 import net.snackbag.vera.VElement;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
@@ -10,7 +11,7 @@ import net.snackbag.vera.layout.VLayout;
 import net.snackbag.vera.style.VEffectState;
 import net.snackbag.vera.style.VStyleState;
 import net.snackbag.vera.style.animation.AnimationEngine;
-import net.snackbag.vera.style.animation.CompiledAnimation;
+import net.snackbag.vera.style.animation.PlaybackContext;
 import net.snackbag.vera.style.animation.VAnimation;
 import net.snackbag.vera.style.animation.easing.VEasing;
 import net.snackbag.vera.util.DragHandler;
@@ -33,8 +34,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     private VStyleState handledPrevStyleState = VEffectState.DEFAULT.asStyleState(); // constantly updates
     private VStyleState prevStyleState = VEffectState.DEFAULT.asStyleState(); // updates max once per frame, can be seen as the definite result
 
-    private VStyleState transitionOrigin = null;
-    private boolean isTransitionUnwinding = false;
+    private VStyleState transitionTarget = null;
 
     protected int offsetX = 0;
     protected int offsetY = 0;
@@ -120,26 +120,6 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         for (String animation : animations.getActive()) {
             stopAnimation(animation);
         }
-    }
-
-    public void startOrRewindAnimation(VAnimation animation) {
-        animations.startOrRewind(animation);
-    }
-
-    public void unwindAnimation(VAnimation animation) {
-        unwindAnimation(animation.name);
-    }
-
-    public void unwindAnimation(String animation) {
-        animations.unwind(animation);
-    }
-
-    public void rewindAnimation(VAnimation animation) {
-        rewindAnimation(animation.name);
-    }
-
-    public void rewindAnimation(String animation) {
-        animations.rewind(animation);
     }
 
     public boolean isAnimationActive(VAnimation animation) {
@@ -246,34 +226,48 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         VeraApp app = getApp();
         var state = createStyleState();
 
-        if (!state.equals(prevStyleState)) {
+        Transition: if (!state.equals(prevStyleState)) {
             Integer transitionTime = app.styleSheet.getKey(this, "transition", state);
             VEasing transitionEasing = app.styleSheet.getKey(this, "transition-easing", state);
 
-            Transition: if (transitionTime > 0) {
-                if (transitionOrigin == state) {
-                    if (isTransitionUnwinding) rewindAnimation(VAnimation.INTERNAL_TRANSITION_NAME);
-                    else unwindAnimation(VAnimation.INTERNAL_TRANSITION_NAME);
-                    break Transition;
+            if (transitionTime == null || transitionEasing == null) break Transition;
+
+            Animation: if (transitionTime > 0) {
+                VAnimation.Builder builder = new VAnimation.Builder(VAnimation.INTERNAL_TRANSITION_NAME);
+
+                // routing
+                if (transitionTarget == prevStyleState) { // when swapped
+                    PlaybackContext playback = animations.getActive(VAnimation.INTERNAL_TRANSITION_NAME);
+                    if (playback == null) {
+                        MinecraftVera.LOGGER.warn("Playback context of transition animation is null, even though transition is still active.");
+                        break Animation;
+                    }
+                    transitionTime = playback.getRelativeTime();
+
+                    // population
+                    builder.keyframe(0, 1, frame -> {
+                        for (String key : app.styleSheet.getKeysStacked(this, prevStyleState)) {
+                            frame.style(key, getStyle(key));
+                        }
+                    });
+                } else { // completely different transition
+                    // population
+                    builder.keyframe(0, 1, frame -> {
+                        for (String key : app.styleSheet.getKeysStacked(this, prevStyleState)) {
+                            frame.style(key, getStyle(key, prevStyleState));
+                        }
+                    });
                 }
 
-                VAnimation.Builder builder = new VAnimation.Builder(VAnimation.INTERNAL_TRANSITION_NAME)
-                        .relativeUnwindTime()
-                        .unwindEasing(transitionEasing);
+                transitionTarget = state;
 
-                builder.keyframe(0, 1, frame -> {
-                    for (String key : app.styleSheet.getKeysStacked(this, prevStyleState)) {
-                        frame.style(key, getStyle(key, prevStyleState));
-                    }
-                });
-
+                // population
                 builder.keyframe(transitionTime - 1, 0, frame -> {
-                    for (String key : app.styleSheet.getKeysStacked(this, state)) {
-                        frame.style(key, app.styleSheet.getKey(this, key, state));
+                    for (String key : app.styleSheet.getKeysStacked(this, transitionTarget)) {
+                        frame.style(key, app.styleSheet.getKey(this, key, transitionTarget));
                     }
                 });
 
-                transitionOrigin = prevStyleState;
                 animate(builder.build(), true);
             }
 
@@ -385,14 +379,6 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         events.register(VEvents.Animation.BEGIN, ctx);
     }
 
-    public void onAnimationUnwindBegin(Consumer<VAnimationEvent.Unwind> ctx) {
-        events.register(VEvents.Animation.UNWIND_BEGIN, ctx);
-    }
-
-    public void onAnimationRewindBegin(Consumer<VAnimationEvent.Rewind> ctx) {
-        events.register(VEvents.Animation.REWIND_BEGIN, ctx);
-    }
-
     public void onAnimationFinish(Consumer<VAnimationEvent.Finish> ctx) {
         events.register(VEvents.Animation.FINISH, ctx);
     }
@@ -435,14 +421,11 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
             }
 
             case VEvents.Animation.FINISH -> {
-                CompiledAnimation animation = ((VAnimationEvent.Finish) ctx).animation();
-                if (animation.name.equals(VAnimation.INTERNAL_TRANSITION_NAME)) {
-                    transitionOrigin = null;
-                    isTransitionUnwinding = false;
+                if (((VAnimationEvent.Finish) ctx).animation().name.equals(VAnimation.INTERNAL_TRANSITION_NAME)) {
+                    System.out.println("Finished transition");
+                    transitionTarget = null;
                 }
             }
-            case VEvents.Animation.UNWIND_BEGIN -> isTransitionUnwinding = true;
-            case VEvents.Animation.REWIND_BEGIN -> isTransitionUnwinding = false;
         }
     }
 
@@ -451,6 +434,10 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         updateIfNeeded();
     }
 
+    /**
+     * Executes {@link #update()} if the current style state has changed.
+     * Called in {@link #afterBuiltinEvent(String, VEventContext)}
+     */
     private void updateIfNeeded() {
         var state = createStyleState();
         if (!state.equals(handledPrevStyleState)) {
