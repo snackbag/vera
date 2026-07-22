@@ -52,4 +52,14 @@ public class V4Int {
     public V4Int with4(int v4) {
         return new V4Int(v1, v2, v3, v4);
     }
+
+    @Override
+    public String toString() {
+        return "V4Int{" +
+                "v1=" + v1 +
+                ", v2=" + v2 +
+                ", v3=" + v3 +
+                ", v4=" + v4 +
+                '}';
+    }
 }

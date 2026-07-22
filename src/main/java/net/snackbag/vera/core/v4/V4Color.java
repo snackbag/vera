@@ -54,4 +54,14 @@ public class V4Color {
     public V4Color with4(VColor v4) {
         return new V4Color(v1, v2, v3, v4);
     }
+
+    @Override
+    public String toString() {
+        return "V4Color{" +
+                "v1=" + v1 +
+                ", v2=" + v2 +
+                ", v3=" + v3 +
+                ", v4=" + v4 +
+                '}';
+    }
 }
