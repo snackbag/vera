@@ -58,6 +58,45 @@ public class CompiledAnimation {
                 .formatted(name, duration, loopMode, keyframes.size());
     }
 
+    public String toBeautifulString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Animation: ").append(name).append('\n');
+        sb.append("Duration : ").append(duration).append(" ms\n");
+        sb.append("LoopMode : ").append(loopMode).append('\n');
+        sb.append("Keyframes: ").append(keyframes.size()).append("\n\n");
+
+        for (int i = 0; i < keyframes.size(); i++) {
+            VKeyframe frame = keyframes.get(i);
+            int start = getWhenKeyframe(frame);
+
+            sb.append('[').append(i).append("] @").append(start).append(" ms\n");
+            sb.append("├─ Transition : ").append(frame.transitionTime).append(" ms\n");
+            sb.append("├─ Stay       : ").append(frame.stayTime).append(" ms\n");
+            sb.append("├─ Easing     : ").append(frame.easing).append('\n');
+            sb.append("└─ Styles\n");
+
+            int styleCount = frame.styles.size();
+            int index = 0;
+
+            for (var entry : frame.styles.entrySet()) {
+                boolean last = ++index == styleCount;
+
+                sb.append("   ")
+                        .append(last ? "└─ " : "├─ ")
+                        .append(entry.getKey())
+                        .append(" = ")
+                        .append(entry.getValue())
+                        .append('\n');
+            }
+
+            if (styleCount == 0) sb.append("   └─ <none>\n");
+            if (i + 1 < keyframes.size()) sb.append('\n');
+        }
+
+        return sb.toString();
+    }
+
     public int getKeyframeIndexAtTime(int time) {
         int bufferTime = 0;
 
