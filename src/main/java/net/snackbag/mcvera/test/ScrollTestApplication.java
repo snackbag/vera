@@ -22,6 +22,6 @@ public class ScrollTestApplication extends VeraApp {
         box.setStyle("transition", 100);
 
         VLabel label = new VLabel(box, "Hi there :)").alsoAdd();
-        label.modifyStyleColor("font", VEffectState.HOVERED).rgb(VColor.MC_GOLD);
+        label.modifyStyleFontColor("font", VEffectState.HOVERED).rgb(VColor.MC_GOLD);
     }
 }
