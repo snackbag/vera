@@ -17,6 +17,7 @@ import net.snackbag.vera.style.animation.easing.VEasing;
 import net.snackbag.vera.util.DragHandler;
 import net.snackbag.vera.core.VRenderContext;
 import net.snackbag.vera.util.VGeometry;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -101,19 +102,39 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     }
 
     public VFont.FontModifier modifyStyleFont(String key) {
-        return modifyStyleFont(key, null);
+        return modifyStyleFont(key, VEffectState.DEFAULT);
     }
 
     public VFont.FontModifier modifyStyleFont(String key, @Nullable VEffectState state) {
         return getApp().styleSheet.modifyKeyAsFont(this, key, state);
     }
 
-    public VColor.ColorModifier modifyStyleFontColor(String key) {
-        return modifyFontColor(key, null);
+    public VFont.FontModifier modifyStyleFont(String key, @NotNull VStyleState state) {
+        return getApp().styleSheet.modifyKeyAsFont(this, key, state);
     }
 
-    public VColor.ColorModifier modifyFontColor(String key, @Nullable VEffectState state) {
+    public VColor.ColorModifier modifyStyleFontColor(String key) {
+        return modifyStyleFontColor(key, VEffectState.DEFAULT);
+    }
+
+    public VColor.ColorModifier modifyStyleFontColor(String key, @Nullable VEffectState state) {
         return getApp().styleSheet.modifyKeyAsFontColor(this, key, state);
+    }
+
+    public VColor.ColorModifier modifyStyleFontColor(String key, @NotNull VStyleState state) {
+        return getApp().styleSheet.modifyKeyAsFontColor(this, key, state);
+    }
+
+    public VColor.ColorModifier modifyStyleColor(String key) {
+        return getApp().styleSheet.modifyKeyAsColor(this, key);
+    }
+
+    public VColor.ColorModifier modifyStyleColor(String key, @Nullable VEffectState state) {
+        return getApp().styleSheet.modifyKeyAsColor(this, key, state);
+    }
+
+    public VColor.ColorModifier modifyStyleColor(String key, @NotNull VStyleState state) {
+        return getApp().styleSheet.modifyKeyAsColor(this, key, state);
     }
 
     public void animate(VAnimation animation) {
