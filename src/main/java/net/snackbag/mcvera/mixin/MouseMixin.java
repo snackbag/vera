@@ -54,7 +54,7 @@ public abstract class MouseMixin {
     }
 
     @Inject(method = "onMouseScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getOverlay()Lnet/minecraft/client/gui/screen/Overlay;"))
-    private void mcvera$onMouseScroll(long window, double horizontal, double vertical, CallbackInfo ci, @Local(ordinal = 2) double d) {
+    private void mcvera$onMouseScroll(long window, double horizontal, double vertical, CallbackInfo ci, @Local(name = "d") double d) {
         // Note for good measure: vanilla doesn't apply sensitivity to horizontal, but only vertical. Therefore, we
         // use d for vertical and horizontal for horizontal
 
