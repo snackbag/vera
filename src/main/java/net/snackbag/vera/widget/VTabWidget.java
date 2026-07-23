@@ -11,7 +11,6 @@ import net.snackbag.vera.event.VEventContext;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VTabWidgetEvent;
 import net.snackbag.vera.layout.VHLayout;
-import net.snackbag.vera.modifier.VHasFont;
 import net.snackbag.vera.style.VStyleState;
 import net.snackbag.vera.style.VUserState;
 import org.jetbrains.annotations.Nullable;
@@ -142,7 +141,7 @@ public class VTabWidget extends VCompound<VTabWidget> {
         return Collections.unmodifiableList((List) getWidgets());
     }
 
-    public static class Tab extends VWidget<Tab> implements VHasFont {
+    public static class Tab extends VWidget<Tab> {
         private String name;
         private final VTabWidget parent;
 

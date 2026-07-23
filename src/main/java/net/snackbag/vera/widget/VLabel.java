@@ -4,11 +4,9 @@ import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.core.v4.V4Int;
 import net.snackbag.vera.flag.VHAlignmentFlag;
-import net.snackbag.vera.modifier.VHasFont;
-import net.snackbag.vera.style.VEffectState;
 import net.snackbag.vera.core.VRenderContext;
 
-public class VLabel extends VWidget<VLabel> implements VHasFont {
+public class VLabel extends VWidget<VLabel> {
     private String text;
     private VHAlignmentFlag alignment;
 

@@ -28,11 +28,11 @@ public class DemoApplication extends VeraApp {
         centerLayout.alignment = VLayoutAlignmentFlag.CENTER;
 
         VLabel label = new VLabel("Not clicked yet", this).alsoAddTo(centerLayout);
-        label.modifyFontColor().rgb(VColor.white());
+        label.modifyStyleFontColor("font").rgb(VColor.white());
 
         VLabel button = new VLabel("Click me", this).alsoAddTo(centerLayout);
 
-        button.modifyFontColor().rgb(VColor.of(95, 180, 0));
+        button.modifyStyleFontColor("font").rgb(VColor.of(95, 180, 0));
         button.setStyle("background-color", VColor.white());
         button.setStyle("padding", 4);
         button.setStyle("overlay", VEffectState.HOVERED, VColor.white().withOpacity(0.5f));

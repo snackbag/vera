@@ -6,8 +6,6 @@ import net.snackbag.vera.core.v4.V4Int;
 import net.snackbag.vera.event.VEventContext;
 import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VLineInputEvent;
-import net.snackbag.vera.modifier.VHasFont;
-import net.snackbag.vera.modifier.VHasPlaceholderFont;
 import net.snackbag.vera.core.VRenderContext;
 import net.snackbag.vera.util.VMath;
 import org.apache.commons.lang3.SystemUtils;
@@ -16,7 +14,7 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.function.Consumer;
 
-public class VLineInput extends VWidget<VLineInput> implements VHasFont, VHasPlaceholderFont {
+public class VLineInput extends VWidget<VLineInput> {
     private String text;
     private String placeholderText;
 
