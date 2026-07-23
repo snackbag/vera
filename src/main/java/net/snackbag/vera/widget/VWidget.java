@@ -431,7 +431,6 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
 
             case VEvents.Animation.FINISH -> {
                 if (((VAnimationEvent.Finish) ctx).animation().name.equals(VAnimation.INTERNAL_TRANSITION_NAME)) {
-                    System.out.println("Finished transition");
                     transitionTarget = null;
                 }
             }
