@@ -19,7 +19,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class MCVeraProvider {
     public void handleAppInitialization(VeraApp app) {
         MCVeraData.applications.add(app);
-        Vera.registrar.applyStandardWidgetStyles(app.styleSheet);
         MinecraftClient.getInstance().send(app::init);
         MinecraftClient.getInstance().send(app::update);
     }

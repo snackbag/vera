@@ -1,5 +1,6 @@
 package net.snackbag.vera.style;
 
+import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.widget.VWidget;
@@ -15,6 +16,16 @@ public class VStyleSheet {
     private final StyleContainer<Class<?>> standardStyles = new StyleContainer<>(); // like HTML <tags/>
 
     private HashMap<String, StyleValueType> typeRegistry = new HashMap<>();
+
+    public VStyleSheet() {
+        this(true);
+    }
+
+    public VStyleSheet(boolean loadDefaultTypeRegistry) {
+        if (loadDefaultTypeRegistry) {
+            Vera.registrar.applyStandardWidgetStyles(this);
+        }
+    }
 
     public @Nullable <T> T getKey(VWidget<?> widget, String key) {
         return getKey(widget, key, VEffectState.DEFAULT);
