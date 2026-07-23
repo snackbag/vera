@@ -63,10 +63,6 @@ public class VLabel extends VWidget<VLabel> {
         this.height = Vera.provider.getTextHeight(text, font);
     }
 
-    public VColor.ColorModifier modifyColor(String key) {
-        return getApp().styleSheet.modifyKeyAsColor(this, key);
-    }
-
     @Override
     public void renderContent(VRenderContext ctx) {
         var state = createStyleState();
