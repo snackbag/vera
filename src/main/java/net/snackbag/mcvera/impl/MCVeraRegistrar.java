@@ -5,9 +5,7 @@ import net.snackbag.vera.style.standard.VStandardStyle;
 import net.snackbag.vera.style.VStyleSheet;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Main Vera registry manager. Use with caution: there are (almost) no
@@ -15,7 +13,7 @@ import java.util.List;
  * implement registrar functionality than touching it yourself.
  */
 public class MCVeraRegistrar {
-    private final List<VStandardStyle> standardStyles = new ArrayList<>();
+    private final Set<VStandardStyle> standardStyles = new HashSet<>();
     private final HashMap<String, VEasing> easings = new HashMap<>();
 
     public void registerStandardStyle(VStandardStyle style) {
