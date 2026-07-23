@@ -25,7 +25,7 @@ public class VLineInput extends VWidget<VLineInput> {
     private int textViewport = 0;
 
     public VLineInput(VAppAccess app) {
-        super(0, 0, 100, 20, app);
+        super(app, 0, 0, 100, 20);
 
         this.text = "";
         this.placeholderText = "";

@@ -23,8 +23,8 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
 
     private final EventHandler delegatedEvents;
 
-    public VCompound(int x, int y, int width, int height, VLayout layout, VAppAccess app) {
-        super(x, y, width, height, app);
+    public VCompound(VAppAccess app, VLayout layout, int x, int y, int width, int height) {
+        super(app, x, y, width, height);
 
         this.delegatedEvents = new EventHandler(this);
         this.delegatedEvents.preprocessor = this::handleDelegatedEvent;

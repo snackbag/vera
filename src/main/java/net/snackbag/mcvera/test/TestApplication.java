@@ -48,7 +48,7 @@ public class TestApplication extends VeraApp {
         input.setStyle("background", VColor.white());
         setFocusedWidget(input);
 
-        VLabel label = new VLabel("Hello world!", this).alsoAdd();
+        VLabel label = new VLabel(this, "Hello world!").alsoAdd();
 
         label.onMouseDrag((ctx) -> setCursorShape(switch (ctx.button()) {
             case LEFT -> VCursorShape.VERTICAL_RESIZE;
@@ -74,7 +74,7 @@ public class TestApplication extends VeraApp {
             label.setText("Not hovered");
         });
 
-        VLabel centerLabel = new VLabel("CENTER", 220, 10, 100, 16, this).alsoAdd();
+        VLabel centerLabel = new VLabel(this, "CENTER", 220, 10, 100, 16).alsoAdd();
         centerLabel.setAlignment(VHAlignmentFlag.CENTER);
         centerLabel.setStyle("background", VColor.black());
         centerLabel.modifyStyleFontColor("font").rgb(255, 255, 255);
@@ -82,7 +82,7 @@ public class TestApplication extends VeraApp {
         centerLabel.setStyle("border-size", 5, 10, 8, 16);
         centerLabel.setStyle("cursor", VCursorShape.ALL_RESIZE);
 
-        VLabel rightLabel = new VLabel("RIGHT", 100, 10, 100, 16, this).alsoAdd();
+        VLabel rightLabel = new VLabel(this, "RIGHT", 100, 10, 100, 16).alsoAdd();
         rightLabel.setAlignment(VHAlignmentFlag.RIGHT);
         rightLabel.setStyle("background", VColor.black());
         rightLabel.modifyStyleFontColor("font").rgb(255, 255, 255);
@@ -90,9 +90,9 @@ public class TestApplication extends VeraApp {
         rightLabel.setStyle("border-size", 1);
         rightLabel.onRightClick(() -> System.out.println(Vera.openFileSelector("test", Path.of("/Volumes/Media"), null)));
 
-        VRect image = new VRect(
+        VRect image = new VRect(this,
                 new VImage("minecraft:textures/block/dirt.png"),
-                0, 30, 32, 32, this).alsoAdd();
+                0, 30, 32, 32).alsoAdd();
         image.onMiddleClick(this::hideCursor);
         image.onMiddleClickRelease(this::showCursor);
         image.setStyle("background", VEffectState.HOVERED, "minecraft:textures/block/diamond_block.png");
@@ -122,7 +122,7 @@ public class TestApplication extends VeraApp {
         tabs.addTab("other test", box);
         tabs.setActiveTab(0);
 
-        VRect rotationRect = new VRect(VColor.black(), this).alsoAdd();
+        VRect rotationRect = new VRect(this, VColor.black()).alsoAdd();
         rotationRect.onLeftClick(() -> input.animate(rotationAnimation));
         rotationRect.move(20, 200);
     }

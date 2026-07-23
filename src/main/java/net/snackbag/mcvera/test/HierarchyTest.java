@@ -48,10 +48,10 @@ public class HierarchyTest {
             styleSheet.setKey(VLabel.class, "font", VFont.create().withColor(VColor.MC_AQUA).withSize(12), VEffectState.HOVERED);
             styleSheet.setKey(VLabel.class, "transition", 250);
 
-            VRect mover = new VRect(VColor.black(), 0, 0, 100, 8, this).alsoAdd();
+            VRect mover = new VRect(this, VColor.black(), 0, 0, 100, 8).alsoAdd();
             mover.onMouseDrag((ctx) -> move(getX() + ctx.moveX(), getY() + ctx.moveY()));
 
-            VLabel label = new VLabel(name, this).alsoAdd();
+            VLabel label = new VLabel(this, name).alsoAdd();
             label.move(1);
         }
 

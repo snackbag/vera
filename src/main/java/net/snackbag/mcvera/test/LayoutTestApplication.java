@@ -15,15 +15,15 @@ public class LayoutTestApplication extends VeraApp {
         new VShortcut(this, "escape", this::hide);
 
         VLayout layout = new VVLayout(this, 0, 0);
-        new VLabel("I'm a test", this).alsoAddTo(layout);
-        new VLabel("I'm another test", this).alsoAddTo(layout);
+        new VLabel(this, "I'm a test").alsoAddTo(layout);
+        new VLabel(this, "I'm another test").alsoAddTo(layout);
 
         VLayout secondLayout = new VHLayout(layout);
-        new VLabel("1", this).alsoAddTo(secondLayout);
-        new VLabel("2", this).alsoAddTo(secondLayout);
+        new VLabel(this, "1").alsoAddTo(secondLayout);
+        new VLabel(this, "2").alsoAddTo(secondLayout);
 
         VLayout thirdLayout = new VVLayout(secondLayout);
-        new VLabel("oh?", this).alsoAddTo(thirdLayout);
-        new VLabel("oh!!!!", this).alsoAddTo(thirdLayout);
+        new VLabel(this, "oh?").alsoAddTo(thirdLayout);
+        new VLabel(this, "oh!!!!").alsoAddTo(thirdLayout);
     }
 }

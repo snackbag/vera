@@ -30,7 +30,7 @@ public class StyleTestApplication extends VeraApp {
         mergeStyleSheet(createStyleSheet());
 
         // Animations
-        VRect testRect = new VRect(VColor.black(), this).alsoAdd();
+        VRect testRect = new VRect(this, VColor.black()).alsoAdd();
         testRect.move(10);
 
         testRect.onLeftClick(() -> testRect.animations.start(longTestAnimation));
@@ -41,7 +41,7 @@ public class StyleTestApplication extends VeraApp {
         testRect.setStyle("background", VEffectState.CLICKED, VColor.MC_RED);
 
         // Moving & classes
-        VLabel testLabel = new VLabel("hello there", 40, 10, this)
+        VLabel testLabel = new VLabel(this, "hello there", 40, 10)
                 .alsoAddClass("label")
                 .alsoAdd();
         testLabel.setStyle("scale", VEffectState.HOVERED, 1.2f);

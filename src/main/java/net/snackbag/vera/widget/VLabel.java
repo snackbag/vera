@@ -10,21 +10,21 @@ public class VLabel extends VWidget<VLabel> {
     private String text;
     private VHAlignmentFlag alignment;
 
-    public VLabel(String text, int x, int y, int width, int height, VAppAccess app) {
-        super(x, y, width, height, app);
+    public VLabel(VAppAccess app, String text, int x, int y, int width, int height) {
+        super(app, x, y, width, height);
 
         this.text = text;
         this.focusOnClick = false;
         alignment = VHAlignmentFlag.LEFT;
     }
 
-    public VLabel(String text, int x, int y, VAppAccess app) {
-        this(text, x, y, 100, 16, app);
+    public VLabel(VAppAccess app, String text, int x, int y) {
+        this(app, text, x, y, 100, 16);
         adjustSize();
     }
 
-    public VLabel(String text, VAppAccess app) {
-        this(text, 0, 0, 100, 16, app);
+    public VLabel(VAppAccess app, String text) {
+        this(app, text, 0, 0, 100, 16);
         adjustSize();
     }
 

@@ -17,7 +17,7 @@ public class VCheckBox extends VWidget<VCheckBox> {
     }
 
     public VCheckBox(VAppAccess app, int width, int height) {
-        super(0, 0, width, height, app);
+        super(app, 0, 0, width, height);
 
         this.checked = false;
     }

@@ -22,15 +22,15 @@ public class LayoutAlignmentTestApplication extends VeraApp {
 
         left = new VHLayout(this, 0, 0);
         left.alignment = VLayoutAlignmentFlag.START;
-        new VLabel("left", this).alsoAddTo(left);
+        new VLabel(this, "left").alsoAddTo(left);
 
         center = new VHLayout(this, 0, 0);
         center.alignment = VLayoutAlignmentFlag.CENTER;
-        new VLabel("center", this).alsoAddTo(center);
+        new VLabel(this, "center").alsoAddTo(center);
 
         right = new VHLayout(this, 0, 0);
         right.alignment = VLayoutAlignmentFlag.END;
-        new VLabel("right", this).alsoAddTo(right);
+        new VLabel(this, "right").alsoAddTo(right);
     }
 
     @Override

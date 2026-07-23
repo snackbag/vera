@@ -10,8 +10,8 @@ public class VScrollBox extends VCompound<VScrollBox> {
     private double scrollX = 0;
     private double scrollY = 0;
 
-    public VScrollBox(int x, int y, int width, int height, VLayout layout, VAppAccess app) {
-        super(x, y, width, height, layout, app);
+    public VScrollBox(VAppAccess app, VLayout layout, int x, int y, int width, int height) {
+        super(app, layout, x, y, width, height);
     }
 
     //

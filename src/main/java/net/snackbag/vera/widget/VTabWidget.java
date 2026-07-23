@@ -26,11 +26,11 @@ public class VTabWidget extends VCompound<VTabWidget> {
     private int activeTab = 0;
 
     public VTabWidget(VAppAccess app) {
-        this(0, 0, 0, 0, app);
+        this(app, 0, 0, 0, 0);
     }
 
-    public VTabWidget(int x, int y, int width, int height, VAppAccess app) {
-        super(x, y, width, height, new VHLayout(app, x, y, width, height), app);
+    public VTabWidget(VAppAccess app, int x, int y, int width, int height) {
+        super(app, new VHLayout(app, x, y, width, height), x, y, width, height);
     }
 
     public int getActiveTabIndex() {
@@ -74,7 +74,7 @@ public class VTabWidget extends VCompound<VTabWidget> {
     }
 
     public void addTab(String name) {
-        addWidget(new Tab(name, this));
+        addWidget(new Tab(this, name));
         events.fire(new VTabWidgetEvent.TabAdded(name));
     }
 
@@ -145,8 +145,8 @@ public class VTabWidget extends VCompound<VTabWidget> {
         private String name;
         private final VTabWidget parent;
 
-        public Tab(String name, VTabWidget parent) {
-            super(0, 0, 0, 0, parent);
+        public Tab(VTabWidget parent, String name) {
+            super(parent, 0, 0, 0, 0);
             this.name = name;
             this.parent = parent;
 

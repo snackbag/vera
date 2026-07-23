@@ -5,16 +5,16 @@ import net.snackbag.vera.core.*;
 import net.snackbag.vera.style.VEffectState;
 
 public class VRect extends VWidget<VRect> {
-    public VRect(VFill background, VAppAccess app) {
-        this(background, 0, 0, 20, 20, app);
+    public VRect(VAppAccess app, VFill background) {
+        this(app, background, 0, 0, 20, 20);
     }
 
-    public VRect(VFill background, int x, int y, VAppAccess app) {
-        this(background, x, y, 20, 20, app);
+    public VRect(VAppAccess app, VFill background, int x, int y) {
+        this(app, background, x, y, 20, 20);
     }
 
-    public VRect(VFill background, int x, int y, int width, int height, VAppAccess app) {
-        super(x, y, width, height, app);
+    public VRect(VAppAccess app, VFill background, int x, int y, int width, int height) {
+        super(app, x, y, width, height);
 
         this.focusOnClick = false;
         setStyle("background", background);

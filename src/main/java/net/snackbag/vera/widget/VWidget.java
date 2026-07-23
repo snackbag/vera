@@ -42,7 +42,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     protected int offsetY = 0;
     protected boolean hasTransparency = false;
 
-    public VWidget(int x, int y, int width, int height, VAppAccess app) {
+    public VWidget(VAppAccess app, int x, int y, int width, int height) {
         super(app, x, y, width, height);
     }
 
