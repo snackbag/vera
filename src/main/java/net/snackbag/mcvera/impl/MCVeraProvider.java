@@ -92,11 +92,15 @@ public class MCVeraProvider {
     }
 
     public int getMouseX() {
-        return (int) (MinecraftClient.getInstance().mouse.getX() / MinecraftClient.getInstance().getWindow().getScaleFactor());
+        return (int) (MinecraftClient.getInstance().mouse.getX() / getScaleFactor());
     }
 
     public int getMouseY() {
-        return (int) (MinecraftClient.getInstance().mouse.getY() / MinecraftClient.getInstance().getWindow().getScaleFactor());
+        return (int) (MinecraftClient.getInstance().mouse.getY() / getScaleFactor());
+    }
+
+    public double getScaleFactor() {
+        return MinecraftClient.getInstance().getWindow().getScaleFactor();
     }
 
     public void handleKeyPressed(int keyCode, int scanCode, int modifiers) {

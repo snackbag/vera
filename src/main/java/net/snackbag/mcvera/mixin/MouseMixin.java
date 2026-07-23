@@ -31,7 +31,7 @@ public abstract class MouseMixin {
     private void mcvera$onCursorMove(long window, double fx, double fy, CallbackInfo ci) {
         if (client.getWindow().getHandle() != window) return;
 
-        double scaleFactor = client.getWindow().getScaleFactor();
+        double scaleFactor = Vera.provider.getScaleFactor();
 
         int mouseX = (int) (fx / scaleFactor);
         int mouseY = (int) (fy / scaleFactor);
