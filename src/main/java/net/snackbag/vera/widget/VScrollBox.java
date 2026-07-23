@@ -7,6 +7,9 @@ import net.snackbag.vera.event.VWidgetEvent;
 import net.snackbag.vera.layout.VLayout;
 
 public class VScrollBox extends VCompound<VScrollBox> {
+    public int deltaYPerScroll = 10;
+    public int deltaHPerScroll = 10;
+
     private double scrollX = 0;
     private double scrollY = 0;
 
@@ -24,7 +27,7 @@ public class VScrollBox extends VCompound<VScrollBox> {
         double diff = this.scrollX - old;
 
         for (VWidget<?> widget : getWidgets()) {
-            widget.offsetX += (int) diff;
+            widget.offsetX += diff;
         }
     }
 
@@ -38,7 +41,7 @@ public class VScrollBox extends VCompound<VScrollBox> {
         double diff = this.scrollY - old;
 
         for (VWidget<?> widget : getWidgets()) {
-            widget.offsetY -= (int) diff;
+            widget.offsetY -= diff;
         }
     }
 
@@ -81,8 +84,8 @@ public class VScrollBox extends VCompound<VScrollBox> {
     }
 
     private void handleScrollEvent(VWidgetEvent.MouseScroll e) {
-        setScrollX(getScrollX() + e.horizontal());
-        setScrollY(getScrollY() + e.vertical());
+        if (e.horizontal() != 0) setScrollX(getScrollX() + e.horizontal() * deltaHPerScroll);
+        if (e.vertical() != 0)   setScrollY(getScrollY() + e.vertical()   * deltaYPerScroll);
     }
 
     //
