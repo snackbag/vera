@@ -244,26 +244,35 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
                     }
                     transitionTime = playback.getRelativeTime();
 
-                    // population
-                    builder.keyframe(0, 1, frame -> {
-                        for (String key : app.styleSheet.getKeysStacked(this, prevStyleState)) {
-                            frame.style(key, getStyle(key));
-                        }
-                    });
-                } else { // completely different transition
-                    // population
-                    builder.keyframe(0, 1, frame -> {
-                        for (String key : app.styleSheet.getKeysStacked(this, prevStyleState)) {
-                            frame.style(key, getStyle(key, prevStyleState));
-                        }
-                    });
                 }
 
                 transitionTarget = state;
 
                 // population
-                builder.keyframe(transitionTime - 1, 0, frame -> {
+                builder.keyframe(0, 1, frame -> {
+                    List<String> insertedStyles = new ArrayList<>();
+
+                    for (String key : app.styleSheet.getKeysStacked(this, prevStyleState)) {
+                        frame.style(key, getStyle(key, prevStyleState));
+                        insertedStyles.add(key);
+                    }
+
                     for (String key : app.styleSheet.getKeysStacked(this, transitionTarget)) {
+                        if (insertedStyles.contains(key)) continue;
+                        frame.style(key, getStyle(key, prevStyleState));
+                    }
+                });
+
+                builder.keyframe(transitionTime - 1, 0, frame -> {
+                    List<String> insertedStyles = new ArrayList<>();
+
+                    for (String key : app.styleSheet.getKeysStacked(this, prevStyleState)) {
+                        frame.style(key, app.styleSheet.getKey(this, key, transitionTarget));
+                        insertedStyles.add(key);
+                    }
+
+                    for (String key : app.styleSheet.getKeysStacked(this, transitionTarget)) {
+                        if (insertedStyles.contains(key)) continue;
                         frame.style(key, app.styleSheet.getKey(this, key, transitionTarget));
                     }
                 });
