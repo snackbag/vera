@@ -17,6 +17,7 @@ import net.snackbag.vera.style.animation.easing.VEasing;
 import net.snackbag.vera.util.DragHandler;
 import net.snackbag.vera.core.VRenderContext;
 import net.snackbag.vera.util.VGeometry;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -97,6 +98,22 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
     public <V> V getStyleOrDefault(String key, V dflt, VStyleState state) {
         V style = getStyle(key, state);
         return style != null ? style : dflt;
+    }
+
+    public VFont.FontModifier modifyStyleFont(String key) {
+        return modifyStyleFont(key, null);
+    }
+
+    public VFont.FontModifier modifyStyleFont(String key, @Nullable VEffectState state) {
+        return getApp().styleSheet.modifyKeyAsFont(this, key, state);
+    }
+
+    public VColor.ColorModifier modifyStyleFontColor(String key) {
+        return modifyFontColor(key, null);
+    }
+
+    public VColor.ColorModifier modifyFontColor(String key, @Nullable VEffectState state) {
+        return getApp().styleSheet.modifyKeyAsFontColor(this, key, state);
     }
 
     public void animate(VAnimation animation) {
