@@ -29,6 +29,9 @@ public class Vera {
     public static long renderCacheId = 0;
     protected static final ArrayList<Runnable> nextFrameTasks = new ArrayList<>();
 
+    public static boolean invertVScrollDirection = false;
+    public static boolean invertHScrollDirection = false;
+
     public static void forVisibleAndAllowedApps(Consumer<VeraApp> handler) {
         final List<VeraApp> handledApps = new ArrayList<>();
 

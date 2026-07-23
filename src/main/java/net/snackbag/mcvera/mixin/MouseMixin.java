@@ -73,6 +73,9 @@ public abstract class MouseMixin {
     @Unique
     private void handleScrollEvents(@Nullable VWidget<?> widget, double horizontal, double vertical) {
         if (widget == null) return;
-        widget.events.fire(new VWidgetEvent.MouseScroll(horizontal, vertical));
+        widget.events.fire(new VWidgetEvent.MouseScroll(
+                Vera.invertHScrollDirection ? -horizontal : horizontal,
+                Vera.invertVScrollDirection ? -vertical : vertical)
+        );
     }
 }
