@@ -120,12 +120,20 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
     @Override
     public void move(int x, int y) {
         super.move(x, y);
+        updateLayoutPosition(x, y);
+    }
+
+    protected void updateLayoutPosition(int x, int y) {
         layout.move(x, y);
     }
 
     @Override
     public void setSize(int width, int height) {
         super.setSize(width, height);
+        updateLayoutSize(width, height);
+    }
+
+    protected void updateLayoutSize(int width, int height) {
         layout.setSize(width, height);
     }
 
