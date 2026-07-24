@@ -27,7 +27,6 @@ public class ScrollTestApplication extends VeraApp {
     public VStyleSheet createStyleSheet() {
         VStyleSheet sheet = new VStyleSheet();
 
-        sheet.setKey(VScrollBox.class, "border-size", 1);
         sheet.setKey(VScrollBox.class, "border-color", VColor.MC_GREEN, VEffectState.HOVERED);
         sheet.setKey(VScrollBox.class, "overlay", VColor.MC_WHITE.withOpacity(0.15f), VEffectState.HOVERED);
         sheet.setKey(VScrollBox.class, "transition", 100);
