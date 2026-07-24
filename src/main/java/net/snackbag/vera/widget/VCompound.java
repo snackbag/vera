@@ -93,6 +93,11 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
     }
 
     @Override
+    public boolean isDelegatedPointOver(int px, int py, VWidget<?> widget) {
+        return true;
+    }
+
+    @Override
     public EventHandler getDelegatedEventHandler() {
         return delegatedEvents;
     }

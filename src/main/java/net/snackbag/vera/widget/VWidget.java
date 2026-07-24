@@ -441,7 +441,12 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         int widgetY = getHitboxY() + offsetY;
         int widgetWidth = getHitboxWidth();
         int widgetHeight = getHitboxHeight();
-        return VGeometry.isInBox(px, py, widgetX, widgetY, widgetWidth, widgetHeight);
+
+        boolean delegatorOk =
+                (appAccess.isDelegated() && appAccess.getDelegator().isDelegatedPointOver(px, py, this))
+                || (!appAccess.isDelegated());
+
+        return VGeometry.isInBox(px, py, widgetX, widgetY, widgetWidth, widgetHeight) && delegatorOk;
     }
 
     @Override
