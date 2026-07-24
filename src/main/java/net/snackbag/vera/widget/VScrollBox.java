@@ -6,6 +6,7 @@ import net.snackbag.vera.core.VRenderContext;
 import net.snackbag.vera.event.VEventContext;
 import net.snackbag.vera.event.VWidgetEvent;
 import net.snackbag.vera.layout.VLayout;
+import net.snackbag.vera.util.VGeometry;
 import org.jetbrains.annotations.Nullable;
 
 public class VScrollBox extends VCompound<VScrollBox> {
@@ -107,6 +108,11 @@ public class VScrollBox extends VCompound<VScrollBox> {
     private void handleScrollEvent(VWidgetEvent.MouseScroll e) {
         if (e.horizontal() != 0) setScrollX(getScrollX() + e.horizontal() * deltaHPerScroll);
         if (e.vertical() != 0)   setScrollY(getScrollY() + e.vertical()   * deltaYPerScroll);
+    }
+
+    @Override
+    public boolean isDelegatedPointOver(int px, int py, VWidget<?> widget) {
+        return VGeometry.isInBox(px, py, getX(), getY(), getWidth(), getHeight());
     }
 
     //
