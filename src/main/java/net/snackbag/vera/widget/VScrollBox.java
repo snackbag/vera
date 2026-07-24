@@ -1,10 +1,12 @@
 package net.snackbag.vera.widget;
 
+import net.minecraft.util.math.MathHelper;
 import net.snackbag.vera.core.VAppAccess;
 import net.snackbag.vera.core.VRenderContext;
 import net.snackbag.vera.event.VEventContext;
 import net.snackbag.vera.event.VWidgetEvent;
 import net.snackbag.vera.layout.VLayout;
+import org.jetbrains.annotations.Nullable;
 
 public class VScrollBox extends VCompound<VScrollBox> {
     public int deltaYPerScroll = 10;
@@ -12,6 +14,8 @@ public class VScrollBox extends VCompound<VScrollBox> {
 
     private double scrollX = 0;
     private double scrollY = 0;
+    private @Nullable Integer maxScrollX = null;
+    private @Nullable Integer maxScrollY = null;
 
     public VScrollBox(VAppAccess app, VLayout layout, int x, int y, int width, int height) {
         super(app, layout, x, y, width, height);
@@ -22,12 +26,11 @@ public class VScrollBox extends VCompound<VScrollBox> {
     //
 
     public void setScrollX(double scrollX) {
-        double old = this.scrollX;
+        scrollX = MathHelper.clamp(scrollX, -getMaxScrollX(), 0);
         this.scrollX = scrollX;
-        double diff = this.scrollX - old;
 
         for (VWidget<?> widget : getWidgets()) {
-            widget.offsetX += diff;
+            widget.offsetX = (int) this.scrollX;
         }
     }
 
@@ -36,17 +39,35 @@ public class VScrollBox extends VCompound<VScrollBox> {
     }
 
     public void setScrollY(double scrollY) {
-        double old = this.scrollY;
+        scrollY = MathHelper.clamp(scrollY, -getMaxScrollY(), 0);
         this.scrollY = scrollY;
-        double diff = this.scrollY - old;
 
         for (VWidget<?> widget : getWidgets()) {
-            widget.offsetY -= diff;
+            widget.offsetY = (int) this.scrollY;
         }
     }
 
     public double getScrollY() {
         return scrollY;
+    }
+
+    public int getMaxScrollX() {
+        if (maxScrollX == null) return Math.max(layout.getEffectiveWidth() - getWidth(), 0);
+        else return maxScrollX;
+    }
+
+    public void setMaxScrollX(@Nullable Integer max) {
+        maxScrollX = max;
+    }
+
+    public int getMaxScrollY() {
+        if (maxScrollY == null) return Math.max(layout.getEffectiveHeight() - getHeight(), 0);
+        else return maxScrollY;
+
+    }
+
+    public void setMaxScrollY(@Nullable Integer max) {
+        maxScrollY = max;
     }
 
     //
@@ -91,6 +112,9 @@ public class VScrollBox extends VCompound<VScrollBox> {
     //
     // Rendering
     //
+    @Override
+    protected void updateLayoutSize(int width, int height) {} // dont update layout size
+
     @Override
     public void renderChildren(VRenderContext ctx) {
         ctx.withClip(0, 0, getWidth(), getHeight(), () -> {
