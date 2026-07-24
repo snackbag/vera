@@ -60,6 +60,15 @@ public class InternalCommands {
                                     HierarchyTest.INSTANCE = new HierarchyTest();
                                     QuadTestApplication.INSTANCE = new QuadTestApplication();
                                     ScrollTestApplication.INSTANCE = new ScrollTestApplication();
+
+                                    FPSDebugApplication.INSTANCE.hide();
+                                    FPSDebugApplication.INSTANCE = new FPSDebugApplication();
+                                    return 1;
+                                })
+                        )
+                        .then(ClientCommandManager.literal("fps")
+                                .executes((ctx) -> {
+                                    FPSDebugApplication.INSTANCE.show();
                                     return 1;
                                 })
                         )
