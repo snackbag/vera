@@ -13,7 +13,7 @@ import java.util.*;
  * implement registrar functionality than touching it yourself.
  */
 public class MCVeraRegistrar {
-    private final Set<VStandardStyle> standardStyles = new HashSet<>();
+    private final Set<VStandardStyle> standardStyles = new LinkedHashSet<>();
     private final HashMap<String, VEasing> easings = new HashMap<>();
 
     public void registerStandardStyle(VStandardStyle style) {
