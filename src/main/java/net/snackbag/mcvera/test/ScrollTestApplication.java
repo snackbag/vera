@@ -3,7 +3,7 @@ package net.snackbag.mcvera.test;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
-import net.snackbag.vera.layout.VXLayout;
+import net.snackbag.vera.layout.VVLayout;
 import net.snackbag.vera.style.VEffectState;
 import net.snackbag.vera.style.VStyleSheet;
 import net.snackbag.vera.widget.VLabel;
@@ -17,11 +17,15 @@ public class ScrollTestApplication extends VeraApp {
         new VShortcut(this, "escape", this::hide);
         mergeStyleSheet(createStyleSheet());
 
-        VScrollBox box = new VScrollBox(this, new VXLayout(this, 0, 0), 20, 20, 100, 100).alsoAdd();
+        VScrollBox box = new VScrollBox(this, new VVLayout(this, 0, 0), 20, 20, 100, 100).alsoAdd();
         box.deltaYPerScroll = 3;
 
         VLabel label = new VLabel(box, "Hi there :)").alsoAdd();
         label.modifyStyleFontColor("font", VEffectState.HOVERED).rgb(VColor.MC_GOLD);
+
+        for (int i = 0; i < 100; i++) {
+            new VLabel(box, "num " + i).alsoAdd();
+        }
     }
 
     public VStyleSheet createStyleSheet() {
