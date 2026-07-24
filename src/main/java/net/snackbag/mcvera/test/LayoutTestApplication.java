@@ -4,6 +4,7 @@ import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.layout.VHLayout;
 import net.snackbag.vera.layout.VLayout;
+import net.snackbag.vera.layout.VSpacer;
 import net.snackbag.vera.layout.VVLayout;
 import net.snackbag.vera.widget.VLabel;
 
@@ -24,6 +25,7 @@ public class LayoutTestApplication extends VeraApp {
 
         VLayout thirdLayout = new VVLayout(secondLayout);
         new VLabel(this, "oh?").alsoAddTo(thirdLayout);
+        new VSpacer(this, 0, 8).alsoAddTo(thirdLayout);
         new VLabel(this, "oh!!!!").alsoAddTo(thirdLayout);
     }
 }
