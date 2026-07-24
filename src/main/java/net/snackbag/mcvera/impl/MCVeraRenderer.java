@@ -99,7 +99,7 @@ public class MCVeraRenderer {
     }
 
     public void drawText(int x, int y, String text, VFont font) {
-        float scaleFactor = font.getSize() / 16.0f;
+        float scaleFactor = font.getSize() / 8.0f;
         drawContext.getMatrices().push();
         drawContext.getMatrices().translate(x, y, 0);
         drawContext.getMatrices().scale(scaleFactor, scaleFactor, 1.0f);

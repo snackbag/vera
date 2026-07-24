@@ -44,8 +44,8 @@ public class HierarchyTest {
             setBackgroundColor(VColor.MC_DARK_GRAY);
             setFlag(VAppFlag.HIERARCHIC, true);
 
-            styleSheet.setKey(VLabel.class, "font", VFont.create().withColor(VColor.white()).withSize(12));
-            styleSheet.setKey(VLabel.class, "font", VFont.create().withColor(VColor.MC_AQUA).withSize(12), VEffectState.HOVERED);
+            styleSheet.setKey(VLabel.class, "font", VFont.create().withColor(VColor.white()).withSize(6));
+            styleSheet.setKey(VLabel.class, "font", VFont.create().withColor(VColor.MC_AQUA).withSize(6), VEffectState.HOVERED);
             styleSheet.setKey(VLabel.class, "transition", 250);
 
             VRect mover = new VRect(this, VColor.black(), 0, 0, 100, 8).alsoAdd();

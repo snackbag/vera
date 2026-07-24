@@ -81,12 +81,12 @@ public class MCVeraProvider {
     }
 
     public int getTextWidth(String text, VFont font) {
-        float scaleFactor = font.getSize() / 16.0f;
+        float scaleFactor = font.getSize() / 8.0f;
         return (int) (MinecraftClient.getInstance().textRenderer.getWidth(text) * scaleFactor);
     }
 
     public int getTextHeight(String text, VFont font) {
-        float scaleFactor = font.getSize() / 16.0f;
+        float scaleFactor = font.getSize() / 8.0f;
         return (int) (MinecraftClient.getInstance().textRenderer.fontHeight * scaleFactor);
     }
 
