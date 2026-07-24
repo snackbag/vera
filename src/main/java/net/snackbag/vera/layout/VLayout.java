@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+// TODO: inline padding
 public abstract class VLayout extends VElement {
     protected final List<VElement> elements = new ArrayList<>();
     public VLayoutAlignmentFlag alignment = VLayoutAlignmentFlag.START;
