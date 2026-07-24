@@ -1,7 +1,6 @@
 package net.snackbag.vera.style.standard;
 
-import net.minecraft.util.Identifier;
-import net.snackbag.mcvera.MinecraftVera;
+import net.snackbag.vera.InternalVera;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VImage;
 import net.snackbag.vera.style.VEffectState;
@@ -13,8 +12,8 @@ public class CheckBoxStandardStyle implements VStandardStyle {
     @Override
     public void apply(VStyleSheet sheet) {
         sheet.setKey(VCheckBox.class, "cursor", VCursorShape.POINTING_HAND, VEffectState.HOVERED);
-        sheet.setKey(VCheckBox.class, "fill", new VImage(new Identifier(MinecraftVera.MOD_ID, "widgets/checkmark/default.png")));
-        sheet.setKey(VCheckBox.class, "fill-checked", new VImage(new Identifier(MinecraftVera.MOD_ID, "widgets/checkmark/checked.png")));
+        sheet.setKey(VCheckBox.class, "fill", new VImage(InternalVera.id("widgets/checkmark/default.png")));
+        sheet.setKey(VCheckBox.class, "fill-checked", new VImage(InternalVera.id("widgets/checkmark/checked.png")));
     }
 
     @Override
