@@ -6,11 +6,18 @@ import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.layout.VVLayout;
 import net.snackbag.vera.style.VEffectState;
 import net.snackbag.vera.style.VStyleSheet;
+import net.snackbag.vera.style.animation.VAnimation;
 import net.snackbag.vera.widget.VLabel;
 import net.snackbag.vera.widget.VScrollBox;
 
 public class ScrollTestApplication extends VeraApp {
     public static ScrollTestApplication INSTANCE = new ScrollTestApplication();
+
+    private final VAnimation animation = new VAnimation.Builder("cool-animation")
+            .keyframe(
+                    0, 200,
+                    (kf) -> kf.style("border-color", VColor.MC_RED)
+            ).build();
 
     @Override
     public void init() {
@@ -26,6 +33,8 @@ public class ScrollTestApplication extends VeraApp {
         for (int i = 0; i < 100; i++) {
             new VLabel(box, "num " + i).alsoAdd();
         }
+
+        box.onScrolledY((event) -> box.animate(animation, true));
     }
 
     public VStyleSheet createStyleSheet() {

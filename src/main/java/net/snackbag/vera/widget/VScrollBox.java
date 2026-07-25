@@ -1,13 +1,18 @@
 package net.snackbag.vera.widget;
 
-import net.minecraft.util.math.MathHelper;
+import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VAppAccess;
 import net.snackbag.vera.core.VRenderContext;
-import net.snackbag.vera.event.VEventContext;
-import net.snackbag.vera.event.VWidgetEvent;
+import net.snackbag.vera.event.*;
 import net.snackbag.vera.layout.VLayout;
+import net.snackbag.vera.style.VStyleState;
 import net.snackbag.vera.util.VGeometry;
+import net.snackbag.vera.util.VMath;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Consumer;
+
+// TODO: internal compound addWidget method that doesn't add to the layout
 
 public class VScrollBox extends VCompound<VScrollBox> {
     public int deltaYPerScroll = 10;
@@ -27,12 +32,15 @@ public class VScrollBox extends VCompound<VScrollBox> {
     //
 
     public void setScrollX(double scrollX) {
-        scrollX = MathHelper.clamp(scrollX, -getMaxScrollX(), 0);
+        scrollX = VMath.clamp(scrollX, 0, getMaxScrollX());
+        double before = this.scrollX;
         this.scrollX = scrollX;
 
         for (VWidget<?> widget : getWidgets()) {
-            widget.offsetX = (int) this.scrollX;
+            widget.offsetX = (int) -this.scrollX;
         }
+
+        events.fire(new VScrollBoxEvent.ScrolledX(before, this.scrollX));
     }
 
     public double getScrollX() {
@@ -40,12 +48,15 @@ public class VScrollBox extends VCompound<VScrollBox> {
     }
 
     public void setScrollY(double scrollY) {
-        scrollY = MathHelper.clamp(scrollY, -getMaxScrollY(), 0);
+        scrollY = VMath.clamp(scrollY, 0, getMaxScrollY());
+        double before = this.scrollY;
         this.scrollY = scrollY;
 
         for (VWidget<?> widget : getWidgets()) {
-            widget.offsetY = (int) this.scrollY;
+            widget.offsetY = (int) -this.scrollY;
         }
+
+        events.fire(new VScrollBoxEvent.ScrolledY(before, this.scrollY));
     }
 
     public double getScrollY() {
@@ -64,7 +75,6 @@ public class VScrollBox extends VCompound<VScrollBox> {
     public int getMaxScrollY() {
         if (maxScrollY == null) return Math.max(layout.getEffectiveHeight() - getHeight(), 0);
         else return maxScrollY;
-
     }
 
     public void setMaxScrollY(@Nullable Integer max) {
@@ -113,6 +123,17 @@ public class VScrollBox extends VCompound<VScrollBox> {
     @Override
     public boolean isDelegatedPointOver(int px, int py, VWidget<?> widget) {
         return VGeometry.isInBox(px, py, getX(), getY(), getWidth(), getHeight());
+    }
+
+    //
+    // Events
+    //
+    public void onScrolledX(Consumer<VScrollBoxEvent.ScrolledX> ctx) {
+        events.register(VEvents.ScrollBox.SCROLLED_X, ctx);
+    }
+
+    public void onScrolledY(Consumer<VScrollBoxEvent.ScrolledY> ctx) {
+        events.register(VEvents.ScrollBox.SCROLLED_Y, ctx);
     }
 
     //

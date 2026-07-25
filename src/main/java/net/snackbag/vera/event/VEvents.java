@@ -65,4 +65,10 @@ public class VEvents {
         public static final String TAB_ADDED = "vtabwidget-tab-added";
         public static final String WIDGET_ADDED = "vtabwidget-tab-widget-added";
     }
+
+    // Scroll Box
+    public static class ScrollBox {
+        public static final String SCROLLED_X = "vscrollbox-scrolled-x";
+        public static final String SCROLLED_Y = "vscrollbox-scrolled-y";
+    }
 }
