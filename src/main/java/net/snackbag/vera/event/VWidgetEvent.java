@@ -20,17 +20,10 @@ public class VWidgetEvent {
         }
     }
 
-    public record MouseDrag(int startX, int startY, int currentX, int currentY, int moveX, int moveY, Direction direction, VMouseButton button) implements VEventContext {
+    public record MouseDrag(int startX, int startY, int currentX, int currentY, int moveX, int moveY, VMouseButton button) implements VEventContext {
         @Override
         public String eventName() {
             return VEvents.Widget.MOUSE_DRAG;
-        }
-
-        public enum Direction {
-            UP,
-            DOWN,
-            LEFT,
-            RIGHT
         }
     }
 

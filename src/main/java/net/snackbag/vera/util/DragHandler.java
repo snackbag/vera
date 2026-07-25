@@ -60,7 +60,6 @@ public class DragHandler {
                 beginPos.x, beginPos.y,
                 x, y,
                 move.x, move.y,
-                VWidgetEvent.MouseDrag.Direction.UP,
                 button
         );
 
