@@ -33,4 +33,16 @@ public class VXLayout extends VLayout {
             cache.put(elem, new Vector2i(getX() + elem.getRawX(), getY() + elem.getRawY()));
         }
     }
+
+    public int calculateElementsHeight() {
+        return elements.stream()
+                .mapToInt((e) -> e.getRawY() + e.getEffectiveHeight())
+                .max().orElse(1);
+    }
+
+    public int calculateElementsWidth() {
+        return elements.stream()
+                .mapToInt((e) -> e.getRawX() + e.getEffectiveWidth())
+                .max().orElse(1);
+    }
 }

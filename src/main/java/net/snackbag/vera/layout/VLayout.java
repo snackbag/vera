@@ -58,17 +58,9 @@ public abstract class VLayout extends VElement {
     protected abstract Vector2i applyAlignment(Vector2i original);
     public abstract void rebuild();
 
-    public int calculateElementsHeight() {
-        return elements.stream()
-                .mapToInt(VElement::getEffectiveHeight)
-                .sum();
-    }
+    public abstract int calculateElementsHeight();
 
-    public int calculateElementsWidth() {
-        return elements.stream()
-                .mapToInt(VElement::getEffectiveWidth)
-                .max().orElse(1);
-    }
+    public abstract int calculateElementsWidth();
 
     public void addElement(VElement elem) {
         if (elements.contains(elem)) return;

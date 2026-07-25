@@ -41,4 +41,16 @@ public class VVLayout extends VLayout {
             case END -> new Vector2i(original.x, getEffectiveHeight() - calculateElementsHeight() + original.y);
         };
     }
+
+    public int calculateElementsHeight() {
+        return elements.stream()
+                .mapToInt(VElement::getEffectiveHeight)
+                .sum();
+    }
+
+    public int calculateElementsWidth() {
+        return elements.stream()
+                .mapToInt(VElement::getEffectiveWidth)
+                .max().orElse(1);
+    }
 }
