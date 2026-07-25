@@ -107,12 +107,12 @@ public class VTabWidget extends VCompound<VTabWidget> {
     }
 
     @Override
-    public void addWidget(VWidget<?> widget) {
+    public void addWidget(VWidget<?> widget, boolean addToLayout) {
         if (!(widget instanceof Tab)) {
             throw new IllegalArgumentException("Don't use addWidget to add to a VTabWidget, use addWidgets instead!");
         }
 
-        super.addWidget(widget);
+        super.addWidget(widget, addToLayout);
 
         // update caches
         cachedTotalTabWidthSum = getTabs().stream()

@@ -146,6 +146,17 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
         layout.setSize(width, height);
     }
 
+    @Override
+    public boolean isPointOverThis(int px, int py) {
+        if (!super.isPointOverThis(px, py)) return false;
+
+        for (VWidget<?> child : widgets) {
+            if (child.isPointOverThis(px, py)) return false;
+        }
+
+        return true;
+    }
+
     //
     // Rendering
     //
