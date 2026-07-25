@@ -13,11 +13,11 @@ public class ScrollBoxStandardStyle implements VStandardStyle {
         sheet.setKey(VScrollBox.class, "border-size", 1);
         sheet.setKey(VScrollBox.class, "background", VColor.white());
 
-        sheet.setKey(VScrollBox.class, "scroll-increment", new VImage(InternalVera.id("widgets/scrollbox/increment.png")));
-        sheet.setKey(VScrollBox.class, "scroll-thumb", new VImage(InternalVera.id("widgets/scrollbox/thumb.png")));
-        sheet.setKey(VScrollBox.class, "scroll-track", VColor.MC_GRAY);
-        sheet.setKey(VScrollBox.class, "scroll-decrement", new VImage(InternalVera.id("widgets/scrollbox/decrement.png")));
-        sheet.setKey(VScrollBox.class, "scroll-width", 16);
+        sheet.setKey(VScrollBox.Bar.class, "scroll-increment", new VImage(InternalVera.id("widgets/scrollbox/increment.png")));
+        sheet.setKey(VScrollBox.Bar.class, "scroll-thumb", new VImage(InternalVera.id("widgets/scrollbox/thumb.png")));
+        sheet.setKey(VScrollBox.Bar.class, "scroll-track", VColor.MC_GRAY);
+        sheet.setKey(VScrollBox.Bar.class, "scroll-decrement", new VImage(InternalVera.id("widgets/scrollbox/decrement.png")));
+        sheet.setKey(VScrollBox.Bar.class, "scroll-width", 6);
     }
 
     @Override

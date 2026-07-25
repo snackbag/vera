@@ -3,6 +3,7 @@ package net.snackbag.mcvera.test;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
+import net.snackbag.vera.layout.VHLayout;
 import net.snackbag.vera.layout.VVLayout;
 import net.snackbag.vera.style.VEffectState;
 import net.snackbag.vera.style.VStyleSheet;
@@ -24,17 +25,28 @@ public class ScrollTestApplication extends VeraApp {
         new VShortcut(this, "escape", this::hide);
         mergeStyleSheet(createStyleSheet());
 
-        VScrollBox box = new VScrollBox(this, new VVLayout(this, 0, 0), 20, 20, 100, 100).alsoAdd();
-        box.deltaYPerScroll = 3;
+        VScrollBox vertBox = new VScrollBox(this, new VVLayout(this, 0, 0), 20, 20, 100, 100).alsoAdd();
+        vertBox.deltaYPerScroll = 3;
 
-        VLabel label = new VLabel(box, "Hi there :)").alsoAdd();
+        VLabel label = new VLabel(vertBox, "Hi there :)").alsoAdd();
         label.modifyStyleFontColor("font", VEffectState.HOVERED).rgb(VColor.MC_GOLD);
 
         for (int i = 0; i < 100; i++) {
-            new VLabel(box, "num " + i).alsoAdd();
+            new VLabel(vertBox, "num " + i).alsoAdd();
         }
 
-        box.onScrolledY((event) -> box.animate(animation, true));
+        vertBox.onScrolledY((event) -> vertBox.animate(animation, true));
+
+        // ----
+
+        VScrollBox horzBox = new VScrollBox(this, new VHLayout(this, 0, 0), 160, 20, 100, 100).alsoAdd();
+        horzBox.deltaHPerScroll = 3;
+
+        for (int i = 0; i < 100; i++) {
+            new VLabel(horzBox, "num " + i).alsoAdd();
+        }
+
+        horzBox.onScrolledX((event) -> horzBox.animate(animation, true));
     }
 
     public VStyleSheet createStyleSheet() {
