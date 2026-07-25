@@ -151,6 +151,16 @@ public class VScrollBox extends VCompound<VScrollBox> {
 
     @Override
     public void renderContent(VRenderContext ctx) {
+        VStyleState state = createStyleState();
+
+        Vera.renderer.drawFill(
+                ctx,
+                0, 0,
+                getEffectiveWidth(), getEffectiveHeight(),
+                getStyle("background", state)
+        );
+    }
+
 
     }
 }
