@@ -1,41 +1,36 @@
 # Vera
+
 Because UI should be simple.
 
-Vera is a simple yet powerful Fabric UI library. There are currently no plans for a Forge version.\
-[Submit a Logo](https://github.com/snackbag/vera/issues/new) [Visit Wiki](https://wiki.snackbag.net/w/vera)
+Vera is a simple yet powerful UI library, currently developed for Fabric. Our wiki page is currently still under
+construction. The Javadoc covers all methods.
 
 ## Features
 
 - Various standard widgets
-  - Labels
-  - Checkboxes
-  - Dropdowns
-  - Images
-  - Text input
-  - Tabs
-  - Rectangles
-  - Easy creation of custom widgets
+    - Checkboxes
+    - Combo boxes
+    - Labels
+    - Text input
+    - Images
+    - Rectangles
+    - Scroll boxes
+    - Tabs
+    - Easy creation of custom widgets
 - Styling system written from the ground up
-- Customizable animation system
-  - Style-composite rendering pipeline
-  - (Custom) easings!
+- Animation system and custom easings
 - Layout system
 - HUD-rendering
-- 2D rendering developer QOL
+- General rendering QOL outside Vera apps
 - App hierarchy
-- Simple keybindings
-- Heavy optimization
-- (Developer) QOL with [Verto](https://github.com/snackbag/verto)
-- Extensive documentation
+- Simple keybinding managing
+- Docstrings everywhere
 
 ### Coming soon
 
-- Full docstrings everywhere
-- More standard composites
-- Multi-versions
-- More precise font options
-- Vertex & fragment shaders
+- Wiki
+- NeoForge & more Minecraft versions
+- Precise TTF rendering
+- Shaders and framebuffers
 - Revised rendering API
-- Double buffer rendering
 - Vanilla-UI abilities
-- Widget Compounds
