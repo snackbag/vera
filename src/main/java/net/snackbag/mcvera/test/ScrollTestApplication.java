@@ -1,10 +1,13 @@
 package net.snackbag.mcvera.test;
 
 import net.snackbag.vera.core.VColor;
+import net.snackbag.vera.core.VCursorShape;
+import net.snackbag.vera.core.VMouseButton;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
 import net.snackbag.vera.layout.VHLayout;
 import net.snackbag.vera.layout.VVLayout;
+import net.snackbag.vera.layout.VXLayout;
 import net.snackbag.vera.style.VEffectState;
 import net.snackbag.vera.style.VStyleSheet;
 import net.snackbag.vera.style.animation.VAnimation;
@@ -47,6 +50,24 @@ public class ScrollTestApplication extends VeraApp {
         }
 
         horzBox.onScrolledX((event) -> horzBox.animate(animation, true));
+
+        // ----
+
+        VScrollBox xBox = new VScrollBox(this, new VXLayout(this, 0, 0), 300, 20, 100, 100).alsoAdd();
+        xBox.deltaHPerScroll = 3;
+        xBox.deltaYPerScroll = 3;
+
+        for (int i = 0; i < 100; i++) {
+            new VLabel(xBox, "num " + i, i * 16, i * 16).alsoAdd();
+        }
+
+        xBox.setStyle("cursor", VEffectState.MC_DRAGGING, VCursorShape.ALL_RESIZE);
+        xBox.onMouseDrag((e) -> {
+            if (e.button() != VMouseButton.MIDDLE) return;
+
+            xBox.setScrollX(xBox.getScrollX() - e.moveX());
+            xBox.setScrollY(xBox.getScrollY() - e.moveY());
+        });
     }
 
     public VStyleSheet createStyleSheet() {
