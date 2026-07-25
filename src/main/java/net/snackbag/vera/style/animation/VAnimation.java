@@ -2,14 +2,13 @@ package net.snackbag.vera.style.animation;
 
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.style.StyleValue;
+import net.snackbag.vera.style.StyleValueType;
 import net.snackbag.vera.style.animation.easing.VEasings;
 import net.snackbag.vera.style.animation.easing.VEasing;
+import net.snackbag.vera.util.VDataHelper;
 import net.snackbag.vera.widget.VWidget;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class VAnimation {
@@ -80,6 +79,23 @@ public class VAnimation {
                     VEasings.IMMEDIATE
             );
             extendedFrames.add(frame);
+        }
+
+        // convert SVTs
+        for (VKeyframe frame : extendedFrames) {
+            HashMap<String, Object> fixedStyles = new HashMap<>();
+
+            for (Map.Entry<String, Object> entry : frame.styles.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+
+                value = VDataHelper.unwrapSingleElementArray(value);
+                value = StyleValueType.convert(value, app.styleSheet.getReservation(key));
+
+                fixedStyles.put(key, value);
+            }
+
+            frame.styles.putAll(fixedStyles);
         }
 
         return new CompiledAnimation(
