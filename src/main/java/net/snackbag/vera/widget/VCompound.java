@@ -51,6 +51,10 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
 
     @Override
     public void addWidget(VWidget<?> widget) {
+        addWidget(widget, true);
+    }
+
+    protected void addWidget(VWidget<?> widget, boolean addToLayout) {
         if (widgets.contains(widget)) {
             MinecraftVera.LOGGER.error("Can't add widget %s to compound %s, because it is already added"
                     .formatted(widget.toString(), getClass().getSimpleName()));
@@ -59,7 +63,7 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
 
         widget.classes.add(identifier.toString());
         widgets.add(widget);
-        layout.addElement(widget);
+        if (addToLayout) layout.addElement(widget);
 
         appAccess.get().addWidget(widget);
     }
