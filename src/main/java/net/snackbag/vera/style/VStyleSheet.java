@@ -3,11 +3,11 @@ package net.snackbag.vera.style;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VFont;
+import net.snackbag.vera.util.VDataHelper;
 import net.snackbag.vera.widget.VWidget;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class VStyleSheet {
@@ -185,7 +185,7 @@ public class VStyleSheet {
     }
 
     private <T> void setContainerKey(StyleContainer<T> container, T part, String key, Object value, @NotNull VStyleState state) {
-        value = potentiallyUnpackArray(value);
+        value = VDataHelper.unwrapSingleElementArray(value);
 
         StyleValueType res = getReservation(key);
         StyleValueType valRes = StyleValueType.get(value, res);
@@ -251,15 +251,6 @@ public class VStyleSheet {
 
     public @Nullable StyleValueType getReservation(String key) {
         return typeRegistry.getOrDefault(key, null);
-    }
-
-    private Object potentiallyUnpackArray(Object value) {
-        if (value.getClass().isArray()) {
-            int length = Array.getLength(value);
-            if (length == 1) value = Array.get(value, 0);
-        }
-
-        return value;
     }
 
     public void addSheet(VStyleSheet target) {

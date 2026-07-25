@@ -97,16 +97,6 @@ public class Vera {
         }
     }
 
-    @SafeVarargs
-    public static <T> @Nullable T firstOf(Predicate<? super T> evaluator, T... values) {
-        for (T v : values) {
-            if (v == null) continue;
-            if (evaluator.test(v)) return v;
-        }
-
-        return null;
-    }
-
     /**
      * Schedules a task to the next frame; run AFTER all Vera rendering
      * @param runnable the task to execute
