@@ -50,6 +50,7 @@ public class VImage implements VFill {
 
     @Override
     public void renderQuad(VRenderContext ctx, int x, int y, int width, int height) {
+        if (!ctx.isVisible(x, y, width, height)) return;
         Vera.renderer.renderTexQuad(
                 ctx.hasTransparency || hasTransparency, src, tint,
                 x, y,

@@ -66,6 +66,9 @@ public class MCVeraRenderer {
     }
 
     public void drawText(VRenderContext ctx, int x, int y, String text, VFont font) {
+        if (!ctx.isVisible(x, y, Vera.provider.getTextWidth(text, font), Vera.provider.getTextHeight(text, font)))
+            return;
+
         MatrixStack stack = drawContext.getMatrices();
         stack.push();
 
@@ -77,6 +80,8 @@ public class MCVeraRenderer {
     }
 
     public void drawImage(VRenderContext ctx, int x, int y, int width, int height, Identifier path) {
+        if (!ctx.isVisible(x, y, width, height)) return;
+
         renderTexQuad(
                 ctx.hasTransparency, path,
                 x, y,
@@ -409,7 +414,7 @@ public class MCVeraRenderer {
             if (widget != hoveredWidget && widget.isHovered()) widget.setHovered(false);
             else if (widget == hoveredWidget && !widget.isHovered()) widget.setHovered(true);
 
-            if (!widget.appAccess.isDelegated()) widget.renderSelf();
+            if (!widget.appAccess.isDelegated()) widget.renderSelf(null);
         }
         app.renderAfterWidgets();
 
@@ -438,10 +443,10 @@ public class MCVeraRenderer {
         }
     }
 
-    public void renderCompoundChildren(VCompound<?> compound) {
+    public void renderCompoundChildren(VCompound<?> compound, VRenderContext ctx) {
         drawContext.getMatrices().push();
         drawContext.getMatrices().translate(-compound.getX(), -compound.getY(), 0);
-        for (VWidget<?> widget : compound.getWidgets()) widget.renderSelf();
+        for (VWidget<?> widget : compound.getWidgets()) widget.renderSelf(ctx);
         drawContext.getMatrices().pop();
     }
 }

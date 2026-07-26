@@ -206,6 +206,7 @@ public class VColor implements VFill {
 
     @Override
     public void renderQuad(VRenderContext ctx, int x, int y, int width, int height) {
+        if (!ctx.isVisible(x, y, width, height)) return;
         Vera.renderer.drawRect(ctx, x, y, width, height, this);
     }
 

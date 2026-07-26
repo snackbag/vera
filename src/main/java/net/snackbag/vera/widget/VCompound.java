@@ -161,30 +161,14 @@ public abstract class VCompound<T extends VWidget<T>> extends VWidget<T> impleme
     // Rendering
     //
     public void renderChildren(VRenderContext ctx) {
-        Vera.renderer.renderCompoundChildren(this);
+        Vera.renderer.renderCompoundChildren(this, ctx);
     }
 
     public void renderAfterChildren(VRenderContext ctx) {}
 
     @Override
-    public void renderSelf() {
-        beforeRender();
-        animations.updateLifetimes();
-
-        if (visibilityConditionsPassed()) {
-            VRenderContext ctx = createRenderContext();
-            Vera.renderer.pushContext(ctx);
-
-            renderContent(ctx);
-            renderChildren(ctx);
-            renderAfterChildren(ctx);
-
-            renderBorder(ctx);
-            renderOverlay(ctx);
-
-            Vera.renderer.popContext();
-        }
-
-        afterRender();
+    public void renderAfterContent(VRenderContext ctx) {
+        renderChildren(ctx);
+        renderAfterChildren(ctx);
     }
 }

@@ -46,7 +46,11 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         super(app, x, y, width, height);
     }
 
+    public void renderBeforeContent(VRenderContext ctx) {}
+
     public abstract void renderContent(VRenderContext ctx);
+
+    public void renderAfterContent(VRenderContext ctx) {}
 
     public int getHitboxX() {
         return getX();
@@ -191,7 +195,7 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         else return VEffectState.DEFAULT;
     }
 
-    public VRenderContext createRenderContext() {
+    private VRenderContext createRenderContext() {
         VStyleState state = createStyleState();
         VeraApp app = getApp();
         return new VRenderContext(
@@ -202,15 +206,20 @@ public abstract class VWidget<T extends VWidget<T>> extends VElement {
         );
     }
 
-    public void renderSelf() {
+    public void renderSelf(@Nullable VRenderContext parent) {
         beforeRender();
         animations.updateLifetimes();
 
         if (visibilityConditionsPassed()) {
             VRenderContext ctx = createRenderContext();
+            if (parent != null) ctx = parent.makeChild(ctx.x, ctx.y, ctx.width, ctx.height);
+
             Vera.renderer.pushContext(ctx);
 
+            renderBeforeContent(ctx);
             renderContent(ctx);
+            renderAfterContent(ctx);
+
             renderBorder(ctx);
             renderOverlay(ctx);
 
