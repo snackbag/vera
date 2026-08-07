@@ -1,35 +1,33 @@
 package net.snackbag.mcvera.impl;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
+import net.minecraft.client.util.InputUtil;
 import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.mcvera.screen.VeraVisibilityScreen;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.VFont;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
+import net.snackbag.vera.event.VWidgetEvent;
+import net.snackbag.vera.flag.VAppFlag;
 import net.snackbag.vera.widget.VWidget;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MCVeraProvider {
     public void handleAppInitialization(VeraApp app) {
         MCVeraData.applications.add(app);
         MinecraftClient.getInstance().send(app::init);
         MinecraftClient.getInstance().send(app::update);
-
-        app.addShortcut(new VShortcut(app, "LeftCtrl+LeftAlt+LeftShift+D", () -> {
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of("Debug mode enabled"));
-            MCVeraData.debugApps.add(app);
-        }, false));
     }
 
     public void handleAppShow(VeraApp app) {
         if (app.isVisible()) return;
 
-        MCVeraData.visibleApplications.add(app);
-        if (app.isMouseRequired()) MCVeraData.appsWithMouseRequired += 1;
+        MCVeraData.visibleApplications.get(app.getPositioning()).add(app);
+        if (app.hasFlag(VAppFlag.REQUIRES_MOUSE)) MCVeraData.appsWithMouseRequired += 1;
         MinecraftClient client = MinecraftClient.getInstance();
         client.send(app::update);
 
@@ -43,8 +41,8 @@ public class MCVeraProvider {
     public void handleAppHide(VeraApp app) {
         if (!app.isVisible()) return;
 
-        if (app.isMouseRequired()) MCVeraData.appsWithMouseRequired -= 1;
-        MCVeraData.visibleApplications.remove(app);
+        if (app.hasFlag(VAppFlag.REQUIRES_MOUSE)) MCVeraData.appsWithMouseRequired -= 1;
+        MCVeraData.visibleApplications.get(app.getPositioning()).remove(app);
         MinecraftClient client = MinecraftClient.getInstance();
         client.send(app::update);
 
@@ -83,33 +81,33 @@ public class MCVeraProvider {
     }
 
     public int getTextWidth(String text, VFont font) {
-        float scaleFactor = font.getSize() / 16.0f;
+        float scaleFactor = font.getSize() / 8.0f;
         return (int) (MinecraftClient.getInstance().textRenderer.getWidth(text) * scaleFactor);
     }
 
     public int getTextHeight(String text, VFont font) {
-        float scaleFactor = font.getSize() / 16.0f;
+        float scaleFactor = font.getSize() / 8.0f;
         return (int) (MinecraftClient.getInstance().textRenderer.fontHeight * scaleFactor);
     }
 
     public int getMouseX() {
-        return (int) (MinecraftClient.getInstance().mouse.getX() / MinecraftClient.getInstance().getWindow().getScaleFactor());
+        return (int) (MinecraftClient.getInstance().mouse.getX() / getScaleFactor());
     }
 
     public int getMouseY() {
-        return (int) (MinecraftClient.getInstance().mouse.getY() / MinecraftClient.getInstance().getWindow().getScaleFactor());
+        return (int) (MinecraftClient.getInstance().mouse.getY() / getScaleFactor());
+    }
+
+    public double getScaleFactor() {
+        return MinecraftClient.getInstance().getWindow().getScaleFactor();
     }
 
     public void handleKeyPressed(int keyCode, int scanCode, int modifiers) {
-        for (VeraApp app : MCVeraData.visibleApplications) {
-            app.keyPressed(keyCode, scanCode, modifiers);
-        }
+        Vera.forVisibleAndAllowedApps(app -> app.keyPressed(keyCode, scanCode, modifiers));
     }
 
     public void handleCharTyped(char chr, int modifiers) {
-        for (VeraApp app : MCVeraData.visibleApplications) {
-            app.charTyped(chr, modifiers);
-        }
+        Vera.forVisibleAndAllowedApps(app -> app.charTyped(chr, modifiers));
     }
 
     public String getDefaultFontName() {
@@ -129,8 +127,45 @@ public class MCVeraProvider {
     }
 
     public void handleFilesDropped(List<Path> paths) {
-        Vera.forHoveredWidget(Vera.getMouseX(), Vera.getMouseY(), (widget) -> {
-            widget.fireEvent("files-dropped", paths);
+        VeraApp top = MCVeraData.getTopHierarchy();
+
+        int x = Vera.getMouseX();
+        int y = Vera.getMouseY();
+
+        if (top != null && top.isPointOverThis(x, y)) {
+            VWidget<?> widget = top.getTopWidgetAt(x, y);
+            if (widget != null) {
+                widget.events.fire(new VWidgetEvent.FilesDropped(paths));
+                return;
+            }
+        }
+
+        AtomicBoolean didSomething = new AtomicBoolean(false);
+        Vera.forAllVisibleApps(app -> {
+            if (didSomething.get()) return;
+            if (!app.isPointOverThis(x, y)) return;
+
+            VWidget<?> widget = app.getTopWidgetAt(x, y);
+            if (widget != null) {
+                widget.events.fire(new VWidgetEvent.FilesDropped(paths));
+                didSomething.set(true);
+            }
         });
+    }
+
+    public boolean isKeyDown(int glfwKeyCode) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null || client.getWindow() == null) {
+            return false;
+        }
+        return InputUtil.isKeyPressed(client.getWindow().getHandle(), glfwKeyCode);
+    }
+
+    public void setClipboard(String content) {
+        MinecraftClient.getInstance().keyboard.setClipboard(content);
+    }
+
+    public String getClipboard() {
+        return MinecraftClient.getInstance().keyboard.getClipboard();
     }
 }

@@ -1,25 +1,31 @@
 package net.snackbag.vera.core;
 
 import net.minecraft.client.MinecraftClient;
+import net.snackbag.mcvera.MCVeraData;
+import net.snackbag.mcvera.MinecraftVera;
 import net.snackbag.vera.Vera;
+import net.snackbag.vera.event.VEvents;
 import net.snackbag.vera.event.VShortcut;
+import net.snackbag.vera.flag.VAppFlag;
+import net.snackbag.vera.flag.VAppPositioningFlag;
+import net.snackbag.vera.style.VStyleSheet;
+import net.snackbag.vera.util.VGeometry;
+import net.snackbag.vera.widget.VDelegator;
 import net.snackbag.vera.widget.VWidget;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
-public abstract class VeraApp {
+public abstract class VeraApp implements VAppAccess {
+    public final VStyleSheet styleSheet = new VStyleSheet();
+
     private final List<VWidget<?>> widgets;
     private final HashMap<String, VShortcut> shortcuts;
     private VColor backgroundColor;
     private VCursorShape cursorShape;
     private boolean cursorVisible;
-    private boolean mouseRequired;
 
     private int x;
     private int y;
@@ -28,6 +34,7 @@ public abstract class VeraApp {
 
     private boolean visible;
     private @Nullable VWidget<?> focusedWidget;
+    private VAppPositioningFlag positioning;
 
     public VeraApp() {
         this(true);
@@ -39,7 +46,7 @@ public abstract class VeraApp {
         this.backgroundColor = VColor.transparent();
         this.cursorShape = VCursorShape.DEFAULT;
         this.cursorVisible = true;
-        this.mouseRequired = mouseRequired;
+        if (mouseRequired) setFlag(VAppFlag.REQUIRES_MOUSE, true);
 
         Vera.provider.handleAppInitialization(this);
 
@@ -49,12 +56,23 @@ public abstract class VeraApp {
         this.y = 0;
 
         this.visible = false;
+        setPositioning(VAppPositioningFlag.SCREEN);
+    }
+
+    @Override
+    public @NotNull VeraApp get() {
+        return this;
+    }
+
+    @Override
+    public @Nullable VDelegator getDelegator() {
+        return null;
     }
 
     public void setCursorVisible(boolean cursorVisible) {
         this.cursorVisible = cursorVisible;
 
-        if (!visible || !mouseRequired) return;
+        if (!visible || !hasFlag(VAppFlag.REQUIRES_MOUSE)) return;
         GLFW.glfwSetInputMode(
                 MinecraftClient.getInstance().getWindow().getHandle(),
                 GLFW.GLFW_CURSOR,
@@ -71,23 +89,6 @@ public abstract class VeraApp {
 
     public boolean isCursorVisible() {
         return cursorVisible;
-    }
-
-    public boolean isMouseRequired() {
-        return mouseRequired;
-    }
-
-    public void setMouseRequired(boolean mouseRequired) {
-        if (this.mouseRequired == mouseRequired) return;
-
-        Vera.provider.handleAppSetMouseRequired(this, mouseRequired);
-        this.mouseRequired = mouseRequired;
-
-        if (!visible || !mouseRequired) return;
-        GLFW.glfwSetInputMode(
-                MinecraftClient.getInstance().getWindow().getHandle(),
-                GLFW.GLFW_CURSOR,
-                cursorVisible ? GLFW.GLFW_CURSOR_NORMAL : GLFW.GLFW_CURSOR_HIDDEN);
     }
 
     public boolean isVisible() {
@@ -115,7 +116,7 @@ public abstract class VeraApp {
         this.visible = visible;
 
         if (visible) setCursorShape(cursorShape);
-        if (!visible || !mouseRequired) return;
+        if (!visible || !hasFlag(VAppFlag.REQUIRES_MOUSE)) return;
         GLFW.glfwSetInputMode(
                 MinecraftClient.getInstance().getWindow().getHandle(),
                 GLFW.GLFW_CURSOR,
@@ -138,6 +139,15 @@ public abstract class VeraApp {
         this.width = width;
     }
 
+    public void setSize(int both) {
+        setSize(both, both);
+    }
+
+    public void setSize(int width, int height) {
+        setWidth(width);
+        setHeight(height);
+    }
+
     public void move(int x, int y) {
         this.x = x;
         this.y = y;
@@ -155,24 +165,52 @@ public abstract class VeraApp {
         return y;
     }
 
+    public void moveToHierarchyTop() {
+        if (!hasFlag(VAppFlag.HIERARCHIC)) {
+            MinecraftVera.LOGGER.warn("Failed to move app to top, because hierarchy isn't enabled");
+            return;
+        }
+
+        MCVeraData.appFlags.get(VAppFlag.HIERARCHIC).remove(this);
+        MCVeraData.appFlags.get(VAppFlag.HIERARCHIC).add(0, this);
+    }
+
     public abstract void init();
 
+    @Override
     public List<VWidget<?>> getWidgets() {
         return new ArrayList<>(widgets);
     }
 
+    @Override
     public void addWidget(VWidget<?> widget) {
+        if (!widget.appAccess.isDelegated()) {
+            if (widgets.contains(widget)) {
+                MinecraftVera.LOGGER.error("Can't add widget %s to app %s, because it is already added"
+                        .formatted(widget.toString(), getClass().getSimpleName()));
+                return;
+            }
+        }
+
         this.widgets.add(widget);
     }
 
+    @Override
     public void removeWidget(VWidget<?> widget) {
-        if (!widgets.contains(widget)) return;
+        if (!widget.appAccess.isDelegated()) {
+            if (!widgets.contains(widget)) {
+                MinecraftVera.LOGGER.error("Can't remove widget %s from app %s, because it wasn't added"
+                        .formatted(widget.toString(), getClass().getSimpleName()));
+                return;
+            }
 
-        if (isFocusedWidget(widget)) setFocusedWidget(null);
-        if (widget.isLeftClickDown()) widget.fireEvent("left-click-release");
-        if (widget.isMiddleClickDown()) widget.fireEvent("middle-click-release");
-        if (widget.isRightClickDown()) widget.fireEvent("right-click-release");
-        if (widget.isHovered()) widget.fireEvent("hover-leave");
+            if (isFocusedWidget(widget)) setFocusedWidget(null);
+        }
+
+        if (widget.isLeftClickDown()) widget.events.fire(VEvents.Widget.LEFT_CLICK_RELEASE);
+        if (widget.isMiddleClickDown()) widget.events.fire(VEvents.Widget.MIDDLE_CLICK_RELEASE);
+        if (widget.isRightClickDown()) widget.events.fire(VEvents.Widget.RIGHT_CLICK_RELEASE);
+        if (widget.isHovered()) widget.events.fire(VEvents.Widget.HOVER_LEAVE);
 
         this.widgets.remove(widget);
     }
@@ -186,10 +224,18 @@ public abstract class VeraApp {
     }
 
     public void render() {
-        Vera.renderer.drawRect(this, 0, 0, width, height, 0, backgroundColor);
+        Vera.renderer.drawRect(x, y, width, height, backgroundColor);
     }
 
     public void renderAfterWidgets() {}
+
+    public void renderHierarchyOverlay() {
+        Vera.renderer.drawRect(x, y, width, height,
+                backgroundColor.isVisible()
+                        ? VColor.black().withOpacity(0.2f)
+                        : backgroundColor.sub(40).withOpacity(0.2f)
+        );
+    }
 
     public void update() {}
 
@@ -210,31 +256,20 @@ public abstract class VeraApp {
         return List.copyOf(shortcuts.values());
     }
 
-    public List<VWidget<?>> getHoveredWidgets() {
-        return getHoveredWidgets(Vera.provider.getMouseX(), Vera.provider.getMouseY());
-    }
+    public @Nullable VWidget<?> getTopWidgetAt(int px, int py) {
+        int mx = px - x;
+        int my = py - y;
 
-    public List<VWidget<?>> getHoveredWidgets(int mouseX, int mouseY) {
-        return getWidgets().parallelStream()
-                .filter(widget -> isMouseOverWidget(widget, mouseX, mouseY))
+        return getWidgetsReversed().stream()
+                .filter(widget -> widget.isPointOverThis(mx, my))
                 .filter(VWidget::visibilityConditionsPassed)
-                .collect(Collectors.toList());
+                .findFirst().orElse(null);
     }
 
-    private boolean isMouseOverWidget(VWidget<?> widget, int mouseX, int mouseY) {
-        if (!widget.visibilityConditionsPassed()) return false;
-
-        int widgetX = widget.getHitboxX() + x;
-        int widgetY = widget.getHitboxY() + y;
-        int widgetWidth = widget.getHitboxWidth();
-        int widgetHeight = widget.getHitboxHeight();
-        return mouseX >= widgetX && mouseX <= widgetX + widgetWidth &&
-                mouseY >= widgetY && mouseY <= widgetY + widgetHeight;
-    }
-
-    public boolean isMouseOverApp(int mouseX, int mouseY) {
+    public boolean isPointOverThis(int px, int py) {
         if (!isVisible()) return false;
-        return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
+
+        return VGeometry.isInBox(px, py, x, y, width, height);
     }
 
     public void setFocusedWidget(@Nullable VWidget<?> widget) {
@@ -242,8 +277,8 @@ public abstract class VeraApp {
             VWidget<?> oldWidget = this.focusedWidget;
             this.focusedWidget = widget;
 
-            if (oldWidget != null) oldWidget.fireEvent("focus-state-change");
-            if (widget != null) widget.fireEvent("focus-state-change");
+            if (oldWidget != null) oldWidget.events.fire(VEvents.Widget.FOCUS_STATE_CHANGE);
+            if (widget != null) widget.events.fire(VEvents.Widget.FOCUS_STATE_CHANGE);
         }
     }
 
@@ -273,11 +308,62 @@ public abstract class VeraApp {
         );
     }
 
+    public VAppPositioningFlag getPositioning() {
+        return positioning;
+    }
+
+    public void setPositioning(VAppPositioningFlag positioning) {
+        // make sure hashmaps exist
+        if (!MCVeraData.visibleApplications.containsKey(this.positioning))
+            MCVeraData.visibleApplications.put(this.positioning, new LinkedHashSet<>());
+        if (!MCVeraData.visibleApplications.containsKey(positioning))
+            MCVeraData.visibleApplications.put(positioning, new LinkedHashSet<>());
+
+        // if visible, then we can also add the app itself
+        if (isVisible()) {
+            MCVeraData.visibleApplications.get(positioning).add(this);
+        }
+
+        // doesn't matter if visible or not, we always remove it from its original
+        MCVeraData.visibleApplications.get(this.positioning).remove(this);
+        this.positioning = positioning;
+    }
+
     public void keyPressed(int keyCode, int scanCode, int modifiers) {
         if (hasFocusedWidget()) getFocusedWidget().keyPressed(keyCode, scanCode, modifiers);
     }
 
     public void charTyped(char chr, int modifiers) {
         if (hasFocusedWidget()) getFocusedWidget().charTyped(chr, modifiers);
+    }
+
+    public void mergeStyleSheet(VStyleSheet target) {
+        styleSheet.addSheet(target);
+    }
+
+    public boolean hasFlag(VAppFlag flag) {
+        if (!MCVeraData.appFlags.containsKey(flag)) return false;
+        else return MCVeraData.appFlags.get(flag).contains(this);
+    }
+
+    public void setFlag(VAppFlag flag, boolean enabled) {
+        if (enabled == hasFlag(flag)) return; // if nothing has to be changed, change nothing
+
+        if (!enabled) MCVeraData.appFlags.get(flag).remove(this);
+        else {
+            if (!MCVeraData.appFlags.containsKey(flag)) MCVeraData.appFlags.put(flag, new ArrayList<>());
+            MCVeraData.appFlags.get(flag).add(this);
+        }
+
+        // handle mouse requirements
+        if (flag == VAppFlag.REQUIRES_MOUSE) {
+            Vera.provider.handleAppSetMouseRequired(this, enabled);
+
+            if (!visible || !enabled) return;
+            GLFW.glfwSetInputMode(
+                    MinecraftClient.getInstance().getWindow().getHandle(),
+                    GLFW.GLFW_CURSOR,
+                    cursorVisible ? GLFW.GLFW_CURSOR_NORMAL : GLFW.GLFW_CURSOR_HIDDEN);
+        }
     }
 }

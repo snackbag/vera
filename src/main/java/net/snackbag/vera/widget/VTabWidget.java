@@ -1,280 +1,225 @@
 package net.snackbag.vera.widget;
 
-import net.minecraft.client.MinecraftClient;
+import net.snackbag.mcvera.MinecraftVera;
 import net.snackbag.vera.Vera;
-import net.snackbag.vera.core.VColor;
-import net.snackbag.vera.core.VCursorShape;
+import net.snackbag.vera.core.VAppAccess;
+import net.snackbag.vera.core.VFill;
 import net.snackbag.vera.core.VFont;
-import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.core.VRenderContext;
+import net.snackbag.vera.core.v4.V4Int;
+import net.snackbag.vera.event.VEventContext;
+import net.snackbag.vera.event.VEvents;
+import net.snackbag.vera.event.VTabWidgetEvent;
+import net.snackbag.vera.layout.VHLayout;
+import net.snackbag.vera.style.VStyleState;
+import net.snackbag.vera.style.VUserState;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 
-public class VTabWidget extends VWidget<VTabWidget> {
-    private VFont font;
-    private VColor selectedBackgroundColor;
-    private VColor defaultBackgroundColor;
-    private int itemSpacingLeft = 4;
-    private int itemSpacingRight = 4;
+public class VTabWidget extends VCompound<VTabWidget> {
+    private int cachedTotalTabWidthSum;
+    private int cachedTabHeightMax;
 
-    private final LinkedHashMap<String, List<VWidget<?>>> tabs = new LinkedHashMap<>();
-    private @Nullable Integer activeTab = null;
-    private @Nullable Integer hoveredTab = null;
+    private int activeTab = 0;
 
-    public VTabWidget(VeraApp app, String... tabs) {
-        super(0, 0, 100, 16, app);
-
-        font = VFont.create();
-        selectedBackgroundColor = VColor.white();
-        defaultBackgroundColor = VColor.white().sub(40);
-
-        setHoverCursor(VCursorShape.POINTING_HAND);
+    public VTabWidget(VAppAccess app) {
+        this(app, 0, 0, 0, 0);
     }
 
-    @Override
-    public void render() {
-        int marginX = 0;
-        int i = -1;
-
-        for (String key : tabs.keySet()) {
-            int textWidth = Vera.provider.getTextWidth(key, font);
-
-            i++;
-            marginX += itemSpacingLeft;
-
-            Vera.renderer.drawRect(app,
-                    x + marginX - itemSpacingLeft, y,
-                    itemSpacingLeft + itemSpacingRight + textWidth,
-                    getHitboxHeight(), 0,
-                    activeTab != null && activeTab == i ? selectedBackgroundColor: defaultBackgroundColor
-            );
-
-            Vera.renderer.drawText(app, x + marginX, y + 2, 0, key, font);
-
-            marginX += textWidth + itemSpacingRight;
-        }
+    public VTabWidget(VAppAccess app, int x, int y, int width, int height) {
+        super(app, new VHLayout(app, x, y, width, height), x, y, width, height);
     }
 
-    @Override
-    public void handleBuiltinEvent(String event, Object... args) {
-        switch (event) {
-            case "mouse-move" -> getHoveredTabIndex((int) args[0]);
-
-            case "hover-enter" -> getHoveredTabIndex(Vera.getMouseX());
-            case "hover-leave" -> hoveredTab = null;
-
-            case "left-click" -> {
-                if (!isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-tab-left-click", hoveredTab);
-                setActiveTab(hoveredTab);
-            }
-            case "left-click-release" -> {
-                if (!isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-tab-left-click-release", hoveredTab);
-            }
-
-            case "middle-click" -> {
-                if (!isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-tab-middle-click", hoveredTab);
-            }
-            case "middle-click-release" -> {
-                if (!isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-tab-middle-click-release", hoveredTab);
-            }
-
-            case "right-click" -> {
-                if (!isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-tab-right-click", hoveredTab);
-            }
-            case "right-click-release" -> {
-                if (!isValidTabIndex(hoveredTab)) return;
-                fireEvent("vtabwidget-tab-right-click-release", hoveredTab);
-            }
-        }
-
-        super.handleBuiltinEvent(event, args);
-    }
-
-    public boolean isValidTabIndex(@Nullable Integer index) {
-        return (!(index == null || index < 0 || index >= tabs.size()));
-    }
-
-    public @Nullable String getHoveredTab(int mouseX) {
-        int index = getHoveredTabIndex(mouseX);
-        return !isValidTabIndex(index) ? null : (String) List.of(tabs.keySet().toArray()).get(index);
-    }
-
-    public int getHoveredTabIndex(int mouseX) {
-        int relativeX = mouseX - getHitboxX();
-        int currentX = 0;
-        int index = 0;
-
-        for (String tabName : tabs.keySet()) {
-            int textWidth = Vera.provider.getTextWidth(tabName, font);
-            int totalTabWidth = itemSpacingLeft + textWidth + itemSpacingRight;
-
-            if (relativeX >= currentX && relativeX < currentX + totalTabWidth) {
-                if (hoveredTab != null && hoveredTab != index) {
-                    fireEvent("vtabwidget-tab-hover-change", hoveredTab);
-                }
-
-                hoveredTab = index;
-                return index;
-            }
-
-            currentX += totalTabWidth;
-            index++;
-        }
-
-        return -1;
-    }
-
-    public @Nullable Integer getTabIndex(String tab) {
-        return !tabs.containsKey(tab) ? null : List.of(tabs.keySet().toArray()).indexOf(tab);
-    }
-
-    public void onTabHoverChange(Consumer<Integer> runnable) {
-        registerEventExecutor("vtabwidget-tab-hover-change", (args) -> runnable.accept((int) args[0]));
-    }
-
-    public void onTabLeftClick(Consumer<Integer> runnable) {
-        registerEventExecutor("vtabwidget-tab-left-click", (args) -> runnable.accept((int) args[0]));
-    }
-
-    public void onTabLeftClickRelease(Consumer<Integer> runnable) {
-        registerEventExecutor("vtabwidget-tab-left-click-release", (args) -> runnable.accept((int) args[0]));
-    }
-
-    public void onTabMiddleClick(Consumer<Integer> runnable) {
-        registerEventExecutor("vtabwidget-tab-middle-click", (args) -> runnable.accept((int) args[0]));
-    }
-
-    public void onTabMiddleClickRelease(Consumer<Integer> runnable) {
-        registerEventExecutor("vtabwidget-tab-middle-click-release", (args) -> runnable.accept((int) args[0]));
-    }
-
-    public void onTabRightClick(Consumer<Integer> runnable) {
-        registerEventExecutor("vtabwidget-tab-right-click", (args) -> runnable.accept((int) args[0]));
-    }
-
-    public void onTabRightClickRelease(Consumer<Integer> runnable) {
-        registerEventExecutor("vtabwidget-tab-right-click-release", (args) -> runnable.accept((int) args[0]));
-    }
-
-    public void addTab(String tab, VWidget<?>... widgets) {
-        addTab(tab, Arrays.asList(widgets));
-    }
-
-    public void addTab(String tab, List<VWidget<?>> widgets) {
-        if (!tabs.containsKey(tab)) {
-            tabs.put(tab, new ArrayList<>());
-        }
-
-        addWidget(tab, widgets);
-    }
-
-    public void addWidget(String tab, VWidget<?>... widgets) {
-        addWidget(tab, Arrays.asList(widgets));
-    }
-
-    public void addWidget(String tab, List<VWidget<?>> widgets) {
-        if (tab == null || !tabs.containsKey(tab)) {
-            throw new IllegalArgumentException("Failed to add " + widgets.size() + " widget(s) to tab '" + tab + "', because it doesn't exist. (App: " + app.getClass().getSimpleName() + ")");
-        }
-
-        Integer tabIndex = getTabIndex(tab);
-
-        for (VWidget<?> widget : widgets) {
-            widget.addVisibilityCondition(() -> isValidTabIndex(tabIndex) && Objects.equals(tabIndex, getActiveTab()));
-            tabs.get(tab).add(widget);
-        }
-    }
-
-    @Override
-    public int getHitboxHeight() {
-        return font.getSize() / 2 + 4;
-    }
-
-    @Override
-    public int getHitboxWidth() {
-        int currentX = 0;
-
-        for (String tabName : tabs.keySet()) {
-            int textWidth = Vera.provider.getTextWidth(tabName, font);
-            int totalTabWidth = itemSpacingLeft + textWidth + itemSpacingRight;
-
-            currentX += totalTabWidth;
-        }
-
-        return currentX;
-    }
-
-    public @Nullable Integer getActiveTab() {
+    public int getActiveTabIndex() {
         return activeTab;
     }
 
-    public void setActiveTab(@Nullable Integer activeTab) {
-        if (activeTab == null || activeTab >= tabs.keySet().size()) {
-            activeTab = null;
+    public @Nullable Tab getActiveTab() {
+        return getTab(activeTab);
+    }
+
+    public void setActiveTab(int index) {
+        Tab tab = getTab(index);
+        if (tab == null) {
+            MinecraftVera.LOGGER.warn("Couldn't set active tab to tab " + index + ", because there is no tab with that index. Size: " + getTabs().size());
+            return;
         }
 
-        this.activeTab = activeTab;
+        activeTab = index;
     }
 
-    public VFont getFont() {
-        return font;
+    public void setActiveTab(Tab tab) {
+        setActiveTab(getTabIndex(tab.name));
     }
 
-    public void setFont(VFont font) {
-        this.font = font;
+    public @Nullable Tab getTab(String name) {
+        for (Tab tab : getTabs()) {
+            if (tab.getName().equals(name)) return tab;
+        }
+
+        return null;
     }
 
-    public VFont.FontModifier modifyFont() {
-        return new VFont.FontModifier(font, this::setFont);
+    public @Nullable Tab getTab(int index) {
+        return !isValidIndex(index) ? null : (Tab) getWidgets().get(index);
     }
 
-    public VColor.ColorModifier modifyFontColor() {
-        return new VColor.ColorModifier(font.getColor(), (color) -> setFont(getFont().withColor(color)));
+    public int getTabIndex(String name) {
+        Tab tab = getTab(name);
+        if (tab == null) throw new NullPointerException("There is no tab with name " + name);
+        return getTabs().indexOf(tab);
     }
 
-    public VColor getSelectedBackgroundColor() {
-        return selectedBackgroundColor;
+    public void addTab(String name) {
+        addWidget(new Tab(this, name));
+        events.fire(new VTabWidgetEvent.TabAdded(name));
     }
 
-    public void setSelectedBackgroundColor(VColor backgroundColor) {
-        this.selectedBackgroundColor = backgroundColor;
+    public void addTab(String name, VWidget<?>... widgets) {
+        addTab(name);
+        addWidgets(name, widgets);
     }
 
-    public VColor.ColorModifier modifySelectedBackgroundColor() {
-        return new VColor.ColorModifier(selectedBackgroundColor, this::setSelectedBackgroundColor);
+    public void removeTab(String name) {
+        removeTab(getTabIndex(name));
     }
 
-    public VColor getDefaultBackgroundColor() {
-        return defaultBackgroundColor;
+    public void removeTab(int index) {
+        if (!isValidIndex(index)) {
+            throw new ArrayIndexOutOfBoundsException("There is no tab with index " + index + "; size: " + getTabs().size());
+        }
+
+        removeWidget(getTab(index));
     }
 
-    public void setDefaultBackgroundColor(VColor defaultBackgroundColor) {
-        this.defaultBackgroundColor = defaultBackgroundColor;
+    protected boolean isValidIndex(int index) {
+        return !(index < 0 || index >= getTabs().size());
     }
 
-    public VColor.ColorModifier modifyDefaultBackgroundColor() {
-        return new VColor.ColorModifier(defaultBackgroundColor, this::setDefaultBackgroundColor);
+    public void addWidgets(String tabName, VWidget<?>... widgets) {
+        Tab tab = getTab(tabName);
+        if (tab == null) throw new NullPointerException("Tab of name " + tabName + " does not exist");
+
+        tab.addWidgets(widgets);
     }
 
-    public int getItemSpacingLeft() {
-        return itemSpacingLeft;
+    @Override
+    public void addWidget(VWidget<?> widget, boolean addToLayout) {
+        if (!(widget instanceof Tab)) {
+            throw new IllegalArgumentException("Don't use addWidget to add to a VTabWidget, use addWidgets instead!");
+        }
+
+        super.addWidget(widget, addToLayout);
+
+        // update caches
+        cachedTotalTabWidthSum = getTabs().stream()
+                .mapToInt(Tab::getEffectiveWidth)
+                .sum();
+        cachedTabHeightMax = getTabs().stream()
+                .mapToInt(Tab::getEffectiveHeight)
+                .max()
+                .orElse(0);
     }
 
-    public void setItemSpacingLeft(int itemSpacingLeft) {
-        this.itemSpacingLeft = itemSpacingLeft;
+    @Override
+    public int getEffectiveWidth() {
+        return super.getEffectiveWidth() + cachedTotalTabWidthSum;
     }
 
-    public int getItemSpacingRight() {
-        return itemSpacingRight;
+    @Override
+    public int getEffectiveHeight() {
+        return super.getEffectiveHeight() + cachedTabHeightMax;
     }
 
-    public void setItemSpacingRight(int itemSpacingRight) {
-        this.itemSpacingRight = itemSpacingRight;
+    @Override
+    public void renderContent(VRenderContext ctx) {}
+
+    public List<Tab> getTabs() {
+        return Collections.unmodifiableList((List) getWidgets());
+    }
+
+    public static class Tab extends VWidget<Tab> {
+        private String name;
+        private final VTabWidget parent;
+
+        public Tab(VTabWidget parent, String name) {
+            super(parent, 0, 0, 0, 0);
+            this.name = name;
+            this.parent = parent;
+
+            adjustSize();
+        }
+
+        private void adjustSize() {
+            VFont font = getStyle("font", createStyleState());
+
+            setSize(
+                    Vera.provider.getTextWidth(name, font),
+                    Vera.provider.getTextHeight(name, font)
+            );
+        }
+
+        public void addWidgets(VWidget<?>... widgets) {
+            for (VWidget<?> widget : widgets) {
+                widget.addVisibilityCondition(() -> parent.getActiveTab() == this);
+                events.fire(new VTabWidgetEvent.WidgetAdded(widget));
+            }
+        }
+
+        public void setName(String name) {
+            this.name = name;
+            adjustSize();
+            events.fire(new VTabWidgetEvent.TabNameChanged(name));
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void onTabNameChange(Consumer<VTabWidgetEvent.TabNameChanged> ctx) {
+            events.register(VEvents.TabWidget.TAB_NAME_CHANGED, ctx);
+        }
+
+        @Override
+        public VStyleState createStyleState() {
+            if (parent.getActiveTab() == this) return super.createStyleState().withUserState(VUserState.ACTIVE);
+            else return super.createStyleState();
+        }
+
+        @Override
+        public int getEffectiveHeight() {
+            V4Int padding = getStyle("padding", createStyleState());
+            return super.getEffectiveHeight() + padding.get1() + padding.get2();
+        }
+
+        @Override
+        public int getEffectiveWidth() {
+            V4Int padding = getStyle("padding", createStyleState());
+            return super.getEffectiveWidth() + padding.get3() + padding.get4();
+        }
+
+        @Override
+        public void handleBuiltinEvent(String event, VEventContext ctx) {
+            super.handleBuiltinEvent(event, ctx);
+
+            if (event.equals(VEvents.Widget.LEFT_CLICK)) {
+                parent.setActiveTab(this);
+            }
+        }
+
+        @Override
+        public void renderContent(VRenderContext ctx) {
+            var state = createStyleState();
+
+            VFont font = getStyle("font", state);
+            VFill background = getStyle("background", state);
+            V4Int padding = getStyle("padding", state);
+
+            Vera.renderer.drawFill(ctx, 0, 0, getEffectiveWidth(), getEffectiveHeight(), background);
+            Vera.renderer.drawText(ctx, padding.get3(), padding.get1(), getName(), font);
+        }
     }
 }
