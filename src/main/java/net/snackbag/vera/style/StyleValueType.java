@@ -2,6 +2,7 @@ package net.snackbag.vera.style;
 
 import net.minecraft.util.Identifier;
 import net.snackbag.mcvera.MinecraftVera;
+import net.snackbag.vera.InternalVera;
 import net.snackbag.vera.core.*;
 import net.snackbag.vera.core.v4.V4Color;
 import net.snackbag.vera.core.v4.V4Int;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 public enum StyleValueType {
     STRING("", (f, t, e, d) -> d > 0.5 ? t : f),
-    IDENTIFIER(Identifier.of(MinecraftVera.MOD_ID, "empty"), (f, t, e, d) -> d > 0.5 ? t : f),
+    IDENTIFIER(InternalVera.id("empty"), (f, t, e, d) -> d > 0.5 ? t : f),
     INT(0, (from, to, easing, delta) -> easing.apply(from, to, delta)),
     FLOAT(0.0F, (from, to, easing, delta) -> easing.apply(from, to, delta)),
     BOOLEAN(false, (f, t, e, d) -> d > 0.5 ? t : f),
