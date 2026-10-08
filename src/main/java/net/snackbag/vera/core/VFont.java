@@ -20,7 +20,7 @@ public class VFont {
     }
 
     public VFont(String name) {
-        this(name, 16, VColor.black());
+        this(name, 8, VColor.black());
     }
 
     public static VFont create() {

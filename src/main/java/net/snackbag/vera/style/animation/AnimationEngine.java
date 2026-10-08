@@ -1,0 +1,108 @@
+package net.snackbag.vera.style.animation;
+
+import net.snackbag.mcvera.MinecraftVera;
+import net.snackbag.vera.event.VAnimationEvent;
+import net.snackbag.vera.style.StyleValueType;
+import net.snackbag.vera.widget.VWidget;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+public class AnimationEngine {
+    public final VWidget<?> widget;
+    private final HashMap<String, PlaybackContext> active = new HashMap<>();
+
+    public AnimationEngine(VWidget<?> widget) {
+        this.widget = widget;
+    }
+
+    public void start(VAnimation animation) {
+        if (active.containsKey(animation.name)) {
+            MinecraftVera.LOGGER.warn("Couldn't start animation %s, because it's already running".formatted(animation.name));
+            return;
+        }
+
+        CompiledAnimation compiled = animation.compile(widget.getApp(), widget);
+        active.put(compiled.name, new PlaybackContext(compiled, System.currentTimeMillis()));
+        widget.events.fire(new VAnimationEvent.Begin(animation));
+    }
+
+    public void stop(VAnimation animation) {
+        stop(animation.name);
+    }
+
+    public void stop(String name) {
+        if (!active.containsKey(name)) {
+            MinecraftVera.LOGGER.warn("Couldn't stop animation %s, because it isn't active".formatted(name));
+            return;
+        }
+
+        PlaybackContext ctx = active.get(name);
+        widget.events.fire(new VAnimationEvent.Finish(ctx.animation, ctx.startTime));
+        active.remove(name);
+    }
+
+    public <T> T animateStyle(String key, T value) {
+        for (PlaybackContext ctx : active.values()) {
+            CompiledAnimation animation = ctx.animation;
+            if (!animation.keys.contains(key)) continue;
+
+            int time = ctx.getRelativeTime();
+
+            // select active keyframes
+            int kfIndex = animation.getKeyframeIndexAtTime(time);
+            int fromKfIndex = Math.max(kfIndex - 1, 0);
+            boolean loopSpoofed = false;
+
+            if (ctx.getCurrentLoopNumber() > 1) { // handle loop mode; spoof first keyframe with last one for smooth transition
+                if (fromKfIndex == 0) {
+                    fromKfIndex = animation.keyframes.size() - 1;
+                    loopSpoofed = true;
+                }
+            }
+
+            VKeyframe to = animation.keyframes.get(kfIndex);
+            VKeyframe from = animation.keyframes.get(fromKfIndex);
+
+            int fromKfWhen = animation.getWhenKeyframe(from);
+            if (ctx.getCurrentLoopNumber() > 1 && loopSpoofed) { // handle loop mode; spoof beginning time for smooth transition
+                fromKfWhen = 0;
+            }
+
+            float delta = animation.getKeyframeDelta(time, fromKfWhen, from, to);
+
+            StyleValueType reservation = widget.getApp().styleSheet.getReservation(key);
+            T kfEase = (T) reservation.animationTransition.apply( // ease keyframe transition
+                    from.styles.get(key), to.styles.get(key),
+                    to.easing, delta);
+            return kfEase;
+        }
+
+        return value;
+    }
+
+    public void updateLifetimes() {
+        HashMap<String, PlaybackContext> copies = new HashMap<>(active); // fix concurrency crash
+
+        for (Map.Entry<String, PlaybackContext> entry : copies.entrySet()) {
+            PlaybackContext ctx = entry.getValue();
+            String name = entry.getKey();
+
+            if (ctx.getProgress() >= 1.0f) stop(name);
+        }
+    }
+
+    public boolean isActive(String animation) {
+        return active.containsKey(animation.toLowerCase());
+    }
+
+    public Set<String> getActive() {
+        return active.keySet();
+    }
+
+    public @Nullable PlaybackContext getActive(String name) {
+        return active.getOrDefault(name, null);
+    }
+}

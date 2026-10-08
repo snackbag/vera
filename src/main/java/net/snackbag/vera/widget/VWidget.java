@@ -1,69 +1,56 @@
 package net.snackbag.vera.widget;
 
+import net.snackbag.mcvera.MinecraftVera;
+import net.snackbag.vera.VElement;
 import net.snackbag.vera.Vera;
 import net.snackbag.vera.core.*;
+import net.snackbag.vera.core.v4.V4Color;
+import net.snackbag.vera.core.v4.V4Int;
 import net.snackbag.vera.event.*;
+import net.snackbag.vera.layout.VLayout;
+import net.snackbag.vera.style.VEffectState;
+import net.snackbag.vera.style.VStyleState;
+import net.snackbag.vera.style.animation.AnimationEngine;
+import net.snackbag.vera.style.animation.PlaybackContext;
+import net.snackbag.vera.style.animation.VAnimation;
+import net.snackbag.vera.style.animation.easing.VEasing;
+import net.snackbag.vera.util.DragHandler;
+import net.snackbag.vera.core.VRenderContext;
+import net.snackbag.vera.util.VGeometry;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.function.Consumer;
 
-public abstract class VWidget<T extends VWidget<T>> {
-    protected int x;
-    protected int y;
-    protected int width;
-    protected int height;
-    protected double rotation;
-    protected V4Color border;
-    protected V4Int borderSize;
+public abstract class VWidget<T extends VWidget<T>> extends VElement {
+    public AnimationEngine animations = new AnimationEngine(this);
+    public final LinkedHashSet<String> classes = new LinkedHashSet<>();
 
-    protected VeraApp app;
-    protected VCursorShape hoverCursor = VCursorShape.DEFAULT;
-    protected @Nullable VCursorShape cursorBeforeHover = null;
-    protected boolean focusOnClick = true;
+    public boolean focusOnClick = true;
     private boolean hovered = false;
-    private boolean visible = true;
 
     private boolean leftClickDown = false;
     private boolean middleClickDown = false;
     private boolean rightClickDown = false;
-    private int leftDragPreviousX = -1;
-    private int leftDragPreviousY = -1;
-    private int middleDragPreviousX = -1;
-    private int middleDragPreviousY = -1;
-    private int rightDragPreviousX = -1;
-    private int rightDragPreviousY = -1;
+    private VStyleState handledPrevStyleState = VEffectState.DEFAULT.asStyleState(); // constantly updates
+    private VStyleState prevStyleState = VEffectState.DEFAULT.asStyleState(); // updates max once per frame, can be seen as the definite result
 
-    private final HashMap<String, List<VEvent>> eventExecutors;
-    private final List<Supplier<Boolean>> visibilityConditions;
+    private VStyleState transitionTarget = null;
 
-    public VWidget(int x, int y, int width, int height, VeraApp app) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.app = app;
-        this.rotation = 0;
-        this.eventExecutors = new HashMap<>();
-        this.visibilityConditions = new ArrayList<>();
-        this.border = new V4Color(VColor.black());
-        this.borderSize = new V4Int(0);
+    protected int offsetX = 0;
+    protected int offsetY = 0;
+    protected boolean hasTransparency = false;
 
-        addVisibilityCondition(this::isVisible);
+    public VWidget(VAppAccess app, int x, int y, int width, int height) {
+        super(app, x, y, width, height);
     }
 
-    public abstract void render();
+    public void renderBeforeContent(VRenderContext ctx) {}
 
-    public int getX() {
-        return x;
-    }
+    public abstract void renderContent(VRenderContext ctx);
 
-    public int getY() {
-        return y;
-    }
+    public void renderAfterContent(VRenderContext ctx) {}
 
     public int getHitboxX() {
         return getX();
@@ -73,112 +60,278 @@ public abstract class VWidget<T extends VWidget<T>> {
         return getY();
     }
 
-    public int getWidth() {
-        return width;
-    }
-
     public int getHitboxWidth() {
-        return getWidth();
-    }
-
-    public int getHeight() {
-        return height;
+        return getEffectiveWidth();
     }
 
     public int getHitboxHeight() {
-        return getHeight();
+        return getEffectiveHeight();
     }
 
-    public void setWidth(int width) {
-        this.width = width;
+    @SuppressWarnings("unchecked")
+    public <V> void setStyle(String key, V... value) {
+        getApp().styleSheet.setKey(this, key, value);
     }
 
-    public void setHeight(int height) {
-        this.height = height;
+    @SuppressWarnings("unchecked")
+    public <V> void setStyle(String key, VEffectState state, V... value) {
+        getApp().styleSheet.setKey(this, key, value, state);
     }
 
-    public V4Color getBorder() {
-        return border;
+    public <V> V getStyle(String key) {
+        return animations.animateStyle(key, getApp().styleSheet.getKey(this, key));
     }
 
-    public void setBorder(V4Color border) {
-        this.border = border;
+    public <V> V getStyle(String key, VEffectState state) {
+        return animations.animateStyle(key, getApp().styleSheet.getKey(this, key, state));
     }
 
-    public void setBorder(VColor all) {
-        setBorder(new V4Color(all));
+    public <V> V getStyle(String key, VStyleState state) {
+        return animations.animateStyle(key, getApp().styleSheet.getKey(this, key, state));
     }
 
-    public void setBorder(VColor tb, VColor lr) {
-        setBorder(new V4Color(tb, lr));
+    public <V> V getStyleOrDefault(String key, V dflt) {
+        V style = getStyle(key);
+        return style != null ? style : dflt;
     }
 
-    public void setBorder(VColor top, VColor bottom, VColor left, VColor right) {
-        setBorder(new V4Color(top, bottom, left, right));
+    public <V> V getStyleOrDefault(String key, V dflt, VEffectState state) {
+        V style = getStyle(key, state);
+        return style != null ? style : dflt;
     }
 
-    public V4Int getBorderSize() {
-        return borderSize;
+    public <V> V getStyleOrDefault(String key, V dflt, VStyleState state) {
+        V style = getStyle(key, state);
+        return style != null ? style : dflt;
     }
 
-    public void setBorderSize(V4Int borderSize) {
-        this.borderSize = borderSize;
+    public VFont.FontModifier modifyStyleFont(String key) {
+        return modifyStyleFont(key, VEffectState.DEFAULT);
     }
 
-    public void setBorderSize(int all) {
-        setBorderSize(new V4Int(all));
+    public VFont.FontModifier modifyStyleFont(String key, @Nullable VEffectState state) {
+        return getApp().styleSheet.modifyKeyAsFont(this, key, state);
     }
 
-    public void setBorderSize(int tb, int lr) {
-        setBorderSize(new V4Int(tb, lr));
+    public VFont.FontModifier modifyStyleFont(String key, @NotNull VStyleState state) {
+        return getApp().styleSheet.modifyKeyAsFont(this, key, state);
     }
 
-    public void setBorderSize(int top, int bottom, int left, int right) {
-        setBorderSize(new V4Int(top, bottom, left, right));
+    public VColor.ColorModifier modifyStyleFontColor(String key) {
+        return modifyStyleFontColor(key, VEffectState.DEFAULT);
     }
 
-    public void renderBorder() {
+    public VColor.ColorModifier modifyStyleFontColor(String key, @Nullable VEffectState state) {
+        return getApp().styleSheet.modifyKeyAsFontColor(this, key, state);
+    }
+
+    public VColor.ColorModifier modifyStyleFontColor(String key, @NotNull VStyleState state) {
+        return getApp().styleSheet.modifyKeyAsFontColor(this, key, state);
+    }
+
+    public VColor.ColorModifier modifyStyleColor(String key) {
+        return getApp().styleSheet.modifyKeyAsColor(this, key);
+    }
+
+    public VColor.ColorModifier modifyStyleColor(String key, @Nullable VEffectState state) {
+        return getApp().styleSheet.modifyKeyAsColor(this, key, state);
+    }
+
+    public VColor.ColorModifier modifyStyleColor(String key, @NotNull VStyleState state) {
+        return getApp().styleSheet.modifyKeyAsColor(this, key, state);
+    }
+
+    public void animate(VAnimation animation) {
+        animate(animation, false);
+    }
+
+    public void animate(VAnimation animation, boolean override) {
+        if (override && isAnimationActive(animation.name)) stopAnimation(animation);
+        animations.start(animation);
+    }
+
+    public void stopAnimation(VAnimation animation) {
+        stopAnimation(animation.name);
+    }
+
+    public void stopAnimation(String animation) {
+        animations.stop(animation);
+    }
+
+    public void stopAllAnimations() {
+        for (String animation : animations.getActive()) {
+            stopAnimation(animation);
+        }
+    }
+
+    public boolean isAnimationActive(VAnimation animation) {
+        return isAnimationActive(animation.name);
+    }
+
+    public boolean isAnimationActive(String animation) {
+        return animations.isActive(animation);
+    }
+
+    public VStyleState createStyleState() {
+        return createEffectState().asStyleState();
+    }
+
+    private VEffectState createEffectState() {
+        // Clicks first
+        if (leftClickDown) return VEffectState.LEFT_CLICKED;
+        else if (middleClickDown) return VEffectState.MIDDLE_CLICKED;
+        else if (rightClickDown) return VEffectState.RIGHT_CLICKED;
+
+        else if (DragHandler.isDragging() && DragHandler.target == this) {
+            return switch (DragHandler.button) {
+                case LEFT -> VEffectState.LC_DRAGGING;
+                case MIDDLE -> VEffectState.MC_DRAGGING;
+                case RIGHT -> VEffectState.RC_DRAGGING;
+            };
+        }
+
+        // Hover as last, since everything else is hover too
+        else if (isHovered()) return VEffectState.HOVERED;
+        else return VEffectState.DEFAULT;
+    }
+
+    private VRenderContext createRenderContext() {
+        VStyleState state = createStyleState();
+        VeraApp app = getApp();
+        return new VRenderContext(
+                app.getX() + offsetX + getX(), app.getY() + offsetY + getY(),
+                getEffectiveWidth(), getEffectiveHeight(),
+                getStyle("rotation", state), getStyle("scale", state),
+                hasTransparency
+        );
+    }
+
+    public void renderSelf(@Nullable VRenderContext parent) {
+        beforeRender();
+        animations.updateLifetimes();
+
+        if (visibilityConditionsPassed()) {
+            VRenderContext ctx = createRenderContext();
+            if (parent != null) ctx = parent.makeChild(ctx.x, ctx.y, ctx.width, ctx.height);
+
+            Vera.renderer.pushContext(ctx);
+
+            renderBeforeContent(ctx);
+            renderContent(ctx);
+            renderAfterContent(ctx);
+
+            renderBorder(ctx);
+            renderOverlay(ctx);
+
+            Vera.renderer.ensureClearContext(ctx);
+            Vera.renderer.popContext();
+        }
+
+        afterRender();
+    }
+
+    public void renderBorder(VRenderContext ctx) {
+        // TODO: [Render Rework] Better border rendering
+
+        var state = createStyleState();
+
+        V4Color borderColor = getStyle("border-color", state);
+        V4Int borderSize = getStyle("border-size", state);
+
         // Top
-        Vera.renderer.drawRect(app, getHitboxX(), getHitboxY() - borderSize.get1(), getHitboxWidth(), borderSize.get1(), 0, border.get1());
+        Vera.renderer.drawRect(ctx, 0, -borderSize.get1(), getEffectiveWidth(), borderSize.get1(), borderColor.get1());
         if (borderSize.get3() > 0) {
-            Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY() - borderSize.get1(), borderSize.get3(), borderSize.get1(), 0, border.get1());
+            Vera.renderer.drawRect(ctx, -borderSize.get3(), -borderSize.get1(), borderSize.get3(), borderSize.get1(), borderColor.get1());
         }
 
         // Bottom
-        Vera.renderer.drawRect(app, getHitboxX(), getHitboxY() + getHitboxHeight(), getHitboxWidth(), borderSize.get2(), 0, border.get2());
+        Vera.renderer.drawRect(ctx, 0, getEffectiveHeight(), getEffectiveWidth(), borderSize.get2(), borderColor.get2());
         if (borderSize.get4() > 0) {
-            Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY() + getHitboxHeight(), borderSize.get4(), borderSize.get2(), 0, border.get2());
+            Vera.renderer.drawRect(ctx, getEffectiveWidth(), getEffectiveHeight(), borderSize.get4(), borderSize.get2(), borderColor.get2());
         }
 
         // Left
-        Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY(), borderSize.get3(), getHitboxHeight(), 0, border.get3());
+        Vera.renderer.drawRect(ctx, -borderSize.get3(), 0, borderSize.get3(), getEffectiveHeight(), borderColor.get3());
         if (borderSize.get2() > 0) {
-            Vera.renderer.drawRect(app, getHitboxX() - borderSize.get3(), getHitboxY() + getHitboxHeight(), borderSize.get3(), borderSize.get2(), 0, border.get3());
+            Vera.renderer.drawRect(ctx, -borderSize.get3(), getEffectiveHeight(), borderSize.get3(), borderSize.get2(), borderColor.get3());
         }
 
         // Right
-        Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY(), borderSize.get4(), getHitboxHeight(), 0, border.get4());
+        Vera.renderer.drawRect(ctx, getEffectiveWidth(), 0, borderSize.get4(), getEffectiveHeight(), borderColor.get4());
         if (borderSize.get1() > 0) {
-            Vera.renderer.drawRect(app, getHitboxX() + getHitboxWidth(), getHitboxY() - borderSize.get1(), borderSize.get4(), borderSize.get1(), 0, border.get4());
+            Vera.renderer.drawRect(ctx, getEffectiveWidth(), -borderSize.get1(), borderSize.get4(), borderSize.get1(), borderColor.get4());
         }
     }
 
-    public void setSize(int width, int height) {
-        setWidth(width);
-        setHeight(height);
+    public void renderOverlay(VRenderContext ctx) {
+        var state = createStyleState();
+
+        Vera.renderer.drawRect(ctx, 0, 0, getEffectiveWidth(), getEffectiveHeight(), getStyle("overlay", state));
     }
 
-    public void setSize(int all) {
-        setSize(all, all);
+    public void beforeRender() {
+        VeraApp app = getApp();
+        var state = createStyleState();
+
+        Transition: if (!state.equals(prevStyleState)) {
+            Integer transitionTime = app.styleSheet.getKey(this, "transition", state);
+            VEasing transitionEasing = app.styleSheet.getKey(this, "transition-easing", state);
+
+            if (transitionTime == null || transitionEasing == null) break Transition;
+
+            Animation: if (transitionTime > 0) {
+                VAnimation.Builder builder = new VAnimation.Builder(VAnimation.INTERNAL_TRANSITION_NAME);
+
+                // routing
+                if (transitionTarget == prevStyleState) { // when swapped
+                    PlaybackContext playback = animations.getActive(VAnimation.INTERNAL_TRANSITION_NAME);
+                    if (playback == null) {
+                        MinecraftVera.LOGGER.warn("Playback context of transition animation is null, even though transition is still active.");
+                        break Animation;
+                    }
+                    transitionTime = playback.getRelativeTime();
+
+                }
+
+                transitionTarget = state;
+
+                // population
+                builder.keyframe(0, 1, frame -> {
+                    List<String> insertedStyles = new ArrayList<>();
+
+                    for (String key : app.styleSheet.getKeysStacked(this, prevStyleState)) {
+                        frame.style(key, getStyle(key, prevStyleState));
+                        insertedStyles.add(key);
+                    }
+
+                    for (String key : app.styleSheet.getKeysStacked(this, transitionTarget)) {
+                        if (insertedStyles.contains(key)) continue;
+                        frame.style(key, getStyle(key, prevStyleState));
+                    }
+                });
+
+                builder.keyframe(transitionTime - 1, 0, frame -> {
+                    List<String> insertedStyles = new ArrayList<>();
+
+                    for (String key : app.styleSheet.getKeysStacked(this, prevStyleState)) {
+                        frame.style(key, app.styleSheet.getKey(this, key, transitionTarget));
+                        insertedStyles.add(key);
+                    }
+
+                    for (String key : app.styleSheet.getKeysStacked(this, transitionTarget)) {
+                        if (insertedStyles.contains(key)) continue;
+                        frame.style(key, app.styleSheet.getKey(this, key, transitionTarget));
+                    }
+                });
+
+                animate(builder.build(), true);
+            }
+
+            prevStyleState = state;
+        }
     }
 
-    public void move(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public void move(int both) {
-        move(both, both);
+    public void afterRender() {
     }
 
     public boolean isLeftClickDown() {
@@ -197,19 +350,20 @@ public abstract class VWidget<T extends VWidget<T>> {
         return leftClickDown || middleClickDown || rightClickDown;
     }
 
-    public VeraApp getApp() {
-        return app;
+    public boolean hasTransparency() {
+        return hasTransparency;
     }
 
-    public double getRotation() {
-        return rotation;
+    public void setHasTransparency(boolean hasTransparency) {
+        this.hasTransparency = hasTransparency;
+        events.fire(new VWidgetEvent.TransparencyStateChanged(hasTransparency));
     }
 
-    public void rotate(double rotation) {
-        this.rotation = rotation;
-    }
+    public void update() {
+        var state = createStyleState();
 
-    public void update() {}
+        getApp().setCursorShape(getStyle("cursor", state));
+    }
 
     public boolean isHovered() {
         return hovered;
@@ -218,237 +372,161 @@ public abstract class VWidget<T extends VWidget<T>> {
     public void setHovered(boolean hovered) {
         // If changed
         if (this.hovered != hovered) {
-            if (hovered) fireEvent("hover");
-            else fireEvent("hover-leave");
+            if (hovered) events.fire(VEvents.Widget.HOVER);
+            else events.fire(VEvents.Widget.HOVER_LEAVE);
         }
 
         this.hovered = hovered;
     }
 
     public void onHover(Runnable runnable) {
-        registerEventExecutor("hover", runnable);
+        events.register(VEvents.Widget.HOVER, runnable);
     }
 
     public void onHoverLeave(Runnable runnable) {
-        registerEventExecutor("hover-leave", runnable);
+        events.register(VEvents.Widget.HOVER_LEAVE, runnable);
     }
 
     public void onLeftClick(Runnable runnable) {
-        registerEventExecutor("left-click", runnable);
+        events.register(VEvents.Widget.LEFT_CLICK, runnable);
     }
 
     public void onLeftClickRelease(Runnable runnable) {
-        registerEventExecutor("left-click-release", runnable);
+        events.register(VEvents.Widget.LEFT_CLICK_RELEASE, runnable);
     }
 
     public void onRightClick(Runnable runnable) {
-        registerEventExecutor("right-click", runnable);
+        events.register(VEvents.Widget.RIGHT_CLICK, runnable);
     }
 
     public void onRightClickRelease(Runnable runnable) {
-        registerEventExecutor("right-click-release", runnable);
+        events.register(VEvents.Widget.RIGHT_CLICK_RELEASE, runnable);
     }
 
     public void onMiddleClick(Runnable runnable) {
-        registerEventExecutor("middle-click", runnable);
+        events.register(VEvents.Widget.MIDDLE_CLICK, runnable);
     }
 
     public void onMiddleClickRelease(Runnable runnable) {
-        registerEventExecutor("middle-click-release", runnable);
+        events.register(VEvents.Widget.MIDDLE_CLICK_RELEASE, runnable);
     }
 
-    public void onMouseScroll(VMouseScrollEvent runnable) {
-        registerEventExecutor("mouse-scroll", args -> runnable.run(
-                (int) args[0], (int) args[1], (double) args[2])
-        );
+    public void onMouseScroll(Consumer<VWidgetEvent.MouseScroll> ctx) {
+        events.register(VEvents.Widget.SCROLL, ctx);
     }
 
-    public void onMouseMove(VMouseMoveEvent runnable) {
-        registerEventExecutor("mouse-move", args -> runnable.run((int) args[0], (int) args[1]));
+    public void onMouseMove(Consumer<VWidgetEvent.MouseMove> ctx) {
+        events.register(VEvents.Widget.MOUSE_MOVE, ctx);
     }
 
-    public void onMouseDragLeft(VMouseDragEvent runnable) {
-        registerEventExecutor("mouse-drag-left", args -> runnable.run((int) args[0], (int) args[1], (int) args[2], (int) args[3]));
-    }
-
-    public void onMouseDragRight(VMouseDragEvent runnable) {
-        registerEventExecutor("mouse-drag-right", args -> runnable.run((int) args[0], (int) args[1], (int) args[2], (int) args[3]));
-    }
-
-    public void onMouseDragMiddle(VMouseDragEvent runnable) {
-        registerEventExecutor("mouse-drag-middle", args -> runnable.run((int) args[0], (int) args[1], (int) args[2], (int) args[3]));
+    public void onMouseDrag(Consumer<VWidgetEvent.MouseDrag> ctx) {
+        events.register(VEvents.Widget.MOUSE_DRAG, ctx);
     }
 
     public void onFocusStateChange(Runnable runnable) {
-        registerEventExecutor("focus-state-change", runnable);
+        events.register(VEvents.Widget.FOCUS_STATE_CHANGE, runnable);
     }
 
-    public void onFilesDropped(VFilesDroppedEvent runnable) {
-        registerEventExecutor("files-dropped", args -> runnable.run((List<Path>) args[0]));
+    public void onFilesDropped(Consumer<VWidgetEvent.FilesDropped> ctx) {
+        events.register(VEvents.Widget.FILES_DROPPED, ctx);
     }
 
-    public void onMessage(VWidgetMessageEvent runnable) {
-        registerEventExecutor("widget-message", args -> runnable.run((VWidgetMessageEvent.Context) args[0]));
+    public void onAnimationBegin(Consumer<VAnimationEvent.Begin> ctx) {
+        events.register(VEvents.Animation.BEGIN, ctx);
     }
 
-    public void sendMessage(VWidget<?> widget, String type) {
-        sendMessage(widget, type, null);
+    public void onAnimationFinish(Consumer<VAnimationEvent.Finish> ctx) {
+        events.register(VEvents.Animation.FINISH, ctx);
     }
 
-    public void sendMessage(VWidget<?> widget, String type, @Nullable Object content) {
-        widget.fireEvent("widget-message", new VWidgetMessageEvent.Context(this, type, content));
+    public void onTransparencyStateChanged(Consumer<VWidgetEvent.TransparencyStateChanged> ctx) {
+        events.register(VEvents.Widget.TRANSPARENCY_STATE_CHANGED, ctx);
     }
 
-    public void sendMessageAll(String type) {
-        sendMessageAll(type, null);
+    public boolean isPointOverThis(int px, int py) {
+        if (!visibilityConditionsPassed()) return false;
+
+        int widgetX = getHitboxX() + offsetX;
+        int widgetY = getHitboxY() + offsetY;
+        int widgetWidth = getHitboxWidth();
+        int widgetHeight = getHitboxHeight();
+
+        boolean delegatorOk =
+                (appAccess.isDelegated() && appAccess.getDelegator().isDelegatedPointOver(px, py, this))
+                || (!appAccess.isDelegated());
+
+        return VGeometry.isInBox(px, py, widgetX, widgetY, widgetWidth, widgetHeight) && delegatorOk;
     }
 
-    public void sendMessageAll(String type, @Nullable Object content) {
-        VWidgetMessageEvent.Context ctx = new VWidgetMessageEvent.Context(this, type, content);
-        for (VWidget<?> widget : app.getWidgets()) widget.fireEvent("widget-message", ctx);
-    }
-
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
-    public void show() {
-        setVisible(true);
-    }
-
-    public void hide() {
-        setVisible(false);
-    }
-
-    public void registerEventExecutor(String event, VEvent executor) {
-        eventExecutors.computeIfAbsent(event, k -> new ArrayList<>()).add(executor);
-    }
-
-    public void registerEventExecutor(String event, Runnable runnable) {
-        registerEventExecutor(event, args -> runnable.run());
-    }
-
-    public void fireEvent(String event, Object... args) {
-        handleBuiltinEvent(event, args);
-
-        if (!eventExecutors.containsKey(event)) return;
-        eventExecutors.get(event).parallelStream().forEach(e -> e.run(args));
-    }
-
-    public void clearEvents() {
-        eventExecutors.clear();
-    }
-
-    public void clearEventsFor(String event) {
-        // IDE said I don't need a containsKey check
-        eventExecutors.remove(event);
-    }
-
-    public void handleBuiltinEvent(String event, Object... args) {
+    @Override
+    public void handleBuiltinEvent(String event, VEventContext ctx) {
         switch (event) {
-            case "left-click" -> {
-                if (shouldFocusOnClick()) {
+            case VEvents.Widget.LEFT_CLICK -> {
+                if (focusOnClick) {
                     setFocused(true);
                 }
                 leftClickDown = true;
             }
 
-            case "right-click" -> rightClickDown = true;
-            case "middle-click" -> middleClickDown = true;
+            case VEvents.Widget.RIGHT_CLICK -> rightClickDown = true;
+            case VEvents.Widget.MIDDLE_CLICK -> middleClickDown = true;
 
-            case "left-click-release" -> clearLeftClickDown();
-            case "right-click-release" -> clearRightClickDown();
-            case "middle-click-release" -> clearMiddleClickDown();
+            case VEvents.Widget.LEFT_CLICK_RELEASE -> clearLeftClickDown();
+            case VEvents.Widget.RIGHT_CLICK_RELEASE -> clearRightClickDown();
+            case VEvents.Widget.MIDDLE_CLICK_RELEASE -> clearMiddleClickDown();
 
-            case "mouse-move" -> {
-                if (leftClickDown) {
-                    int newX = (int) args[0];
-                    int newY = (int) args[1];
-                    if (leftDragPreviousX != -1 || leftDragPreviousY != -1) fireEvent("mouse-drag-left", leftDragPreviousX, leftDragPreviousY, newX, newY);
-
-                    leftDragPreviousX = newX;
-                    leftDragPreviousY = newY;
-                } else if (rightClickDown) {
-                    int newX = (int) args[0];
-                    int newY = (int) args[1];
-
-                    if (rightDragPreviousX != -1 || rightDragPreviousY != -1) fireEvent("mouse-drag-right", rightDragPreviousX, rightDragPreviousY, newX, newY);
-
-                    rightDragPreviousX = newX;
-                    rightDragPreviousY = newY;
-                } else if (middleClickDown) {
-                    int newX = (int) args[0];
-                    int newY = (int) args[1];
-
-                    if (middleDragPreviousX != -1 || middleDragPreviousY != -1) fireEvent("mouse-drag-middle", middleDragPreviousX, middleDragPreviousY, newX, newY);
-
-                    middleDragPreviousX = newX;
-                    middleDragPreviousY = newY;
-                }
-            }
-
-            case "hover" -> {
-                cursorBeforeHover = app.getCursorShape();
-                app.setCursorShape(hoverCursor);
-            }
-
-            case "hover-leave" -> {
+            case VEvents.Widget.HOVER_LEAVE -> {
                 clearLeftClickDown();
                 clearRightClickDown();
                 clearMiddleClickDown();
-
-                if (cursorBeforeHover == null) break;
-
-                app.setCursorShape(cursorBeforeHover);
             }
+
+            case VEvents.Animation.FINISH -> {
+                if (((VAnimationEvent.Finish) ctx).animation().name.equals(VAnimation.INTERNAL_TRANSITION_NAME)) {
+                    transitionTarget = null;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void afterBuiltinEvent(String name, VEventContext ctx) {
+        updateIfNeeded();
+    }
+
+    /**
+     * Executes {@link #update()} if the current style state has changed.
+     * Called in {@link #afterBuiltinEvent(String, VEventContext)}
+     */
+    private void updateIfNeeded() {
+        var state = createStyleState();
+        if (!state.equals(handledPrevStyleState)) {
+            update();
+            handledPrevStyleState = state;
         }
     }
 
     private void clearLeftClickDown() {
         leftClickDown = false;
-        leftDragPreviousX = -1;
-        leftDragPreviousY = -1;
     }
 
     private void clearRightClickDown() {
         rightClickDown = false;
-        rightDragPreviousX = -1;
-        rightDragPreviousY = -1;
     }
 
     private void clearMiddleClickDown() {
         middleClickDown = false;
-        middleDragPreviousX = -1;
-        middleDragPreviousY = -1;
-    }
-
-    public VCursorShape getHoverCursor() {
-        return hoverCursor;
-    }
-
-    public void setHoverCursor(@Nullable VCursorShape hoverCursor) {
-        this.hoverCursor = hoverCursor == null ? VCursorShape.DEFAULT : hoverCursor;
     }
 
     public boolean isFocused() {
-        return app.isFocusedWidget(this);
+        return getApp().isFocusedWidget(this);
     }
 
     public void setFocused(boolean focused) {
+        VeraApp app = getApp();
+
         if (focused) app.setFocusedWidget(this);
         else app.setFocusedWidget(null);
-    }
-
-    public boolean shouldFocusOnClick() {
-        return focusOnClick;
-    }
-
-    public void setFocusOnClick(boolean focus) {
-        focusOnClick = focus;
     }
 
     public void keyPressed(int keyCode, int scanCode, int modifiers) {}
@@ -456,19 +534,24 @@ public abstract class VWidget<T extends VWidget<T>> {
     public void charTyped(char chr, int modifiers) {}
 
     public void remove() {
-        app.removeWidget(this);
+        appAccess.removeWidget(this);
     }
 
-    public T alsoAdd() {
-        app.addWidget(this);
+    public T alsoAddClass(String clazz) {
+        classes.add(clazz);
         return (T) this;
     }
 
-    public void addVisibilityCondition(Supplier<Boolean> condition) {
-        visibilityConditions.add(condition);
+    public T alsoAdd() {
+        appAccess.addWidget(this);
+        return (T) this;
     }
 
-    public boolean visibilityConditionsPassed() {
-        return visibilityConditions.parallelStream().allMatch(Supplier::get);
+    @Override
+    public T alsoAddTo(VLayout layout) {
+        super.alsoAddTo(layout);
+        alsoAdd();
+
+        return (T) this;
     }
 }

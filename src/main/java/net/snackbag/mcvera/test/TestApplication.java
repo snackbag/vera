@@ -1,24 +1,25 @@
 package net.snackbag.mcvera.test;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.Identifier;
 import net.snackbag.vera.Vera;
-import net.snackbag.vera.core.VAlignmentFlag;
+import net.snackbag.vera.core.VImage;
+import net.snackbag.vera.flag.VHAlignmentFlag;
 import net.snackbag.vera.core.VColor;
 import net.snackbag.vera.core.VCursorShape;
 import net.snackbag.vera.core.VeraApp;
 import net.snackbag.vera.event.VShortcut;
+import net.snackbag.vera.flag.VAppFlag;
+import net.snackbag.vera.style.VEffectState;
+import net.snackbag.vera.style.animation.VAnimation;
 import net.snackbag.vera.widget.*;
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
-import java.awt.*;
 import java.nio.file.Path;
-import java.util.Arrays;
 
 public class TestApplication extends VeraApp {
-    public static final TestApplication INSTANCE = new TestApplication();
+    public static TestApplication INSTANCE = new TestApplication();
+
+    private final VAnimation rotationAnimation = new VAnimation.Builder("rotation")
+            .keyframe(1000, 0, frame -> frame.style("rotation", 360f))
+            .build();
 
     public TestApplication() {
         super();
@@ -26,7 +27,7 @@ public class TestApplication extends VeraApp {
 
     @Override
     public void init() {
-        VShortcut exit = new VShortcut(this, "escape", () -> {
+        new VShortcut(this, "escape", () -> {
             if (hasFocusedWidget()) {
                 setFocusedWidget(null);
                 return;
@@ -35,37 +36,35 @@ public class TestApplication extends VeraApp {
             this.hide();
         });
 
-        VShortcut changeMouseRequired = new VShortcut(this, "leftalt+m", () -> {
-            setMouseRequired(!isMouseRequired());
-        });
-
-        addShortcut(exit);
-        addShortcut(changeMouseRequired);
+        new VShortcut(this, "leftalt+m", () -> toggleFlag(VAppFlag.REQUIRES_MOUSE));
 
         VLineInput input = new VLineInput(this).alsoAdd();
-        input.setMaxChars(15);
+        input.setMaxChars(30);
         input.setPlaceholderText("Enter text...");
         input.onAddCharLimited(System.out::println);
-        input.onMouseMove((x, y) -> System.out.println("x=" + x + ", y=" + y));
+        input.onMouseMove((ctx) -> System.out.println("x=" + ctx.x() + ", y=" + ctx.y()));
 
         input.move(50);
-        input.setBackgroundColor(VColor.white());
+        input.setStyle("background", VColor.white());
         setFocusedWidget(input);
 
-        VLabel label = new VLabel("Hello world!", this).alsoAdd();
+        VLabel label = new VLabel(this, "Hello world!").alsoAdd();
 
-        label.onMouseDragLeft((oldX, oldY, newX, newY) -> setCursorShape(VCursorShape.VERTICAL_RESIZE));
+        label.onMouseDrag((ctx) -> setCursorShape(switch (ctx.button()) {
+            case LEFT -> VCursorShape.VERTICAL_RESIZE;
+            case MIDDLE -> VCursorShape.ALL_RESIZE;
+            case RIGHT -> VCursorShape.HORIZONTAL_RESIZE;
+        }));
+
         label.onLeftClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
-        label.onMouseDragMiddle((oldX, oldY, newX, newY) -> setCursorShape(VCursorShape.ALL_RESIZE));
         label.onMiddleClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
-        label.onMouseDragRight((oldX, oldY, newX, newY) -> setCursorShape(VCursorShape.HORIZONTAL_RESIZE));
         label.onRightClickRelease(() -> setCursorShape(VCursorShape.DEFAULT));
         label.onFilesDropped(System.out::println);
 
-        label.setPadding(5);
+        label.setStyle("padding", 5);
         label.move(10);
-        label.setBackgroundColor(VColor.black());
-        label.setFont(label.getFont().withColor(VColor.white()));
+        label.setStyle("background", VColor.black());
+        label.modifyStyleFont("font").color(VColor.white());
         label.adjustSize();
         label.onHover(() -> {
             label.setText("Hovered");
@@ -75,61 +74,61 @@ public class TestApplication extends VeraApp {
             label.setText("Not hovered");
         });
 
-        VLabel centerLabel = new VLabel("CENTER", this).alsoAdd();
-        centerLabel.setAlignment(VAlignmentFlag.CENTER);
-        centerLabel.setBackgroundColor(VColor.black());
-        centerLabel.modifyFontColor().rgb(255, 255, 255);
-        centerLabel.move(220, 10);
-        centerLabel.setBorder(VColor.MC_BLUE, VColor.MC_GOLD, VColor.MC_RED, VColor.MC_GREEN);
-        centerLabel.setBorderSize(5, 10, 8, 16);
-        centerLabel.setHoverCursor(VCursorShape.ALL_RESIZE);
+        VLabel centerLabel = new VLabel(this, "CENTER", 220, 10, 100, 16).alsoAdd();
+        centerLabel.setAlignment(VHAlignmentFlag.CENTER);
+        centerLabel.setStyle("background", VColor.black());
+        centerLabel.modifyStyleFontColor("font").rgb(255, 255, 255);
+        centerLabel.setStyle("border-color", VColor.MC_BLUE, VColor.MC_GOLD, VColor.MC_RED, VColor.MC_GREEN);
+        centerLabel.setStyle("border-size", 5, 10, 8, 16);
+        centerLabel.setStyle("cursor", VCursorShape.ALL_RESIZE);
 
-        VLabel rightLabel = new VLabel("RIGHT", this).alsoAdd();
-        rightLabel.setAlignment(VAlignmentFlag.RIGHT);
-        rightLabel.setBackgroundColor(VColor.black());
-        rightLabel.modifyFontColor().rgb(255, 255, 255);
-        rightLabel.move(100, 10);
-        rightLabel.setBorder(VColor.white());
-        rightLabel.setBorderSize(1);
+        VLabel rightLabel = new VLabel(this, "RIGHT", 100, 10, 100, 16).alsoAdd();
+        rightLabel.setAlignment(VHAlignmentFlag.RIGHT);
+        rightLabel.setStyle("background", VColor.black());
+        rightLabel.modifyStyleFontColor("font").rgb(255, 255, 255);
+        rightLabel.setStyle("border-color", VColor.white());
+        rightLabel.setStyle("border-size", 1);
         rightLabel.onRightClick(() -> System.out.println(Vera.openFileSelector("test", Path.of("/Volumes/Media"), null)));
 
-        VImage image = new VImage(
-                Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/dirt.png"),
-                32, 32, this).alsoAdd();
-        image.move(0, 30);
+        VRect image = new VRect(this,
+                new VImage("minecraft:textures/block/dirt.png"),
+                0, 30, 32, 32).alsoAdd();
         image.onMiddleClick(this::hideCursor);
         image.onMiddleClickRelease(this::showCursor);
+        image.setStyle("background", VEffectState.HOVERED, "minecraft:textures/block/diamond_block.png");
 
-        VDropdown dropdown = new VDropdown(this).alsoAdd();
-        dropdown.addItem("coolio");
-        dropdown.addItem("shmoolio");
-        dropdown.addItem("roolio", Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/dirt.png"));
-        dropdown.addItem("buger", () -> System.out.println("pressed"));
-        dropdown.move(90);
-        dropdown.setItemSpacing(16);
-        dropdown.modifyHoverFont().color(VColor.white());
-        dropdown.setItemHoverColor(VColor.black());
-        dropdown.onFocusStateChange(() -> System.out.println("focus state change: " + dropdown.isFocused()));
-
-        dropdown.getItem(2).setHoverIcon(Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/block/diamond_ore.png"));
+        VComboBox box = new VComboBox(this).alsoAdd();
+        box.addItem("coolio");
+        box.addItem("shmoolio");
+        box.addItem("roolio", item -> {
+            item.setStyle("ci-icon", "minecraft:textures/block/dirt.png");
+            item.setStyle("ci-icon", VEffectState.HOVERED, "minecraft:textures/block/diamond_ore.png");
+        });
+        box.addItem("buger");
+        box.move(90);
+        box.onFocusStateChange(() -> System.out.println("focus state change: " + box.isFocused()));
 
         VCheckBox checkbox = new VCheckBox(this).alsoAdd();
         checkbox.move(20, 140);
-        checkbox.setHoverOverlayColor(VColor.white().withOpacity(0.4f));
+        checkbox.setStyle("overlay", VEffectState.HOVERED, VColor.white().withOpacity(0.4f));
 
-        checkbox.onCheckStateChange((state) -> {
-            if (!state) removeWidget(checkbox);
+        checkbox.onCheckStateChanged((ctx) -> {
+            if (!ctx.checked()) removeWidget(checkbox);
         });
 
         VTabWidget tabs = new VTabWidget(this).alsoAdd();
         tabs.move(20, 170);
         tabs.addTab("test", checkbox);
-        tabs.addTab("other test", dropdown);
+        tabs.addTab("other test", box);
         tabs.setActiveTab(0);
 
-        VRect rotationRect = new VRect(VColor.black(), this).alsoAdd();
-        rotationRect.rotate(45);
+        VRect rotationRect = new VRect(this, VColor.black()).alsoAdd();
+        rotationRect.onLeftClick(() -> input.animate(rotationAnimation));
         rotationRect.move(20, 200);
+    }
+
+    private void toggleFlag(VAppFlag flag) {
+        setFlag(flag, !hasFlag(flag));
     }
 
     @Override

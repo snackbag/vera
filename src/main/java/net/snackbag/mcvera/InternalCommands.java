@@ -1,0 +1,77 @@
+package net.snackbag.mcvera;
+
+import com.example.demo.DemoMod;
+import com.mojang.brigadier.CommandDispatcher;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.command.CommandRegistryAccess;
+import net.snackbag.mcvera.test.*;
+
+public class InternalCommands {
+    public static void register(
+            CommandDispatcher<FabricClientCommandSource> dispatcher,
+            CommandRegistryAccess ra
+    ) {
+        if (!FabricLoader.getInstance().isDevelopmentEnvironment()) return;
+
+        dispatcher.register(
+                ClientCommandManager.literal("vera")
+                        .then(ClientCommandManager.literal("test")
+                                .then(ClientCommandManager.literal("generic").executes((ctx) -> {
+                                    TestApplication.INSTANCE.show();
+                                    return 1;
+                                }))
+                                .then(ClientCommandManager.literal("styles").executes((ctx) -> {
+                                    StyleTestApplication.INSTANCE.show();
+                                    return 1;
+                                }))
+                                .then(ClientCommandManager.literal("layout").executes((ctx) -> {
+                                    LayoutTestApplication.INSTANCE.show();
+                                    return 1;
+                                }))
+                                .then(ClientCommandManager.literal("layoutalignments").executes((ctx) -> {
+                                    LayoutAlignmentTestApplication.INSTANCE.show();
+                                    return 1;
+                                }))
+                                .then(ClientCommandManager.literal("hierarchy").executes(ctx -> {
+                                    HierarchyTest.INSTANCE.start();
+                                    return 1;
+                                }))
+                                .then(ClientCommandManager.literal("quads").executes(ctx -> {
+                                    QuadTestApplication.INSTANCE.show();
+                                    return 1;
+                                }))
+                                .then(ClientCommandManager.literal("scroll").executes(ctx -> {
+                                    ScrollTestApplication.INSTANCE.show();
+                                    return 1;
+                                }))
+                                .then(ClientCommandManager.literal("demo").executes(ctx -> {
+                                    DemoMod.init();
+                                    return 1;
+                                }))
+                        )
+                        .then(ClientCommandManager.literal("clear-tests")
+                                .executes((ctx) -> {
+                                    TestApplication.INSTANCE = new TestApplication();
+                                    StyleTestApplication.INSTANCE = new StyleTestApplication();
+                                    LayoutTestApplication.INSTANCE = new LayoutTestApplication();
+                                    LayoutAlignmentTestApplication.INSTANCE = new LayoutAlignmentTestApplication();
+                                    HierarchyTest.INSTANCE = new HierarchyTest();
+                                    QuadTestApplication.INSTANCE = new QuadTestApplication();
+                                    ScrollTestApplication.INSTANCE = new ScrollTestApplication();
+
+                                    FPSDebugApplication.INSTANCE.hide();
+                                    FPSDebugApplication.INSTANCE = new FPSDebugApplication();
+                                    return 1;
+                                })
+                        )
+                        .then(ClientCommandManager.literal("fps")
+                                .executes((ctx) -> {
+                                    FPSDebugApplication.INSTANCE.show();
+                                    return 1;
+                                })
+                        )
+        );
+    }
+}

@@ -2,6 +2,8 @@ package net.snackbag.mcvera;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.snackbag.vera.Vera;
+import net.snackbag.vera.style.standard.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,5 +14,17 @@ public class MinecraftVera implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Loading Vera...");
+
+		LOGGER.info("Registering standard styles");
+		Vera.registrar.registerStandardStyle(new WidgetStandardStyle());
+
+		// sorted alphabetically
+		Vera.registrar.registerStandardStyle(new CheckBoxStandardStyle());
+		Vera.registrar.registerStandardStyle(new ComboBoxStandardStyle());
+		Vera.registrar.registerStandardStyle(new LabelStandardStyle());
+		Vera.registrar.registerStandardStyle(new LineInputStandardStyle());
+		Vera.registrar.registerStandardStyle(new RectStandardStyle());
+		Vera.registrar.registerStandardStyle(new ScrollBoxStandardStyle());
+		Vera.registrar.registerStandardStyle(new TabWidgetStandardStyle());
 	}
 }
