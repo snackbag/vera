@@ -1,41 +1,102 @@
 package net.snackbag.mcvera.mixin;
 
 import net.minecraft.client.gui.ParentElement;
+import net.snackbag.mcvera.MCVeraData;
 import net.snackbag.vera.Vera;
+import net.snackbag.vera.core.VMouseButton;
+import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.event.VEvents;
+import net.snackbag.vera.event.VWidgetEvent;
+import net.snackbag.vera.flag.VAppFlag;
+import net.snackbag.vera.util.DragHandler;
+import net.snackbag.vera.widget.VWidget;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Mixin(ParentElement.class)
 public interface ParentElementMixin {
     @Inject(method = "mouseClicked", at = @At("HEAD"))
-    private void mcvera$handleMouseClick(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
-        Vera.forHoveredWidget((int) mouseX, (int) mouseY, (widget) -> {
-            switch (button) {
-                case 0: widget.fireEvent("left-click"); break;
-                case 1: widget.fireEvent("right-click"); break;
-                case 2: widget.fireEvent("middle-click"); break;
-                default: throw new IllegalStateException("Invalid button type: " + button);
+    private void mcvera$handleMouseClick(double mouseXRaw, double mouseYRaw, int button, CallbackInfoReturnable<Boolean> cir) {
+        int mouseX = (int) mouseXRaw;
+        int mouseY = (int) mouseYRaw;
+        boolean justChanged = false;
+
+        VMouseButton btn = VMouseButton.fromInt(button);
+
+        List<VeraApp> hierarchicApps = new ArrayList<>(MCVeraData.getAppsWithFlag(VAppFlag.HIERARCHIC));
+        for (VeraApp app : hierarchicApps) {
+            if (app.isPointOverThis(mouseX, mouseY)) {
+                if (MCVeraData.isTopHierarchy(app)) break;
+
+                app.moveToHierarchyTop();
+                justChanged = true;
+                break;
             }
-        }, (app) -> app.setFocusedWidget(null));
+        }
+
+        boolean finalJustChanged = justChanged; // weird java shit
+        MCVeraData.asTopHierarchy(app -> {
+            if (!app.isPointOverThis(mouseX, mouseY)) return;
+            if (finalJustChanged) return;
+
+            handleClickEvents(app.getTopWidgetAt(mouseX, mouseY), btn);
+        });
+
+        Vera.forAllVisibleApps(app -> {
+            if (app.hasFlag(VAppFlag.HIERARCHIC)) return;
+
+            VWidget<?> hoveredWidget = app.getTopWidgetAt(mouseX, mouseY);
+            if (hoveredWidget != null) handleClickEvents(hoveredWidget, btn);
+            else app.setFocusedWidget(null);
+        });
+    }
+
+    @Unique
+    private void handleClickEvents(@Nullable VWidget<?> widget, VMouseButton button) {
+        if (widget == null) return;
+
+        switch (button) {
+            case LEFT -> widget.events.fire(VEvents.Widget.LEFT_CLICK);
+            case RIGHT -> widget.events.fire(VEvents.Widget.RIGHT_CLICK);
+            case MIDDLE -> widget.events.fire(VEvents.Widget.MIDDLE_CLICK);
+        }
+
+        DragHandler.down(button, widget);
     }
 
     @Inject(method = "mouseReleased", at = @At("HEAD"))
-    private void mcvera$handleMouseRelease(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
-        Vera.forHoveredWidget((int) mouseX, (int) mouseY, (widget) -> {
-            switch (button) {
-                case 0: widget.fireEvent("left-click-release"); break;
-                case 1: widget.fireEvent("right-click-release"); break;
-                case 2: widget.fireEvent("middle-click-release"); break;
-            }
+    private void mcvera$handleMouseRelease(double mouseXRaw, double mouseYRaw, int button, CallbackInfoReturnable<Boolean> cir) {
+        int mouseX = (int) mouseXRaw;
+        int mouseY = (int) mouseYRaw;
+
+        VMouseButton btn = VMouseButton.fromInt(button);
+
+        MCVeraData.asTopHierarchy(app -> handleReleaseEvents(app.getTopWidgetAt(mouseX, mouseY), btn));
+        Vera.forAllVisibleApps(app -> {
+            if (app.hasFlag(VAppFlag.HIERARCHIC)) return;
+            if (!app.isPointOverThis(mouseX, mouseY)) return;
+
+            handleReleaseEvents(app.getTopWidgetAt(mouseX, mouseY), btn);
         });
+
+        DragHandler.release(btn);
     }
 
-    @Inject(method = "mouseScrolled", at = @At("HEAD"))
-    private void mcvera$handleMouseScroll(double mouseX, double mouseY, double amount, CallbackInfoReturnable<Boolean> cir) {
-        Vera.forHoveredWidget((int) mouseX, (int) mouseY, (widget) -> {
-            widget.fireEvent("mouse-scroll", (int) mouseX, (int) mouseY, amount);
-        });
+    @Unique
+    private void handleReleaseEvents(@Nullable VWidget<?> widget, VMouseButton button) {
+        if (widget == null) return;
+
+        switch (button) {
+            case LEFT -> widget.events.fire(VEvents.Widget.LEFT_CLICK_RELEASE);
+            case RIGHT -> widget.events.fire(VEvents.Widget.RIGHT_CLICK_RELEASE);
+            case MIDDLE -> widget.events.fire(VEvents.Widget.MIDDLE_CLICK_RELEASE);
+        }
     }
 }

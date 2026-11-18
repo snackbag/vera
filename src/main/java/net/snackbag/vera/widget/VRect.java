@@ -1,33 +1,29 @@
 package net.snackbag.vera.widget;
 
 import net.snackbag.vera.Vera;
-import net.snackbag.vera.core.VColor;
-import net.snackbag.vera.core.VeraApp;
+import net.snackbag.vera.core.*;
+import net.snackbag.vera.style.VEffectState;
 
 public class VRect extends VWidget<VRect> {
-    protected VColor color;
+    public VRect(VAppAccess app, VFill background) {
+        this(app, background, 0, 0, 20, 20);
+    }
 
-    public VRect(VColor color, VeraApp app) {
-        super(0, 0, 20, 20, app);
+    public VRect(VAppAccess app, VFill background, int x, int y) {
+        this(app, background, x, y, 20, 20);
+    }
 
-        this.color = color;
+    public VRect(VAppAccess app, VFill background, int x, int y, int width, int height) {
+        super(app, x, y, width, height);
+
         this.focusOnClick = false;
-    }
-
-    public VColor getColor() {
-        return color;
-    }
-
-    public void setColor(VColor color) {
-        this.color = color;
-    }
-
-    public VColor.ColorModifier modifyColor() {
-        return new VColor.ColorModifier(color, this::setColor);
+        setStyle("background", background);
     }
 
     @Override
-    public void render() {
-        Vera.renderer.drawRect(app, x, y, width, height, rotation, color);
+    public void renderContent(VRenderContext ctx) {
+        var state = createStyleState();
+
+        Vera.renderer.drawFill(ctx, 0, 0, width, height, getStyle("background", state));
     }
 }

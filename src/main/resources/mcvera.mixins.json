@@ -3,13 +3,17 @@
     "package": "net.snackbag.mcvera.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
-        "MinecraftClientMixin",
-        "VeraAppMixin"
+        "MinecraftClientMixin"
     ],
     "injectors": {
         "defaultRequire": 1
     },
     "client": [
+        "DrawContextAccessor",
+
+        "DrawContextMixin",
+        "GameRendererMixin",
+        "InGameHudMixin",
         "KeyboardMixin",
         "MouseMixin",
         "ParentElementMixin",

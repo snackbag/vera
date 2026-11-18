@@ -4,16 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
-import net.snackbag.mcvera.impl.MCVeraProvider;
-import net.snackbag.mcvera.impl.MCVeraRenderer;
 import net.snackbag.mcvera.test.TestHandler;
 import net.snackbag.vera.Vera;
-import net.snackbag.vera.core.VeraApp;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,24 +21,13 @@ public class MinecraftVeraClient implements ClientModInitializer {
         MinecraftVera.LOGGER.info("Loading client Vera implementation...");
         TestHandler.impl(false);
 
-        HudRenderCallback.EVENT.register((context, tickDelta) -> {
-            MCVeraRenderer.drawContext = context;
-            MCVeraRenderer renderer = MCVeraRenderer.getInstance();
-
-            for (VeraApp app : MCVeraData.visibleApplications) {
-                renderer.renderApp(app);
-            }
-        });
-
         ClientTickEvents.END_CLIENT_TICK.register((client) -> {
             // only when changing
             if (MCVeraData.previousPressedKeys.equals(MCVeraData.pressedKeys)) return;
             MCVeraData.previousPressedKeys = new ArrayList<>(MCVeraData.pressedKeys);
 
             String combination = makeCombination(client);
-            for (VeraApp app : MCVeraData.visibleApplications) {
-                app.handleShortcut(combination);
-            }
+            Vera.forVisibleAndAllowedApps(app -> app.handleShortcut(combination));
         });
     }
 
