@@ -1,3 +1,7 @@
+# Archived
+
+The library has outgrown its original scope and many decisions are not up to par with our current quality. Due to time constraints, it is not possible to rewrite the entire library. Ultimately, the decision to archive this library was made. We will reassess this project in the future.
+
 # Vera
 
 Because UI should be simple.
